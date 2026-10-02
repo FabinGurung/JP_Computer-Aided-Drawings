@@ -8,20 +8,31 @@ on:
     paths:
       - "models/open-architecture-engine-v0.1/**"
       - "tools/open_architecture/**"
+      - "public/research/open-architecture-engine-v0.1/**"
       - ".github/workflows/open-architecture-poc.yml"
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: open-architecture-pages
+  cancel-in-progress: true
 
 jobs:
   deterministic-generation:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+
       - name: Generate derived geometry
         run: python tools/open_architecture/generate_poc.py
+
       - name: Validate generated artifacts
         run: |
           python -m json.tool public/research/open-architecture-engine-v0.1/model.gltf >/dev/null
@@ -37,10 +48,36 @@ jobs:
           assert manifest["outputs"] == ["plan.svg","plan.dxf","model.gltf"]
           for name in manifest["outputs"]:
               assert (out/name).exists() and (out/name).stat().st_size > 0
+          assert (out/"index.html").exists()
           print("OPEN_ARCHITECTURE_POC_QA=PASS")
           PY
+
       - name: Preserve existing app build
         run: |
           npm ci
           npm run typecheck
           npm run build
+
+      - name: Configure GitHub Pages
+        if: github.event_name == 'push'
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload research page
+        if: github.event_name == 'push'
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: public/research/open-architecture-engine-v0.1
+
+  deploy-pages:
+    if: github.event_name == 'push'
+    needs: deterministic-generation
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
