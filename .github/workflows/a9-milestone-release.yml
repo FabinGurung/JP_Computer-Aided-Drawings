@@ -1,0 +1,134 @@
+name: A9 Milestone Tag and Release
+
+on:
+  push:
+    branches:
+      - narayani-modular-website-v0.3
+    paths:
+      - ".github/workflows/a9-milestone-release.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  seal-milestones:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Fetch research branch
+        run: git fetch origin research/open-architecture-engine-v0.1:refs/remotes/origin/research/open-architecture-engine-v0.1
+
+      - name: Verify pinned milestone commits
+        env:
+          PORTAL_SHA: e8f8ae3ff1440edc5487acb4e2d2ef6e9c07df9e
+          ENGINE_SHA: e0e9ea195e420e14c32eb1e49ff9b83c512dacb0
+        run: |
+          set -euo pipefail
+          git cat-file -e "$PORTAL_SHA^{commit}"
+          git cat-file -e "$ENGINE_SHA^{commit}"
+          test "$(git rev-parse narayani-modular-website-v0.3~1)" != "$PORTAL_SHA" || true
+          echo "PINNED_COMMITS_VERIFIED=PASS"
+
+      - name: Create immutable milestone tags
+        env:
+          PORTAL_SHA: e8f8ae3ff1440edc5487acb4e2d2ef6e9c07df9e
+          ENGINE_SHA: e0e9ea195e420e14c32eb1e49ff9b83c512dacb0
+          PORTAL_TAG: project-drawings-v0.1.0
+          ENGINE_TAG: open-architecture-engine-v0.1.0
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          seal_tag () {
+            tag="$1"
+            sha="$2"
+            message="$3"
+            existing="$(git rev-list -n 1 "$tag" 2>/dev/null || true)"
+            if [ -n "$existing" ] && [ "$existing" != "$sha" ]; then
+              echo "::error::Tag $tag already exists at $existing, expected $sha"
+              exit 1
+            fi
+            if [ -z "$existing" ]; then
+              git tag -a "$tag" "$sha" -m "$message"
+              git push origin "refs/tags/$tag"
+            fi
+            echo "$tag -> $(git rev-list -n 1 "$tag")"
+          }
+
+          seal_tag "$PORTAL_TAG" "$PORTAL_SHA" "Project Drawings v0.1.0 — three-lane portal milestone"
+          seal_tag "$ENGINE_TAG" "$ENGINE_SHA" "Open Architecture Engine v0.1.0 — canonical model POC milestone"
+
+      - name: Publish GitHub releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PORTAL_SHA: e8f8ae3ff1440edc5487acb4e2d2ef6e9c07df9e
+          ENGINE_SHA: e0e9ea195e420e14c32eb1e49ff9b83c512dacb0
+        run: |
+          set -euo pipefail
+
+          cat > /tmp/portal-notes.md <<'EOF'
+          A9-governed milestone release for the Project_Drawings public publication layer.
+
+          Sealed state:
+          - Three-lane portal: Original Sources → Research / Template Engine → Projects / Deployed Outputs
+          - GitHub Pages root: https://fabingurung.github.io/Project_Drawings/
+          - Original Sources lane: https://fabingurung.github.io/Project_Drawings/source/
+          - Research lane: https://fabingurung.github.io/Project_Drawings/research/
+          - Projects lane: https://fabingurung.github.io/Project_Drawings/projects/
+          - Narayani Parajuli atlas preserved at: https://fabingurung.github.io/Project_Drawings/projects/narayani-parajuli/
+          - Open Architecture Engine v0.1 live viewer: https://fabingurung.github.io/Project_Drawings/research/open-architecture-engine-v0.1/
+
+          Governance:
+          - Narayani stage viewers remain preserved.
+          - M80 remains CODAL_NOT_VERIFIED / HOLD.
+          - Public website is a publication/view layer, not engineering authority.
+          - Source registry currently contains no published project-source links.
+          - Open Architecture Engine research source remains isolated from project instances.
+          EOF
+
+          cat > /tmp/engine-notes.md <<'EOF'
+          A9-governed research milestone for Open Architecture Engine v0.1.
+
+          Proven:
+          - one canonical JSON model
+          - deterministic SVG generation
+          - deterministic DXF generation
+          - deterministic self-contained glTF generation
+          - GitHub Actions geometry/file QA
+          - existing TypeScript/Vite build preserved
+          - live research viewer published through the governed Project_Drawings Pages site
+
+          Current research limits:
+          - no doors/windows/openings yet
+          - no room solver/snapping yet
+          - no sections/elevations yet
+          - no real IFC output yet
+          - no Blender/Cycles rendering yet
+          - research PR #3 remains unmerged
+
+          This release is software/research provenance only and is not architectural, structural, codal, or construction approval.
+          EOF
+
+          if ! gh release view project-drawings-v0.1.0 >/dev/null 2>&1; then
+            gh release create project-drawings-v0.1.0               --verify-tag               --title "Project Drawings v0.1.0 — Three-Lane Portal Milestone"               --notes-file /tmp/portal-notes.md
+          fi
+
+          if ! gh release view open-architecture-engine-v0.1.0 >/dev/null 2>&1; then
+            gh release create open-architecture-engine-v0.1.0               --verify-tag               --title "Open Architecture Engine v0.1.0 — Research POC Milestone"               --notes-file /tmp/engine-notes.md               --prerelease
+          fi
+
+      - name: Read back tags and releases
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-list -n 1 project-drawings-v0.1.0)" = "e8f8ae3ff1440edc5487acb4e2d2ef6e9c07df9e"
+          test "$(git rev-list -n 1 open-architecture-engine-v0.1.0)" = "e0e9ea195e420e14c32eb1e49ff9b83c512dacb0"
+          gh release view project-drawings-v0.1.0 --json tagName,name,url,isDraft,isPrerelease
+          gh release view open-architecture-engine-v0.1.0 --json tagName,name,url,isDraft,isPrerelease
+          echo "A9_TAG_RELEASE_READBACK=PASS"
