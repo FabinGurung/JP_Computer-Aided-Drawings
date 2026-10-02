@@ -1,0 +1,27 @@
+{
+  "schema": "fabin-project-drawings://architecture-model/0.1",
+  "project_id": "POC-OPEN-ARCH-001",
+  "revision": "v0.1",
+  "units": "mm",
+  "north_deg": 0,
+  "storeys": [
+    {
+      "storey_id": "GF",
+      "elevation_mm": 0,
+      "height_mm": 3000,
+      "slabs": [
+        {
+          "element_id": "SLAB-GF-001",
+          "polygon_mm": [[0,0],[6000,0],[6000,4000],[0,4000]],
+          "thickness_mm": 125
+        }
+      ],
+      "walls": [
+        {"element_id":"WALL-GF-001","start_mm":[0,0],"end_mm":[6000,0],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-002","start_mm":[6000,0],"end_mm":[6000,4000],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-003","start_mm":[6000,4000],"end_mm":[0,4000],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-004","start_mm":[0,4000],"end_mm":[0,0],"thickness_mm":230,"height_mm":3000}
+      ]
+    }
+  ]
+}
