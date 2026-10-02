@@ -74,6 +74,8 @@ jobs:
     if: github.event_name == 'push'
     needs: deterministic-generation
     runs-on: ubuntu-latest
+    environment:
+      name: github-pages-research
     steps:
       - name: Deploy GitHub Pages
         id: deployment
