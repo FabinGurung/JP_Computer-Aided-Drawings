@@ -3,118 +3,67 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Project Drawings — governed project viewers, architecture research engines, and public-safe AEC publications.">
+<meta name="description" content="Project Drawings — original sources, reusable research engines, and project-specific deployed outputs.">
 <title>Project Drawings · Fabin Gurung</title>
 <style>
 :root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#eef2f7}
 *{box-sizing:border-box}body{margin:0}.wrap{max-width:1180px;margin:auto;padding:30px 20px 54px}
-.hero,.card,.section{background:#fff;border:1px solid #d8e0ea;border-radius:18px;box-shadow:0 8px 24px #0f172a0d}
+.hero,.lane,.note{background:#fff;border:1px solid #d8e0ea;border-radius:18px;box-shadow:0 8px 24px #0f172a0d}
 .hero{padding:30px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#475569}
-h1{margin:.25em 0 .2em;font-size:clamp(34px,6vw,62px);line-height:1.02}.lead{max-width:860px;color:#475569;font-size:17px;line-height:1.55}
-.status{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{padding:5px 10px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;font-size:12px;font-weight:800}
-.pass{border-color:#86efac;background:#f0fdf4;color:#166534}.hold{border-color:#fcd34d;background:#fffbeb;color:#92400e}
-.section{padding:22px;margin-top:18px}.section-head{display:flex;justify-content:space-between;gap:20px;align-items:end;margin-bottom:14px}.section-head h2{margin:0}.section-head p{margin:.4em 0 0;color:#64748b}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.card{padding:20px;box-shadow:none;display:flex;flex-direction:column;min-height:240px}
-.card .kicker{font-size:12px;font-weight:800;color:#64748b;text-transform:uppercase;letter-spacing:.08em}.card h3{font-size:24px;margin:.4em 0}.card p{color:#64748b;line-height:1.5}
-.card .meta{display:flex;gap:8px;flex-wrap:wrap;margin:4px 0 12px}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:auto}
-.btn{display:inline-block;text-decoration:none;padding:10px 13px;border-radius:9px;background:#2563eb;color:#fff;font-weight:800;font-size:13px}.btn.secondary{background:white;color:#334155;border:1px solid #cbd5e1}
-.note{margin-top:18px;color:#64748b;font-size:13px;line-height:1.5}footer{margin-top:20px;text-align:center;color:#64748b;font-size:12px}
-@media(max-width:760px){.grid{grid-template-columns:1fr}.section-head{align-items:start;flex-direction:column}}
+h1{margin:.25em 0 .2em;font-size:clamp(34px,6vw,62px);line-height:1.02}.lead{max-width:900px;color:#475569;font-size:17px;line-height:1.58}
+.flow{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:20px}.step{padding:8px 12px;border:1px solid #cbd5e1;border-radius:999px;font-size:12px;font-weight:800;background:#f8fafc}.arrow{color:#64748b;font-weight:900}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:18px}.lane{padding:22px;display:flex;flex-direction:column;min-height:330px}.num{font-size:12px;font-weight:900;color:#2563eb;letter-spacing:.09em;text-transform:uppercase}.lane h2{font-size:25px;margin:.45em 0}.lane p{color:#64748b;line-height:1.5}.meta{display:flex;gap:7px;flex-wrap:wrap;margin:6px 0 12px}.pill{padding:5px 9px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;font-size:11px;font-weight:800}.pass{border-color:#86efac;background:#f0fdf4;color:#166534}.hold{border-color:#fcd34d;background:#fffbeb;color:#92400e}.actions{margin-top:auto}.btn{display:inline-block;text-decoration:none;padding:10px 13px;border-radius:9px;background:#2563eb;color:#fff;font-weight:800;font-size:13px}.btn.secondary{background:white;color:#334155;border:1px solid #cbd5e1;margin-left:5px}
+.note{padding:20px;margin-top:18px;color:#475569;line-height:1.55}footer{margin-top:20px;text-align:center;color:#64748b;font-size:12px}
+@media(max-width:900px){.grid{grid-template-columns:1fr}.lane{min-height:0}}
 </style>
 </head>
 <body>
 <main class="wrap">
-  <section class="hero">
-    <div class="eyebrow">Fabin Gurung · Project_Drawings</div>
-    <h1>Project Drawings</h1>
-    <p class="lead">Public-safe AEC project viewers and experimental architecture engines. Project-specific drawing packages remain separate from research prototypes, while both live under one governed publication site.</p>
-    <div class="status">
-      <span class="pill pass">GITHUB PAGES LIVE</span>
-      <span class="pill">PROJECT VIEWERS</span>
-      <span class="pill">RESEARCH / ENGINES</span>
-      <span class="pill hold">ENGINEERING AUTHORITY REMAINS GOVERNED</span>
-    </div>
-  </section>
+<section class="hero">
+  <div class="eyebrow">Fabin Gurung · Project_Drawings</div>
+  <h1>Project Drawings</h1>
+  <p class="lead">One governed website, separated into three roles: the files we start from, the reusable software/template we develop, and the project-specific outputs we publish. This keeps research reusable without deleting or overwriting earlier project work.</p>
+  <div class="flow">
+    <span class="step">1 · ORIGINAL SOURCE</span><span class="arrow">→</span>
+    <span class="step">2 · RESEARCH / TEMPLATE ENGINE</span><span class="arrow">→</span>
+    <span class="step">3 · PROJECT INSTANCES / OUTPUTS</span>
+  </div>
+</section>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <h2>Projects</h2>
-        <p>Published project-specific viewers and governed drawing packages.</p>
-      </div>
-    </div>
-    <div class="grid">
-      <article class="card">
-        <div class="kicker">PRJ-000007 · Fishtail Builders</div>
-        <h3>Narayani Parajuli Residence</h3>
-        <div class="meta">
-          <span class="pill pass">MODULAR DRAWING ATLAS</span>
-          <span class="pill">V02 → M80</span>
-          <span class="pill hold">M80 HOLD</span>
-        </div>
-        <p>The preserved Narayani modular drawing atlas with independent work-package viewers for PCC, footing reinforcement, RCC, starter/dowel works, columns, plinth beams, and the underground water tank package.</p>
-        <div class="actions">
-          <a class="btn" href="./projects/narayani-parajuli/">Open Narayani Atlas →</a>
-          <a class="btn secondary" href="./stages/v02/" target="_blank" rel="noopener">Open V02 ↗</a>
-        </div>
-      </article>
+<section class="grid">
+  <article class="lane">
+    <div class="num">Lane 1</div>
+    <h2>Original Sources</h2>
+    <div class="meta"><span class="pill">FILE LINKS</span><span class="pill">INPUTS</span><span class="pill hold">PUBLIC-SAFE ONLY</span></div>
+    <p>Links to the actual files a project begins from: CAD/BIM files, PDFs, drawings, scans, models, schedules, reference images, and other governed inputs.</p>
+    <p>This lane records where the real source material lives; it does not duplicate or reinterpret those files.</p>
+    <div class="actions"><a class="btn" href="./source/">Open Source Registry →</a></div>
+  </article>
 
-      <article class="card">
-        <div class="kicker">Repository / project hub development</div>
-        <h3>Project_Drawings Source</h3>
-        <div class="meta">
-          <span class="pill">VERSION CONTROL</span>
-          <span class="pill">A9 GOVERNED</span>
-        </div>
-        <p>GitHub source, branch history, research PRs, and publication lineage for the wider Project_Drawings system.</p>
-        <div class="actions">
-          <a class="btn" href="https://github.com/FabinGurung/Project_Drawings" target="_blank" rel="noopener">Open GitHub Repository ↗</a>
-          <a class="btn secondary" href="https://github.com/FabinGurung/Project_Drawings/pull/3" target="_blank" rel="noopener">Research PR #3 ↗</a>
-        </div>
-      </article>
-    </div>
-  </section>
+  <article class="lane">
+    <div class="num">Lane 2</div>
+    <h2>Research / Template Engine</h2>
+    <div class="meta"><span class="pill pass">OPEN ARCH ENGINE v0.1</span><span class="pill">REUSABLE</span><span class="pill">EXPERIMENTAL</span></div>
+    <p>This is where we build the reusable software: canonical model schemas, geometry generators, 2D/3D viewers, DXF/IFC adapters, rendering pipelines, QA, and future editing tools.</p>
+    <p>The engine is a template/toolchain. It should not contain each project's authoritative source files.</p>
+    <div class="actions"><a class="btn" href="./research/">Open Research →</a><a class="btn secondary" href="./research/open-architecture-engine-v0.1/">v0.1</a></div>
+  </article>
 
-  <section class="section">
-    <div class="section-head">
-      <div>
-        <h2>Research / Engines</h2>
-        <p>Experimental tooling stays isolated from project engineering authority until separately validated and promoted.</p>
-      </div>
-    </div>
-    <div class="grid">
-      <article class="card">
-        <div class="kicker">Open Architecture Engine · v0.1</div>
-        <h3>Canonical model → 2D + CAD + 3D</h3>
-        <div class="meta">
-          <span class="pill pass">SVG</span>
-          <span class="pill pass">DXF</span>
-          <span class="pill pass">glTF</span>
-          <span class="pill hold">IFC NEXT</span>
-        </div>
-        <p>A deterministic proof that one small canonical architectural model can generate multiple representations. The live page includes the generated floor plan, downloadable DXF, interactive 3D glTF model, and output manifest.</p>
-        <div class="actions">
-          <a class="btn" href="./research/open-architecture-engine-v0.1/">Open Architecture Engine v0.1 →</a>
-          <a class="btn secondary" href="https://github.com/FabinGurung/Project_Drawings/tree/research/open-architecture-engine-v0.1" target="_blank" rel="noopener">Research Branch ↗</a>
-        </div>
-      </article>
+  <article class="lane">
+    <div class="num">Lane 3</div>
+    <h2>Projects / Deployed Outputs</h2>
+    <div class="meta"><span class="pill pass">NARAYANI PRESERVED</span><span class="pill">PROJECT INSTANCES</span></div>
+    <p>Project-specific pages and resource objects created from governed source files, optionally using the reusable research engine.</p>
+    <p>Narayani remains here as preserved project work. Future projects can use newer engine versions without rewriting Narayani.</p>
+    <div class="actions"><a class="btn" href="./projects/">Open Projects →</a><a class="btn secondary" href="./projects/narayani-parajuli/">Narayani</a></div>
+  </article>
+</section>
 
-      <article class="card">
-        <div class="kicker">Next research gate</div>
-        <h3>Architecture Engine v0.2</h3>
-        <div class="meta">
-          <span class="pill">PLANNED</span>
-        </div>
-        <p>Doors and windows attached to walls, actual wall openings, room detection, derived dimensions, improved synchronized 2D/3D interaction, then real IFC generation through IfcOpenShell.</p>
-        <div class="actions">
-          <a class="btn secondary" href="./research/open-architecture-engine-v0.1/">Review v0.1 baseline →</a>
-        </div>
-      </article>
-    </div>
-    <p class="note"><strong>Boundary:</strong> website rendering and research automation do not create architectural, structural, codal, or construction approval. Governed engineering source records and signed documents remain authoritative.</p>
-  </section>
+<section class="note">
+<strong>Separation rule:</strong> Source files remain source files. Research builds reusable capability. Projects consume approved sources and tool versions to create project-specific outputs. Updating the research engine does <strong>not</strong> automatically modify Narayani or any other existing project publication.
+</section>
 
-  <footer>Project_Drawings · public-safe publication layer · existing Narayani stage files preserved</footer>
+<footer>Project_Drawings · public-safe publication layer · engineering authority remains governed separately</footer>
 </main>
 </body>
 </html>
