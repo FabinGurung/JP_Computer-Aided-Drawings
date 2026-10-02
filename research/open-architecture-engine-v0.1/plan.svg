@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 700" role="img" aria-label="POC generated floor plan">
+<rect width="100%" height="100%" fill="white"/>
+<polygon points="85.06,617.69 914.94,617.69 914.94,82.31 85.06,82.31" fill="#f8fafc" stroke="#94a3b8" stroke-width="2"/>
+<polygon points="85.06,602.29 914.94,602.29 914.94,633.08 85.06,633.08" fill="#cbd5e1" stroke="#334155" stroke-width="2"><title>WALL-GF-001</title></polygon>
+<polygon points="899.03,617.69 899.03,82.31 930.84,82.31 930.84,617.69" fill="#cbd5e1" stroke="#334155" stroke-width="2"><title>WALL-GF-002</title></polygon>
+<polygon points="914.94,97.71 85.06,97.71 85.06,66.92 914.94,66.92" fill="#cbd5e1" stroke="#334155" stroke-width="2"><title>WALL-GF-003</title></polygon>
+<polygon points="100.97,82.31 100.97,617.69 69.16,617.69 69.16,82.31" fill="#cbd5e1" stroke="#334155" stroke-width="2"><title>WALL-GF-004</title></polygon>
+<text x="500" y="32" text-anchor="middle" font-family="system-ui" font-size="20">POC · POC-OPEN-ARCH-001 · revision v0.1</text>
+<text x="500" y="675" text-anchor="middle" font-family="system-ui" font-size="18">6000 mm</text>
+<text x="30" y="350" text-anchor="middle" transform="rotate(-90 30 350)" font-family="system-ui" font-size="18">4000 mm</text>
+</svg>
