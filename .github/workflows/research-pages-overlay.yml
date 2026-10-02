@@ -1,0 +1,80 @@
+name: Narayani Pages + Open Architecture Research Overlay
+
+on:
+  push:
+    branches:
+      - narayani-modular-website-v0.3
+    paths:
+      - ".github/workflows/research-pages-overlay.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: github-pages
+  cancel-in-progress: false
+
+jobs:
+  build-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout allowed Pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: narayani-modular-website-v0.3
+
+      - name: Checkout isolated research branch
+        uses: actions/checkout@v4
+        with:
+          ref: research/open-architecture-engine-v0.1
+          path: _research_source
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Generate research artifacts from canonical model
+        run: python _research_source/tools/open_architecture/generate_poc.py
+
+      - name: Assemble site without changing existing Narayani files
+        run: |
+          mkdir -p _site
+          cp index.html 404.html MANIFEST.json .nojekyll _site/
+          cp -R assets data stages _site/
+          mkdir -p _site/research/open-architecture-engine-v0.1
+          cp -R _research_source/public/research/open-architecture-engine-v0.1/. _site/research/open-architecture-engine-v0.1/
+
+      - name: Verify preserved root and research overlay
+        run: |
+          test -f _site/index.html
+          test -d _site/stages
+          test -f _site/research/open-architecture-engine-v0.1/index.html
+          test -f _site/research/open-architecture-engine-v0.1/plan.svg
+          test -f _site/research/open-architecture-engine-v0.1/plan.dxf
+          test -f _site/research/open-architecture-engine-v0.1/model.gltf
+          python -m json.tool _site/research/open-architecture-engine-v0.1/model.gltf >/dev/null
+          echo "PAGES_OVERLAY_QA=PASS"
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+        with:
+          enablement: true
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site
+
+  deploy-pages:
+    needs: build-pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
