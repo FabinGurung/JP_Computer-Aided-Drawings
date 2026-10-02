@@ -1,0 +1,13 @@
+{
+  "schema": "fabin-project-drawings://generated-manifest/0.1",
+  "source": "models/open-architecture-engine-v0.1/poc-model.json",
+  "project_id": "POC-OPEN-ARCH-001",
+  "revision": "v0.1",
+  "outputs": ["plan.svg","plan.dxf","model.gltf"],
+  "scope": ["rectangular slab","axis-defined walls"],
+  "known_limitations": [
+    "No doors/windows/openings in v0.1 POC.",
+    "No IFC artifact emitted until IfcOpenShell validation is available.",
+    "This is software geometry QA only, not architectural/structural approval."
+  ]
+}
