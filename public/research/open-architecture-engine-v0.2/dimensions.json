@@ -1,13 +1,51 @@
 {
   "dimensions": [
-    {"dimension_id":"DIM-GF-OVERALL-X","kind":"overall_x","value_mm":6000},
-    {"dimension_id":"DIM-GF-OVERALL-Y","kind":"overall_y","value_mm":4000},
-    {"dimension_id":"DIM-OPEN-GF-DOOR-001-WIDTH","element_id":"OPEN-GF-DOOR-001","kind":"opening_width","value_mm":1000},
-    {"dimension_id":"DIM-OPEN-GF-DOOR-001-HEIGHT","element_id":"OPEN-GF-DOOR-001","kind":"opening_height","value_mm":2100},
-    {"dimension_id":"DIM-OPEN-GF-DOOR-001-SILL","element_id":"OPEN-GF-DOOR-001","kind":"opening_sill","value_mm":0},
-    {"dimension_id":"DIM-OPEN-GF-WINDOW-001-WIDTH","element_id":"OPEN-GF-WINDOW-001","kind":"opening_width","value_mm":1500},
-    {"dimension_id":"DIM-OPEN-GF-WINDOW-001-HEIGHT","element_id":"OPEN-GF-WINDOW-001","kind":"opening_height","value_mm":1200},
-    {"dimension_id":"DIM-OPEN-GF-WINDOW-001-SILL","element_id":"OPEN-GF-WINDOW-001","kind":"opening_sill","value_mm":900}
+    {
+      "dimension_id": "DIM-GF-OVERALL-X",
+      "kind": "overall_x",
+      "value_mm": 6000
+    },
+    {
+      "dimension_id": "DIM-GF-OVERALL-Y",
+      "kind": "overall_y",
+      "value_mm": 4000
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-DOOR-001-WIDTH",
+      "element_id": "OPEN-GF-DOOR-001",
+      "kind": "opening_width",
+      "value_mm": 1000
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-DOOR-001-HEIGHT",
+      "element_id": "OPEN-GF-DOOR-001",
+      "kind": "opening_height",
+      "value_mm": 2100
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-DOOR-001-SILL",
+      "element_id": "OPEN-GF-DOOR-001",
+      "kind": "opening_sill",
+      "value_mm": 0
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-WINDOW-001-WIDTH",
+      "element_id": "OPEN-GF-WINDOW-001",
+      "kind": "opening_width",
+      "value_mm": 1500
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-WINDOW-001-HEIGHT",
+      "element_id": "OPEN-GF-WINDOW-001",
+      "kind": "opening_height",
+      "value_mm": 1200
+    },
+    {
+      "dimension_id": "DIM-OPEN-GF-WINDOW-001-SILL",
+      "element_id": "OPEN-GF-WINDOW-001",
+      "kind": "opening_sill",
+      "value_mm": 900
+    }
   ],
-  "schema":"fabin-project-drawings://derived-dimensions/0.2"
+  "schema": "fabin-project-drawings://derived-dimensions/0.2"
 }
