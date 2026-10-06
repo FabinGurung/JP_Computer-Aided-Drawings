@@ -1,0 +1,24 @@
+{
+  "rooms": [
+    {
+      "area_m2_centerline": 24.0,
+      "area_mm2_centerline": 24000000.0,
+      "boundary_wall_ids": [
+        "WALL-GF-001",
+        "WALL-GF-002",
+        "WALL-GF-003",
+        "WALL-GF-004"
+      ],
+      "detection_method": "closed-wall-centerline-loop",
+      "element_id": "ROOM-GF-E6825D26",
+      "polygon_mm": [
+        [0.0,0.0],
+        [6000.0,0.0],
+        [6000.0,4000.0],
+        [0.0,4000.0]
+      ],
+      "storey_id": "GF"
+    }
+  ],
+  "schema": "fabin-project-drawings://derived-rooms/0.2"
+}
