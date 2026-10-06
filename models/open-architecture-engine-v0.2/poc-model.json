@@ -1,0 +1,41 @@
+{
+  "schema": "fabin-project-drawings://architecture-model/0.2",
+  "project_id": "POC-OPEN-ARCH-002",
+  "revision": "v0.2",
+  "units": "mm",
+  "north_deg": 0,
+  "room_detection": {
+    "enabled": true,
+    "mode": "closed-wall-centerline-loops"
+  },
+  "storeys": [
+    {
+      "storey_id": "GF",
+      "elevation_mm": 0,
+      "height_mm": 3000,
+      "slabs": [
+        {
+          "element_id": "SLAB-GF-001",
+          "polygon_mm": [[0,0],[6000,0],[6000,4000],[0,4000]],
+          "thickness_mm": 125
+        }
+      ],
+      "walls": [
+        {"element_id":"WALL-GF-001","start_mm":[0,0],"end_mm":[6000,0],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-002","start_mm":[6000,0],"end_mm":[6000,4000],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-003","start_mm":[6000,4000],"end_mm":[0,4000],"thickness_mm":230,"height_mm":3000},
+        {"element_id":"WALL-GF-004","start_mm":[0,4000],"end_mm":[0,0],"thickness_mm":230,"height_mm":3000}
+      ],
+      "openings": [
+        {"element_id":"OPEN-GF-DOOR-001","kind":"door","wall_id":"WALL-GF-001","offset_mm":1200,"width_mm":1000,"height_mm":2100,"sill_mm":0},
+        {"element_id":"OPEN-GF-WINDOW-001","kind":"window","wall_id":"WALL-GF-003","offset_mm":2100,"width_mm":1500,"height_mm":1200,"sill_mm":900}
+      ],
+      "doors": [
+        {"element_id":"DOOR-GF-001","opening_id":"OPEN-GF-DOOR-001","swing":"left_in"}
+      ],
+      "windows": [
+        {"element_id":"WINDOW-GF-001","opening_id":"OPEN-GF-WINDOW-001","type":"fixed"}
+      ]
+    }
+  ]
+}
