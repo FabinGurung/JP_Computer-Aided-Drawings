@@ -1,0 +1,82 @@
+{
+  "$schema": "https://raw.githubusercontent.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph/main/schemas/module-manifest.schema.json",
+  "schema_version": "1.0.0",
+  "manifest_kind": "A7_MODULE_MANIFEST",
+  "manifest_status": "ACTIVE",
+  "module_id": "MOD-CAD-001",
+  "repository_id": "REPO-000003",
+  "provider_repository_id": "897526094",
+  "repository_full_name": "FabinGurung/JP_Computer-Aided-Drawings",
+  "canonical_label": "JP Computer-Aided Drawings",
+  "module_role": "CAD_DRAWINGS",
+  "ownership_profile_id": "OWN-MOD-CAD-001",
+  "a7_registry": {
+    "system_id": "SYS-A7-000001",
+    "repository_id": "REPO-000001",
+    "provider_repository_id": "1406572237",
+    "repository_full_name": "FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph",
+    "module_registry_path": "registry/entities/modules.json",
+    "ownership_registry_path": "registry/authority/module-ownership.json",
+    "authority_map_path": "registry/authority/authority-map.json",
+    "system_boundary_path": "registry/authority/system-boundaries.json"
+  },
+  "refs": {
+    "default_branch": "narayani-pages-v0.2",
+    "canonical_working_ref": "narayani-pages-v0.2",
+    "publication_ref": "narayani-pages-v0.2",
+    "development_ref": "narayani-modular-website-v0.3"
+  },
+  "routing_entrypoints": [
+    {
+      "entrypoint_id": "READ_FIRST",
+      "kind": "HUMAN_READ_FIRST",
+      "ref": "narayani-pages-v0.2",
+      "path": "README.md"
+    },
+    {
+      "entrypoint_id": "PUBLICATION_MANIFEST",
+      "kind": "MACHINE_CONTRACT",
+      "ref": "narayani-pages-v0.2",
+      "path": "MANIFEST.json"
+    },
+    {
+      "entrypoint_id": "PUBLIC_DATA",
+      "kind": "PUBLICATION_DATA",
+      "ref": "narayani-pages-v0.2",
+      "path": "data/"
+    },
+    {
+      "entrypoint_id": "PUBLIC_APP",
+      "kind": "HUMAN_INTERFACE",
+      "ref": "narayani-pages-v0.2",
+      "path": "index.html"
+    },
+    {
+      "entrypoint_id": "DEVELOPMENT_READ_FIRST",
+      "kind": "HUMAN_READ_FIRST",
+      "ref": "narayani-modular-website-v0.3",
+      "path": "README.md"
+    },
+    {
+      "entrypoint_id": "DEVELOPMENT_PROJECTS",
+      "kind": "ENGINEERING_WORK_AREA",
+      "ref": "narayani-modular-website-v0.3",
+      "path": "projects/"
+    },
+    {
+      "entrypoint_id": "DEVELOPMENT_STAGES",
+      "kind": "ENGINEERING_WORK_AREA",
+      "ref": "narayani-modular-website-v0.3",
+      "path": "stages/"
+    }
+  ],
+  "resolver_rules": [
+    "READ_THIS_MANIFEST_FIRST",
+    "LOAD_A7_OWNERSHIP_PROFILE_BEFORE_DOMAIN_MUTATION",
+    "RESPECT_PUBLICATION_VS_DEVELOPMENT_REF_BOUNDARY",
+    "WEBSITE_RENDERING_DOES_NOT_CREATE_ENGINEERING_APPROVAL",
+    "OPERATIONS_LINKS_DO_NOT_TRANSFER_CAD_AUTHORITY"
+  ],
+  "manifest_role": "ROUTING_ONLY_NON_AUTHORITATIVE_FOR_DOMAIN_FACTS",
+  "observed_at": "2026-10-06T11:36:00Z"
+}
