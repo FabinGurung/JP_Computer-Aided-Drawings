@@ -1,32 +1,77 @@
-# Narayani Modular Drawing Atlas v0.3.1 — DEVELOPMENT
+# Project Drawings — Governed Multi-Project AEC Hub
 
-This branch/package is the modular successor to the verified v0.2 GitHub Pages status publication.
+This branch is the multi-project successor to the Narayani-only Vite/TypeScript development candidate.
 
-## Safety and authority
-- Production v0.2 remains untouched until explicit promotion.
-- Private Google Drive identifiers/links are excluded from this public payload.
-- Engineering states are preserved; website rendering does not create new engineering approval.
-- M80 remains CODAL_NOT_VERIFIED / HOLD / user-deferred.
+## Portal pattern
 
-## Modular rule
-The root `index.html` calls `data/navigation.json` and loads each work package as an independent module. Each stage has separate `index.html`, `stage.css`, `stage.js`, `stage-data.json`, and `meta.json`.
+The repository now follows the same high-level pattern as the MSc Structural Engineering study portal:
 
-## Source lineage
-Exact private source Drive IDs are retained only in the governed Drive-side INTERNAL_LINEAGE control record and are deliberately not published. Public `meta.json` files retain source artifact names and SHA-256 hashes for byte-level provenance without exposing private Drive routes.
+```text
+root project registry
+└── projects/
+    ├── narayani-parajuli/
+    └── ramachandra-devkota/
+```
 
-## Promotion
-Do not change the GitHub Pages source from `narayani-pages-v0.2:/` until this development branch has passed remote tree/file verification, functional QA, public-safety scan, and explicit promotion authorization.
+Each project owns its own subpage and can grow independent modules without turning the repository root into one project’s website.
 
-## QA01 normalization
-- Module-card tab counts now mean primary viewer tabs.
-- V03 reports 5 primary viewer tabs; its 3 rebar layer controls remain sub-controls.
-- M80 source panels are grouped into 8 primary viewer tabs without changing engineering data.
-- Private governed source references are displayed as non-clickable labels rather than dead public links.
-- Production Pages remains on `narayani-pages-v0.2`; this development branch is not promoted.
+## Preserved Narayani lineage
 
-## v0.4 Vite + TypeScript migration
-Shared homepage/app shell migrated to TypeScript. Proven PCC→M80 stage viewers remain unchanged under `public/stages/` for Phase 1 compatibility.
+This branch is a direct child of:
 
-- Source parent: `4486dcfc453cb80e0bffd4836ac052bd7463d6b5`
-- Vercel build target: `dist/`
-- M80: `CODAL_NOT_VERIFIED / HOLD / DEFERRED`
+- `narayani-vite-ts-vercel-v0.4`
+- commit `9771d9d1061eab6ef3a9590a1fe0aa2a7359ae60`
+- tree `80a43b2078c89825ae36641be057d2f9a9483e99`
+
+The proven Narayani V02, V03 and M40–M80 viewer files under `public/stages/` remain in place. The shared hub adds a project-level route in front of them instead of deleting, flattening or recreating those modules.
+
+## Current project routes
+
+- `/projects/narayani-parajuli/` — Narayani Parajuli Residence / PRJ-000007
+- `/projects/ramachandra-devkota/` — 14 One Storey House — Ramachandra Devkota / PRJ-000029 / REB-002
+
+The public-safe registry lives at `public/data/projects.json`.
+
+## Authority and safety
+
+- A9-governed Google Drive remains the engineering and project-data authority.
+- GitHub is the code/publication/version-history layer.
+- Website rendering does not create engineering approval, construction approval, project commencement, or contract-value authority.
+- Private Drive identifiers/URLs, internal checkpoint/register links, and unapproved contact details must not be exposed in public website payloads.
+- Approved Google Docs/Sheets may later be linked from a project module only after their public/stakeholder access classification explicitly permits it.
+- Narayani M80 remains `CODAL_NOT_VERIFIED / HOLD / DEFERRED`.
+- Ramachandra Devkota remains `PLANNED`; its current estimate remains internal/preliminary.
+
+## Publication ledger rule
+
+Every governed web publication should be represented in A9 and GitHub with at least:
+
+- source project/event/release lineage
+- candidate branch
+- parent/base commit
+- commit SHA
+- tree SHA
+- pull request
+- public-safety/readback state
+- tag and GitHub Release when created
+- deployment provider + deployment URL/state
+- rollback commit/tag
+
+Recommended A9 typed relations include `PUBLISHED_AS`, `COMMIT_FOR`, `PR_FOR`, `TAG_FOR`, `RELEASE_FOR`, `DEPLOYS`, `SUPERSEDES` and `ROLLBACK_TO`.
+
+## Build
+
+Framework: Vite + TypeScript
+
+```bash
+npm run typecheck
+npm run build
+```
+
+Output: `dist/`
+
+## Candidate status
+
+Branch: `project-hub-v0.2`
+
+This branch is a candidate until source-level QA, provider readback, A9 Local/Main registration and deployment verification are complete. Do not infer a public/live deployment merely from the branch or commit existing.

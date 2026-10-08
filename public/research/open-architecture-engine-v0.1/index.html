@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<meta name="description" content="Fabin Project_Drawings open architecture engine v0.1 research proof"/>
+<title>Open Architecture Engine v0.1 · Project_Drawings</title>
+<script type="module" src="https://unpkg.com/@google/model-viewer/dist/model-viewer.min.js"></script>
+<style>
+:root{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#172033;background:#eef2f7}
+*{box-sizing:border-box}body{margin:0}.wrap{max-width:1180px;margin:auto;padding:28px 20px 48px}.hero,.panel{background:#fff;border:1px solid #d8e0ea;border-radius:18px;box-shadow:0 7px 24px #0f172a0c}.hero{padding:26px}.eyebrow{font-size:12px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#475569}.hero h1{margin:.25em 0;font-size:clamp(30px,5vw,52px);line-height:1.04}.hero p{max-width:850px;color:#475569}.status{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}.pill{padding:5px 10px;border-radius:999px;border:1px solid #cbd5e1;background:#f8fafc;font-size:12px;font-weight:800}.pass{border-color:#86efac;background:#f0fdf4;color:#166534}.hold{border-color:#fcd34d;background:#fffbeb;color:#92400e}.grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}.panel{padding:18px}.panel h2{margin-top:0}.plan{width:100%;min-height:420px;border:1px solid #e2e8f0;border-radius:12px;background:white;object-fit:contain}model-viewer{display:block;width:100%;height:480px;border:1px solid #e2e8f0;border-radius:12px;background:linear-gradient(#f8fafc,#e2e8f0)}.actions{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}.btn{display:inline-block;text-decoration:none;padding:9px 12px;border-radius:9px;background:#2563eb;color:white;font-weight:800;font-size:13px}.btn.secondary{background:white;color:#334155;border:1px solid #cbd5e1}.flow{white-space:pre-wrap;background:#0f172a;color:#e2e8f0;padding:18px;border-radius:12px;overflow:auto}.note{color:#64748b;font-size:13px}.wide{margin-top:18px}@media(max-width:820px){.grid{grid-template-columns:1fr}.plan{min-height:300px}model-viewer{height:360px}}
+</style>
+</head>
+<body>
+<main class="wrap">
+<section class="hero">
+<div class="eyebrow">Fabin Project_Drawings · isolated research branch</div>
+<h1>Open Architecture Engine v0.1</h1>
+<p>This page proves the core architecture: one small canonical building model generates multiple deterministic representations. It is a software/geometry research proof, not an architectural, structural, codal, or construction approval.</p>
+<div class="status">
+<span class="pill pass">CANONICAL MODEL → MULTIPLE OUTPUTS</span>
+<span class="pill pass">GITHUB ACTIONS QA</span>
+<span class="pill hold">IFC NEXT GATE</span>
+<span class="pill">RESEARCH ONLY</span>
+</div>
+</section>
+
+<section class="grid">
+<article class="panel">
+<h2>Generated 2D plan</h2>
+<img class="plan" src="./plan.svg" alt="Generated 2D floor plan"/>
+<div class="actions">
+<a class="btn" href="./plan.svg" target="_blank" rel="noopener">Open SVG ↗</a>
+<a class="btn secondary" href="./plan.dxf" download>DXF</a>
+<a class="btn secondary" href="./manifest.json" target="_blank" rel="noopener">Manifest</a>
+</div>
+</article>
+
+<article class="panel">
+<h2>Generated 3D model</h2>
+<model-viewer src="./model.gltf" camera-controls auto-rotate shadow-intensity="1" interaction-prompt="auto" alt="Generated 3D architectural proof model"></model-viewer>
+<div class="actions">
+<a class="btn" href="./model.gltf" target="_blank" rel="noopener">Open glTF ↗</a>
+<a class="btn secondary" href="https://github.com/FabinGurung/Project_Drawings/blob/research/open-architecture-engine-v0.1/models/open-architecture-engine-v0.1/poc-model.json" target="_blank" rel="noopener">Canonical JSON ↗</a>
+</div>
+</article>
+</section>
+
+<section class="panel wide">
+<h2>What is actually proven</h2>
+<pre class="flow">poc-model.json
+      │
+      ├── plan.svg   ← derived 2D geometry
+      ├── plan.dxf   ← derived CAD geometry
+      └── model.gltf ← derived 3D geometry
+
+same source → multiple outputs → automated QA</pre>
+<p class="note">Current v0.1 scope is deliberately small: one storey, one quadrilateral slab and four axis-defined walls. Doors/windows, openings, rooms, dimensions, IFC, sections/elevations and Blender/Cycles rendering are subsequent gates.</p>
+</section>
+</main>
+</body>
+</html>

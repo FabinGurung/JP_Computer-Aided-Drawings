@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Narayani Parajuli Residence governed structural viewer hub."/>
+<title>Narayani Parajuli Residence · Project Drawings</title><link rel="stylesheet" href="../../assets/css/site.css"/></head>
+<body>
+<nav class="project-page-nav"><a href="../../">← All projects</a></nav>
+<header class="hero"><div class="eyebrow">Fishtail Builders · PRJ-000007 · governed project subpage</div><h1>Narayani Parajuli Residence</h1><p>The richer Narayani V02→M80 viewer set is preserved intact. This project page becomes its front door inside the shared Project Drawings portal.</p><div class="notice"><b>Engineering state is preserved:</b> frozen packages remain frozen; M80 remains <b>CODAL_NOT_VERIFIED / HOLD</b> and is not construction-approved.</div></header>
+<main>
+<section><div class="section-head"><div><h2>Structural work-package modules</h2><p>Open a module here or launch its full-page governed viewer.</p></div><div id="loadState" class="pill">Loading…</div></div><div id="cards" class="cards"></div></section>
+<section id="viewerSection" class="viewer-section" hidden><div class="viewer-head"><div><span id="viewerStage" class="pill"></span><h2 id="viewerTitle">Viewer</h2></div><div class="actions"><a id="openFull" class="button" href="#" target="_blank" rel="noopener">Open full page ↗</a><button id="closeViewer" class="button ghost" type="button">Close</button></div></div><iframe id="viewer" title="Detailed stage viewer"></iframe><p class="viewer-note">Detailed engineering source/checkpoint records remain in governed private project storage.</p></section>
+<section class="architecture"><h2>Project route</h2><pre>Narayani Parajuli Residence
+├── V02 · PCC / Blinding
+├── V03 · Footing Reinforcement
+├── M40 · Footing RCC
+├── M50 · Starter / Dowel / Embedded Works
+├── M60 · Column First Lift
+├── M70 · Plinth Beam Network
+└── M80 · Underground Water Tank · HOLD</pre></section>
+</main><footer>Narayani project subpage · migrated without deleting or flattening the proven stage modules.</footer>
+<script>
+const $=s=>document.querySelector(s);const load=$('#loadState'),cards=$('#cards'),section=$('#viewerSection'),frame=$('#viewer'),full=$('#openFull');
+function route(href){return new URL('../../'+href,location.href).href}
+function openModule(m){section.hidden=false;$('#viewerStage').textContent=`${m.stage} · ${m.version}`;$('#viewerTitle').textContent=m.title;frame.src=route(m.href);frame.title=`${m.stage} ${m.title} detailed viewer`;full.href=route(m.href);history.replaceState(null,'','#'+m.slug);section.scrollIntoView({behavior:'smooth',block:'start'})}
+async function boot(){try{const r=await fetch('../../data/navigation.json',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const {modules}=await r.json();load.textContent=`${modules.length} modules`;modules.forEach(m=>{const c=document.createElement('article');c.className='card';c.setAttribute('role','button');c.tabIndex=0;c.innerHTML=`<div class="stage">${m.stage}</div><h3>${m.title}</h3><div class="meta"><span class="pill">${m.version}</span><span class="pill ${m.status.includes('HOLD')?'hold':'frozen'}">${m.status}</span><span class="pill">${m.tab_count} viewer tabs</span></div>`;c.onclick=()=>openModule(m);c.onkeydown=e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();openModule(m)}};cards.appendChild(c)});const wanted=location.hash.replace('#','');const hit=modules.find(m=>m.slug===wanted);if(hit)openModule(hit)}catch(e){load.textContent='Load failed';load.classList.add('hold');console.error(e)}}
+$('#closeViewer').onclick=()=>{section.hidden=true;frame.src='about:blank';history.replaceState(null,'',location.pathname)};boot();
+</script></body></html>

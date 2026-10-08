@@ -1,0 +1,43 @@
+{
+  "canonical_element_ids": [
+    "DOOR-GF-001",
+    "OPEN-GF-DOOR-001",
+    "OPEN-GF-WINDOW-001",
+    "SLAB-GF-001",
+    "WALL-GF-001",
+    "WALL-GF-002",
+    "WALL-GF-003",
+    "WALL-GF-004",
+    "WINDOW-GF-001"
+  ],
+  "known_limitations": [
+    "Room area is wall-centreline software geometry QA, not quantity authority.",
+    "IFC is intentionally not emitted in v0.2; real IfcOpenShell is the next gate.",
+    "Research/software QA only; not architectural, structural, codal, construction or client approval."
+  ],
+  "non_regression": {
+    "narayani_stage_files_must_remain_untouched": true,
+    "v0.1_source": "models/open-architecture-engine-v0.1/poc-model.json"
+  },
+  "outputs": [
+    "plan.svg",
+    "plan.dxf",
+    "model.gltf",
+    "rooms.json",
+    "dimensions.json"
+  ],
+  "project_id": "POC-OPEN-ARCH-002",
+  "revision": "v0.2",
+  "room_ids": [
+    "ROOM-GF-E6825D26"
+  ],
+  "schema": "fabin-project-drawings://generated-manifest/0.2",
+  "scope": [
+    "host-attached door/window openings",
+    "closed-loop room detection",
+    "derived dimensions",
+    "synchronized SVG/DXF/glTF generation"
+  ],
+  "source": "models/open-architecture-engine-v0.2/poc-model.json",
+  "source_sha256": "fe465c4f82cf677c7282ecd871f49387a082551c04a635881ae81a6612af4836"
+}

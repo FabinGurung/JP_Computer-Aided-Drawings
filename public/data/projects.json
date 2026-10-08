@@ -1,0 +1,32 @@
+{
+  "schema": "a9-project-drawings://public-project-registry/0.2",
+  "generated_at_npt": "2026-09-26",
+  "policy": "Public-safe project metadata only. A9-governed Google Drive remains engineering/project authority. Private Drive IDs, private source URLs, internal checkpoint links and unapproved contact details are excluded.",
+  "projects": [
+    {
+      "project_id": "PRJ-000007",
+      "slug": "narayani-parajuli",
+      "name": "Narayani Parajuli Residence",
+      "organization": "Fishtail Builders",
+      "location": "Pokhara, Nepal",
+      "project_status": "GOVERNED ENGINEERING WORKSTREAM",
+      "portal_status": "MODULAR VIEWERS",
+      "summary": "Existing V02, V03 and M40–M80 structural viewers are preserved and exposed through a project-level route instead of occupying the repository root.",
+      "href": "projects/narayani-parajuli/",
+      "modules": ["V02 PCC","V03 Footing Reinforcement","M40 Footing RCC","M50 Starter/Dowel","M60 Column","M70 Plinth Beam","M80 Water Tank"]
+    },
+    {
+      "project_id": "PRJ-000029",
+      "project_code": "REB-002",
+      "slug": "ramachandra-devkota",
+      "name": "14 One Storey House — Ramachandra Devkota",
+      "organization": "Rohini Engineering and Builders",
+      "location": "Ward 14, Pokhara",
+      "project_status": "PLANNED",
+      "portal_status": "PROJECT PAGE READY",
+      "summary": "Governed CAD revisions, architectural visualization, native preliminary estimate workspace and current project-state controls are enough to support a useful portal now, with future WBS, reports and field modules reserved.",
+      "href": "projects/ramachandra-devkota/",
+      "modules": ["Drawings & Models","Visualization","Estimate / BOQ","Project State","WBS / Gantt","Reports","Site & Media","Release History"]
+    }
+  ]
+}

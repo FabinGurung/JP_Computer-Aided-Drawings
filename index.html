@@ -1,20 +1,29 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="Narayani governed AEC drawing atlas — Vite + TypeScript preview."/>
-<title>Narayani AEC · Vite + TypeScript Preview</title><link rel="stylesheet" href="/assets/css/site.css"/></head>
-<body><header class="hero"><div class="eyebrow">Fishtail Builders · PRJ-000007 · Vite + TypeScript v0.4 preview</div>
-<h1>Narayani Modular Drawing Atlas</h1><p>The proven PCC→M80 viewers are preserved while the application shell migrates to a typed Vite/TypeScript architecture.</p>
-<div class="notice"><b>Engineering state is preserved:</b> frozen packages remain frozen; M80 remains <b>CODAL_NOT_VERIFIED / HOLD</b> and is not construction-approved.</div></header>
-<main><section><div class="section-head"><div><h2>Work-package modules</h2><p>Phase 1 keeps the proven stage viewers intact while the shared application layer becomes typed.</p></div><div id="loadState" class="pill">Loading…</div></div><div id="cards" class="cards"></div></section>
-<section id="viewerSection" class="viewer-section" hidden><div class="viewer-head"><div><span id="viewerStage" class="pill"></span><h2 id="viewerTitle">Viewer</h2></div><div class="actions"><a id="openFull" class="button" href="#" target="_blank" rel="noopener">Open full page ↗</a><button id="closeViewer" class="button ghost" type="button">Close</button></div></div><iframe id="viewer" title="Detailed stage viewer"></iframe></section>
-<section class="architecture"><h2>v0.4 architecture</h2><pre>index.html
-src/main.ts
-src/types.ts
-public/assets/
-public/data/
-public/stages/
-package.json
-tsconfig.json
-vite.config.ts
-vercel.json</pre></section></main>
-<footer>Public preview · private Drive identifiers excluded · signed engineering documents remain authoritative.</footer><script type="module" src="/src/main.ts"></script></body></html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<meta name="description" content="Governed AEC project portal — one project system, many project pages."/>
+<title>Project Drawings · Governed AEC Project Hub</title><link rel="stylesheet" href="/assets/css/site.css"/>
+</head>
+<body>
+<header class="hero"><div class="eyebrow">Governed AEC project portal · A9 publication view</div><h1>Project Drawings</h1><p>One stable front door for project drawings, visualizations, estimates, schedules, reports and future field records. Pick a project first; each project then keeps its own modules and release history.</p><div class="notice"><b>Authority boundary:</b> A9-governed Google Drive remains the engineering/project authority. This site is the public-safe navigation and publication layer; it does not create design approval or construction authority.</div></header>
+<main>
+<section><div class="section-head"><div><h2>Projects</h2><p>Shared portal → project subpage → project modules.</p></div><div id="loadState" class="pill">Loading…</div></div>
+<label class="search-label" for="projectSearch">Find a project</label><input id="projectSearch" class="portal-search" type="search" placeholder="Search client, project ID, company or location…" autocomplete="off"/>
+<div id="cards" class="cards project-cards"></div></section>
+<section class="architecture"><h2>Portal architecture</h2><pre>Project Drawings
+├── Narayani Parajuli Residence
+│   ├── V02 / V03 / M40 / M50 / M60 / M70 / M80
+│   └── governed structural viewers
+└── Ramachandra Devkota
+    ├── Drawings & Models
+    ├── Visualization
+    ├── Estimate / BOQ
+    ├── Project State
+    ├── WBS / Gantt
+    ├── Reports & Documents
+    ├── Site & Media
+    └── Release History</pre></section>
+</main>
+<footer>Public-safe project hub · private Drive identifiers excluded · signed/governed project records remain authoritative.</footer>
+<script type="module" src="/src/main.ts"></script></body></html>

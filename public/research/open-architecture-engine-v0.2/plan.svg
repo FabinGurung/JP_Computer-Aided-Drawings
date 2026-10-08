@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1100 780" role="img" aria-label="Open Architecture Engine v0.2 generated floor plan">
+<rect width="100%" height="100%" fill="white"/>
+<style>text{font-family:system-ui,sans-serif}.wall{fill:#cbd5e1;stroke:#334155;stroke-width:1.3}.room{fill:#ecfeff;stroke:#67e8f9;stroke-dasharray:6 6}.opening{stroke:#0f172a;stroke-width:2}.window{stroke:#0284c7;stroke-width:2}</style>
+<polygon class="room" points="126.92,658.97 973.08,658.97 973.08,121.03 126.92,121.03"/><text x="550.00" y="390.00" text-anchor="middle">ROOM-GF-E6825D26 · 24.00 m²*</text>
+<polygon class="wall" points="126.92,643.50 296.15,643.50 296.15,674.43 126.92,674.43"><title>WALL-GF-001</title></polygon>
+<polygon class="wall" points="437.18,643.50 973.08,643.50 973.08,674.43 437.18,674.43"><title>WALL-GF-001</title></polygon>
+<polygon class="wall" points="956.86,658.97 956.86,121.03 989.29,121.03 989.29,658.97"><title>WALL-GF-002</title></polygon>
+<polygon class="wall" points="973.08,136.50 676.92,136.50 676.92,105.57 973.08,105.57"><title>WALL-GF-003</title></polygon>
+<polygon class="wall" points="465.38,136.50 126.92,136.50 126.92,105.57 465.38,105.57"><title>WALL-GF-003</title></polygon>
+<polygon class="wall" points="143.14,121.03 143.14,658.97 110.71,658.97 110.71,121.03"><title>WALL-GF-004</title></polygon>
+<line class="opening" x1="296.15" y1="658.97" x2="296.15" y2="524.48"/>
+<line class="window" x1="676.92" y1="113.30" x2="465.38" y2="113.30"/>
+<line class="window" x1="676.92" y1="128.77" x2="465.38" y2="128.77"/>
+<text x="550" y="30" text-anchor="middle" font-size="20">Open Architecture Engine v0.2 · POC-OPEN-ARCH-002</text>
+<text x="550" y="760" text-anchor="middle" font-size="12">* room area = wall-centreline software geometry QA only</text>
+</svg>
