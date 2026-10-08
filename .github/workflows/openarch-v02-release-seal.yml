@@ -1,0 +1,98 @@
+name: Open Architecture Engine v0.2 - Immutable Research Release
+on:
+  push:
+    branches:
+      - release/open-architecture-engine-v0.2-seal-20261008
+    paths:
+      - .github/workflows/openarch-v02-release-seal.yml
+
+permissions:
+  contents: write
+
+jobs:
+  tag-and-release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout complete history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Verify immutable release candidate and integration
+        env:
+          TARGET_SHA: 7caf1bdc743e9f0614afb37eebe34cb94153cd8b
+          MERGE_SHA: 8d81788432f65dca83460ddc31bcee76627a0739
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch origin refs/heads/research/open-architecture-engine-v0.2
+          git cat-file -e "$TARGET_SHA^{commit}"
+          git cat-file -e "$MERGE_SHA^{commit}"
+          test "$(git rev-parse HEAD^)" = "$MERGE_SHA"
+          test "$(git diff --name-only HEAD^ HEAD)" = ".github/workflows/openarch-v02-release-seal.yml"
+          test "$(gh run view 37771551956 --json conclusion --jq '.conclusion')" = "success"
+          test "$(gh run view 37771551999 --json conclusion --jq '.conclusion')" = "success"
+          echo "PINNED_V02_RELEASE_CANDIDATE_AND_CI=PASS"
+
+      - name: Create annotated tag without moving existing tags
+        env:
+          TARGET_SHA: 7caf1bdc743e9f0614afb37eebe34cb94153cd8b
+          TAG: open-architecture-engine-v0.2.0
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if git ls-remote --exit-code --tags --refs origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
+          else
+            git tag -a "$TAG" "$TARGET_SHA" -m "Open Architecture Engine v0.2.0 — deterministic research core; A9 SEQ20"
+            git push origin "refs/tags/$TAG"
+          fi
+          test "$(git rev-list -n 1 "$TAG")" = "$TARGET_SHA"
+          echo "IMMUTABLE_V02_TAG_VERIFIED=PASS"
+
+      - name: Publish research-only GitHub prerelease
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: open-architecture-engine-v0.2.0
+        run: |
+          set -euo pipefail
+          cat > /tmp/openarch-v02-release-notes.md <<'EOF'
+          Open Architecture Engine v0.2.0 — RESEARCH / SOFTWARE PROVENANCE ONLY.
+
+          Proven:
+          - Stable canonical IDs and wall-hosted door/window opening relationships
+          - Real 3D wall voids, room-loop detection and derived dimensions
+          - Synchronized deterministic SVG, DXF and glTF representations from canonical model
+          - Mutation acceptance proof and v0.1 non-regression
+          - Existing TypeScript/Vite build preserved
+
+          Research source commit: 7caf1bdc743e9f0614afb37eebe34cb94153cd8b.
+          Integration PR: https://github.com/FabinGurung/JP_Computer-Aided-Drawings/pull/5
+          Verified merge to project-hub-v0.2: 8d81788432f65dca83460ddc31bcee76627a0739.
+          PR QA: https://github.com/FabinGurung/JP_Computer-Aided-Drawings/actions/runs/37771551956
+          v0.1 regression QA: https://github.com/FabinGurung/JP_Computer-Aided-Drawings/actions/runs/37771551999
+
+          Known limitations:
+          - No real IFC, multi-storey editor, stairs, roofs, sections/elevations or engineering approval.
+          - Real IfcOpenShell IFC interoperability is a separate next milestone.
+          - Narayani project releases and GitHub Pages owner branch are not modified by this research release.
+          - This release is NOT architectural, structural, codal, construction, regulatory, or client approval.
+          EOF
+          if ! gh release view "$TAG" >/dev/null 2>&1; then
+            gh release create "$TAG" --verify-tag --prerelease \
+              --title "Open Architecture Engine v0.2.0 — Research Core Milestone" \
+              --notes-file /tmp/openarch-v02-release-notes.md
+          fi
+          test "$(gh release view "$TAG" --json isPrerelease --jq '.isPrerelease')" = "true"
+          echo "V02_RESEARCH_PRERELEASE_VERIFIED=PASS"
+
+      - name: Final provider tag and release readback
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch origin "refs/tags/open-architecture-engine-v0.2.0:refs/tags/open-architecture-engine-v0.2.0" || true
+          test "$(git rev-list -n 1 open-architecture-engine-v0.2.0)" = "7caf1bdc743e9f0614afb37eebe34cb94153cd8b"
+          gh release view open-architecture-engine-v0.2.0 --json tagName,name,url,isDraft,isPrerelease
+          echo "A9_V02_TAG_RELEASE_READBACK=PASS"
