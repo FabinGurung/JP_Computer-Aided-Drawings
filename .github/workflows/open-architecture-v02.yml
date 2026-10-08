@@ -1,0 +1,75 @@
+name: Open Architecture Engine v0.2 QA
+
+on:
+  push:
+    branches:
+      - research/open-architecture-engine-v0.2
+  pull_request:
+    paths:
+      - "models/open-architecture-engine-v0.2/**"
+      - "tools/open_architecture/generate_v02.py"
+      - "public/research/open-architecture-engine-v0.2/**"
+      - "research/OPEN_ARCHITECTURE_ENGINE_V0.2.md"
+      - ".github/workflows/open-architecture-v02.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  deterministic-generation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Prove v0.1 remains reproducible
+        run: |
+          python tools/open_architecture/generate_poc.py
+          git diff --exit-code -- public/research/open-architecture-engine-v0.1
+
+      - name: Generate and acceptance-check v0.2
+        run: python tools/open_architecture/generate_v02.py --acceptance-check
+
+      - name: Validate v0.2 artifacts
+        run: |
+          python -m json.tool public/research/open-architecture-engine-v0.2/model.gltf >/dev/null
+          python - <<'PY'
+          import json
+          import xml.etree.ElementTree as ET
+          from pathlib import Path
+
+          out = Path("public/research/open-architecture-engine-v0.2")
+          ET.parse(out / "plan.svg")
+          dxf = (out / "plan.dxf").read_text(encoding="utf-8")
+          assert "SECTION" in dxf and "ENTITIES" in dxf and dxf.rstrip().endswith("EOF")
+
+          manifest = json.loads((out / "manifest.json").read_text(encoding="utf-8"))
+          rooms = json.loads((out / "rooms.json").read_text(encoding="utf-8"))
+          dims = json.loads((out / "dimensions.json").read_text(encoding="utf-8"))
+          gltf = json.loads((out / "model.gltf").read_text(encoding="utf-8"))
+
+          assert manifest["schema"].endswith("/0.2")
+          assert len(manifest["canonical_element_ids"]) == 9
+          assert manifest["room_ids"] == ["ROOM-GF-E6825D26"]
+          assert rooms["rooms"][0]["area_m2_centerline"] == 24.0
+          assert {d["kind"] for d in dims["dimensions"]} >= {"overall_x", "overall_y", "opening_width", "opening_height", "opening_sill"}
+
+          provenance = {p["source_element_id"]: p for p in gltf["nodes"][0]["extras"]["piece_provenance"]}
+          assert provenance["WALL-GF-001"]["hosted_opening_ids"] == ["OPEN-GF-DOOR-001"]
+          assert provenance["WALL-GF-003"]["hosted_opening_ids"] == ["OPEN-GF-WINDOW-001"]
+          assert provenance["WALL-GF-001"]["piece_count"] == 3
+          assert provenance["WALL-GF-003"]["piece_count"] == 4
+          print("OPEN_ARCHITECTURE_V02_QA=PASS")
+          PY
+
+      - name: Prove committed v0.2 outputs are deterministic
+        run: git diff --exit-code -- public/research/open-architecture-engine-v0.2
+
+      - name: Preserve existing application build
+        run: |
+          npm ci
+          npm run typecheck
+          npm run build
