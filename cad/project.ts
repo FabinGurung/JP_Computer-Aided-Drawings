@@ -17,6 +17,7 @@ export type ProjectPackage={
  model:CadModel;
 };
 const idPattern=/^[A-Z0-9][A-Z0-9_-]{2,63}$/;
+const levelPattern=/^[A-Z0-9][A-Z0-9_-]{0,63}$/;
 const string=(s:unknown,max=150)=>typeof s==="string"&&s.trim().length>0&&s.trim().length<=max;
 function assert(test:unknown,message:string):asserts test {if(!test)throw Error("Project input rejected: "+message);}
 export function validatePackage(raw:unknown):ProjectPackage{
@@ -30,7 +31,7 @@ export function validatePackage(raw:unknown):ProjectPackage{
  assert(info.units==="mm"&&info.coordinate_system==="LOCAL_CARTESIAN","only millimetre local Cartesian supported");
  assert(Array.isArray(p.levels)&&p.levels.length>0&&p.levels.length<=100,"invalid level count");
  const ids=new Set<string>();
- for(const level of p.levels){assert(level&&idPattern.test(level.id)&&!ids.has(level.id)&&Number.isFinite(level.elevation_mm),"invalid or duplicate level");ids.add(level.id);}
+ for(const level of p.levels){assert(level&&levelPattern.test(level.id)&&!ids.has(level.id)&&Number.isFinite(level.elevation_mm),"invalid or duplicate level");ids.add(level.id);}
  assert(Array.isArray(p.source_refs)&&p.source_refs.length<=500,"invalid source references");
  const sources=new Set<string>();
  for(const ref of p.source_refs){
