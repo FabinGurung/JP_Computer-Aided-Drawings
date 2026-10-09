@@ -5,6 +5,7 @@ import {validate,encode,type CadElement,type CadModel} from "./model";
 import {resolveModel,linkFor,sectionFaces,type SectionAxis} from "./parametrics";
 import {createFrameStarter,validatePackage,packageFromModel,encodePackage,type ProjectPackage,type CadProjectKind} from "./project";
 import {validateDxfReview,type CadDxfReview,type OverlayEntity} from "./dxf_overlay";
+import {validateSemanticReview,type SemanticReview,type ReviewedColumn} from "./semantic_review";
 const el=<T extends Element>(id:string)=>{const e=document.querySelector<T>("#"+id);if(!e)throw Error("Missing "+id);return e;};
 const container=el<HTMLDivElement>("viewport"),status=el<HTMLDivElement>("status"),tree=el<HTMLDivElement>("modelTree");
 const setStatus=(s:string)=>{status.textContent=s;};
@@ -17,7 +18,7 @@ const sun=new THREE.DirectionalLight(0xffe7bd,3.2);sun.position.set(6,13,9);scen
 const grid=new THREE.GridHelper(30,30,0x45637b,0x274157);grid.position.y=-0.005;scene.add(grid);
 const axes=new THREE.AxesHelper(2);axes.position.set(-1,0,1);scene.add(axes);
 const draftGroup=new THREE.Group();draftGroup.name="DRAFT_MODEL";scene.add(draftGroup);
-let ifcGroup:THREE.Group|null=null,dxfReviewGroup:THREE.Group|null=null,activeDxfReview:CadDxfReview|null=null,model:CadModel,resolved:CadModel,original:CadModel,activePackage:ProjectPackage,selected:string|null=null,mode:"select"|"move"="select";
+let ifcGroup:THREE.Group|null=null,dxfReviewGroup:THREE.Group|null=null,activeDxfReview:CadDxfReview|null=null,semanticGroup:THREE.Group|null=null,activeSemanticReview:SemanticReview|null=null,selectedReviewGrid:string|null=null,model:CadModel,resolved:CadModel,original:CadModel,activePackage:ProjectPackage,selected:string|null=null,mode:"select"|"move"="select";
 let undo:CadModel[]=[],redo:CadModel[]=[],clipped=false,view:"3d"|"plan"|"front"|"side"="3d";
 const meshes=new Map<string,THREE.Mesh>();
 const clipPlane=new THREE.Plane(new THREE.Vector3(0,-1,0),2.2);
@@ -100,6 +101,7 @@ function commit(next:CadElement){
 function restore(next:CadModel){const candidate=validate(next);resolveModel(candidate);model=candidate;draw();select(selected);setStatus("Draft history restored.");}
 const getBox=()=>{
  const bounds=new THREE.Box3().setFromObject(draftGroup);
+ if(semanticGroup&&semanticGroup.children.length)return new THREE.Box3().setFromObject(semanticGroup);
  if(dxfReviewGroup&&dxfReviewGroup.children.length)return new THREE.Box3().setFromObject(dxfReviewGroup);
  return bounds;
 };
@@ -124,7 +126,7 @@ function viewMode(newView:typeof view){
  for(const key of ["3d","Plan","Front","Side"]){
   const id="view"+key;el<HTMLButtonElement>(id).classList.toggle("active",key.toLowerCase()===view);
  }
- el("viewName").textContent=view==="3d"?"3D perspective":view==="plan"?"Ground floor plan":view==="front"?"Front elevation":"Side elevation";
+ el("viewName").textContent=activeSemanticReview?"Verified source footprints · elevation unknown":view==="3d"?"3D perspective":view==="plan"?"Ground floor plan":view==="front"?"Front elevation":"Side elevation";
 }
 
 const SVG_NS="http://www.w3.org/2000/svg";
@@ -197,6 +199,7 @@ function activateProject(pkg:ProjectPackage,message:string){
  const good=validatePackage(pkg),candidate=validate(good.model);
  resolveModel(candidate);
  cleanImportedIfc();
+ clearSemanticReview();
  clearDxfReview();
  activePackage=good;
  model=candidate;
@@ -295,7 +298,7 @@ function displayDxfReview(review:CadDxfReview){
   line.name=item.layer+"/"+item.handle;line.userData={cad_source_handle:item.handle,source_id:data.source.source_id,verified:false};
   group.add(line);byLayer.set(item.layer,(byLayer.get(item.layer)||0)+1);
  }
- clearDxfReview();dxfReviewGroup=group;activeDxfReview=data;scene.add(group);
+ clearSemanticReview();clearDxfReview();dxfReviewGroup=group;activeDxfReview=data;scene.add(group);
  draftGroup.visible=false;el<HTMLElement>("sectionSvg").closest(".section-view")?.setAttribute("hidden","");
  const list=el<HTMLElement>("dxfReviewLayers");
  for(const [layer,count] of [...byLayer.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15)){
@@ -317,11 +320,99 @@ el<HTMLInputElement>("loadDxfReview").onchange=async event=>{
 };
 el<HTMLButtonElement>("clearDxfReview").onclick=()=>{clearDxfReview();viewMode(view);setStatus("DXF review overlay cleared. Canonical project geometry preserved.");};
 
+
+/* M05: Native semantic identities, traced to CAD block geometry. No invented 3D. */
+function clearSemanticReview(){
+ if(semanticGroup){
+  scene.remove(semanticGroup);
+  semanticGroup.traverse(obj=>{
+   if(obj instanceof THREE.Line){obj.geometry.dispose();(obj.material as THREE.Material).dispose();}
+  });
+  semanticGroup=null;
+ }
+ activeSemanticReview=null;selectedReviewGrid=null;
+ draftGroup.visible=true;
+ el<HTMLElement>("sectionSvg").closest(".section-view")?.removeAttribute("hidden");
+ el<HTMLElement>("semanticReviewStatus").textContent="No reviewed column layout loaded.";
+ el<HTMLElement>("semanticColumns").replaceChildren();
+ el<HTMLElement>("semanticSelection").textContent="Select a source footprint.";
+}
+function selectReviewed(grid:string){
+ const review=activeSemanticReview;
+ const col=review?.columns.find(c=>c.grid===grid);
+ if(!col)return;
+ selectedReviewGrid=grid;
+ if(semanticGroup)for(const obj of semanticGroup.children){
+  if(obj instanceof THREE.Line)(obj.material as THREE.LineBasicMaterial).color.setHex(obj.userData.grid===grid?0xffc658:0x6fdaed);
+ }
+ const details=el<HTMLElement>("semanticSelection");
+ details.textContent=grid+" · "+col.column_type+" · "+col.shape+
+  " · "+col.width_mm+"×"+col.depth_mm+" mm"+
+  " · centre ("+col.x_mm+", "+col.y_mm+") mm"+
+  " · DXF handle "+col.source_handle+" · residual "+col.residual_mm+" mm."+
+  " Height/elevation not verified. Not field-issued.";
+ el<HTMLElement>("semanticColumns").querySelectorAll<HTMLButtonElement>("button").forEach(b=>{
+  b.classList.toggle("selected",b.dataset.grid===grid);
+ });
+}
+function showSemanticReview(review:SemanticReview){
+ const data=validateSemanticReview(review);
+ const group=new THREE.Group();group.name="M05_SEMANTIC_2D_ONLY";
+ const coords=(x:number,y:number)=>new THREE.Vector3(x/1000,.035,-y/1000);
+ for(const c of data.columns){
+  let points:THREE.Vector3[];
+  if(c.shape==="circular"){
+   points=Array.from({length:48},(_,i)=>{const a=2*Math.PI*i/48;return coords(c.x_mm+c.width_mm/2*Math.cos(a),c.y_mm+c.depth_mm/2*Math.sin(a));});
+  }else{
+   points=[[c.x_mm-c.width_mm/2,c.y_mm-c.depth_mm/2],
+    [c.x_mm+c.width_mm/2,c.y_mm-c.depth_mm/2],
+    [c.x_mm+c.width_mm/2,c.y_mm+c.depth_mm/2],
+    [c.x_mm-c.width_mm/2,c.y_mm+c.depth_mm/2]].map(p=>coords(p[0]!,p[1]!));
+  }
+  const line=new THREE.LineLoop(new THREE.BufferGeometry().setFromPoints(points),
+     new THREE.LineBasicMaterial({color:0x6fdaed,linewidth:2}));
+  line.userData={grid:c.grid,source_handle:c.source_handle};
+  line.name=c.grid+" / "+c.source_handle;
+  group.add(line);
+ }
+ clearSemanticReview();clearDxfReview();
+ semanticGroup=group;activeSemanticReview=data;scene.add(group);
+ draftGroup.visible=false;
+ el<HTMLElement>("sectionSvg").closest(".section-view")?.setAttribute("hidden","");
+ const list=el<HTMLElement>("semanticColumns");
+ for(const c of data.columns){
+  const b=document.createElement("button");b.type="button";b.dataset.grid=c.grid;
+  b.textContent=c.grid+" · "+c.column_type+" · "+(c.shape==="circular"?"Ø":"")+c.width_mm+" mm";
+  b.onclick=()=>selectReviewed(c.grid);list.appendChild(b);
+ }
+ el<HTMLElement>("semanticReviewStatus").textContent=data.project_id+" · "+data.columns.length+
+  " CAD-reconciled 2D columns · max deviation "+data.alignment.maximum_residual_mm+
+  " mm · source-handle audit PASS · 3D height/elevation HOLD.";
+ viewMode("plan");selectReviewed(data.columns[0]!.grid);
+ setStatus("M05 source-based 2D column footprints loaded. These are not 3D columns, structural approval or construction drawings.");
+}
+el<HTMLInputElement>("loadSemanticReview").onchange=async event=>{
+ const input=event.currentTarget as HTMLInputElement,file=input.files?.[0];if(!file)return;
+ try{
+  if(!file.name.toLowerCase().endsWith(".json")||file.size>2*1024*1024)throw Error("Select the source-reviewed JSON file (2MB maximum)");
+  showSemanticReview(validateSemanticReview(JSON.parse(await file.text())));
+ }catch(error){setStatus(String(error));el<HTMLElement>("semanticReviewStatus").textContent="M05 import rejected; previous review kept.";
+ }finally{input.value="";}
+};
+el<HTMLButtonElement>("clearSemanticReview").onclick=()=>{
+ clearSemanticReview();viewMode("plan");setStatus("M05 semantic source review cleared; draft model preserved.");
+};
+
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
+ray.params.Line.threshold=.14;
 renderer.domElement.addEventListener("pointerup",event=>{
  if(mode==="move")return;
  const bounds=renderer.domElement.getBoundingClientRect();pointer.set(((event.clientX-bounds.left)/bounds.width)*2-1,-((event.clientY-bounds.top)/bounds.height)*2+1);
- ray.setFromCamera(pointer,camera);const hit=ray.intersectObjects([...meshes.values()],false)[0];
+ ray.setFromCamera(pointer,camera);
+ if(semanticGroup){const sourceHit=ray.intersectObjects(semanticGroup.children,false)[0];
+  if(sourceHit){const key=(sourceHit.object.userData as {grid?:string}).grid;if(key)selectReviewed(key);}return;}
+ if(dxfReviewGroup)return;
+ const hit=ray.intersectObjects([...meshes.values()],false)[0];
  if(hit){const id=(hit.object.userData as {id?:string}).id;if(id)select(id);}
 });
 const resize=()=>{renderer.setSize(width(),height());persp.aspect=width()/height();persp.updateProjectionMatrix();if(view!=="3d")fit();};
