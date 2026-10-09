@@ -100,7 +100,7 @@ function commit(next:CadElement){
 function restore(next:CadModel){const candidate=validate(next);resolveModel(candidate);model=candidate;draw();select(selected);setStatus("Draft history restored.");}
 const getBox=()=>{
  const bounds=new THREE.Box3().setFromObject(draftGroup);
- if(dxfReviewGroup&&dxfReviewGroup.children.length)bounds.union(new THREE.Box3().setFromObject(dxfReviewGroup));
+ if(dxfReviewGroup&&dxfReviewGroup.children.length)return new THREE.Box3().setFromObject(dxfReviewGroup);
  return bounds;
 };
 function fit(modeName= view){
@@ -278,6 +278,7 @@ function clearDxfReview(){
   dxfReviewGroup=null;
  }
  activeDxfReview=null;
+ draftGroup.visible=true;el<HTMLElement>("sectionSvg").closest(".section-view")?.removeAttribute("hidden");
  el<HTMLElement>("dxfReviewStatus").textContent="No DXF review layer loaded.";
  el<HTMLElement>("dxfReviewLayers").replaceChildren();
 }
@@ -295,6 +296,7 @@ function displayDxfReview(review:CadDxfReview){
   group.add(line);byLayer.set(item.layer,(byLayer.get(item.layer)||0)+1);
  }
  clearDxfReview();dxfReviewGroup=group;activeDxfReview=data;scene.add(group);
+ draftGroup.visible=false;el<HTMLElement>("sectionSvg").closest(".section-view")?.setAttribute("hidden","");
  const list=el<HTMLElement>("dxfReviewLayers");
  for(const [layer,count] of [...byLayer.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15)){
   const d=document.createElement("div");d.textContent=layer+" · "+count;list.appendChild(d);
@@ -302,7 +304,7 @@ function displayDxfReview(review:CadDxfReview){
  el<HTMLElement>("dxfReviewStatus").textContent=
  "Source "+data.source.source_id+" · "+data.entities.length+" native entities · "+
  byLayer.size+" layers · millimetres · geometry overlay only (not approved BIM).";
- viewMode("plan");setStatus("DXF geometry loaded in isolated review overlay. Source file unchanged; no semantic promotion.");
+ viewMode("plan");el<HTMLElement>("viewName").textContent="Source DXF plan · review";setStatus("DXF geometry loaded in isolated review overlay. Source file unchanged; no semantic promotion.");
 }
 el<HTMLInputElement>("loadDxfReview").onchange=async event=>{
  const input=event.currentTarget as HTMLInputElement,file=input.files?.[0];
