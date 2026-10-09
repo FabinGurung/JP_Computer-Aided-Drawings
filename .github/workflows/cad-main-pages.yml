@@ -1,5 +1,16 @@
-name: CAD Main GitHub Pages (manual activation gate)
+name: CAD Main GitHub Pages (validated CAD publishing)
 on:
+  push:
+    branches: [main]
+    paths:
+      - "cad/**"
+      - "package.json"
+      - "package-lock.json"
+      - "vite.config.ts"
+      - "tsconfig.json"
+      - "scripts/copy-ifc-wasm.mjs"
+      - "index.html"
+      - ".github/workflows/cad-main-pages.yml"
   workflow_dispatch:
 permissions:
   contents: read
@@ -19,6 +30,11 @@ jobs:
       - run: npm ci
       - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
       - run: python tools/site/check_public_routes.py dist
+      - run: |
+          test -s dist/cad/index.html
+          test -s dist/cad/demo.json
+          test -s dist/cad/web-ifc.wasm
+          echo "FIVE_ENGINE_BROWSER_PUBLICATION_GATE_PASS"
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with: {path: dist}

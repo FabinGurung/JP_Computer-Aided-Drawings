@@ -1,0 +1,25 @@
+name: CAD M01 Resolve Dependency Lockfile
+on:
+  push:
+    branches: [feature/five-engine-cad-m01-20261009]
+    paths: [package.json, .github/workflows/cad-m01-lockfile.yml]
+permissions:
+  contents: write
+jobs:
+  resolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: {persist-credentials: true}
+      - uses: actions/setup-node@v4
+        with: {node-version: "22"}
+      - name: Resolve and commit dependency lockfile once
+        run: |
+          npm install --package-lock-only --ignore-scripts --no-audit
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add package-lock.json
+          if git diff --cached --quiet; then echo "Lockfile unchanged"; else
+            git commit -m "build(cad): resolve five-engine browser dependency lockfile"
+            git push origin "HEAD:feature/five-engine-cad-m01-20261009"
+          fi
