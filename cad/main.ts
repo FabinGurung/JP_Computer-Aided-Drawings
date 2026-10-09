@@ -3,7 +3,7 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {TransformControls} from "three/addons/controls/TransformControls.js";
 import {validate,encode,type CadElement,type CadModel} from "./model";
 import {resolveModel,linkFor,sectionFaces,type SectionAxis} from "./parametrics";
-const el=<T extends Element>(id:string)=>{const e=document.getElementById(id);if(!e)throw Error("Missing "+id);return e as T;};
+const el=<T extends Element>(id:string)=>{const e=document.querySelector<T>("#"+id);if(!e)throw Error("Missing "+id);return e;};
 const container=el<HTMLDivElement>("viewport"),status=el<HTMLDivElement>("status"),tree=el<HTMLDivElement>("modelTree");
 const setStatus=(s:string)=>{status.textContent=s;};
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
