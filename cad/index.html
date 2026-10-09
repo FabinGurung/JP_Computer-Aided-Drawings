@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M04</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M05</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
 <body><div class="app">
-<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M04</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
+<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M05</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
 <div class="toolbar" aria-label="CAD operations">
 <button id="view3d" class="active" type="button">3D</button><button id="viewPlan" type="button">Plan</button><button id="viewFront" type="button">Front</button><button id="viewSide" type="button">Side</button>
 <span class="separate"></span><button id="modeSelect" type="button" class="active">Select</button><button id="modeMove" type="button">Move · 100mm snap</button>
@@ -41,6 +41,13 @@
 <button id="clearDxfReview" type="button">Clear DXF overlay</button>
 <p class="sub" id="dxfReviewStatus" role="status">No DXF review layer loaded.</p>
 <div id="dxfReviewLayers" aria-label="DXF layer summary"></div>
+<h2>Semantic source review · M05</h2>
+<p class="sub">Load a locally reconciled DXF column package. 2D verified footprints only; column heights and storey elevations remain unknown.</p>
+<label class="upload">Open M05 column review JSON<input type="file" id="loadSemanticReview" accept=".json,application/json"></label>
+<button type="button" id="clearSemanticReview">Clear reviewed columns</button>
+<p id="semanticReviewStatus" class="sub" role="status">No reviewed column layout loaded.</p>
+<div id="semanticColumns" class="semantic-list" aria-label="Reviewed source-linked column list"></div>
+<p id="semanticSelection" class="sub" aria-live="polite">Select a source footprint.</p>
 <h2>Interchange</h2><label class="upload">Import IFC (web-ifc)<input type="file" id="importIfc" accept=".ifc"></label><button id="downloadJson" type="button">Export draft JSON</button><button id="resetDemo" type="button">Reset active project</button>
 <p class="sub">IFC import is read-only and separate from draft editing. For IFC / STEP / DXF exports, use the tested optional Python bridge locally.</p></div></aside>
 </div><footer>Project packages are local draft data; the starter has fabricated example geometry, not measured dimensions. IFC authoring / CAD kernel / DXF are Python adapters, not browser-hosted services.</footer>
