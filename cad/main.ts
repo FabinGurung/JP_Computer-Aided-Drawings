@@ -4,6 +4,7 @@ import {TransformControls} from "three/addons/controls/TransformControls.js";
 import {validate,encode,type CadElement,type CadModel} from "./model";
 import {resolveModel,linkFor,sectionFaces,type SectionAxis} from "./parametrics";
 import {createFrameStarter,validatePackage,packageFromModel,encodePackage,type ProjectPackage,type CadProjectKind} from "./project";
+import {validateDxfReview,type CadDxfReview,type OverlayEntity} from "./dxf_overlay";
 const el=<T extends Element>(id:string)=>{const e=document.querySelector<T>("#"+id);if(!e)throw Error("Missing "+id);return e;};
 const container=el<HTMLDivElement>("viewport"),status=el<HTMLDivElement>("status"),tree=el<HTMLDivElement>("modelTree");
 const setStatus=(s:string)=>{status.textContent=s;};
@@ -16,7 +17,7 @@ const sun=new THREE.DirectionalLight(0xffe7bd,3.2);sun.position.set(6,13,9);scen
 const grid=new THREE.GridHelper(30,30,0x45637b,0x274157);grid.position.y=-0.005;scene.add(grid);
 const axes=new THREE.AxesHelper(2);axes.position.set(-1,0,1);scene.add(axes);
 const draftGroup=new THREE.Group();draftGroup.name="DRAFT_MODEL";scene.add(draftGroup);
-let ifcGroup:THREE.Group|null=null,model:CadModel,resolved:CadModel,original:CadModel,activePackage:ProjectPackage,selected:string|null=null,mode:"select"|"move"="select";
+let ifcGroup:THREE.Group|null=null,dxfReviewGroup:THREE.Group|null=null,activeDxfReview:CadDxfReview|null=null,model:CadModel,resolved:CadModel,original:CadModel,activePackage:ProjectPackage,selected:string|null=null,mode:"select"|"move"="select";
 let undo:CadModel[]=[],redo:CadModel[]=[],clipped=false,view:"3d"|"plan"|"front"|"side"="3d";
 const meshes=new Map<string,THREE.Mesh>();
 const clipPlane=new THREE.Plane(new THREE.Vector3(0,-1,0),2.2);
@@ -97,7 +98,11 @@ function commit(next:CadElement){
  model=candidate;draw();select(next.id);setStatus("Draft updated: "+next.id+" · Undo available. No engineering sources changed.");
 }
 function restore(next:CadModel){const candidate=validate(next);resolveModel(candidate);model=candidate;draw();select(selected);setStatus("Draft history restored.");}
-const getBox=()=>new THREE.Box3().setFromObject(draftGroup);
+const getBox=()=>{
+ const bounds=new THREE.Box3().setFromObject(draftGroup);
+ if(dxfReviewGroup&&dxfReviewGroup.children.length)return new THREE.Box3().setFromObject(dxfReviewGroup);
+ return bounds;
+};
 function fit(modeName= view){
  const bounds=getBox(),center=bounds.getCenter(new THREE.Vector3()),size=bounds.getSize(new THREE.Vector3());
  if(bounds.isEmpty())return;const span=Math.max(size.x,size.y,size.z,6),dist=span*1.75;
@@ -192,6 +197,7 @@ function activateProject(pkg:ProjectPackage,message:string){
  const good=validatePackage(pkg),candidate=validate(good.model);
  resolveModel(candidate);
  cleanImportedIfc();
+ clearDxfReview();
  activePackage=good;
  model=candidate;
  original=structuredClone(candidate);
@@ -250,6 +256,67 @@ el<HTMLButtonElement>("downloadProject").onclick=()=>{
 };
 
 el<HTMLButtonElement>("resetDemo").onclick=()=>{undo.push(structuredClone(model));redo=[];restore(original);fit();};
+
+const coords=(p:number[])=>new THREE.Vector3(p[0]!/1000,.025,-p[1]!/1000);
+const pointGeometry=(points:number[][])=>new THREE.BufferGeometry().setFromPoints(points.map(coords));
+function pointsOf(e:OverlayEntity):number[][]{
+ if(e.kind==="LINE"||e.kind==="LWPOLYLINE")return e.points_mm;
+ const c=e.points_mm[0]!,r=e.radius_mm!;
+ const start=e.kind==="ARC"?e.start_angle_deg!:0,end=e.kind==="ARC"?e.end_angle_deg!:360;
+ const delta=((end-start)%360+360)%360||360;
+ return Array.from({length:Math.max(12,Math.ceil(delta/6))+1},(_,i)=>{
+  const a=(start+delta*i/Math.max(12,Math.ceil(delta/6)))*Math.PI/180;
+  return [c[0]!+r*Math.cos(a),c[1]!+r*Math.sin(a)];
+ });
+}
+function clearDxfReview(){
+ if(dxfReviewGroup){
+  scene.remove(dxfReviewGroup);
+  dxfReviewGroup.traverse(obj=>{
+   if(obj instanceof THREE.Line){obj.geometry.dispose();(obj.material as THREE.Material).dispose();}
+  });
+  dxfReviewGroup=null;
+ }
+ activeDxfReview=null;
+ draftGroup.visible=true;el<HTMLElement>("sectionSvg").closest(".section-view")?.removeAttribute("hidden");
+ el<HTMLElement>("dxfReviewStatus").textContent="No DXF review layer loaded.";
+ el<HTMLElement>("dxfReviewLayers").replaceChildren();
+}
+function displayDxfReview(review:CadDxfReview){
+ const data=validateDxfReview(review),group=new THREE.Group();group.name="DXF_REVIEW_ONLY";
+ const byLayer=new Map<string,number>();
+ for(const item of data.entities){
+  const points=pointsOf(item);
+  if(points.length<2)continue;
+  const color=/wall|column|foot|beam/i.test(item.layer)?0xffb86f:0x77d4ee;
+  const material=new THREE.LineBasicMaterial({color,transparent:true,opacity:.9});
+  const geom=pointGeometry(points);
+  const line=item.kind==="LWPOLYLINE"&&item.closed?new THREE.LineLoop(geom,material):new THREE.Line(geom,material);
+  line.name=item.layer+"/"+item.handle;line.userData={cad_source_handle:item.handle,source_id:data.source.source_id,verified:false};
+  group.add(line);byLayer.set(item.layer,(byLayer.get(item.layer)||0)+1);
+ }
+ clearDxfReview();dxfReviewGroup=group;activeDxfReview=data;scene.add(group);
+ draftGroup.visible=false;el<HTMLElement>("sectionSvg").closest(".section-view")?.setAttribute("hidden","");
+ const list=el<HTMLElement>("dxfReviewLayers");
+ for(const [layer,count] of [...byLayer.entries()].sort((a,b)=>b[1]-a[1]).slice(0,15)){
+  const d=document.createElement("div");d.textContent=layer+" · "+count;list.appendChild(d);
+ }
+ el<HTMLElement>("dxfReviewStatus").textContent=
+ "Source "+data.source.source_id+" · "+data.entities.length+" native entities · "+
+ byLayer.size+" layers · millimetres · geometry overlay only (not approved BIM).";
+ viewMode("plan");el<HTMLElement>("viewName").textContent="Source DXF plan · review";setStatus("DXF geometry loaded in isolated review overlay. Source file unchanged; no semantic promotion.");
+}
+el<HTMLInputElement>("loadDxfReview").onchange=async event=>{
+ const input=event.currentTarget as HTMLInputElement,file=input.files?.[0];
+ if(!file)return;
+ try{
+  if(!file.name.toLowerCase().endsWith(".json")||file.size>15*1024*1024)throw Error("Select a converted DXF review JSON of 15MB or less");
+  displayDxfReview(validateDxfReview(JSON.parse(await file.text())));
+ }catch(error){setStatus(String(error));el<HTMLElement>("dxfReviewStatus").textContent="Import rejected; prior overlay preserved.";}
+ finally{input.value="";}
+};
+el<HTMLButtonElement>("clearDxfReview").onclick=()=>{clearDxfReview();viewMode(view);setStatus("DXF review overlay cleared. Canonical project geometry preserved.");};
+
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
 renderer.domElement.addEventListener("pointerup",event=>{
  if(mode==="move")return;

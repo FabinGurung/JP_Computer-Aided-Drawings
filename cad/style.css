@@ -20,3 +20,5 @@
 .project-file input{width:100%;font-size:10px}
 .download-project{margin-top:7px}
 #projectInputStatus{font-size:11px;overflow-wrap:anywhere}
+
+#dxfReviewLayers{max-height:190px;overflow:auto;border:1px solid var(--edge);border-radius:6px;padding:6px;font-size:11px;color:#a7ced9;display:grid;gap:5px}#dxfReviewLayers div{padding:5px;border-bottom:1px solid #23465b}#dxfReviewStatus{border:1px solid #46758c;background:#123249;padding:8px;border-radius:8px;color:#9ce5e1}
