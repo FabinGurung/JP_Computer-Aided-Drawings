@@ -2,3 +2,7 @@ node_modules/
 dist/
 .vercel/
 .DS_Store
+__pycache__/
+.pytest_cache/
+*.pyc
+public/cad/web-ifc.wasm

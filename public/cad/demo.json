@@ -1,0 +1,140 @@
+{
+  "schema": "fabin-cad://canonical-boxes/0.1",
+  "project_id": "DEMO-CAD-M01",
+  "units": "mm",
+  "authority": "DEMO_ONLY",
+  "elements": [
+    {
+      "id": "SLAB_GF_001",
+      "kind": "slab",
+      "level": "GF",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": -200,
+      "length_mm": 9000,
+      "width_mm": 7000,
+      "height_mm": 200,
+      "material": "concrete"
+    },
+    {
+      "id": "FOOTING_A1",
+      "kind": "footing",
+      "level": "FOUNDATION",
+      "x_mm": 200,
+      "y_mm": 200,
+      "z_mm": -800,
+      "length_mm": 1300,
+      "width_mm": 1300,
+      "height_mm": 400,
+      "material": "concrete"
+    },
+    {
+      "id": "FOOTING_B1",
+      "kind": "footing",
+      "level": "FOUNDATION",
+      "x_mm": 7400,
+      "y_mm": 200,
+      "z_mm": -800,
+      "length_mm": 1300,
+      "width_mm": 1300,
+      "height_mm": 400,
+      "material": "concrete"
+    },
+    {
+      "id": "COL_A1",
+      "kind": "column",
+      "level": "GF",
+      "x_mm": 700,
+      "y_mm": 700,
+      "z_mm": 0,
+      "length_mm": 350,
+      "width_mm": 350,
+      "height_mm": 3200,
+      "material": "concrete"
+    },
+    {
+      "id": "COL_B1",
+      "kind": "column",
+      "level": "GF",
+      "x_mm": 7850,
+      "y_mm": 700,
+      "z_mm": 0,
+      "length_mm": 350,
+      "width_mm": 350,
+      "height_mm": 3200,
+      "material": "concrete"
+    },
+    {
+      "id": "WALL_FRONT",
+      "kind": "wall",
+      "level": "GF",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 9000,
+      "width_mm": 230,
+      "height_mm": 3000,
+      "material": "masonry"
+    },
+    {
+      "id": "WALL_BACK",
+      "kind": "wall",
+      "level": "GF",
+      "x_mm": 0,
+      "y_mm": 6770,
+      "z_mm": 0,
+      "length_mm": 9000,
+      "width_mm": 230,
+      "height_mm": 3000,
+      "material": "masonry"
+    },
+    {
+      "id": "WALL_LEFT",
+      "kind": "wall",
+      "level": "GF",
+      "x_mm": 0,
+      "y_mm": 230,
+      "z_mm": 0,
+      "length_mm": 230,
+      "width_mm": 6540,
+      "height_mm": 3000,
+      "material": "masonry"
+    },
+    {
+      "id": "WALL_RIGHT",
+      "kind": "wall",
+      "level": "GF",
+      "x_mm": 8770,
+      "y_mm": 230,
+      "z_mm": 0,
+      "length_mm": 230,
+      "width_mm": 6540,
+      "height_mm": 3000,
+      "material": "masonry"
+    },
+    {
+      "id": "BEAM_FRONT",
+      "kind": "beam",
+      "level": "ROOF",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 3000,
+      "length_mm": 9000,
+      "width_mm": 300,
+      "height_mm": 450,
+      "material": "concrete"
+    },
+    {
+      "id": "BEAM_BACK",
+      "kind": "beam",
+      "level": "ROOF",
+      "x_mm": 0,
+      "y_mm": 6700,
+      "z_mm": 3000,
+      "length_mm": 9000,
+      "width_mm": 300,
+      "height_mm": 450,
+      "material": "concrete"
+    }
+  ]
+}
