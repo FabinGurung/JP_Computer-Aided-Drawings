@@ -1,7 +1,7 @@
 /** Safe portable read-only CAD review object. No asserted BIM semantics or approval. */
 export type OverlayEntity={handle:string;layer:string;kind:"LINE"|"LWPOLYLINE"|"CIRCLE"|"ARC";points_mm:number[][];closed:boolean;radius_mm?:number;start_angle_deg?:number;end_angle_deg?:number};
 export type CadDxfReview={schema:"fabin-cad://dxf-review-overlay/0.1";status:"SOURCE_GEOMETRY_REVIEW_ONLY";source:{source_id:string;file_sha256:string;dxf_version:string;units:"mm";region_global_mm:number[];local_origin_global_mm:number[]};entities:OverlayEntity[];qa:{selected_count:number;by_kind:Record<string,number>;outside_region:Record<string,number>;unsupported_or_bulge:Record<string,number>;modelspace_entity_count:number;semantic_gate:"NO_AUTOMATIC_BIM_PROMOTION"}};
-const finite=(x:unknown)=>typeof x==="number"&&Number.isFinite(x);
+const finite=(x:unknown):x is number=>typeof x==="number"&&Number.isFinite(x);
 function check(condition:unknown,msg:string):asserts condition{if(!condition)throw Error("DXF review rejected: "+msg);}
 export function validateDxfReview(raw:unknown):CadDxfReview{
  check(raw&&typeof raw==="object","not a JSON object");
