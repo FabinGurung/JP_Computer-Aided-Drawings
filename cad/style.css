@@ -8,3 +8,15 @@
 #constraintStatus{padding:8px;background:#173247;border:1px solid #385c6a;border-radius:8px;color:#76d2ce}
 .sr-only{position:absolute;width:1px;height:1px;padding:0;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 @media(max-width:880px){.section-view{top:auto;bottom:58px;right:10px;width:min(94%,390px);min-width:0}#sectionSvg{max-height:135px}}
+/* M03 reusable project starter and on-device package interchange */
+.project-setup{border:1px solid #38556c;border-radius:11px;background:#11283b;padding:13px;margin-bottom:20px}
+.project-setup h2{font-size:14px;color:#8be1de}
+.project-setup form{display:grid;gap:8px;margin:11px 0}
+.project-setup form label{display:grid;gap:3px;font-size:11px;color:#b2cadc}
+.project-setup input,.project-setup select{width:100%;min-width:0;background:#071827;color:#e9f5ff;border:1px solid #3c5e76;border-radius:6px;padding:8px;font-size:12px}
+.project-setup button{width:100%;white-space:normal}
+.project-identity{padding:8px 9px;background:#143e4c;border:1px solid #3a7179;border-radius:7px;color:#b5f7e7;font-size:12px;overflow-wrap:anywhere}
+.project-file{margin-top:10px}
+.project-file input{width:100%;font-size:10px}
+.download-project{margin-top:7px}
+#projectInputStatus{font-size:11px;overflow-wrap:anywhere}

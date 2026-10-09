@@ -3,6 +3,7 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {TransformControls} from "three/addons/controls/TransformControls.js";
 import {validate,encode,type CadElement,type CadModel} from "./model";
 import {resolveModel,linkFor,sectionFaces,type SectionAxis} from "./parametrics";
+import {createFrameStarter,validatePackage,packageFromModel,encodePackage,type ProjectPackage,type CadProjectKind} from "./project";
 const el=<T extends Element>(id:string)=>{const e=document.querySelector<T>("#"+id);if(!e)throw Error("Missing "+id);return e;};
 const container=el<HTMLDivElement>("viewport"),status=el<HTMLDivElement>("status"),tree=el<HTMLDivElement>("modelTree");
 const setStatus=(s:string)=>{status.textContent=s;};
@@ -15,7 +16,7 @@ const sun=new THREE.DirectionalLight(0xffe7bd,3.2);sun.position.set(6,13,9);scen
 const grid=new THREE.GridHelper(30,30,0x45637b,0x274157);grid.position.y=-0.005;scene.add(grid);
 const axes=new THREE.AxesHelper(2);axes.position.set(-1,0,1);scene.add(axes);
 const draftGroup=new THREE.Group();draftGroup.name="DRAFT_MODEL";scene.add(draftGroup);
-let ifcGroup:THREE.Group|null=null,model:CadModel,resolved:CadModel,original:CadModel,selected:string|null=null,mode:"select"|"move"="select";
+let ifcGroup:THREE.Group|null=null,model:CadModel,resolved:CadModel,original:CadModel,activePackage:ProjectPackage,selected:string|null=null,mode:"select"|"move"="select";
 let undo:CadModel[]=[],redo:CadModel[]=[],clipped=false,view:"3d"|"plan"|"front"|"side"="3d";
 const meshes=new Map<string,THREE.Mesh>();
 const clipPlane=new THREE.Plane(new THREE.Vector3(0,-1,0),2.2);
@@ -79,6 +80,8 @@ function renderInspector(){
   input.readOnly=Boolean(link&&(k==="x"||k==="y"||k==="z"||(k==="length"&&link.kind==="span_columns_x")));
  }
  el<HTMLElement>("constraintStatus").textContent=link?link.kind==="center_on_top"?"Linked to "+link.parent_id+" · position follows footing":"Span driven by "+link.from_id+" and "+link.to_id+" · length is computed":"Independent geometry · editable placement";
+ const semantic=activePackage?.element_semantics.find(s=>s.element_id===e?.id);
+ el<HTMLElement>("selectedName").textContent=e?e.id+" · "+e.kind+(semantic?" · "+semantic.verification:""):"Click an element in the model";
  el<HTMLInputElement>("elementId").value=e?.id||"";el<HTMLInputElement>("elementType").value=e?.kind||"";
 }
 function select(id:string|null){selected=id&&meshes.has(id)?id:null;highlight();drawTree();renderInspector();renderSection();setStatus(selected?"Selected "+selected+" · draft only":"Select any building object to inspect.");}
@@ -174,8 +177,78 @@ el<HTMLButtonElement>("undo").onclick=()=>{const p=undo.pop();if(p){redo.push(st
 el<HTMLButtonElement>("redo").onclick=()=>{const p=redo.pop();if(p){undo.push(structuredClone(model));restore(p);}};
 el<HTMLButtonElement>("downloadJson").onclick=()=>{
  const draft=structuredClone(model);draft.authority="DRAFT";
- const blob=new Blob([encode(draft)],{type:"application/json"});const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download="open-architecture-draft-m01.json";link.click();URL.revokeObjectURL(url);
+ const blob=new Blob([encode(draft)],{type:"application/json"});const url=URL.createObjectURL(blob),link=document.createElement("a");link.href=url;link.download=model.project_id+"-geometry-draft.json";link.click();URL.revokeObjectURL(url);
 };
+
+function cleanImportedIfc(){
+ if(!ifcGroup)return;
+ scene.remove(ifcGroup);
+ ifcGroup.traverse(obj=>{if(obj instanceof THREE.Mesh){
+  obj.geometry.dispose();(obj.material as THREE.Material).dispose();
+ }});
+ ifcGroup=null;
+}
+function activateProject(pkg:ProjectPackage,message:string){
+ const good=validatePackage(pkg),candidate=validate(good.model);
+ resolveModel(candidate);
+ cleanImportedIfc();
+ activePackage=good;
+ model=candidate;
+ original=structuredClone(candidate);
+ undo=[];redo=[];selected=null;view="3d";
+ const slider=el<HTMLInputElement>("sectionPosition");
+ const e=model.elements.find(x=>x.kind==="column")||model.elements[0]!;
+ const cut=e.y_mm+e.width_mm/2;
+ slider.min=String(Math.min(0,...model.elements.map(x=>x.y_mm)));
+ slider.max=String(Math.max(...model.elements.map(x=>x.y_mm+x.width_mm)));
+ slider.value=String(Math.min(Number(slider.max),Math.max(Number(slider.min),cut)));
+ el<HTMLSelectElement>("sectionAxis").value="y";
+ el<HTMLElement>("activeProject").textContent=good.project.name+" · "+good.project.id+" · "+good.project.revision;
+ el<HTMLElement>("projectInputStatus").textContent="Local draft · "+good.model.elements.length+" elements · "+good.model.links?.length+" links · "+good.source_refs.length+" source pointers";
+ draw();viewMode("3d");renderInspector();
+ setStatus(message);
+}
+function downloadData(text:string,fileName:string){
+ const blob=new Blob([text],{type:"application/json"});
+ const url=URL.createObjectURL(blob),a=document.createElement("a");
+ a.href=url;a.download=fileName;a.click();URL.revokeObjectURL(url);
+}
+el<HTMLFormElement>("projectForm").onsubmit=event=>{
+ event.preventDefault();
+ try{
+  const input={
+   id:el<HTMLInputElement>("newProjectId").value.trim().toUpperCase(),
+   name:el<HTMLInputElement>("newProjectName").value.trim(),
+   kind:el<HTMLSelectElement>("newProjectKind").value as CadProjectKind,
+   length_mm:Number(el<HTMLInputElement>("newProjectLength").value),
+   width_mm:Number(el<HTMLInputElement>("newProjectWidth").value),
+   storey_height_mm:Number(el<HTMLInputElement>("newProjectHeight").value)
+  };
+  const pkg=createFrameStarter(input);
+  activateProject(pkg,"M03 new project created: "+pkg.project.id+" · starter geometry unverified");
+ }catch(error){setStatus(String(error));el<HTMLElement>("projectInputStatus").textContent=String(error);}
+};
+el<HTMLInputElement>("loadProjectFile").onchange=async event=>{
+ const input=event.currentTarget as HTMLInputElement,file=input.files?.[0];
+ if(!file)return;
+ try{
+  if(!file.name.toLowerCase().endsWith(".json")||file.size>4*1024*1024)throw Error("Only JSON packages up to 4 MB are supported");
+  const raw:unknown=JSON.parse(await file.text());
+  const data=raw as {schema?:string};
+  const pkg=data.schema==="fabin-cad://canonical-boxes/0.1"?packageFromModel(validate(raw)):validatePackage(raw);
+  activateProject(pkg,"M03 project loaded locally: "+pkg.project.id+" · project draft only");
+ }catch(error){setStatus("Project open rejected: "+String(error));el<HTMLElement>("projectInputStatus").textContent="Import failed. Current project preserved.";}
+ finally{input.value="";}
+};
+el<HTMLButtonElement>("downloadProject").onclick=()=>{
+ try{
+  const draft=structuredClone(model);draft.authority="DRAFT";
+  const pkg=validatePackage({...activePackage,model:draft});
+  downloadData(encodePackage(pkg),pkg.project.id+"-cad-project.json");
+  setStatus("Project package prepared for local download · no upload performed.");
+ }catch(error){setStatus("Cannot export project: "+String(error));}
+};
+
 el<HTMLButtonElement>("resetDemo").onclick=()=>{undo.push(structuredClone(model));redo=[];restore(original);fit();};
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
 renderer.domElement.addEventListener("pointerup",event=>{
@@ -206,8 +279,7 @@ async function boot(){
  try{
   const url=new URL("cad/demo.json",new URL(import.meta.env.BASE_URL,location.origin));
   const r=await fetch(url,{cache:"no-store"});if(!r.ok)throw Error("HTTP "+r.status);
-  model=validate(await r.json());resolveModel(model);original=structuredClone(model);draw();fit();renderInspector();
-  setStatus("M02 demo loaded · "+model.elements.length+" linked boxes · not construction/engineering authority");
+  activateProject(packageFromModel(validate(await r.json()),"M02 demonstration"),"M02 demo loaded · 11 source-backed synthetic objects · no engineering authority");
  }catch(err){setStatus("Canonical model load failed: "+String(err));}
 }
 void boot();

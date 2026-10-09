@@ -8,6 +8,8 @@ class ModelError(ValueError): pass
 
 def load_model(path: str|Path) -> dict:
     model=json.loads(Path(path).read_text(encoding="utf-8"))
+    from .project_package import extract_model
+    model=extract_model(model)
     if not isinstance(model,dict) or model.get("schema")!="fabin-cad://canonical-boxes/0.1" or model.get("units")!="mm":
         raise ModelError("Unsupported canonical schema or units")
     if not model.get("project_id") or model.get("authority") not in {"DEMO_ONLY","DRAFT"}:
