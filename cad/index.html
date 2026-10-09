@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M02</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M03</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
 <body><div class="app">
-<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M02</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
+<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M03</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
 <div class="toolbar" aria-label="CAD operations">
 <button id="view3d" class="active" type="button">3D</button><button id="viewPlan" type="button">Plan</button><button id="viewFront" type="button">Front</button><button id="viewSide" type="button">Side</button>
 <span class="separate"></span><button id="modeSelect" type="button" class="active">Select</button><button id="modeMove" type="button">Move · 100mm snap</button>
@@ -9,7 +9,25 @@
 <button id="resetCamera" type="button">Fit</button><button id="undo" type="button">Undo</button><button id="redo" type="button">Redo</button>
 </div>
 <div class="bodygrid">
-<aside class="panel explorer"><h2>Model explorer</h2><p class="sub">Click an element to inspect or edit. Draft changes do not modify project authorities.</p><div id="modelTree" class="tree"></div><div class="sidebarlinks"><a href="../research/open-architecture-engine/">Research milestones ↗</a><a href="../projects/">Project adapters ↗</a></div></aside>
+<aside class="panel explorer">
+<section class="project-setup" aria-label="Project setup">
+ <h2>Project setup · M03</h2>
+ <p class="sub">One shared engine. Start another project, or open a validated project JSON package locally.</p>
+ <p id="activeProject" class="project-identity">M02 demonstration</p>
+ <form id="projectForm" novalidate>
+  <label>Project ID<input id="newProjectId" value="DEMO-NEW-001" maxlength="64" autocomplete="off"></label>
+  <label>Project name<input id="newProjectName" value="New demonstration building" maxlength="120"></label>
+  <label>Project type<select id="newProjectKind"><option value="residential">Residential</option><option value="commercial">Commercial</option><option value="institutional">Institutional</option><option value="other">Other</option></select></label>
+  <label>Length (mm)<input id="newProjectLength" type="number" value="9000" min="5000" max="60000"></label>
+  <label>Width (mm)<input id="newProjectWidth" type="number" value="7000" min="4000" max="40000"></label>
+  <label>Storey height (mm)<input id="newProjectHeight" type="number" value="3000" min="2400" max="7000"></label>
+  <button type="submit" id="createProject">Create starter project</button>
+ </form>
+ <label class="upload project-file">Open project JSON<input type="file" id="loadProjectFile" accept=".json,application/json"></label>
+ <button type="button" id="downloadProject" class="download-project">Save project package JSON</button>
+ <p class="sub" id="projectInputStatus" role="status">Project files stay in your browser unless you explicitly save them. IFC remains a separate read-only geometry import.</p>
+</section>
+<h2>Model explorer</h2><p class="sub">Click an element to inspect or edit. Draft changes do not modify project authorities.</p><div id="modelTree" class="tree"></div><div class="sidebarlinks"><a href="../research/open-architecture-engine/">Research milestones ↗</a><a href="../projects/">Project adapters ↗</a></div></aside>
 <main class="stage"><div id="viewport" role="img" aria-label="Interactive 3D CAD model with selection and orthographic camera modes"></div><div class="viewhud"><strong id="viewName">3D perspective</strong><span id="selectionHint">Orbit: drag · Zoom: scroll · Select: click</span></div><div class="section-view" aria-label="Derived section drawing">
  <div class="section-title"><strong>Linked section · M02</strong><label for="sectionAxis" class="sr-only">Section direction</label>
  <select id="sectionAxis"><option value="y">Longitudinal (X–Z)</option><option value="x">Cross (Y–Z)</option></select></div>
@@ -17,7 +35,7 @@
  <svg id="sectionSvg" viewBox="0 0 800 285" aria-label="Computed section cut through resolved structural solids" role="img"></svg>
  </div><div id="status" role="status" aria-live="polite">Loading canonical demo…</div></main>
 <aside class="panel inspector"><h2>Inspector</h2><p id="selectedName" class="sub">No object selected</p><p id="constraintStatus" class="sub" role="status">Select an element</p><form id="elementForm" novalidate><label>ID<input id="elementId" readonly></label><label>Type<input id="elementType" readonly></label><label>X (mm)<input id="x" type="number" step="50" min="-1000000" max="1000000"></label><label>Y (mm)<input id="y" type="number" step="50" min="-1000000" max="1000000"></label><label>Z (mm)<input id="z" type="number" step="50" min="-1000000" max="1000000"></label><label>Length (mm)<input id="length" type="number" step="50" min="1"></label><label>Width (mm)<input id="width" type="number" step="50" min="1"></label><label>Height (mm)<input id="height" type="number" step="50" min="1"></label><button type="submit">Apply draft dimensions</button></form>
-<div class="export"><h2>Interchange</h2><label class="upload">Import IFC (web-ifc)<input type="file" id="importIfc" accept=".ifc"></label><button id="downloadJson" type="button">Export draft JSON</button><button id="resetDemo" type="button">Restore demo</button>
+<div class="export"><h2>Interchange</h2><label class="upload">Import IFC (web-ifc)<input type="file" id="importIfc" accept=".ifc"></label><button id="downloadJson" type="button">Export draft JSON</button><button id="resetDemo" type="button">Reset active project</button>
 <p class="sub">IFC import is read-only and separate from draft editing. For IFC / STEP / DXF exports, use the tested optional Python bridge locally.</p></div></aside>
-</div><footer>Fabricated demonstration geometry, not Narayani measured data. IFC authoring / CAD kernel / DXF are Python adapters, not browser-hosted services.</footer>
+</div><footer>Project packages are local draft data; the starter has fabricated example geometry, not measured dimensions. IFC authoring / CAD kernel / DXF are Python adapters, not browser-hosted services.</footer>
 </div><script type="module" src="./main.ts"></script></body></html>
