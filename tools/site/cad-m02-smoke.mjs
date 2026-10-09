@@ -1,0 +1,43 @@
+import {chromium} from "playwright";
+const browser=await chromium.launch({headless:true,args:["--use-angle=swiftshader","--enable-webgl","--enable-unsafe-swiftshader"]});
+const page=await browser.newPage({viewport:{width:1440,height:950}});
+const runtimeErrors=[];page.on("pageerror",e=>runtimeErrors.push(e.message));
+const input=async id=>Number(await page.locator("#"+id).inputValue());
+const pick=async name=>page.locator("#modelTree button").filter({hasText:name}).click();
+try{
+ await page.goto(process.env.CAD_M02_URL||"http://127.0.0.1:5174/cad/",{waitUntil:"domcontentloaded",timeout:40000});
+ await page.waitForFunction(()=>document.querySelector("#status")?.textContent?.includes("M02 demo loaded"),undefined,{timeout:40000});
+ if((await page.locator("#modelTree button").count())!==11)throw Error("Wrong model tree element count");
+ await pick("COL_A1");
+ const colX=await input("x");
+ if(!(await page.locator("#x").evaluate(e=>e.readOnly)))throw Error("Driven column placement is writable");
+ await pick("BEAM_FRONT");
+ const beamX=await input("x"),beamLength=await input("length");
+ if(!(await page.locator("#length").evaluate(e=>e.readOnly)))throw Error("Spanning beam has editable length");
+ if(await page.locator('#sectionSvg rect[data-element-id="BEAM_FRONT"]').count()!==1)throw Error("Initial section beam missing");
+ await pick("FOOTING_A1");
+ const footX=await input("x");
+ await page.locator("#x").fill(String(footX+200));
+ await page.locator("#elementForm button[type=submit]").click();
+ await page.waitForFunction(()=>document.querySelector("#status")?.textContent?.startsWith("Draft updated:"));
+ await pick("COL_A1");
+ if((await input("x"))!==colX+200)throw Error("Column did not follow footing");
+ await pick("BEAM_FRONT");
+ if((await input("x"))!==beamX+200||(await input("length"))!==beamLength-200)throw Error("Beam failed to track both columns");
+ if(await page.locator('#sectionSvg rect[data-element-id="BEAM_FRONT"]').count()!==1)throw Error("Derived section did not update");
+ await page.locator("#undo").click();
+ if((await input("x"))!==beamX||(await input("length"))!==beamLength)throw Error("Undo did not restore derived span");
+ await page.locator("#redo").click();
+ if((await input("x"))!==beamX+200)throw Error("Redo did not reapply derived span");
+ await page.locator("#sectionAxis").selectOption("x");
+ if(!(await page.locator("#sectionReadout").textContent()).includes("X ="))throw Error("Section axis control failed");
+ if((await page.locator("#sectionSvg rect").count())===0)throw Error("Cross section is empty");
+ if(runtimeErrors.length)throw Error("Browser exception: "+runtimeErrors.join(" | "));
+ console.log("CAD_M02_BROWSER_END_TO_END_PASS 11 objects; linked column+200mm; beam+200mm length-200mm; section+undo/redo");
+ await page.screenshot({path:"/tmp/cad-m02-smoke.png",fullPage:true});
+}catch(err){
+ console.error("CAD_M02_DIAG_STATUS",await page.locator("#status").textContent().catch(()=>"(unavailable)"));
+ console.error("CAD_M02_DIAG_ERRORS",runtimeErrors);
+ await page.screenshot({path:"/tmp/cad-m02-smoke.png",fullPage:true}).catch(()=>{});
+ throw err;
+}finally{await browser.close();}

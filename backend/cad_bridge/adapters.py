@@ -2,8 +2,10 @@
 from __future__ import annotations
 from pathlib import Path
 from .model import dims_m
+from .constraints import resolve_model
 def export_dxf(model:dict,output:str|Path)->dict:
     import ezdxf
+    model=resolve_model(model)
     doc=ezdxf.new("R2013");doc.units=4;ms=doc.modelspace()
     for name,color in {"slab":8,"wall":7,"column":3,"footing":1,"beam":2}.items():
         doc.layers.new(name.upper(),dxfattribs={"color":color})
@@ -17,6 +19,7 @@ def export_dxf(model:dict,output:str|Path)->dict:
 def export_ifc(model:dict,output:str|Path)->dict:
     import uuid
     import numpy as np
+    model=resolve_model(model)
     import ifcopenshell
     import ifcopenshell.api.aggregate
     import ifcopenshell.api.context
@@ -64,6 +67,7 @@ def occt_compound(model:dict):
     from OCP.BRepPrimAPI import BRepPrimAPI_MakeBox
     from OCP.TopoDS import TopoDS_Compound
     from OCP.gp import gp_Pnt
+    model=resolve_model(model)
     comp=TopoDS_Compound();builder=BRep_Builder();builder.MakeCompound(comp)
     for e in model["elements"]:
         x,y,z=e["x_mm"],e["y_mm"],e["z_mm"]
