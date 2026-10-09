@@ -1,0 +1,31 @@
+name: CAD Existing Live Site Read-Only Audit
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cad-live-readonly-audit.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+  pages: read
+jobs:
+  inspect-only:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check actual Pages source when authorized
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set +e
+          gh api "repos/${GITHUB_REPOSITORY}/pages" --jq '{html_url,source,build_type,status}' 2>&1
+          echo "PAGES_SOURCE_READBACK_EXIT=$?"
+          echo "No Pages settings were changed."
+      - name: Probe published website routes without deployment
+        run: |
+          set -eu
+          ROOT="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          for route in "" "research/" "projects/" "projects/narayani-parajuli/" "research/open-architecture-engine/" "research/open-architecture-engine/v0.2/" "releases/" "guide/"; do
+            code=$(curl -sS -L --max-time 20 -o /tmp/cad-live-page -w "%{http_code}" "$ROOT$route" || true)
+            title=$(grep -o -m1 '<title>[^<]*</title>' /tmp/cad-live-page || true)
+            echo "LIVE_SITE_CHECK route=/$route status=$code title=$title"
+          done
+          echo "READ_ONLY_LIVE_AUDIT_COMPLETE; no deployment/cutover performed."
