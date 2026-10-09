@@ -1,0 +1,41 @@
+name: CAD M03 Live Project Template Acceptance
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cad-m03-live-qa.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-project-template:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - name: Wait until M03 package form is published
+        run: |
+          set -eu
+          base="https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/"
+          for i in $(seq 1 20); do
+            if curl -fsSL "$base" -o /tmp/cad.html &&
+               grep -q 'CAD Studio · M03' /tmp/cad.html &&
+               grep -q 'id="projectForm"' /tmp/cad.html; then break; fi
+            echo "Pages propagation wait $i"
+            sleep 6
+          done
+          grep -q 'id="projectForm"' /tmp/cad.html
+          echo CAD_M03_PUBLIC_ROUTE_FORM_PASS
+      - name: Interact with the published five-engine CAD application
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          CAD_M03_URL=https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/ node tools/site/cad-m03-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cad-m03-public-project-template-evidence
+          path: /tmp/cad-m03-template-browser.png
+          if-no-files-found: ignore
