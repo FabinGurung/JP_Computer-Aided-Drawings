@@ -1,0 +1,39 @@
+name: CAD M02 Live Parametric Browser Readback
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cad-m02-live-qa.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  published-geometry:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - name: Wait for verified M02 publication
+        run: |
+          set -e
+          url="https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/"
+          for attempt in $(seq 1 18); do
+            if curl -fsSL "$url" -o /tmp/cad-live.html && grep -q 'CAD Studio · M02' /tmp/cad-live.html; then break; fi
+            echo "Waiting for M02 GitHub Pages propagation $attempt"
+            sleep 5
+          done
+          grep -q 'CAD Studio · M02' /tmp/cad-live.html
+          echo CAD_M02_LIVE_ROUTE_AVAILABLE
+      - name: Exercise deployed WebGL and linked geometry
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          CAD_M02_URL=https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/ node tools/site/cad-m02-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cad-m02-live-verified-screenshot
+          path: /tmp/cad-m02-smoke.png
+          if-no-files-found: ignore
