@@ -39,6 +39,21 @@ class ColumnReconcileTest(unittest.TestCase):
    self.assertEqual(pkg["columns"][2]["shape"],"circular")
    self.assertTrue(all(x["height_mm"] is None and x["z_mm"] is None for x in pkg["columns"]))
    self.assertEqual(pkg["qa"]["semantic_promotion"],"BLOCKED")
+ def test_generic_reusable_project_input(self):
+  with TemporaryDirectory() as tmp:
+   src,layout,rows=self.setup_fixture(tmp)
+   item=json.loads(layout.read_text())
+   item["schema"]="fabin-cad://column-grid-observations/0.1"
+   item["status"]="SOURCE_GRID_OBSERVATIONS_UNVERIFIED"
+   item["project"]["id"]="INDEPENDENT-002"
+   layout.write_text(json.dumps(item))
+   digest=hashlib.sha256(src.read_bytes()).hexdigest()
+   pkg=reconcile_columns(src,layout,"GENERIC-SOURCE",digest)
+   self.assertEqual(pkg["project_id"],"INDEPENDENT-002")
+   self.assertEqual(pkg["qa"]["semantic_promotion"],"BLOCKED")
+   item["status"]="FIELD_APPROVED"
+   layout.write_text(json.dumps(item))
+   with self.assertRaises(ValueError):reconcile_columns(src,layout,"GENERIC-SOURCE",digest)
  def test_hash_revision_and_geometry_conflicts_rejected(self):
   with TemporaryDirectory() as tmp:
    src,layout,rows=self.setup_fixture(tmp);digest=hashlib.sha256(src.read_bytes()).hexdigest()
