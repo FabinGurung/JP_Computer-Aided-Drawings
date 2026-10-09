@@ -1,0 +1,40 @@
+name: CAD Unified Website Staging QA
+on:
+  push:
+    branches:
+      - feature/unified-main-website-20261009
+      - main
+  pull_request:
+    paths:
+      - "index.html"
+      - "src/main.ts"
+      - "vite.config.ts"
+      - "public/**"
+      - "tools/site/**"
+      - ".github/workflows/cad-unified-website-qa.yml"
+permissions:
+  contents: read
+jobs:
+  build-and-audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - run: npm ci
+      - run: npm run typecheck
+      - name: Verify GitHub Pages base build and static routes
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          python tools/site/check_public_routes.py dist
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.12"}
+      - name: Verify frozen research generators
+        run: |
+          python tools/open_architecture/generate_poc.py
+          python tools/open_architecture/generate_v02.py --acceptance-check
+          git diff --exit-code -- public/research/open-architecture-engine-v0.1 public/research/open-architecture-engine-v0.2
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cad-unified-site-staging
+          path: dist

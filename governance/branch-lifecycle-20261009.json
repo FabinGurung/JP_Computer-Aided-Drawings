@@ -1,0 +1,110 @@
+{
+  "schema": "cad-public://branch-lifecycle/1.0",
+  "as_of_npt": "2026-10-09",
+  "repo_id": "897526094",
+  "default_at_preflight": "narayani-pages-v0.2",
+  "target_default": "main",
+  "deletion_count": 0,
+  "classification_rule": "Retained and documented does not equal physically archived.",
+  "repository_admin_available": false,
+  "web_hosting_source": "UNVERIFIED; preserve current active Pages config and Vercel",
+  "notes": [
+    "GitHub branches are development workspaces; visitor navigation should open deployed website routes.",
+    "All original refs preserved. No GitHub branch deletion, force update, old tag rewrite or change to Narayani engineering authority.",
+    "Source-only GitHub code links permitted only when explicitly labelled as source/history.",
+    "A9 SEQ20 frozen Local POST contains interim status; live Local/Main 20/20 FINAL_CLOSED_PASS verified; historical timing nuance, not corruption.",
+    "Vercel team fabingurung-2646 returned 403, production source remains unverified."
+  ],
+  "branches": [
+    {
+      "name": "feature/a7-seq-000007-module-manifest",
+      "sha": "3fb871066f628437d231d81d15096b6b5312fb51",
+      "purpose": "historical feature",
+      "disposition": "retained; distinct A7_MODULE.json; no deletion"
+    },
+    {
+      "name": "narayani-modular-website-v0.3",
+      "sha": "ac443fcb6c03c4eaf96e32d7e68b1f638438eac9",
+      "purpose": "historical modular website / production-source candidate",
+      "disposition": "retained until actual Pages source inspected and safe handover verified"
+    },
+    {
+      "name": "narayani-pages-v0.2",
+      "sha": "c0f8a61f938b495e01dc360314af477f7d73654c",
+      "purpose": "CURRENT DEFAULT / Narayani atlas",
+      "disposition": "keep unchanged until main becomes default AND deployment readback confirms"
+    },
+    {
+      "name": "narayani-vite-ts-vercel-v0.4",
+      "sha": "9771d9d1061eab6ef3a9590a1fe0aa2a7359ae60",
+      "purpose": "historic Vite/TypeScript starter",
+      "disposition": "ancestor of project-hub-v0.2; retained"
+    },
+    {
+      "name": "project-hub-v0.1",
+      "sha": "0153107e02c0072bead24b5061dd50515a1ee621",
+      "purpose": "historical project-hub branch",
+      "disposition": "distinct root project pages; retained for historical comparison"
+    },
+    {
+      "name": "project-hub-v0.2",
+      "sha": "8d81788432f65dca83460ddc31bcee76627a0739",
+      "purpose": "integrated research and Vite source baseline",
+      "disposition": "source for staged unified site and future main; retain"
+    },
+    {
+      "name": "release/open-architecture-engine-v0.2-seal-20261008",
+      "sha": "16d9ac2f4a1da01f25235e04baa21b0a275c5fcc",
+      "purpose": "release workflow history",
+      "disposition": "retain, release tag immutable"
+    },
+    {
+      "name": "research/open-architecture-engine-v0.1",
+      "sha": "e0e9ea195e420e14c32eb1e49ff9b83c512dacb0",
+      "purpose": "frozen v0.1 research",
+      "disposition": "retain; v0.1.0 release immutable"
+    },
+    {
+      "name": "research/open-architecture-engine-v0.2",
+      "sha": "7caf1bdc743e9f0614afb37eebe34cb94153cd8b",
+      "purpose": "frozen v0.2 research",
+      "disposition": "retain; v0.2.0 release immutable"
+    },
+    {
+      "name": "snapshot/post-a7-seq-000007-module-manifest",
+      "sha": "c0f8a61f938b495e01dc360314af477f7d73654c",
+      "purpose": "snapshot",
+      "disposition": "retain"
+    },
+    {
+      "name": "snapshot/pre-a7-seq-000007-module-manifest",
+      "sha": "8b306c27e77942d9f38adc6ad1b0d1dde2e2ac18",
+      "purpose": "snapshot",
+      "disposition": "retain"
+    },
+    {
+      "name": "snapshot/pre-pages-policy-overlay-20261005",
+      "sha": "7fe6c78bc3a9551f7b4b5efd22dceacb6825214f",
+      "purpose": "snapshot",
+      "disposition": "retain"
+    },
+    {
+      "name": "snapshot/pre-main-consolidation-hub-20261009",
+      "sha": "8d81788432f65dca83460ddc31bcee76627a0739",
+      "purpose": "new rollback snapshot",
+      "disposition": "retained"
+    },
+    {
+      "name": "snapshot/pre-main-consolidation-pages-20261009",
+      "sha": "c0f8a61f938b495e01dc360314af477f7d73654c",
+      "purpose": "new rollback snapshot",
+      "disposition": "retained"
+    }
+  ],
+  "migration": {
+    "staging_branch": "feature/unified-main-website-20261009",
+    "baseline_commit": "8d81788432f65dca83460ddc31bcee76627a0739",
+    "live_pages_activation": "MANUAL_ONLY_AFTER_BRANCH_AND_DEPLOYMENT_VERIFICATION",
+    "v03_ifc": "HOLD"
+  }
+}

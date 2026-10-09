@@ -1,29 +1,18 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<meta name="description" content="Governed AEC project portal — one project system, many project pages."/>
-<title>Project Drawings · Governed AEC Project Hub</title><link rel="stylesheet" href="/assets/css/site.css"/>
-</head>
-<body>
-<header class="hero"><div class="eyebrow">Governed AEC project portal · A9 publication view</div><h1>Project Drawings</h1><p>One stable front door for project drawings, visualizations, estimates, schedules, reports and future field records. Pick a project first; each project then keeps its own modules and release history.</p><div class="notice"><b>Authority boundary:</b> A9-governed Google Drive remains the engineering/project authority. This site is the public-safe navigation and publication layer; it does not create design approval or construction authority.</div></header>
-<main>
-<section><div class="section-head"><div><h2>Projects</h2><p>Shared portal → project subpage → project modules.</p></div><div id="loadState" class="pill">Loading…</div></div>
-<label class="search-label" for="projectSearch">Find a project</label><input id="projectSearch" class="portal-search" type="search" placeholder="Search client, project ID, company or location…" autocomplete="off"/>
-<div id="cards" class="cards project-cards"></div></section>
-<section class="architecture"><h2>Portal architecture</h2><pre>Project Drawings
-├── Narayani Parajuli Residence
-│   ├── V02 / V03 / M40 / M50 / M60 / M70 / M80
-│   └── governed structural viewers
-└── Ramachandra Devkota
-    ├── Drawings & Models
-    ├── Visualization
-    ├── Estimate / BOQ
-    ├── Project State
-    ├── WBS / Gantt
-    ├── Reports & Documents
-    ├── Site & Media
-    └── Release History</pre></section>
-</main>
-<footer>Public-safe project hub · private Drive identifiers excluded · signed/governed project records remain authoritative.</footer>
-<script type="module" src="/src/main.ts"></script></body></html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Project Drawings — reusable architecture software, research and governed project websites."><title>Project Drawings · CAD and Architecture Hub</title><link rel="stylesheet" href="./assets/css/site.css"><link rel="stylesheet" href="./assets/css/consolidated-site.css"></head>
+<body><div class="shell"><nav class="topnav" aria-label="Primary navigation"><a class="brand" href="./">Project Drawings</a><a href="./research/">Research</a><a href="./projects/">Projects</a><a href="./releases/">Releases</a><a href="./source/">Source registry</a><a href="./guide/">Guide</a></nav>
+<header class="hero"><div class="eyebrow">CAD · Research · Project publication</div><h1>Project Drawings</h1>
+<p>One public website for reusable architecture software, tested research demonstrations and project-specific published outputs. Source files remain in version control; the site opens real pages rather than GitHub development branches.</p>
+<div class="callout"><strong>Authority boundary:</strong> This website is a public-safe navigation and research layer. Private A9 Drive records and project engineering authorities are not published here. Narayani M80 remains CODAL_NOT_VERIFIED / HOLD.</div></header>
+<main><div class="grid">
+<article class="tile"><span class="tag">Research</span><h2>Open Architecture Engine</h2><p>Browse released v0.1 and v0.2 software research proofs, with real 2D and 3D derived artefacts.</p><a class="action" href="./research/open-architecture-engine/">Open research →</a></article>
+<article class="tile"><span class="tag">Project websites</span><h2>Projects</h2><p>Open real project subpages and preserved Narayani V02, V03 and M40–M80 work-package viewers.</p><a class="action" href="./projects/">Browse projects →</a></article>
+<article class="tile"><span class="tag">Immutable versions</span><h2>Releases</h2><p>Read the published architecture research releases and their verified implementation boundaries.</p><a class="action" href="./releases/">View releases →</a></article>
+<article class="tile"><span class="tag">Navigation</span><h2>Guide & source</h2><p>Understand the separate roles of project inputs, research tools and project instances.</p><a class="action" href="./guide/">Read guide →</a></article>
+</div>
+<section class="hero" style="margin-top:18px"><div class="eyebrow">Project directory</div><h2>Find a project</h2><p>Browse the public-safe registry without exposing restricted engineering source files.</p>
+<div id="loadState" class="tag">Loading…</div>
+<label for="projectSearch" class="search-label" style="display:block;margin-top:12px">Search project</label>
+<input id="projectSearch" class="portal-search" type="search" placeholder="Name, project code or location…" autocomplete="off" style="width:100%;max-width:600px;padding:12px;border:1px solid #cad9e9;border-radius:9px">
+<div id="cards" class="cards project-cards" style="margin-top:14px"></div></section></main><footer>Project Drawings · Research is not engineering approval · <a href="./guide/">Guide</a></footer>
+</div><script type="module" src="/src/main.ts"></script></body></html>
