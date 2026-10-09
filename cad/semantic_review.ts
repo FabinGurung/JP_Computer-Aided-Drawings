@@ -20,7 +20,7 @@ const fail=(msg:string):never=>{throw Error("M05 review rejected: "+msg);};
 const valid=(x:unknown):x is number=>typeof x==="number"&&Number.isFinite(x);
 const two=(x:unknown):x is number[]=>Array.isArray(x)&&x.length===2&&x.every(valid);
 const four=(x:unknown):x is number[]=>Array.isArray(x)&&x.length===4&&x.every(valid);
-const requireCheck=(x:unknown,msg:string):asserts x=>{if(!x)fail(msg);};
+function requireCheck(x:unknown,msg:string):asserts x {if(!x)fail(msg);}
 export function validateSemanticReview(value:unknown):SemanticReview{
  requireCheck(value&&typeof value==="object","expected JSON object");
  const data=value as Partial<SemanticReview>;
