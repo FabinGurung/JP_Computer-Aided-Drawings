@@ -20,7 +20,12 @@ if(!ready?.includes("M01 demo loaded"))throw Error("Demo did not initialize: "+r
  if(!id)throw Error("Element did not become selected");
  const original=Number(await page.locator("#length").inputValue());
  await page.locator("#length").fill(String(original+100));
- await page.locator("#elementForm button[type=submit]").click();
+ console.log("FORM_VALIDATION",await page.locator("#elementForm").evaluate(form=>({
+ valid:form.checkValidity(),
+ invalid:Array.from(form.elements).filter(input=>!input.checkValidity()).map(input=>({id:input.id,value:input.value,message:input.validationMessage}))
+})));
+await page.locator("#elementForm button[type=submit]").click();
+console.log("FORM_AFTER_SUBMIT_STATUS",await page.locator("#status").textContent());
  await page.waitForFunction(()=>document.querySelector("#status")?.textContent?.includes("Draft updated"));
  if(Number(await page.locator("#length").inputValue())!==original+100)throw Error("Dimension not updated");
  await page.locator("#undo").click();
