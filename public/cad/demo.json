@@ -136,5 +136,26 @@
       "height_mm": 450,
       "material": "concrete"
     }
+  ],
+  "links": [
+    {
+      "id": "SUPPORT_A1",
+      "kind": "center_on_top",
+      "parent_id": "FOOTING_A1",
+      "child_id": "COL_A1"
+    },
+    {
+      "id": "SUPPORT_B1",
+      "kind": "center_on_top",
+      "parent_id": "FOOTING_B1",
+      "child_id": "COL_B1"
+    },
+    {
+      "id": "SPAN_FRONT",
+      "kind": "span_columns_x",
+      "from_id": "COL_A1",
+      "to_id": "COL_B1",
+      "child_id": "BEAM_FRONT"
+    }
   ]
 }

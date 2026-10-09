@@ -29,6 +29,8 @@ def load_model(path: str|Path) -> dict:
                 raise ModelError("Nonpositive "+name+" for "+e["id"])
             if name not in ("length_mm","width_mm","height_mm") and abs(value)>1000000:
                 raise ModelError("Extreme coordinate for "+e["id"])
+    from .constraints import resolve_model
+    resolve_model(model)  # reject invalid/orphaned/cyclic relationships before any exporter runs
     return model
 
 def dims_m(e:dict)->tuple[float,float,float]:
