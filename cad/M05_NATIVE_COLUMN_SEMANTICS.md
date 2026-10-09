@@ -17,10 +17,11 @@ The output `fabin-cad://semantic-column-review/0.1` contains only 2D plan footpr
 ## Browser
 Open the single shared `/cad/` application and import the locally generated M05 review JSON in **Semantic source review**. Inspect selectable rectangular and circular columns, source IDs/handles, grid centres and review residuals. CAD primitive plan view remains isolated from synthetic starter, its derived sections, M04 raw DXF layer and IFC read-only imports. Invalid imports cannot erase a valid previous review. Remove review to return to draft model.
 
-## Narayani verified in the private source session
-The existing corrected v0.6 layout has **23** source-handle identified columns (17 rectangular 400x400 mm and 6 circular diameter 350 mm). Resolving the native source's INSERT internal geometry yields translation approximately +756005.039257 mm East, -129533.739670 mm North from the corrected A1 grid, max difference about 0.643 mm. The six C4 INSERT **base points are remotely offset** from the physical column geometry, hence a naive INSERT-coordinate approach is materially wrong.
+## Private-source QA boundary
 
-The user-facing private package should stay in the conversation or private project store until approved. Original structural DXF and corrected site review are governed Drive evidence. No automatic read/write to private Drive, no field issuance and no architectural source conversion claimed.
+Project-specific CAD coordinates, block geometry, SHA-256 values, private source IDs, handle maps and corrected source layouts belong in the governed private project record, not in this public software repository.
+
+The generic software has passed native geometry tests and private-project integration checks, while the derived private review package is supplied separately to its authorized user. A source-hashed review package can always be rebuilt from authorized original DXF and local observations.
 
 ## Future gates
 Explicitly verified structural elevations, levels, heights, circular 3D solids, actual footing geometry, wall/opening semantics and source revision reconciliation must precede editable BIM 3D or construction/QTO authority. Treat the project's M80 codal status as HOLD.
