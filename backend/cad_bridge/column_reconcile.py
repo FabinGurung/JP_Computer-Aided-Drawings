@@ -42,9 +42,16 @@ def reconcile_columns(dxf_path:str|Path,layout_path:str|Path,source_id:str,
     require(math.isfinite(tolerance_mm) and 0<tolerance_mm<=5,"tolerance must be 0..5mm")
     actual_sha=sha256_file(source);require(actual_sha==expected_sha256,"immutable DXF SHA256 mismatch")
     layout,layout_sha=load_layout(layout_file)
-    require(layout.get("schema")=="a9://narayani/site-setout-column-face-layout/0.6",
-            "currently only the normalized corrected v0.6 layout is supported")
-    require("NOT_FIELD_ISSUED" in layout.get("status",""),"field approval cannot be inferred")
+    schema=layout.get("schema")
+    if schema=="a9://narayani/site-setout-column-face-layout/0.6":
+        require("NOT_FIELD_ISSUED" in layout.get("status",""),"legacy v0.6 is not field issued")
+    elif schema=="fabin-cad://column-grid-observations/0.1":
+        require(layout.get("status")=="SOURCE_GRID_OBSERVATIONS_UNVERIFIED","generic input must remain unapproved")
+    else:
+        raise ValueError("M05 source reconciliation rejected: unsupported layout schema")
+    project_id=layout.get("project",{}).get("id","")
+    require(isinstance(project_id,str) and re.fullmatch("[A-Za-z0-9_-]{3,80}",project_id) is not None,
+            "invalid project ID")
     require(layout.get("coordinate_frame",{}).get("units")=="mm","layout coordinate units must be mm")
     raw=layout.get("columns")
     require(isinstance(raw,list) and len(raw)>0 and len(raw)<=500,"invalid corrected column list")
@@ -96,7 +103,7 @@ def reconcile_columns(dxf_path:str|Path,layout_path:str|Path,source_id:str,
         item["z_mm"]=None
         item["height_mm"]=None
     return {"schema":SCHEMA,"status":"SEMANTIC_PLAN_REVIEW_ONLY",
-      "project_id":layout.get("project",{}).get("id",""),
+      "project_id":project_id,
       "source":{"source_id":source_id,"file_sha256":actual_sha,"layout_sha256":layout_sha,
         "units":"mm","dxf_version":doc.dxfversion},
       "alignment":{"method":"TRANSFORMED_INSERT_BLOCK_BBOX_CENTRE_TRANSLATION",
