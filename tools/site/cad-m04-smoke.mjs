@@ -15,9 +15,10 @@ try{
  const count=await page.locator("#modelTree button").count();
  await page.locator("#loadDxfReview").setInputFiles({name:"preview.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(frame))});
  await page.waitForFunction(()=>document.querySelector("#dxfReviewStatus")?.textContent?.includes("2 native entities"));
- if((await page.locator("#viewName").textContent())!=="Ground floor plan")throw Error("DXF review should switch to plan");
+ if((await page.locator("#viewName").textContent())!=="Source DXF plan · review")throw Error("DXF review should switch to plan");
  if(!await page.locator("#dxfReviewLayers").textContent())throw Error("DXF layer inspector blank");
  if((await page.locator("#modelTree button").count())!==count)throw Error("Source review changed editable model");
+ if(!(await page.locator(".section-view").getAttribute("hidden")!==null))throw Error("Source review should hide synthetic model section");
  const bad=structuredClone(frame);bad.qa.semantic_gate="APPROVED";
  await page.locator("#loadDxfReview").setInputFiles({name:"bad.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(bad))});
  await page.waitForFunction(()=>document.querySelector("#status")?.textContent?.includes("DXF review rejected:"));
