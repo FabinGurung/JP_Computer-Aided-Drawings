@@ -2,7 +2,7 @@ name: CAD M01 Browser Interaction and IFC End-to-End QA
 on:
   push:
     branches: [main]
-    paths: [.github/workflows/cad-m01-ui-smoke.yml]
+    paths: [.github/workflows/cad-m01-ui-smoke.yml, tools/site/cad-browser-smoke.mjs]
   workflow_dispatch:
 permissions: {contents: read}
 jobs:

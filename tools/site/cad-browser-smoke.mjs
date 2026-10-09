@@ -6,7 +6,13 @@ const errors=[];page.on("pageerror",error=>errors.push(error.message));
 try{
  await page.goto(site,{waitUntil:"domcontentloaded",timeout:45000});
  await page.locator("#viewport canvas").waitFor({timeout:30000});
- await page.waitForFunction(()=>document.querySelector("#status")?.textContent?.includes("M01 demo loaded"),undefined,{timeout:30000});
+ await page.waitForFunction(()=>{
+ const t=document.querySelector("#status")?.textContent||"";
+ return t.includes("M01 demo loaded")||t.includes("load failed");
+},undefined,{timeout:30000});
+const ready=await page.locator("#status").textContent();
+console.log("CAD_BROWSER_READY_STATUS",ready);
+if(!ready?.includes("M01 demo loaded"))throw Error("Demo did not initialize: "+ready+" | errors="+errors.join(" || "));
  const rows=await page.locator("#modelTree button").count();
  if(rows!==11)throw Error("Expected 11 scene objects, got "+rows);
  await page.locator("#modelTree button").first().click();
@@ -41,4 +47,9 @@ try{
   console.log("WEB_IFC_IN_BROWSER_GEOMETRY_PASS");
  }
  await page.screenshot({path:"/tmp/cad-m01-browser-smoke.png",fullPage:true});
+}catch(error){
+ console.error("CAD_BROWSER_DIAGNOSTIC_STATUS",await page.locator("#status").textContent().catch(()=>"(unavailable)"));
+ console.error("CAD_BROWSER_DIAGNOSTIC_ERRORS",errors);
+ await page.screenshot({path:"/tmp/cad-m01-browser-smoke.png",fullPage:true}).catch(err=>console.error("screenshot failed",String(err)));
+ throw error;
 }finally{await browser.close();}
