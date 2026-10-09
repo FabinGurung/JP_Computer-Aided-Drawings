@@ -1,0 +1,54 @@
+name: CAD M01 Live Pages Readback
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cad-m01-live-audit.yml]
+  workflow_run:
+    workflows: ["CAD Main GitHub Pages (validated CAD publishing)"]
+    types: [completed]
+permissions: {contents: read}
+jobs:
+  live-readback:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Validate deployed CAD routes and real assets without writing
+        run: |
+          set -euo pipefail
+          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          for attempt in $(seq 1 12); do
+            if curl --max-time 15 -fsSL "${BASE}cad/" -o /tmp/cad-live.html &&
+               grep -q 'OPEN ARCHITECTURE' /tmp/cad-live.html; then break; fi
+            echo "Propagation wait: $attempt";sleep 10
+          done
+          grep -q 'Open Architecture' /tmp/cad-live.html
+          curl -fsSL "${BASE}" -o /tmp/cad-root.html
+          grep -q 'Launch CAD Studio M01' /tmp/cad-root.html
+          curl -fsSL "${BASE}cad/demo.json" -o /tmp/cad-model.json
+          python - <<'PY'
+          import json
+          m=json.load(open("/tmp/cad-model.json"))
+          assert m["schema"]=="fabin-cad://canonical-boxes/0.1"
+          assert m["authority"]=="DEMO_ONLY"
+          assert len(m["elements"])>=8
+          print("LIVE_CANONICAL_DEMO_PASS",len(m["elements"]))
+          PY
+          curl -fsSI "${BASE}cad/web-ifc.wasm" | head -n 8
+          python - <<'PY'
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin
+          from urllib.request import urlopen
+          class AssetParser(HTMLParser):
+              def __init__(self):super().__init__();self.assets=[]
+              def handle_starttag(self,tag,attrs):
+                  d=dict(attrs)
+                  if tag=="script" and d.get("src"):self.assets.append(d["src"])
+          p=AssetParser();p.feed(open("/tmp/cad-live.html").read())
+          assert p.assets, "No Vite application script found"
+          for asset in p.assets:
+              url=urljoin("https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/",asset)
+              with urlopen(url,timeout=20) as response:
+                  assert response.status==200
+                  assert "javascript" in response.headers.get("Content-Type","") or url.endswith(".js")
+              print("LIVE_CAD_SCRIPT_PASS",url)
+          PY
+          echo "CAD_M01_PUBLIC_LIVE_READBACK_PASS"
