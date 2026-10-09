@@ -1,0 +1,35 @@
+name: CAD M01 Browser Interaction and IFC End-to-End QA
+on:
+  push:
+    branches: [main]
+    paths: [.github/workflows/cad-m01-ui-smoke.yml]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  browser-e2e:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install headless browser and IFC authoring library
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          python -m pip install ifcopenshell==0.8.4.post1
+      - name: Generate real IFC from same synthetic model
+        run: python -m backend.cad_bridge.cli --format ifc --out /tmp/cad-m01-ifc.ifc
+      - name: Test live WebGL editor and web-ifc round trip
+        env:
+          CAD_TEST_IFC: /tmp/cad-m01-ifc.ifc
+        run: node tools/site/cad-browser-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cad-m01-browser-smoke-evidence
+          path: /tmp/cad-m01-browser-smoke.png
+          if-no-files-found: ignore
