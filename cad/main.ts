@@ -8,6 +8,25 @@ import {validateDxfReview,type CadDxfReview,type OverlayEntity} from "./dxf_over
 import {validateSemanticReview,type SemanticReview,type ReviewedColumn} from "./semantic_review";
 const el=<T extends Element>(id:string)=>{const e=document.querySelector<T>("#"+id);if(!e)throw Error("Missing "+id);return e;};
 const container=el<HTMLDivElement>("viewport"),status=el<HTMLDivElement>("status"),tree=el<HTMLDivElement>("modelTree");
+/* On phones, put the drawing first and keep secondary CAD panels accessible
+   through a native section expander and an anchored navigation strip. */
+const mobileView=window.matchMedia("(max-width:700px)");
+const sectionPanel=el<HTMLDetailsElement>("sectionPanel");
+if(mobileView.matches)sectionPanel.open=false;
+for(const button of document.querySelectorAll<HTMLButtonElement>("[data-mobile-target]")){
+ button.addEventListener("click",()=>{
+  const key=button.dataset.mobileTarget;
+  const target=key==="stage"?document.querySelector<HTMLElement>(".stage"):
+   key==="explorer"?document.querySelector<HTMLElement>(".explorer"):
+   key==="inspector"?document.querySelector<HTMLElement>(".inspector"):
+   document.querySelector<HTMLElement>(".export");
+  target?.scrollIntoView({block:"start",behavior:"smooth"});
+  document.querySelectorAll<HTMLButtonElement>("[data-mobile-target]").forEach(b=>{
+   if(b===button)b.setAttribute("aria-current","page");else b.removeAttribute("aria-current");
+  });
+ });
+}
+
 const setStatus=(s:string)=>{status.textContent=s;};
 const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
 renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.outputColorSpace=THREE.SRGBColorSpace;

@@ -1,0 +1,32 @@
+name: CAD Mobile Responsive Visual And Interaction QA
+on:
+  push:
+    branches: [feature/mobile-cad-workspace-responsive-20261010]
+  pull_request:
+    paths: ["cad/**","tools/site/cad-responsive-smoke.mjs",".github/workflows/cad-mobile-qa.yml"]
+permissions: {contents: read}
+jobs:
+  responsive-cad:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - run: npm ci
+      - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
+      - run: python tools/site/check_public_routes.py dist
+      - name: Browser QA on phone, tablet and desktop
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/cad-mobile-vite.log 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5174/cad/ >/dev/null && break;sleep 2;done
+          CAD_MOBILE_URL=http://127.0.0.1:5174/cad/ node tools/site/cad-responsive-smoke.mjs
+      - name: Preserve browser screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-mobile-layout-screenshots
+          path: artifacts/
+          if-no-files-found: ignore
