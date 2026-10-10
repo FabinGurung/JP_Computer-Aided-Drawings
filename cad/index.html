@@ -1,7 +1,7 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M05</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M06</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
 <body><div class="app">
-<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M05</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
+<header class="top"><a href="../" class="home">← Project Drawings</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M06</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
 <div class="toolbar" aria-label="CAD operations">
 <button id="view3d" class="active" type="button">3D</button><button id="viewPlan" type="button">Plan</button><button id="viewFront" type="button">Front</button><button id="viewSide" type="button">Side</button>
 <span class="separate"></span><button id="modeSelect" type="button" class="active">Select</button><button id="modeMove" type="button">Move · 100mm snap</button>
@@ -48,6 +48,13 @@
 <p id="semanticReviewStatus" class="sub" role="status">No reviewed column layout loaded.</p>
 <div id="semanticColumns" class="semantic-list" aria-label="Reviewed source-linked column list"></div>
 <p id="semanticSelection" class="sub" aria-live="polite">Select a source footprint.</p>
+<h2>Vertical evidence · M06</h2>
+<p class="sub">First open your M05 column plan. Export a blank project-specific height schedule, link source records and fill elevations locally. A 3D preview is provisional only.</p>
+<button id="downloadVerticalTemplate" type="button">Download blank height template</button>
+<label class="upload">Open M06 vertical observations<input id="loadVerticalReview" type="file" accept=".json,application/json"></label>
+<button id="clearVerticalReview" type="button">Return to M05 plan</button>
+<p class="sub" id="verticalStatus" role="status">No vertical observations loaded. M05 footprints remain plan-only.</p>
+
 <h2>Interchange</h2><label class="upload">Import IFC (web-ifc)<input type="file" id="importIfc" accept=".ifc"></label><button id="downloadJson" type="button">Export draft JSON</button><button id="resetDemo" type="button">Reset active project</button>
 <p class="sub">IFC import is read-only and separate from draft editing. For IFC / STEP / DXF exports, use the tested optional Python bridge locally.</p></div></aside>
 </div><nav class="mobile-nav" aria-label="Mobile CAD workspace navigation"><button type="button" data-mobile-target="stage" aria-current="page">Model</button><button type="button" data-mobile-target="explorer">Project</button><button type="button" data-mobile-target="inspector">Inspect</button><button type="button" data-mobile-target="export">Sources</button></nav><footer>Project packages are local draft data; the starter has fabricated example geometry, not measured dimensions. IFC authoring / CAD kernel / DXF are Python adapters, not browser-hosted services.</footer>
