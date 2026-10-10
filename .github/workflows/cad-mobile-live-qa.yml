@@ -1,0 +1,40 @@
+name: CAD Mobile Published Layout And Controls Acceptance
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/cad-mobile-live-qa.yml"]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  public-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - name: Wait for published responsive phone layout
+        run: |
+          set -euo pipefail
+          url="https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/"
+          for i in $(seq 1 35); do
+            if curl --max-time 15 -fsSL "$url" -o /tmp/cad-phone.html &&
+               grep -q 'class="mobile-nav"' /tmp/cad-phone.html &&
+               grep -q 'id="sectionPanel"' /tmp/cad-phone.html;then break;fi
+            sleep 5
+          done
+          grep -q 'class="mobile-nav"' /tmp/cad-phone.html
+          echo CAD_MOBILE_PUBLIC_HTML_PASS
+      - name: Test actual public site at phone, tablet and desktop widths
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          CAD_MOBILE_URL=https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/ node tools/site/cad-responsive-smoke.mjs
+      - name: Save phone and desktop screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-mobile-public-browser-qa
+          path: artifacts/
+          if-no-files-found: ignore
