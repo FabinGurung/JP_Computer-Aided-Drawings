@@ -428,6 +428,43 @@ el<HTMLButtonElement>("clearSemanticReview").onclick=()=>{
  clearSemanticReview();viewMode("plan");setStatus("M05 semantic source review cleared; draft model preserved.");
 };
 
+
+function clearVerticalReview(){
+ if(verticalGroup){
+  scene.remove(verticalGroup);
+  verticalGroup.traverse(obj=>{
+   if(obj instanceof THREE.Mesh){obj.geometry.dispose();(obj.material as THREE.Material).dispose();}
+  });
+  verticalGroup=null;
+ }
+ activeVertical=null;
+ if(semanticGroup)semanticGroup.visible=true;
+ el<HTMLElement>("verticalStatus").textContent="No vertical observations loaded. M05 footprints remain plan-only.";
+}
+function renderVerticalReview(raw:unknown){
+ const plan=activeSemanticReview;
+ if(!plan)throw Error("Load an M05 source-reconciled plan first");
+ const parsed=resolveVertical(raw,plan);
+ const group=new THREE.Group();group.name="M06_PROVISIONAL_3D";
+ for(const s of parsed.solids){
+  const material=new THREE.MeshStandardMaterial({color:0xeca96a,roughness:.7,transparent:true,opacity:.55,side:THREE.DoubleSide});
+  const geo=s.shape==="circular"?new THREE.CylinderGeometry(s.width_mm/2000,s.width_mm/2000,s.height_mm/1000,48):
+   new THREE.BoxGeometry(s.width_mm/1000,s.height_mm/1000,s.depth_mm/1000);
+  const mesh=new THREE.Mesh(geo,material);
+  mesh.position.set(s.x_mm/1000,(s.bottom_mm+s.top_mm)/2000,-s.y_mm/1000);
+  mesh.name=s.grid+" / provisional vertical";
+  mesh.userData={grid:s.grid,source_handle:s.source_handle,approved:false};
+  group.add(mesh);
+ }
+ clearVerticalReview();
+ verticalGroup=group;activeVertical=parsed;scene.add(group);
+ if(semanticGroup)semanticGroup.visible=false;
+ el<HTMLElement>("verticalStatus").textContent=parsed.solids.length+" provisional 3D segments. Source links are user-attested; not field-issued.";
+ viewMode("3d");
+ if(selectedReviewGrid)selectReviewed(selectedReviewGrid);
+ setStatus("M06 3D preview only; vertical evidence and construction status are not approved.");
+}
+
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
 ray.params.Line.threshold=.14;
 renderer.domElement.addEventListener("pointerup",event=>{
