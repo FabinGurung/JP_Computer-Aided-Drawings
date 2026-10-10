@@ -22,6 +22,7 @@ for(const [name,w,h] of [["small-phone",360,740],["iphone",390,844],["large-phon
     stageOrder:getComputedStyle(document.querySelector(".stage")).order
   }));
   if(geometry.outer>geometry.inner+2)throw Error("Horizontal page overflow "+JSON.stringify(geometry));
+  if(["iphone","small-phone","large-phone"].includes(name))await page.screenshot({path:"artifacts/cad-responsive-initial-"+name+".png"});
   if(w<500){
    if(geometry.bar>70||geometry.top>115)throw Error("Toolbar or masthead consumes mobile viewport: "+JSON.stringify(geometry));
    if(geometry.canvas<260)throw Error("Canvas too small: "+geometry.canvas);
