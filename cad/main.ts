@@ -465,6 +465,28 @@ function renderVerticalReview(raw:unknown){
  setStatus("M06 3D preview only; vertical evidence and construction status are not approved.");
 }
 
+
+el<HTMLButtonElement>("downloadVerticalTemplate").onclick=()=>{
+ const plan=activeSemanticReview;
+ if(!plan){setStatus("Load an M05 column plan first.");return;}
+ downloadData(JSON.stringify(verticalTemplate(plan),null,2)+"\n",plan.project_id+"-vertical-observations-TEMPLATE.json");
+ setStatus("Blank vertical template downloaded. Supply elevations and source IDs before review.");
+};
+el<HTMLInputElement>("loadVerticalReview").onchange=async event=>{
+ const input=event.currentTarget as HTMLInputElement,file=input.files?.[0];
+ if(!file)return;
+ try{
+  if(!file.name.toLowerCase().endsWith(".json")||file.size>2*1024*1024)throw Error("Choose local JSON under 2 MB");
+  renderVerticalReview(JSON.parse(await file.text()));
+ }catch(error){
+  setStatus(String(error));
+  el<HTMLElement>("verticalStatus").textContent="Vertical import rejected; existing review retained.";
+ }finally{input.value="";}
+};
+el<HTMLButtonElement>("clearVerticalReview").onclick=()=>{
+ clearVerticalReview();viewMode("plan");setStatus("M06 overlay cleared. Original M05 plan restored.");
+};
+
 const ray=new THREE.Raycaster(),pointer=new THREE.Vector2();
 ray.params.Line.threshold=.14;
 renderer.domElement.addEventListener("pointerup",event=>{
