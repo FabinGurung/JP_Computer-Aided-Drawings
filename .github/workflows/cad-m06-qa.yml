@@ -1,0 +1,25 @@
+name: CAD M06 Source Linked Vertical Preview QA
+on:
+  push:
+    branches: [feature/cad-m06-vertical-evidence-preview-20261010]
+  pull_request:
+    paths: ["cad/**","tools/site/cad-m06-smoke.mjs",".github/workflows/cad-m06-qa.yml"]
+permissions: {contents: read}
+jobs:
+  vertical-preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: "npm"}
+      - run: npm ci
+      - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
+      - run: python tools/site/check_public_routes.py dist
+      - name: Phone and desktop WebGL source revision/height gate QA
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/cad-m06-vite.log 2>&1 &)
+          for i in $(seq 1 25); do curl -fsS http://127.0.0.1:5174/cad/ >/dev/null && break;sleep 2;done
+          CAD_M06_URL=http://127.0.0.1:5174/cad/ node tools/site/cad-m06-smoke.mjs
