@@ -1,0 +1,94 @@
+{
+  "schema": "fabin-cad://design-source/0.1",
+  "status": "SYNTHETIC_QA_ONLY",
+  "project_id": "SYNTHETIC-M08",
+  "units": "mm",
+  "section_y_mm": 100,
+  "levels": [
+    {
+      "id": "Foundation",
+      "z_mm": -1000
+    },
+    {
+      "id": "Ground",
+      "z_mm": -450
+    },
+    {
+      "id": "First",
+      "z_mm": 3200
+    }
+  ],
+  "elements": [
+    {
+      "id": "Footing01",
+      "kind": "footing",
+      "level_id": "Foundation",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": -900,
+      "length_mm": 1400,
+      "width_mm": 1400,
+      "height_mm": 450
+    },
+    {
+      "id": "Column01",
+      "kind": "column",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 400,
+      "y_mm": 0,
+      "z_mm": -450,
+      "length_mm": 400,
+      "width_mm": 400,
+      "height_mm": 3450
+    },
+    {
+      "id": "Beam01",
+      "kind": "beam",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 2800,
+      "length_mm": 8500,
+      "width_mm": 350,
+      "height_mm": 400
+    },
+    {
+      "id": "Slab01",
+      "kind": "slab",
+      "level_id": "First",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 3200,
+      "length_mm": 8500,
+      "width_mm": 7600,
+      "height_mm": 150
+    },
+    {
+      "id": "Wall01",
+      "kind": "wall",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 8500,
+      "width_mm": 200,
+      "height_mm": 3000
+    }
+  ],
+  "openings": [
+    {
+      "id": "Opening01",
+      "host_id": "Wall01",
+      "source_id": "SYNTHETIC_SPEC",
+      "offset_mm": 2000,
+      "sill_mm": 100,
+      "width_mm": 1000,
+      "height_mm": 2100
+    }
+  ]
+}
