@@ -1,6 +1,8 @@
 """Independent release artifact gate: hashes, statuses, source identity, file allowlist."""
 import argparse,hashlib,json
 from pathlib import Path
+import sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
 from backend.cad_bridge.design_job import load
 def verify(directory,job,root):
     path=Path(directory);m=json.loads((path/"manifest.json").read_text())
