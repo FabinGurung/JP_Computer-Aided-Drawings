@@ -116,3 +116,98 @@ def build(plan:dict,vertical:dict,source_dxf:str|Path)->dict:
             "qa":{"source_dxf_sha256":"MATCHED_NATIVE_BYTES","geometry":"EXACT_RECTANGLE_CIRCLE_NATIVE",
                   "vertical_provenance":"USER_ATTESTED_NOT_INDEPENDENTLY_VERIFIED",
                   "engineering_approval":"HOLD","quantity_takeoff":"BLOCKED"}}
+
+
+def export_dxf(interchange:dict,path:str|Path)->dict:
+    """Plan source IDs retained through CAD XDATA; geometry stays truly circular."""
+    import ezdxf
+    doc=ezdxf.new("R2013");doc.units=4
+    ms=doc.modelspace()
+    doc.layers.new("M07_PROVISIONAL_COLUMNS",dxfattribs={"color":3})
+    doc.appids.new("FABIN_CAD")
+    for solid in interchange["solids"]:
+        x=solid["x_mm"];y=solid["y_mm"]
+        if solid["shape"]=="circular":
+            e=ms.add_circle((x,y),solid["width_mm"]/2,dxfattribs={"layer":"M07_PROVISIONAL_COLUMNS"})
+        else:
+            a=solid["width_mm"]/2;b=solid["depth_mm"]/2
+            e=ms.add_lwpolyline([(x-a,y-b),(x+a,y-b),(x+a,y+b),(x-a,y+b)],close=True,
+                    dxfattribs={"layer":"M07_PROVISIONAL_COLUMNS"})
+        e.set_xdata("FABIN_CAD",[(1000,solid["id"]),(1000,solid["source_handle"]),(1000,"NOT_FIELD_ISSUED")])
+    doc.saveas(str(path))
+    return {"engine":"ezdxf","shape_count":len(interchange["solids"]),"format":"DXF_PLAN",
+            "status":interchange["status"]}
+
+def export_ifc(interchange:dict,path:str|Path)->dict:
+    """IFC4 parametric extruded Circle/Rectangle, rather than approximating circles with boxes."""
+    import ifcopenshell
+    import ifcopenshell.api.aggregate
+    import ifcopenshell.api.context
+    import ifcopenshell.api.geometry
+    import ifcopenshell.api.project
+    import ifcopenshell.api.root
+    import ifcopenshell.api.spatial
+    import ifcopenshell.api.unit
+    import numpy as np
+    file=ifcopenshell.api.project.create_file(version="IFC4")
+    project=ifcopenshell.api.root.create_entity(file,ifc_class="IfcProject",name=interchange["project_id"]+" / PROVISIONAL")
+    unit=ifcopenshell.api.unit.add_si_unit(file,unit_type="LENGTHUNIT")
+    ifcopenshell.api.unit.assign_unit(file,units=[unit])
+    context=ifcopenshell.api.context.add_context(file,context_type="Model")
+    body=ifcopenshell.api.context.add_context(file,context_type="Model",
+        context_identifier="Body",target_view="MODEL_VIEW",parent=context)
+    site=ifcopenshell.api.root.create_entity(file,ifc_class="IfcSite",name="Local observation site")
+    building=ifcopenshell.api.root.create_entity(file,ifc_class="IfcBuilding",name="Provisional observations")
+    storey=ifcopenshell.api.root.create_entity(file,ifc_class="IfcBuildingStorey",name="OBSERVATIONS_ONLY")
+    ifcopenshell.api.aggregate.assign_object(file,relating_object=project,products=[site])
+    ifcopenshell.api.aggregate.assign_object(file,relating_object=site,products=[building])
+    ifcopenshell.api.aggregate.assign_object(file,relating_object=building,products=[storey])
+    for s in interchange["solids"]:
+        item=ifcopenshell.api.root.create_entity(file,ifc_class="IfcColumn",name=s["grid"])
+        item.Tag=s["id"]
+        item.Description="PROVISIONAL_NOT_FIELD_ISSUED | native DXF handle "+s["source_handle"]
+        item.GlobalId=ifcopenshell.guid.compress(uuid.uuid5(uuid.NAMESPACE_URL,
+            interchange["project_id"]+"/M07/"+s["id"]).hex)
+        w=s["width_mm"]/1000;h=s["depth_mm"]/1000
+        if s["shape"]=="circular":
+            profile=file.create_entity("IfcCircleProfileDef",ProfileType="AREA",Radius=w/2)
+        else:
+            profile=file.create_entity("IfcRectangleProfileDef",ProfileType="AREA",XDim=w,YDim=h)
+        representation=ifcopenshell.api.geometry.add_profile_representation(file,context=body,
+            profile=profile,depth=s["height_mm"]/1000)
+        ifcopenshell.api.geometry.assign_representation(file,product=item,representation=representation)
+        matrix=np.eye(4)
+        matrix[:3,3]=[s["x_mm"]/1000,s["y_mm"]/1000,s["z_mm"]/1000]
+        ifcopenshell.api.geometry.edit_object_placement(file,product=item,matrix=matrix,is_si=True)
+        ifcopenshell.api.spatial.assign_container(file,relating_structure=storey,products=[item])
+    file.write(str(path))
+    return {"engine":"IfcOpenShell","shape_count":len(interchange["solids"]),"format":"IFC4",
+            "status":interchange["status"]}
+
+def make_occt(interchange:dict):
+    """True analytical cylinders and BREP boxes, based on the same source IDs."""
+    from OCP.BRep import BRep_Builder
+    from OCP.BRepPrimAPI import BRepPrimAPI_MakeBox,BRepPrimAPI_MakeCylinder
+    from OCP.TopoDS import TopoDS_Compound
+    from OCP.gp import gp_Pnt,gp_Ax2,gp_Dir
+    compound=TopoDS_Compound();builder=BRep_Builder();builder.MakeCompound(compound)
+    for s in interchange["solids"]:
+        x=s["x_mm"];y=s["y_mm"];z=s["z_mm"];h=s["height_mm"]
+        if s["shape"]=="circular":
+            shape=BRepPrimAPI_MakeCylinder(gp_Ax2(gp_Pnt(x,y,z),gp_Dir(0,0,1)),s["width_mm"]/2,h).Shape()
+        else:
+            w=s["width_mm"]/2;d=s["depth_mm"]/2
+            shape=BRepPrimAPI_MakeBox(gp_Pnt(x-w,y-d,z),gp_Pnt(x+w,y+d,z+h)).Shape()
+        builder.Add(compound,shape)
+    return compound
+
+def export_step(interchange:dict,path:str|Path)->dict:
+    from OCP.STEPControl import STEPControl_Writer,STEPControl_AsIs
+    from OCP.IFSelect import IFSelect_RetDone
+    w=STEPControl_Writer()
+    if w.Transfer(make_occt(interchange),STEPControl_AsIs)!=IFSelect_RetDone:
+        raise RuntimeError("OpenCascade transfer failed")
+    if w.Write(str(path))!=IFSelect_RetDone:
+        raise RuntimeError("OpenCascade STEP export failed")
+    return {"engine":"OpenCascade/OCP","shape_count":len(interchange["solids"]),
+            "format":"STEP_BREP","status":interchange["status"]}
