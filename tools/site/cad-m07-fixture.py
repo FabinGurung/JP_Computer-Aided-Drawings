@@ -1,6 +1,7 @@
 """Generate synthetic structural source and M05/M06 review without client data."""
 from pathlib import Path
-import json,hashlib
+import json,hashlib,sys
+sys.path.insert(0,str(Path(__file__).resolve().parents[2]))
 from backend.tests.test_column_reconcile import ColumnReconcileTest
 from backend.cad_bridge.column_reconcile import reconcile_columns
 from backend.cad_bridge.vertical_interchange import build
