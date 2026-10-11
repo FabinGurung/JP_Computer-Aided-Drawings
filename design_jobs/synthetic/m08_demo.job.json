@@ -1,0 +1,10 @@
+{
+  "schema": "fabin-cad://design-job/0.1",
+  "status": "SYNTHETIC_QA_ONLY",
+  "job_id": "M08-SYNTHETIC-BUILD-001",
+  "project_id": "SYNTHETIC-M08",
+  "source": {
+    "path": "design_jobs/synthetic/m08_demo.source.json",
+    "sha256": "508684bbe51f11986e18befd221c82fe9888bfb73f0c46a48ff3b3deff7b32cb"
+  }
+}
