@@ -42,7 +42,7 @@ class M08DesignMachineTests(unittest.TestCase):
    exp=TopExp_Explorer(rdr.OneShape(),TopAbs_SOLID);count=0
    while exp.More():count+=1;exp.Next()
    self.assertEqual(count,5)
-   p=GProp_GProps();BRepGProp.VolumeProperties(make_occt(state),p)
+   p=GProp_GProps();BRepGProp.VolumeProperties_s(make_occt(state),p)
    expected=sum(e["length_mm"]*e["width_mm"]*e["height_mm"] for e in state["elements"])
    expected-=1000*2100*200
    self.assertAlmostEqual(p.Mass(),expected,delta=expected*0.0000005)
