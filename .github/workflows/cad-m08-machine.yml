@@ -44,6 +44,21 @@ jobs:
         run: python -m backend.cad_bridge.design_cli --job "$JOB_PATH" --repo-root . --out /tmp/cad-m08-reviews
       - name: Independent artifact SHA-256 / source read-back
         run: python tools/site/cad-m08-verify.py --out /tmp/cad-m08-reviews --job "$JOB_PATH"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - name: Build browser CAD app without unverified content
+        run: |
+          npm ci
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+      - name: Browser WebIFC and Three.js import acceptance
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/cad-m08-vite.log 2>&1 &)
+          for i in $(seq 1 25); do curl -fsS http://127.0.0.1:5174/cad/ >/dev/null && break; sleep 2; done
+          M08_CAD_URL=http://127.0.0.1:5174/cad/ node tools/site/cad-m08-browser.mjs
       - name: Store draft outputs as nonproduction Actions artifact
         uses: actions/upload-artifact@v4
         with:
