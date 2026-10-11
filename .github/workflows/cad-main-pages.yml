@@ -4,6 +4,9 @@ on:
     branches: [main]
     paths:
       - "cad/**"
+      - "backend/cad_bridge/design_*.py"
+      - "design_jobs/synthetic/**"
+      - "tools/site/cad-m08-verify.py"
       - "package.json"
       - "package-lock.json"
       - "vite.config.ts"
@@ -30,6 +33,18 @@ jobs:
       - run: npm ci
       - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
       - run: python tools/site/check_public_routes.py dist
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install pinned geometry engines for Pages build
+        run: python -m pip install -r backend/requirements.txt
+      - name: GitHub-hosted machine generates synthetic demo plan and IFC/STEP/DXF
+        run: |
+          python -m unittest backend.tests.test_design_machine -v
+          python -m backend.cad_bridge.design_cli --job design_jobs/synthetic/m08_demo.job.json --repo-root . --out dist/cad/jobs/m08-demo
+          python tools/site/cad-m08-verify.py --out dist/cad/jobs/m08-demo --job design_jobs/synthetic/m08_demo.job.json
+          test -s dist/cad/jobs/m08-demo/index.html
+          test -s dist/cad/jobs/m08-demo/manifest.json
+          echo "M08_PAGES_MACHINE_GENERATED_SOURCE_HASH_QA_PASS"
       - run: |
           test -s dist/cad/index.html
           test -s dist/cad/demo.json
