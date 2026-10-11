@@ -1,0 +1,42 @@
+name: CAD M08 Published Machine Artifact Verification
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/cad-m08-live-qa.yml"]
+  workflow_dispatch:
+permissions: {contents: read}
+jobs:
+  published-source-readback:
+    runs-on: ubuntu-latest
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - name: Independent public Pages file and provenance verification
+        run: |
+          python - <<'PY'
+          import hashlib,json,time,urllib.request
+          from pathlib import Path
+          url="https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/jobs/m08-demo/"
+          def fetch(name):
+              with urllib.request.urlopen(url+name,timeout=25) as x:return x.read()
+          for attempt in range(30):
+              try:
+                  manifest=json.loads(fetch("manifest.json"))
+                  if manifest.get("job_id")=="M08-SYNTHETIC-BUILD-001":break
+              except Exception:pass
+              time.sleep(5)
+          else:raise RuntimeError("M08 public Pages machine output unavailable")
+          j=Path("design_jobs/synthetic/m08_demo.job.json")
+          expected=json.loads(j.read_text())
+          assert manifest["job_sha256"]==hashlib.sha256(j.read_bytes()).hexdigest()
+          assert manifest["source_sha256"]==expected["source"]["sha256"]
+          assert manifest["engineering_approval"]=="HOLD" and manifest["quantity_takeoff"]=="BLOCKED"
+          assert manifest["status"]=="SYNTHETIC_QA_ONLY" and manifest["ai_geometry_generation"]=="NONE"
+          files={p["name"] for p in manifest["outputs"]}
+          assert files=={"design.ifc","design.step","design.dxf","plan.svg","section.svg","index.html"}
+          for out in manifest["outputs"]:
+              data=fetch(out["name"])
+              assert len(data)==out["bytes"]
+              assert hashlib.sha256(data).hexdigest()==out["sha256"],out["name"]
+          print("M08_PUBLIC_PAGES_MACHINE_EVIDENCE_READBACK_PASS",len(files))
+          PY
