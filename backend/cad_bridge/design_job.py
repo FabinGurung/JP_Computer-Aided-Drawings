@@ -39,6 +39,7 @@ def load(job_path,repo_root):
     item=read_json(sourcefile)
     require(item.get("schema")==SOURCE_SCHEMA and item.get("status")=="SYNTHETIC_QA_ONLY","source type")
     require(item.get("project_id")==job["project_id"] and item.get("units")=="mm","source project and units")
+    require(num(item.get("section_y_mm")) and abs(item["section_y_mm"])<1000000,"explicit section plane")
     elements=item.get("elements"); openings=item.get("openings")
     require(isinstance(elements,list) and 0<len(elements)<=200 and isinstance(openings,list) and len(openings)<=100,"element/opening lists")
     ids=set(); elements_by_id={};levels=item.get("levels")
