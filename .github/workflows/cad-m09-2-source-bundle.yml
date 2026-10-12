@@ -1,0 +1,65 @@
+name: CAD M09.2 Multi-Source Evidence and Private Boundary
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/source_bundle.py"
+      - "backend/cad_bridge/private_boundary.py"
+      - "backend/cad_bridge/bundle_cli.py"
+      - "backend/tests/test_source_bundle.py"
+      - "design_jobs/synthetic/m09_*"
+      - "design_jobs/schemas/source-bundle-0.2.schema.json"
+      - "cad/M09_2_MULTISOURCE_PRIVATE_BOUNDARY.md"
+      - ".github/workflows/cad-m09-2-source-bundle.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m09-2-contract
+  cancel-in-progress: false
+jobs:
+  manifest-revision-auth-boundary:
+    runs-on: ubuntu-latest
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: M09.1 regression and M09.2 positive, negative and private boundary tests
+        run: python -m unittest backend.tests.test_governed_job backend.tests.test_source_bundle -v
+      - name: Generate deterministic multi-source evidence receipt
+        run: |
+          python -m backend.cad_bridge.bundle_cli \
+            --bundle design_jobs/synthetic/m09_multisource.bundle.json \
+            --repo-root . --out /tmp/m09-2-receipt.json
+      - name: Independent document hashes, revision DAG, and refusal readback
+        run: |
+          python - /tmp/m09-2-receipt.json <<'PY'
+          import hashlib,json,pathlib,sys
+          receipt=json.loads(pathlib.Path(sys.argv[1]).read_text())
+          input_bytes=pathlib.Path("design_jobs/synthetic/m09_multisource.bundle.json").read_bytes()
+          doc=json.loads(input_bytes)
+          assert receipt["bundle_sha256"]==hashlib.sha256(input_bytes).hexdigest()
+          assert receipt["validation"]=="PASS"
+          assert len(receipt["documents"])==4 and len(receipt["edges"])==5
+          assert len(receipt["current_sources"])==3
+          assert receipt["source_evidence_stage"]=="ENGINEER_REVIEW_REQUIRED"
+          assert receipt["engineering_approval"]=="HOLD"
+          assert receipt["release_authorized"] is False
+          assert receipt["private_execution_enabled"] is False
+          assert receipt["quantity_takeoff"]=="BLOCKED"
+          assert [e["relation"] for e in receipt["edges"]].count("SUPERSEDES")==1
+          for entry in doc["documents"]:
+              raw=pathlib.Path(entry["path"]).read_bytes()
+              assert hashlib.sha256(raw).hexdigest()==entry["sha256"]
+          assert len({r["artifact_id"] for r in receipt["documents"]})==4
+          assert "private" not in json.dumps(doc).lower() or doc["classification"]=="SYNTHETIC_QA_ONLY"
+          print("M09_2_MULTISOURCE_HASH_FK_REVISION_PRIVATE_GATE_READBACK_PASS")
+          PY
+      - name: Store only synthetic verification receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: m09-2-synthetic-source-bundle-proof
+          path: /tmp/m09-2-receipt.json
+          retention-days: 14
+          if-no-files-found: error
