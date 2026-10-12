@@ -1,0 +1,22 @@
+{
+  "schema": "fabin-cad://governed-job/0.1",
+  "execution_id": "M09-SYNTHETIC-CONTRACT-001",
+  "project": {
+    "project_id": "SYNTHETIC-M08",
+    "classification": "SYNTHETIC_QA_ONLY",
+    "approval_state": "HOLD"
+  },
+  "design_job": {
+    "path": "design_jobs/synthetic/m08_demo.job.json",
+    "sha256": "9462b8f4974b314fe4348b141887ed9785fa4ceab45184b60990971c4e096a73"
+  },
+  "sources": [
+    {
+      "source_id": "SYNTHETIC_SPEC",
+      "revision": "M08_R1",
+      "path": "design_jobs/synthetic/m08_demo.source.json",
+      "sha256": "508684bbe51f11986e18befd221c82fe9888bfb73f0c46a48ff3b3deff7b32cb",
+      "authority_state": "SYNTHETIC_FIXTURE"
+    }
+  ]
+}

@@ -1,0 +1,107 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/design_jobs/schemas/governed-job-0.1.schema.json",
+  "title": "Public synthetic governed CAD job v0.1",
+  "description": "Shape only: Python validator additionally checks SHA256, relationships and confinement. No private client authorization.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "execution_id",
+    "project",
+    "design_job",
+    "sources"
+  ],
+  "properties": {
+    "schema": {
+      "const": "fabin-cad://governed-job/0.1"
+    },
+    "execution_id": {
+      "$ref": "#/$defs/id"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "project_id",
+        "classification",
+        "approval_state"
+      ],
+      "properties": {
+        "project_id": {
+          "$ref": "#/$defs/id"
+        },
+        "classification": {
+          "const": "SYNTHETIC_QA_ONLY"
+        },
+        "approval_state": {
+          "const": "HOLD"
+        }
+      }
+    },
+    "design_job": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "$ref": "#/$defs/syntheticPath"
+        },
+        "sha256": {
+          "$ref": "#/$defs/sha256"
+        }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "source_id",
+          "revision",
+          "path",
+          "sha256",
+          "authority_state"
+        ],
+        "properties": {
+          "source_id": {
+            "$ref": "#/$defs/id"
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$"
+          },
+          "path": {
+            "$ref": "#/$defs/syntheticPath"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "authority_state": {
+            "const": "SYNTHETIC_FIXTURE"
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{2,79}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "syntheticPath": {
+      "type": "string",
+      "pattern": "^design_jobs/synthetic/[A-Za-z0-9._/-]+$"
+    }
+  }
+}
