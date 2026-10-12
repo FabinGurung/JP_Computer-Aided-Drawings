@@ -1,0 +1,57 @@
+name: CAD M09 Governed Synthetic Design Job Contracts
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/governed_*.py"
+      - "backend/tests/test_governed_job.py"
+      - "design_jobs/synthetic/**"
+      - "design_jobs/schemas/**"
+      - ".github/workflows/cad-m09-contract.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m09-contract
+  cancel-in-progress: false
+jobs:
+  contract-and-lineage-validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Positive, negative, isolation and idempotency contract tests
+        run: python -m unittest backend.tests.test_governed_job -v
+      - name: Generate controlled synthetic M09 validation artifact
+        run: |
+          python -m backend.cad_bridge.governed_cli \
+            --contract design_jobs/synthetic/m09_demo.governed.json \
+            --repo-root . --out /tmp/m09-validation.json
+      - name: Independent source/lineage/approval readback
+        run: |
+          python - /tmp/m09-validation.json <<'PY'
+          import hashlib, json, pathlib, sys
+          artifact = json.loads(pathlib.Path(sys.argv[1]).read_text())
+          contract = pathlib.Path("design_jobs/synthetic/m09_demo.governed.json").read_bytes()
+          job = pathlib.Path("design_jobs/synthetic/m08_demo.job.json").read_bytes()
+          source = pathlib.Path("design_jobs/synthetic/m08_demo.source.json").read_bytes()
+          assert artifact["contract_sha256"] == hashlib.sha256(contract).hexdigest()
+          assert artifact["design_job_sha256"] == hashlib.sha256(job).hexdigest()
+          assert artifact["source_sha256"] == hashlib.sha256(source).hexdigest()
+          assert artifact["validation"] == "PASS"
+          assert artifact["engineering_approval"] == "HOLD"
+          assert artifact["release_authorized"] is False
+          assert artifact["private_execution_enabled"] is False
+          assert artifact["objects"] == 6 and len(artifact["edges"]) == 15
+          assert all(e["relation"] == "REFERENCES" for e in artifact["edges"])
+          print("M09_CONTRACT_PROVENANCE_READBACK_PASS")
+          PY
+      - name: Keep proof as temporary nonproduction artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: m09-synthetic-contract-evidence
+          path: /tmp/m09-validation.json
+          retention-days: 14
+          if-no-files-found: error
