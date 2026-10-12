@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/design_jobs/schemas/source-bundle-0.2.schema.json",
+  "title": "M09.2 public synthetic multiple-source evidence bundle",
+  "description": "Structural contract. Python source_bundle validates source SHA256, project FKs, active revisions, supersession DAG and fail-closed approval states. No private source allowance.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "bundle_id",
+    "project_id",
+    "classification",
+    "engineering_approval",
+    "governed_contract",
+    "documents"
+  ],
+  "properties": {
+    "schema": {
+      "const": "fabin-cad://source-bundle/0.2"
+    },
+    "bundle_id": {
+      "$ref": "#/$defs/id"
+    },
+    "project_id": {
+      "$ref": "#/$defs/id"
+    },
+    "classification": {
+      "const": "SYNTHETIC_QA_ONLY"
+    },
+    "engineering_approval": {
+      "const": "HOLD"
+    },
+    "governed_contract": {
+      "$ref": "#/$defs/fixturePath"
+    },
+    "documents": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "artifact_id",
+          "source_id",
+          "revision",
+          "role",
+          "lifecycle",
+          "path",
+          "sha256",
+          "authority_state",
+          "supersedes"
+        ],
+        "properties": {
+          "artifact_id": {
+            "$ref": "#/$defs/id"
+          },
+          "source_id": {
+            "$ref": "#/$defs/id"
+          },
+          "revision": {
+            "type": "string",
+            "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]{0,79}$"
+          },
+          "role": {
+            "enum": [
+              "GEOMETRY",
+              "BRIEF",
+              "CONSTRAINT"
+            ]
+          },
+          "lifecycle": {
+            "enum": [
+              "CURRENT",
+              "SUPERSEDED"
+            ]
+          },
+          "path": {
+            "$ref": "#/$defs/fixturePath"
+          },
+          "sha256": {
+            "$ref": "#/$defs/sha256"
+          },
+          "authority_state": {
+            "const": "SYNTHETIC_FIXTURE"
+          },
+          "supersedes": {
+            "anyOf": [
+              {
+                "$ref": "#/$defs/id"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "id": {
+      "type": "string",
+      "pattern": "^[A-Za-z][A-Za-z0-9_-]{2,79}$"
+    },
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "fixturePath": {
+      "type": "string",
+      "pattern": "^design_jobs/synthetic/[A-Za-z0-9._/-]+$"
+    }
+  }
+}

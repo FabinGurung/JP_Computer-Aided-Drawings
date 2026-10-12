@@ -1,0 +1,7 @@
+{
+  "schema": "fabin-cad://synthetic-evidence/0.1",
+  "project_id": "SYNTHETIC-M08",
+  "source_id": "BRIEF_SPEC",
+  "status": "SYNTHETIC_QA_ONLY",
+  "summary": "A synthetic test brief. No real site, client or engineering instruction."
+}
