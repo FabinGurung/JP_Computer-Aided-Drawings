@@ -1,0 +1,7 @@
+{
+  "schema": "fabin-cad://synthetic-evidence/0.1",
+  "project_id": "SYNTHETIC-M08",
+  "source_id": "CONSTRAINT_SPEC",
+  "status": "SYNTHETIC_QA_ONLY",
+  "summary": "Synthetic draft constraints R1 for lineage testing; not authority for construction."
+}
