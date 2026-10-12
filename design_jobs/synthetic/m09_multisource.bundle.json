@@ -1,0 +1,54 @@
+{
+  "schema": "fabin-cad://source-bundle/0.2",
+  "bundle_id": "M09-SYNTHETIC-MULTISOURCE-001",
+  "project_id": "SYNTHETIC-M08",
+  "classification": "SYNTHETIC_QA_ONLY",
+  "engineering_approval": "HOLD",
+  "governed_contract": "design_jobs/synthetic/m09_demo.governed.json",
+  "documents": [
+    {
+      "artifact_id": "SRC-M09-GEOMETRY-001",
+      "source_id": "SYNTHETIC_SPEC",
+      "revision": "M08_R1",
+      "role": "GEOMETRY",
+      "lifecycle": "CURRENT",
+      "path": "design_jobs/synthetic/m08_demo.source.json",
+      "sha256": "508684bbe51f11986e18befd221c82fe9888bfb73f0c46a48ff3b3deff7b32cb",
+      "authority_state": "SYNTHETIC_FIXTURE",
+      "supersedes": null
+    },
+    {
+      "artifact_id": "SRC-M09-BRIEF-001",
+      "source_id": "BRIEF_SPEC",
+      "revision": "BRIEF_R1",
+      "role": "BRIEF",
+      "lifecycle": "CURRENT",
+      "path": "design_jobs/synthetic/m09_brief.synthetic.json",
+      "sha256": "501d16e189c2c08777d620e74387849c5e2768a4367a11147cdd7b6808a0bcf2",
+      "authority_state": "SYNTHETIC_FIXTURE",
+      "supersedes": null
+    },
+    {
+      "artifact_id": "SRC-M09-CONSTRAINT-001",
+      "source_id": "CONSTRAINT_SPEC",
+      "revision": "CONSTRAINT_R1",
+      "role": "CONSTRAINT",
+      "lifecycle": "SUPERSEDED",
+      "path": "design_jobs/synthetic/m09_constraints_r1.synthetic.json",
+      "sha256": "b3ec3af15f382120bbb66b9fd26b94d71f3c5eb8fa2958fb618746799eb9c8c6",
+      "authority_state": "SYNTHETIC_FIXTURE",
+      "supersedes": null
+    },
+    {
+      "artifact_id": "SRC-M09-CONSTRAINT-002",
+      "source_id": "CONSTRAINT_SPEC",
+      "revision": "CONSTRAINT_R2",
+      "role": "CONSTRAINT",
+      "lifecycle": "CURRENT",
+      "path": "design_jobs/synthetic/m09_constraints_r2.synthetic.json",
+      "sha256": "ba8a9fad453829c99ecdbaf79f9d81697418ddbb0941d4b43f3a7817674162d0",
+      "authority_state": "SYNTHETIC_FIXTURE",
+      "supersedes": "SRC-M09-CONSTRAINT-001"
+    }
+  ]
+}
