@@ -185,7 +185,7 @@ def read_source_bundle(bundle_path, repo_root):
         "run_key": run_key, "output_id": "m09-bundle-" + run_key[:24],
         "documents": seed["documents"],
         "current_sources": sorted(
-            (source_id, next(d["artifact_id"] for d in docs if d["lifecycle"] == "CURRENT"))
+            [source_id, next(d["artifact_id"] for d in docs if d["lifecycle"] == "CURRENT")]
             for source_id, docs in by_source.items()),
         "edges": sorted(edges, key=lambda e: (e["from_id"], e["relation"], e["to_id"]))
     }
