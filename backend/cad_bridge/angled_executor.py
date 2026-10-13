@@ -47,7 +47,9 @@ def exact_section_edges(state):
     explorer = TopExp_Explorer(section_shape, TopAbs_EDGE)
     lines = []
     while explorer.More():
-        edge = TopoDS.Edge_s(explorer.Current())
+        edge_cast = getattr(TopoDS, "Edge_s", None) or getattr(TopoDS, "Edge", None)
+        check(edge_cast is not None, "SECTION_EDGE_CAST_UNSUPPORTED")
+        edge = edge_cast(explorer.Current())
         curve = BRepAdaptor_Curve(edge)
         check(curve.GetType() == GeomAbs_Line, "SECTION_NONLINEAR_UNSUPPORTED")
         lo, hi = curve.FirstParameter(), curve.LastParameter()
