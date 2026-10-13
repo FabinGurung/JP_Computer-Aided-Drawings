@@ -1,0 +1,77 @@
+{
+  "schema": "fabin-cad://oriented-design-source/0.1",
+  "status": "SYNTHETIC_QA_ONLY",
+  "project_id": "SYNTHETIC-M10",
+  "units": "mm",
+  "levels": [
+    {
+      "id": "Ground",
+      "z_mm": 0
+    }
+  ],
+  "walls": [
+    {
+      "id": "WallEast01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 4000,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 0
+    },
+    {
+      "id": "WallNorth01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 4000,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 3000,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 90
+    },
+    {
+      "id": "WallWest01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 4000,
+      "y_mm": 3000,
+      "z_mm": 0,
+      "length_mm": 4000,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 180
+    }
+  ],
+  "openings": [
+    {
+      "id": "OpeningNorth01",
+      "host_id": "WallNorth01",
+      "source_id": "SYNTHETIC_SPEC",
+      "offset_mm": 900,
+      "sill_mm": 500,
+      "width_mm": 800,
+      "height_mm": 1800
+    }
+  ],
+  "joints": [
+    {
+      "id": "JointCorner01",
+      "wall_a": "WallEast01",
+      "endpoint_a": "END",
+      "wall_b": "WallNorth01",
+      "endpoint_b": "START"
+    },
+    {
+      "id": "JointCorner02",
+      "wall_a": "WallNorth01",
+      "endpoint_a": "END",
+      "wall_b": "WallWest01",
+      "endpoint_b": "START"
+    }
+  ]
+}
