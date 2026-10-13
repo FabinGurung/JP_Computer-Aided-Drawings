@@ -1,0 +1,70 @@
+name: CAD M10.2 Arbitrary Yaw, T-Junction, Exact BRep Section
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/angled_*.py"
+      - "backend/tests/test_angled_network.py"
+      - "design_jobs/synthetic/m10_2_demo.source.json"
+      - "cad/M10_2_ARBITRARY_ANGLE_AND_SECTION.md"
+      - ".github/workflows/cad-m10-2-native.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m10-2-exact-section
+  cancel-in-progress: false
+jobs:
+  native-arbitrary-angle-t-junction-section:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install native geometry engines
+        run: python -m pip install -r backend/requirements.txt
+      - name: M10.2 true IFC/STEP/DXF geometry, exact section, and rejection tests
+        run: python -m unittest backend.tests.test_angled_network -v
+      - name: Prior M10.1, M09.2 and M09.1 regressions
+        run: |
+          python -m unittest backend.tests.test_oriented_geometry \
+            backend.tests.test_source_bundle backend.tests.test_governed_job -v
+      - name: Execute source-pinned synthetic job
+        run: |
+          python -m backend.cad_bridge.angled_cli \
+            --preset synthetic-angled-t-network --repo-root . --out /tmp/cad-m10-2-evidence
+      - name: Independent section and SHA256 readback, HOLD verified
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path("/tmp/cad-m10-2-evidence")
+          source=pathlib.Path("design_jobs/synthetic/m10_2_demo.source.json")
+          m=json.loads((root/"manifest.json").read_bytes())
+          assert m["schema"]=="fabin-cad://oriented-design-result/0.2"
+          assert m["source_sha256"]==hashlib.sha256(source.read_bytes()).hexdigest()
+          assert (m["walls"],m["joints"],m["openings"])==(4,3,1)
+          assert len(m["outputs"])==7 and m["section_edges"]>=8
+          assert m["section_method"]=="OPENCASCADE_BREP_SECTION_EXACT_LINEAR_EDGES"
+          assert m["engineering_approval"]=="HOLD"
+          assert m["quantity_takeoff"]=="BLOCKED"
+          assert m["private_execution_enabled"] is False
+          assert m["release_authorized"] is False
+          for item in m["outputs"]:
+              f=root/item["name"]
+              assert f.is_file()
+              assert len(f.read_bytes())==item["bytes"]
+              assert hashlib.sha256(f.read_bytes()).hexdigest()==item["sha256"]
+          sec=json.loads((root/"section.json").read_text())
+          assert sec["algorithm"]=="OPENCASCADE_BREP_SECTION_EXACT_LINEAR_EDGES"
+          assert sec["host_wall_id"]=="WallAngle01"
+          assert sec["engineering_approval"]=="HOLD"
+          print("CAD_M10_2_EXACT_BREP_SECTION_SHA_AND_NATIVE_QA_PASS")
+          PY
+      - name: Store only short-lived synthetic outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-m10-2-synthetic-exact-section
+          path: /tmp/cad-m10-2-evidence
+          retention-days: 14
+          if-no-files-found: error

@@ -1,0 +1,101 @@
+{
+  "schema": "fabin-cad://oriented-design-source/0.2",
+  "status": "SYNTHETIC_QA_ONLY",
+  "project_id": "SYNTHETIC-M10-2",
+  "units": "mm",
+  "levels": [
+    {
+      "id": "Ground",
+      "z_mm": 0
+    }
+  ],
+  "walls": [
+    {
+      "id": "WallMain01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 6000,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 0
+    },
+    {
+      "id": "WallAngle01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 6000,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 3500,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 60
+    },
+    {
+      "id": "WallReturn01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 7750,
+      "y_mm": 3031.088913245535,
+      "z_mm": 0,
+      "length_mm": 4000,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 180
+    },
+    {
+      "id": "WallBranch01",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 3000,
+      "y_mm": 0,
+      "z_mm": 0,
+      "length_mm": 1600,
+      "width_mm": 200,
+      "height_mm": 3000,
+      "yaw_deg": 90
+    }
+  ],
+  "openings": [
+    {
+      "id": "OpeningAngle01",
+      "host_id": "WallAngle01",
+      "source_id": "SYNTHETIC_SPEC",
+      "offset_mm": 1200,
+      "sill_mm": 400,
+      "width_mm": 900,
+      "height_mm": 1700
+    }
+  ],
+  "joints": [
+    {
+      "id": "JointAngled01",
+      "wall_a": "WallMain01",
+      "position_a_mm": 6000,
+      "wall_b": "WallAngle01",
+      "position_b_mm": 0
+    },
+    {
+      "id": "JointReturn01",
+      "wall_a": "WallAngle01",
+      "position_a_mm": 3500,
+      "wall_b": "WallReturn01",
+      "position_b_mm": 0
+    },
+    {
+      "id": "JointT01",
+      "wall_a": "WallMain01",
+      "position_a_mm": 3000,
+      "wall_b": "WallBranch01",
+      "position_b_mm": 0
+    }
+  ],
+  "section": {
+    "id": "SectionAngle01",
+    "host_wall_id": "WallAngle01",
+    "offset_mm": 1650
+  }
+}
