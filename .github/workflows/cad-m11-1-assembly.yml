@@ -1,0 +1,77 @@
+name: CAD M11.1 Reusable Assembly Native Contract
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/assembly_*.py"
+      - "backend/tests/test_assembly_engine.py"
+      - "design_jobs/synthetic/m11_*.json"
+      - "cad/M11_1_REUSABLE_ASSEMBLY.md"
+      - ".github/workflows/cad-m11-1-assembly.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m11-1-assembly-native
+  cancel-in-progress: false
+jobs:
+  pinned-template-instance-assembly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install native CAD engine versions
+        run: python -m pip install -r backend/requirements.txt
+      - name: Run assembly geometry and failure-gate tests
+        run: python -m unittest backend.tests.test_assembly_engine -v
+      - name: Preserve M10.2, M10.1 and M09 source governance
+        run: |
+          python -m unittest \
+            backend.tests.test_angled_network \
+            backend.tests.test_oriented_geometry \
+            backend.tests.test_source_bundle \
+            backend.tests.test_governed_job -v
+      - name: Execute pinned synthetic assembly
+        run: |
+          python -m backend.cad_bridge.assembly_cli \
+            --preset synthetic-assembly --repo-root . \
+            --out /tmp/cad-m11-1-assembly
+      - name: Independently read back SHAs, FKs, type quantities and HOLD
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path("/tmp/cad-m11-1-assembly")
+          source=pathlib.Path("design_jobs/synthetic/m10_2_demo.source.json").read_bytes()
+          job=pathlib.Path("design_jobs/synthetic/m11_demo.assembly.json").read_bytes()
+          m=json.loads((root/"manifest.json").read_bytes())
+          g=json.loads((root/"assembly-graph.json").read_bytes())
+          assert m["schema"]=="fabin-cad://synthetic-assembly-result/0.1"
+          assert m["job_sha256"]==hashlib.sha256(job).hexdigest()
+          assert m["source_sha256"]==hashlib.sha256(source).hexdigest()
+          assert m["source_git_blob_sha1"]==hashlib.sha1(
+              ("blob "+str(len(source))+"\0").encode()+source).hexdigest()
+          assert m["baseline_walls"]==4 and m["baseline_openings"]==1
+          assert (m["component_templates"],m["component_instances"],m["groups"])==(4,6,3)
+          assert m["component_counts"]=={"beam":1,"column":2,"footing":2,"slab":1}
+          assert m["lineage_edges"]==25 and len(g["edges"])==25
+          assert m["engineering_approval"]=="HOLD" and m["quantity_takeoff"]=="BLOCKED"
+          assert m["private_execution_enabled"] is False
+          assert m["release_authorized"] is False
+          assert m["structural_design_verified"] is False
+          assert len(m["outputs"])==8
+          assert len({x["name"] for x in m["outputs"]})==8
+          for out in m["outputs"]:
+              p=root/out["name"]
+              assert p.is_file() and p.stat().st_size==out["bytes"]
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==out["sha256"]
+          print("M11_1_NATIVE_ASSEMBLY_SHA_PK_FK_ENG_HOLD_PASS")
+          PY
+      - name: Retain only synthetic, nonproduction outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-m11-1-synthetic-assembly-review
+          path: /tmp/cad-m11-1-assembly/
+          retention-days: 14
+          if-no-files-found: error

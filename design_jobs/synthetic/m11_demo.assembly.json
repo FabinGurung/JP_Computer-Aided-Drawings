@@ -1,0 +1,122 @@
+{
+  "schema": "fabin-cad://synthetic-assembly-job/0.1",
+  "status": "SYNTHETIC_QA_ONLY",
+  "assembly_id": "AssemblyDemoM11",
+  "project_id": "SYNTHETIC-M10-2",
+  "source": {
+    "path": "design_jobs/synthetic/m10_2_demo.source.json",
+    "git_blob_sha1": "c93f07d5f69fbce0d737fb3572331be1692a6c13"
+  },
+  "groups": [
+    {
+      "id": "FoundationGroup",
+      "label": "Synthetic foundation objects"
+    },
+    {
+      "id": "FrameGroup",
+      "label": "Synthetic frame objects"
+    },
+    {
+      "id": "DeckGroup",
+      "label": "Synthetic deck objects"
+    }
+  ],
+  "templates": [
+    {
+      "id": "FootingTypeA",
+      "kind": "footing",
+      "length_mm": 1200,
+      "width_mm": 1200,
+      "height_mm": 550
+    },
+    {
+      "id": "ColumnTypeA",
+      "kind": "column",
+      "length_mm": 350,
+      "width_mm": 350,
+      "height_mm": 3200
+    },
+    {
+      "id": "BeamTypeA",
+      "kind": "beam",
+      "length_mm": 4000,
+      "width_mm": 250,
+      "height_mm": 350
+    },
+    {
+      "id": "SlabTypeA",
+      "kind": "slab",
+      "length_mm": 7300,
+      "width_mm": 3800,
+      "height_mm": 160
+    }
+  ],
+  "instances": [
+    {
+      "id": "FootingWest01",
+      "template_id": "FootingTypeA",
+      "group_id": "FoundationGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 600,
+      "y_mm": 1950,
+      "z_mm": -650,
+      "yaw_deg": 0
+    },
+    {
+      "id": "FootingEast01",
+      "template_id": "FootingTypeA",
+      "group_id": "FoundationGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 5200,
+      "y_mm": 1950,
+      "z_mm": -650,
+      "yaw_deg": 0
+    },
+    {
+      "id": "ColumnWest01",
+      "template_id": "ColumnTypeA",
+      "group_id": "FrameGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 1025,
+      "y_mm": 2375,
+      "z_mm": -100,
+      "yaw_deg": 0
+    },
+    {
+      "id": "ColumnEast01",
+      "template_id": "ColumnTypeA",
+      "group_id": "FrameGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 5625,
+      "y_mm": 2375,
+      "z_mm": -100,
+      "yaw_deg": 0
+    },
+    {
+      "id": "BeamMid01",
+      "template_id": "BeamTypeA",
+      "group_id": "FrameGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 1300,
+      "y_mm": 2400,
+      "z_mm": 2800,
+      "yaw_deg": 0
+    },
+    {
+      "id": "SlabDeck01",
+      "template_id": "SlabTypeA",
+      "group_id": "DeckGroup",
+      "level_id": "Ground",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": -500,
+      "z_mm": 3200,
+      "yaw_deg": 0
+    }
+  ]
+}
