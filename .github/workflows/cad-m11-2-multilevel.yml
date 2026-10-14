@@ -1,0 +1,81 @@
+name: CAD M11.2 Two-Level Rotated Assembly and Exact Full Section
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/assembly_multilevel*.py"
+      - "backend/tests/test_assembly_multilevel.py"
+      - "design_jobs/synthetic/m11_2_multistorey.assembly.json"
+      - ".github/workflows/cad-m11-2-multilevel.yml"
+      - "cad/M11_2_MULTILEVEL_ASSEMBLY.md"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m11-2-native
+  cancel-in-progress: false
+jobs:
+  verified-multilevel-assembly:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Install pinned native engines
+        run: python -m pip install -r backend/requirements.txt
+      - name: Native multilevel/contact/exact-section regressions
+        run: python -m unittest backend.tests.test_assembly_multilevel -v
+      - name: Preserve previous native CAD contract acceptance
+        run: |
+          python -m unittest \
+            backend.tests.test_assembly_engine \
+            backend.tests.test_angled_network \
+            backend.tests.test_oriented_geometry \
+            backend.tests.test_source_bundle \
+            backend.tests.test_governed_job -v
+      - name: Run only the verified synthetic source preset
+        run: |
+          python -m backend.cad_bridge.assembly_multilevel_cli \
+            --preset synthetic-multilevel --repo-root . \
+            --out /tmp/cad-m11-2-evidence
+      - name: Independently verify authority, geometry and SHA evidence
+        run: |
+          python - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('/tmp/cad-m11-2-evidence')
+          source=pathlib.Path('design_jobs/synthetic/m11_2_multistorey.assembly.json')
+          prior=pathlib.Path('design_jobs/synthetic/m11_demo.assembly.json')
+          m=json.loads((root/'manifest.json').read_text())
+          contacts=json.loads((root/'contacts.json').read_text())
+          sec=json.loads((root/'section.json').read_text())
+          assert m['schema']=='fabin-cad://multi-level-assembly-result/0.2'
+          assert m['job_sha256']==hashlib.sha256(source.read_bytes()).hexdigest()
+          assert m['base_assembly_sha256']==hashlib.sha256(prior.read_bytes()).hexdigest()
+          assert m['levels']==2 and m['component_instances']==10
+          assert m['rotated_components']==1 and m['contacts_verified']==4
+          assert m['lineage_edges']==46
+          assert m['section_includes_new_components'] is True
+          assert m['engineering_approval']=='HOLD'
+          assert m['quantity_takeoff']=='BLOCKED'
+          assert m['private_execution_enabled'] is False
+          assert m['structural_design_verified'] is False
+          assert m['release_authorized'] is False
+          assert len(m['outputs'])==9
+          assert len(contacts['contacts'])==4
+          assert all(not x['structural_capacity_verified'] for x in contacts['contacts'])
+          assert 'RoofSlab01' in sec['intersection_contributors']
+          assert 'UpperColumnWest01' in sec['intersection_contributors']
+          for x in m['outputs']:
+              p=root/x['name']; assert p.is_file()
+              assert p.stat().st_size==x['bytes']
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==x['sha256']
+          print('M11_2_MULTILEVEL_NATIVE_CONTACT_SECTION_SHA_PASS')
+          PY
+      - name: Preserve short-lived synthetic native artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-m11-2-synthetic-assembly-evidence
+          path: /tmp/cad-m11-2-evidence/
+          retention-days: 14
+          if-no-files-found: error
