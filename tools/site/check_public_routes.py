@@ -7,7 +7,7 @@ from html.parser import HTMLParser
 
 root=Path(sys.argv[1] if len(sys.argv)>1 else "dist")
 required=[
-"index.html","research/index.html","research/open-architecture-engine/index.html",
+"index.html","cad/brief/index.html","research/index.html","research/open-architecture-engine/index.html",
 "research/open-architecture-engine/v0.2/index.html","research/open-architecture-engine-v0.2/index.html",
 "research/open-architecture-engine-v0.2/plan.svg","research/open-architecture-engine-v0.2/plan.dxf",
 "research/open-architecture-engine-v0.2/model.gltf","research/open-architecture-engine-v0.2/rooms.json",
