@@ -1,0 +1,116 @@
+{
+  "schema": "fabin-cad://multi-level-assembly-job/0.2",
+  "status": "SYNTHETIC_QA_ONLY",
+  "assembly_id": "AssemblyDemoM11Level2",
+  "project_id": "SYNTHETIC-M10-2",
+  "base": {
+    "path": "design_jobs/synthetic/m11_demo.assembly.json",
+    "git_blob_sha1": "ea88895f7a52d393a707fd5b55fd3850b004bc97"
+  },
+  "levels": [
+    {
+      "id": "First",
+      "z_mm": 3360
+    }
+  ],
+  "templates": [
+    {
+      "id": "UpperColumnType",
+      "kind": "column",
+      "length_mm": 350,
+      "width_mm": 350,
+      "height_mm": 3040
+    },
+    {
+      "id": "RoofSlabType",
+      "kind": "slab",
+      "length_mm": 7300,
+      "width_mm": 3800,
+      "height_mm": 160
+    },
+    {
+      "id": "DiagonalBeamType",
+      "kind": "beam",
+      "length_mm": 2100,
+      "width_mm": 280,
+      "height_mm": 350
+    }
+  ],
+  "instances": [
+    {
+      "id": "UpperColumnWest01",
+      "template_id": "UpperColumnType",
+      "group_id": "FrameGroup",
+      "level_id": "First",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 1025,
+      "y_mm": 2375,
+      "z_mm": 3360,
+      "yaw_deg": 0
+    },
+    {
+      "id": "UpperColumnEast01",
+      "template_id": "UpperColumnType",
+      "group_id": "FrameGroup",
+      "level_id": "First",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 5625,
+      "y_mm": 2375,
+      "z_mm": 3360,
+      "yaw_deg": 0
+    },
+    {
+      "id": "RoofSlab01",
+      "template_id": "RoofSlabType",
+      "group_id": "DeckGroup",
+      "level_id": "First",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 0,
+      "y_mm": -500,
+      "z_mm": 6400,
+      "yaw_deg": 0
+    },
+    {
+      "id": "DiagonalBeam01",
+      "template_id": "DiagonalBeamType",
+      "group_id": "FrameGroup",
+      "level_id": "First",
+      "source_id": "SYNTHETIC_SPEC",
+      "x_mm": 2300,
+      "y_mm": 600,
+      "z_mm": 4600,
+      "yaw_deg": 30
+    }
+  ],
+  "contacts": [
+    {
+      "id": "GroundSlabWestTop",
+      "component_a": "SlabDeck01",
+      "component_b": "UpperColumnWest01",
+      "relation": "SURFACE_TOUCH_ONLY"
+    },
+    {
+      "id": "GroundSlabEastTop",
+      "component_a": "SlabDeck01",
+      "component_b": "UpperColumnEast01",
+      "relation": "SURFACE_TOUCH_ONLY"
+    },
+    {
+      "id": "RoofSlabWestBottom",
+      "component_a": "RoofSlab01",
+      "component_b": "UpperColumnWest01",
+      "relation": "SURFACE_TOUCH_ONLY"
+    },
+    {
+      "id": "RoofSlabEastBottom",
+      "component_a": "RoofSlab01",
+      "component_b": "UpperColumnEast01",
+      "relation": "SURFACE_TOUCH_ONLY"
+    }
+  ],
+  "section": {
+    "id": "AssemblySection01",
+    "axis": "X",
+    "position_mm": 1250
+  }
+}
