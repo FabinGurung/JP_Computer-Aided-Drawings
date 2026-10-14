@@ -72,8 +72,8 @@ function renderDetails(){
  for(let i=0;i<mass.storeys;i++){
   const story=(163/mass.storeys),y=175-(i+1)*story;
   const rect=document.createElementNS("http://www.w3.org/2000/svg","rect");
-  for(const [key,value] of [["x","20"],["y",String(y)],["width","250"],["height",String(story)],
-   ["fill",chosen<0||chosen===i?"#21606b":"#10283e"],["stroke","#acc4d3"]])rect.setAttribute(key,value);
+  for(const [key,value] of ([["x","20"],["y",String(y)],["width","250"],["height",String(story)],
+   ["fill",chosen<0||chosen===i?"#21606b":"#10283e"],["stroke","#acc4d3"]] as [string,string][]))rect.setAttribute(key,value);
   root.append(rect);
   const t=document.createElementNS("http://www.w3.org/2000/svg","text");
   t.setAttribute("x","30");t.setAttribute("y",String(y+story/2+4));t.setAttribute("fill","#e7f7fb");t.setAttribute("font-size","12");
