@@ -1,12 +1,63 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Website guide — public-safe architecture and project research website.">
-<title>Website guide · Project Drawings</title><link rel="stylesheet" href="../assets/css/consolidated-site.css"></head>
-<body><div class="shell">
-<nav class="topnav" aria-label="Primary navigation"><a class="brand" href="../">Project Drawings</a><a href="../research/">Research</a><a href="../projects/">Projects</a><a href="../releases/">Releases</a><a href="../source/">Source registry</a><a href="../guide/">Guide</a></nav>
-<main><section class="hero"><div class="eyebrow">Documentation · Public-safe publication</div><h1>Website guide</h1><p>Use the links in this website to navigate live pages. Git branches are development workspaces, not website navigation tabs.</p><div class="grid">
-<article class="tile"><span class="tag">Inputs</span><h2>Original sources</h2><p>Public-safe source provenance only; restricted Drive originals and internal identifiers are withheld.</p><a class="action" href="../source/">Open source registry →</a></article>
-<article class="tile"><span class="tag">Reusable systems</span><h2>Research</h2><p>Shared models, generators, file-format proofs and versioned software research.</p><a class="action" href="../research/">Open research →</a></article>
-<article class="tile"><span class="tag">Specific work</span><h2>Project pages</h2><p>Per-project public views, with the owning project retaining design authority.</p><a class="action" href="../projects/">Open projects →</a></article>
-</div><div class="callout"><strong>For contributors:</strong> feature and research branches are temporary development workspaces. Approved work is integrated into the canonical website branch; public visitors use normal site URLs. Private A9 controls stay outside the public repository.</div></section></main>
-<footer>Research and project navigation only. Engineering and private Drive records remain governed separately. <a href="../">Home</a></footer></div></body></html>
+<meta name="description" content="How AI-Aided Drawing works: natural language, deterministic GitHub CAD, progressive 3D/2D detail and verified project source.">
+<title>How It Works · AI-Aided Drawing</title><link rel="stylesheet" href="../assets/css/consolidated-site.css">
+<style>
+.guide-lede{max-width:820px;font-size:17px}.guide-tags{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}
+.guide-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin:18px 0}
+.guide-step{border:1px solid #d5e4ef;background:#fff;border-radius:12px;padding:18px}
+.guide-step .num{font-size:12px;color:#316f87;font-weight:800;letter-spacing:.07em}
+.guide-step h3{margin:8px 0;font-size:17px}.guide-step p{font-size:14px;margin:4px 0}
+.guide-flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:18px 0}
+.guide-flow span{padding:9px 12px;background:#e8f5f6;border-radius:30px;font-size:13px;color:#175c69;font-weight:750}
+.guide-flow b{color:#6c859b}.guide-detail{border:1px solid #ccdeea;padding:13px 17px;border-radius:12px;background:#fff;margin:10px 0}
+.guide-detail summary{cursor:pointer;font-weight:800;color:#234f70;line-height:1.5}
+.guide-detail p{font-size:14px}.guide-legend{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:10px;margin:15px 0}
+.guide-legend div{padding:15px;border:1px solid #cddde8;background:#fff;border-radius:11px}
+.guide-legend strong{display:block;color:#173c59}.guide-legend p{font-size:13px;margin:6px 0}
+.guide-warning{border-left:4px solid #c57b30;background:#fff8ec;padding:15px 18px;border-radius:8px}
+.guide-warning p{margin:0}main section{margin-bottom:20px}h2{margin-top:22px}
+</style></head><body><div class="shell">
+<nav class="topnav" aria-label="Primary navigation"><a class="brand" href="../">Project Drawings</a><a href="../cad/brief/">Describe → 3D</a><a href="../cad/">CAD Studio</a><a href="../projects/">Projects</a><a href="../releases/">Releases</a><a href="../guide/" aria-current="page">How It Works</a></nav>
+<main>
+<section class="hero">
+<div class="eyebrow">How It Works · Shared A7 guide v0.1 · CAD-specific application</div>
+<h1>AI-Aided Drawing.<br>Describe it. Explore it.</h1>
+<p class="guide-lede">You explain what building or detail you want in ordinary language. ChatGPT (or another AI) helps interpret your words and existing drawings. Our versioned GitHub CAD engine checks the facts and computes the geometry. The website shows a clickable 3D-first result, with 2D views and deeper detail only where the sources support them.</p>
+<div><a class="action" href="../cad/brief/">Try describing a building in 3D →</a> <a class="action secondary" href="../cad/">Open detailed CAD Studio →</a></div>
+<div class="guide-tags"><span class="tag">No JSON needed from the user</span><span class="tag">Same engine for every project</span><span class="tag">Unverified details stay unresolved</span></div>
+</section>
+<section class="hero" id="how"><h2>What happens after you describe a drawing?</h2><div class="guide-flow" aria-label="AI-Aided Drawing process"><span>Human request</span><b>→</b><span>AI interpretation</span><b>→</b><span>Versioned validation</span><b>→</b><span>CAD engine</span><b>→</b><span>3D / drawings</span></div>
+<div class="guide-grid">
+<article class="guide-step"><div class="num">01 · UNDERSTAND</div><h3>Tell us what you need</h3><p>Use words, dimensions or an existing drawing. You do not write a prompt schema or technical parameter file.</p></article>
+<article class="guide-step"><div class="num">02 · RESOLVE</div><h3>Interpret and find sources</h3><p>AI checks what you said against existing drawings, revisions and authority. It asks only for missing facts.</p></article>
+<article class="guide-step"><div class="num">03 · NORMALIZE</div><h3>Validate real measurements</h3><p>GitHub-versioned validators verify quoted dimensions, units, IDs, source revisions and unapproved assumptions.</p></article>
+<article class="guide-step"><div class="num">04 · EXECUTE</div><h3>Run the CAD engines</h3><p>Three.js, web-ifc, IfcOpenShell, OpenCascade and ezdxf each contribute their existing tested capabilities.</p></article>
+<article class="guide-step"><div class="num">05 · VERIFY</div><h3>Check geometry and evidence</h3><p>Regression tests and provenance checks protect reproducibility; licensed design sign-off is separate.</p></article>
+<article class="guide-step"><div class="num">06 · EXPLORE</div><h3>3D first, more when clicked</h3><p>Choose levels and elements, filter trades and inspect source-linked plans, sections, labels and details.</p></article>
+<article class="guide-step"><div class="num">07 · TRACE</div><h3>Replay the approved inputs</h3><p>Keep the exact source, canonical request, engine commit, runtime version, QA and output manifest.</p></article>
+</div>
+<p>ChatGPT guides and interprets; <strong>GitHub executes versioned software</strong> through its CI or an authorized runner. GitHub does not automatically acquire the hidden capabilities of any AI model. Different AI systems can use the same public contract and deterministic engines, but identical casual sentences do not guarantee identical interpretations.</p>
+</section>
+<section class="hero"><h2>One building, progressive detail</h2><p>You should not need to navigate ten technical subpages to understand what happens at site. Open the building, then drill into the area and task you need.</p>
+<div class="guide-legend">
+<div><strong>3D · Main view</strong><p>Orbit the building, select a floor and show/hide systems. Existing browser preview currently supports simple geometric envelopes and other synthetic CAD capabilities.</p></div>
+<div><strong>2D · Precise views</strong><p>Plans, elevations, sections, details, dimensions and labels derived from the validated model. Specific detailed drawing families require verified source geometry.</p></div>
+<div><strong>4D · Build sequence</strong><p>Link components to governed scheduling tasks, milestones, predecessors and work progress. This is a planned integration, not automatically live.</p></div>
+<div><strong>5D · Cost / quantity</strong><p>Link source-supported quantities to the separate cost repository and approved rates. Not a currently approved quantity takeoff.</p></div>
+</div>
+<details class="guide-detail"><summary>Workers · Where do I click to know what work is needed?</summary><p>Planned flow: open project → select floor/room/work package → select element → see simple colored work diagram, dimension callouts, required material and step labels. Show “ISSUED FOR CONSTRUCTION” only when the actual owning engineering authority has approved that exact revision. Until then, mark the item DRAFT / HOLD.</p></details>
+<details class="guide-detail"><summary>Engineers · How are details, checks and sources shown?</summary><p>Inspect exact source revision, element ID, constraints, local coordinates, technical dimensions, sections, native IFC/DXF/STEP geometry, verification results, and conflicting/unresolved assumptions. Do not infer rebar, material grades, wall thickness or connection capacity without evidence.</p></details>
+<details class="guide-detail"><summary>Owners · How will milestones, budgets and progress be connected?</summary><p>CAD supplies model component IDs; Scheduling owns tasks/dates; Cost owns the rate and BOQ logic; Operations owns evidence of performed field work. A7 links these as peer modules; it does not copy their authorities into one website.</p></details>
+</section>
+<section class="hero"><h2>What is genuinely available now?</h2>
+<div class="guide-warning"><p><strong>Current truth:</strong> M12.1 provides an English dimension-to-3D volume preview and separate synthetic native CAD generators. The actual Narayani current sources are restricted DWG revisions, not verified DXF conversions. Real-project BIM generation, complete worker-detail sheets, schedule/cost linkage, and engineering acceptance are <strong>not yet implemented or approved</strong>.</p></div>
+<p>When facts are missing, the system should request only those inputs. Never silently invent beam sizes, column locations, reinforcement, construction stages, prices or material grades. Public demo data is not a site instruction.</p></section>
+<section class="hero" id="for-builders"><h2>For developers and AI agents</h2>
+<p>This website follows the <a href="https://fabingurung.github.io/JP_A7_System_Registry_and_Knowledge_Graph/how-it-works.html">single cross-repository A7 How It Works standard</a>. A7 owns the common interaction template; CAD owns geometry and drawing rules. The implementation is preserved in GitHub commits and checked with CI.</p>
+<details class="guide-detail"><summary>View the machine contract and reproduction rules</summary>
+<p>Reproducibility needs identical normalized input, source hashes/versions, pinned engine commit, deterministic runtime settings and verified output hashes. The AI-to-engine interface is <a href="https://raw.githubusercontent.com/FabinGurung/JP_Computer-Aided-Drawings/main/backend/cad_bridge/conversation_contract.py">conversation_contract.py</a>; DXF inventory is <a href="https://raw.githubusercontent.com/FabinGurung/JP_Computer-Aided-Drawings/main/backend/cad_bridge/dxf_inventory.py">dxf_inventory.py</a>. Exact source code, test and export boundaries live in the owning repository.</p>
+<p><a href="https://raw.githubusercontent.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph/main/policies/global/ai-aided-product-guide.v0.1.json">Canonical machine standard v0.1</a> · <a href="https://raw.githubusercontent.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph/main/docs/AI_AIDED_PRODUCT_GUIDE_TEMPLATE_v0.1.md">Cross-repository content template</a> · <a href="https://raw.githubusercontent.com/FabinGurung/JP_Computer-Aided-Drawings/main/governance/AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md">CAD adaptation and version history</a></p>
+</details>
+</section></main><footer>Draft/preview is not construction authority. <a href="../">Home</a> · <a href="https://fabingurung.github.io/JP_A7_System_Registry_and_Knowledge_Graph/how-it-works.html">Universal guide</a>.</footer>
+</div></body></html>
