@@ -11,7 +11,7 @@ function parse(text:string):Parsed{
  function field(name:"length_mm"|"width_mm"|"height_mm",patterns:string[],range:[number,number]){
   for(const raw of patterns){
    const match=new RegExp(raw,"i").exec(text);if(!match)continue;
-   const value=Number(match[1])*units[match[2].toLowerCase()];
+   const value=Number(match[1]!)*(units[match[2]!.toLowerCase()]??NaN);
    if(Number.isFinite(value)&&value>=range[0]&&value<=range[1]){
     data[name]=Math.round(value*1000)/1000;proof.push(name+" ← "+match[0]);break;
    }
@@ -24,7 +24,7 @@ function parse(text:string):Parsed{
  const count=/\b(1[0-2]|[1-9]|one|two|three|four|five|six|seven|eight|nine|ten)\s*(?:storeys?|stories|floors?|levels?)\b/i.exec(text);
  if(count){
   const words:Record<string,number>={one:1,two:2,three:3,four:4,five:5,six:6,seven:7,eight:8,nine:9,ten:10};
-  const value=words[count[1].toLowerCase()]??Number(count[1]);
+  const value=words[count[1]!.toLowerCase()]??Number(count[1]!);
   if(value>=1&&value<=12){data.storeys=value;proof.push("storeys ← "+count[0]);}
  }
  const needs:[keyof Mass,string][]=[["length_mm","What is the building length, with units?"],["width_mm","What is the building width, with units?"],["storeys","How many storeys?"],["height_mm","What is the floor-to-floor height, with units?"]];
@@ -65,17 +65,17 @@ function renderDetails(){
  for(const [name,value] of [["Length",String(mass.length_mm)+" mm"],["Width",String(mass.width_mm)+" mm"],
    ["Floor height",String(mass.height_mm)+" mm"],["Storeys",String(mass.storeys)],
    ["Shown",chosen===-1?"All":String(chosen+1)],["Validity","MASS ONLY"]])
-  facts.append(element(name,value));
+  facts.append(element(name!,value!));
  const root=document.createElementNS("http://www.w3.org/2000/svg","svg");
  root.setAttribute("viewBox","0 0 440 206");root.setAttribute("role","img");
  root.setAttribute("aria-label","Envelope only, not a structural section");
  for(let i=0;i<mass.storeys;i++){
   const story=(163/mass.storeys),y=175-(i+1)*story;
-  const rect=document.createElementNS(root.namespaceURI,"rect");
+  const rect=document.createElementNS("http://www.w3.org/2000/svg","rect");
   for(const [key,value] of [["x","20"],["y",String(y)],["width","250"],["height",String(story)],
    ["fill",chosen<0||chosen===i?"#21606b":"#10283e"],["stroke","#acc4d3"]])rect.setAttribute(key,value);
   root.append(rect);
-  const t=document.createElementNS(root.namespaceURI,"text");
+  const t=document.createElementNS("http://www.w3.org/2000/svg","text");
   t.setAttribute("x","30");t.setAttribute("y",String(y+story/2+4));t.setAttribute("fill","#e7f7fb");t.setAttribute("font-size","12");
   t.textContent="Level "+(i+1)+" · "+Math.round((i+1)*mass.height_mm)+" mm";root.append(t);
  }
@@ -84,7 +84,7 @@ function renderDetails(){
 function select(n:number){
  if(!mass)return;chosen=n;
  for(let i=0;i<bodies.length;i++){
-  const m=bodies[i];m.visible=n===-1||n===i;
+  const m=bodies[i]!;m.visible=n===-1||n===i;
   (m.material as THREE.MeshStandardMaterial).opacity=n===i?.46:.23;
  }renderDetails();
 }
@@ -140,7 +140,7 @@ renderer.domElement.addEventListener("pointerup",ev=>{
  point.x=2*(ev.clientX-box.left)/box.width-1;point.y=1-2*(ev.clientY-box.top)/box.height;
  raycaster.setFromCamera(point,camera);
  const hit=raycaster.intersectObjects(bodies.filter(m=>m.visible),false);
- if(hit.length)select(Number(hit[0].object.userData.floor));
+ if(hit.length)select(Number(hit[0]!.object.userData.floor));
 });
 get<HTMLButtonElement>("render").onclick=generate;
 get<HTMLButtonElement>("sample").onclick=()=>{
