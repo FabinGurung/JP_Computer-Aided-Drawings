@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
     paths: [.github/workflows/cad-m01-live-audit.yml]
+  pull_request:
+    paths: [.github/workflows/cad-m01-live-audit.yml]
   workflow_run:
     workflows: ["CAD Main GitHub Pages (validated CAD publishing)"]
     types: [completed]
