@@ -17,7 +17,7 @@ required=[
 "data/projects.json","data/navigation.json","stages/m80/index.html",".nojekyll"]
 missing=[x for x in required if not (root/x).is_file()]
 guide=(root/"guide/index.html").read_text() if (root/"guide/index.html").exists() else ""
-assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","NORMALIZE","EXECUTE","VERIFY","EXPLORE","TRACE","3D","2D","4D","5D","engineering acceptance","A7 How It Works standard","AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md")), "AI aided CAD guide missing canonical policy or safety details"
+assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","VALIDATE","EXECUTE","VERIFY","VIEW","TRACE","3D","2D","4D","5D","engineering acceptance","CAD-owned AAD template","AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md")), "AI aided CAD guide missing canonical policy or safety details"
 assert 'href="./guide/"' in (root/"index.html").read_text() and "How It Works" in (root/"index.html").read_text(),"home missing guide navigation"
 assert 'href="../../guide/"' in (root/"cad/brief/index.html").read_text(),"brief must reach guide"
 assert 'href="../guide/"' in (root/"cad/index.html").read_text(),"CAD studio must reach guide"
