@@ -4,6 +4,8 @@ on:
     branches: [main]
     paths:
       - "cad/**"
+      - "public/**"
+      - "tools/site/check_public_routes.py"
       - "backend/cad_bridge/design_*.py"
       - "design_jobs/synthetic/**"
       - "tools/site/cad-m08-verify.py"
