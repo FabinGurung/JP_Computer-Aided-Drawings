@@ -1,6 +1,6 @@
 # Open Architecture — CAD Studio
 
-**Human-first AI-Aided Drawing guide:** [How It Works](https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/) · [Describe → 3D](https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/brief/). This CAD-specific presentation derives from the single [A7 global AI-aided product guide contract](https://github.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph/blob/main/policies/global/ai-aided-product-guide.v0.1.json); GitHub is the deterministic engine/code authority, not an AI model. See [versioned CAD guide adoption](governance/AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md).
+**Human-first AI-Aided Drawing guide:** [How It Works](https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/) · [Describe → 3D](https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/brief/). The **CAD/AAD repository owns its AI-Aided Design template** at [governance/aad/aad-domain-template.v0.1.json](governance/aad/aad-domain-template.v0.1.json); **A7 is a read-only catalogue/index**, not the template authority; GitHub is the deterministic engine/code authority, not an AI model. See [versioned CAD guide adoption](governance/AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md).
 
 
 The repository's **main objective is reusable, browser-first CAD/BIM engineering software**. The homepage opens the working `/cad/` studio; project-specific viewers are secondary adapter/evidence layers.

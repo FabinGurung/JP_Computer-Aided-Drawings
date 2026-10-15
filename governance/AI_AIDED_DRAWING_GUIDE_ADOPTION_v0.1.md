@@ -1,12 +1,12 @@
 # AI-Aided Drawing — How It Works site adoption v0.1
 
-**Single cross-repository authority:** [A7 AI-aided product guide machine contract](https://github.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph/blob/main/policies/global/ai-aided-product-guide.v0.1.json). A7 owns the reusable interaction template and cross-module routes; this CAD repository owns the specialized implementation. This is a versioned *adoption*, not a second independently editable policy.
+**Canonical AAD template owner:** this CAD repository, [governance/aad/aad-domain-template.v0.1.json](aad/aad-domain-template.v0.1.json). A7 is a read-only cross-repository catalogue, not the template owner. Its previously published AAD-like document is a historical misplaced copy, not this module's active authority; do not edit A7 without a separately explicit user request.
 
 ## User-facing location
 
 The existing website route [`/guide/`](https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/) becomes **How It Works**. Its entry must be reachable from the public home page, existing `/cad/` Studio and `/cad/brief/` language-to-3D pilot. Do not create a deeper “how-to” folder or require users to read `AGENTS.md`, Git histories, JSON schema or the A7 control-tower directory to operate the product.
 
-The guide follows **UNDERSTAND → RESOLVE → NORMALIZE → EXECUTE → VERIFY → EXPLORE → TRACE** from A7. It separates AI conversational interpretation from versioned computational kernels, shows what the user does, and explains what remains unverified. Progressively disclose detail rather than exposing many pages or engineer-specific language at entry.
+The CAD-owned guide follows **UNDERSTAND → RESOLVE → VALIDATE → EXECUTE → VERIFY → VIEW → TRACE** from its versioned AAD template. It separates AI conversational interpretation from versioned computational kernels, shows what the user does, and explains what remains unverified. Progressively disclose detail rather than exposing many pages or engineer-specific language at entry.
 
 ## CAD-specific progressive product
 
@@ -30,7 +30,7 @@ Project originals remain provider-native and access-controlled. Narayani current
 ## Version and regression
 
 Source: `public/guide/index.html`, `index.html`, `cad/index.html`, `cad/brief/index.html`.
-Canonical A7: `policies/global/ai-aided-product-guide.v0.1.json` and `docs/AI_AIDED_PRODUCT_GUIDE_TEMPLATE_v0.1.md`.
+Canonical CAD/AAD: `governance/aad/aad-domain-template.v0.1.json` and `governance/aad/README.md`. A7 holds only index/links for discovery. Do not write A7 as a side effect of CAD changes.
 Validation: `tools/site/check_public_routes.py` asserts the deployed `/guide/` route, seven stages, CAD 2D/3D/4D/5D caveats, source/future approval boundary and navigational access from home, CAD Studio and browser brief.
 
 Release procedure: feature branch → PR → all GitHub checks → merge to main → GitHub Pages/staging provider readback; preserve earlier routes and source histories. Git-native lineage uses old/new commit SHAs. Any separately required A9 Local/Main domain registry procedure remains a distinct source-governance process, not an excuse to duplicate copies of the same Git-only documentation change.
