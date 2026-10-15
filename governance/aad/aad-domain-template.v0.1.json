@@ -1,0 +1,95 @@
+{
+  "schema": "jp-cad://aad-domain-template/0.1",
+  "template_id": "AAD-CAD-TEMPLATE-001",
+  "name": "AI-Aided Design and Drawing — owned CAD domain template",
+  "version": "0.1.0",
+  "status": "ACTIVE_DOMAIN_OWNED_TEMPLATE",
+  "owner_repository": "FabinGurung/JP_Computer-Aided-Drawings",
+  "owner_module": "CAD",
+  "scope": "Language-first CAD/BIM and drawing generation interactions, deterministic validation, source-linked levels, disciplines, detailed views and exports",
+  "architecture": {
+    "a7_role": "READ_ONLY_FEDERATED_CATALOGUE",
+    "a7_may_index": [
+      "service_identity",
+      "repository_location",
+      "module_owner",
+      "capability_version",
+      "public_page_link",
+      "current_status",
+      "release_commit_reference",
+      "cross_module_relation"
+    ],
+    "a7_must_not_own": [
+      "aad_template",
+      "aad_geometry_engine",
+      "cad_domain_schema",
+      "engineering_validation",
+      "worker_drawing_rules",
+      "project_originals",
+      "private_source_data",
+      "specialist_product_documentation"
+    ],
+    "a7_write_authorization": "REQUIRES_SEPARATE_EXPLICIT_USER_INSTRUCTION_FOR_A7_SCOPE",
+    "reusable_interface": "Other AI interpreters normalize to locally validated source-backed requests; A7 only resolves the owner",
+    "directory_rule": "Never write, update, publish, or auto-sync A7 from CAD tasks; proposals may be recorded in CAD repo pending explicit user authorization"
+  },
+  "pipeline": [
+    {
+      "id": "UNDERSTAND",
+      "actor": "USER",
+      "stage": "Natural language, dimensions, revisions, photo or verified drawing reference; user never manually composes JSON"
+    },
+    {
+      "id": "RESOLVE",
+      "actor": "AI_INTERPRETER",
+      "stage": "Read source authority; extract evidence-backed intent; identify missing facts"
+    },
+    {
+      "id": "VALIDATE",
+      "actor": "CAD_DOMAIN_VALIDATOR",
+      "stage": "Source rev/hash, quantities and units, stable IDs, constraints, private/public authorization"
+    },
+    {
+      "id": "EXECUTE",
+      "actor": "PINNED_CAD_KERNEL",
+      "stage": "IfC/OpenCascade/ezdxf/Three.js deterministic geometry from normalized source"
+    },
+    {
+      "id": "VERIFY",
+      "actor": "DOMAIN_QA",
+      "stage": "Native geometry, reproducible output manifests, regression tests, separate licensed engineer acceptance"
+    },
+    {
+      "id": "VIEW",
+      "actor": "PRODUCT_UI",
+      "stage": "3D-first building -> level -> discipline -> component -> drawing section -> work detail, role-based labels and color legend"
+    },
+    {
+      "id": "TRACE",
+      "actor": "CAD_RELEASE",
+      "stage": "Canonical request hash, source version/hash, engine commit, dependency locks, output digest and approval status"
+    }
+  ],
+  "display": {
+    "primary": "3D-first navigable building with progressive detail",
+    "2D": "Plans/elevations/sections/detail sheets from source-verified geometry",
+    "3D": "Semantic selection, isolated layers, element dimensions and role-filtered instructions",
+    "4D": "Cross-repo referenced Scheduling tasks, dependencies and milestones; not owned by A7/CAD",
+    "5D": "Cross-repo referenced Cost QTO/rate/BOQ under Cost ownership; not owned by A7/CAD",
+    "worker_gate": "Approved issued-for-construction revision required before treating graphics as work instructions"
+  },
+  "controls": {
+    "no_inferred_engineering_parameters": true,
+    "no_private_source_publication": true,
+    "no_a7_mutation_as_side_effect": true,
+    "no_unverified_completion_claim": true,
+    "no_structural_approval_from_qa_only": true,
+    "reproducibility": "Same canonical normalized request, immutable source bytes, pinned engine/toolchain, stable settings and output manifest, not merely same prose prompt"
+  },
+  "links": {
+    "read_only_catalogue": "https://github.com/FabinGurung/JP_A7_System_Registry_and_Knowledge_Graph",
+    "cad_product": "https://fabingurung.github.io/JP_Computer-Aided-Drawings/",
+    "cad_user_guide": "https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/"
+  },
+  "supersedes_external_ownership_assumption": "A7 policy file policies/global/ai-aided-product-guide.v0.1.json is a preexisting historical placement, NOT canonical for AAD domain. Do not mutate or delete it without separate explicit A7 instructions."
+}
