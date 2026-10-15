@@ -3,6 +3,8 @@ on:
   push:
     branches: [main]
     paths: [.github/workflows/cad-m01-live-audit.yml]
+  pull_request:
+    paths: [.github/workflows/cad-m01-live-audit.yml]
   workflow_run:
     workflows: ["CAD Main GitHub Pages (validated CAD publishing)"]
     types: [completed]
@@ -22,7 +24,15 @@ jobs:
           done
           grep -q 'Open Architecture' /tmp/cad-live.html
           curl -fsSL "${BASE}" -o /tmp/cad-root.html
-          grep -q 'Launch CAD Studio M01' /tmp/cad-root.html
+          grep -q 'How It Works' /tmp/cad-root.html
+          grep -q 'href="./cad/brief/"' /tmp/cad-root.html
+          grep -q 'href="./cad/"' /tmp/cad-root.html
+          curl -fsSL "${BASE}guide/" -o /tmp/cad-guide.html
+          grep -q 'AI-Aided Drawing' /tmp/cad-guide.html
+          grep -q '07 · TRACE' /tmp/cad-guide.html
+          curl -fsSL "${BASE}cad/brief/" -o /tmp/cad-brief.html
+          grep -q 'AI-AIDED DRAWING' /tmp/cad-brief.html
+          grep -q 'How It Works' /tmp/cad-brief.html
           curl -fsSL "${BASE}cad/demo.json" -o /tmp/cad-model.json
           python - <<'PY'
           import json
