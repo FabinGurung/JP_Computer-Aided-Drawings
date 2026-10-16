@@ -114,13 +114,8 @@ try{
    if(!(Number(await page.locator('#plan rect[data-part="BED"]').getAttribute("x"))>oldBedX))
      throw Error("Bed positioning did not update plan");
    // A corrupt/unknown-id draft must not silently enter the drawing model.
-   await page.locator("#download").click();
-   const stored=await page.evaluate(async()=>{
-     // The editor's validated model has a versioned model package. Test the
-     // exact saved bytes independently below via Playwright's download event.
-     return document.querySelector("#area")?.textContent;
-   });
-   if(stored!=="48.0 m²")throw Error("Component editing unexpectedly altered building footprint");
+   if(await page.locator("#area").innerText()!=="48.0 m²")
+     throw Error("Component editing unexpectedly altered building footprint");
    const saved=page.waitForEvent("download");
    await page.locator("#download").click();
    const downloaded=await saved;
@@ -132,9 +127,9 @@ try{
       throw Error("Versioned component changes missing from saved draft");
    const readback=await page.locator("#upload");
    await readback.setInputFiles({name:"linked-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(serialized))});
-   if(!(await page.locator("#partMessage").innerText()).includes("W-NL") &&
+   if(!(await page.locator("#message").innerText()).includes("Loaded draft") ||
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
-      throw Error("Draft load changed linked components");
+      throw Error("Validated draft reload lost the linked bed geometry");
    // Legacy 0.1 input is upgraded with centered hosted openings.
    await readback.setInputFiles({name:"legacy-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({
      schema:"jp-cad://linked-one-bay-demo/0.1",length:8,width:6,height:3,door:.95,window:1.4,bed:true
