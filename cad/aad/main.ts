@@ -10,7 +10,7 @@ type Draft = {schema:string;length:number;width:number;height:number;door:number
 type Solid = {id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
 const SCHEMA="jp-cad://linked-one-bay-demo/0.1";
 const defaults:Draft={schema:SCHEMA,length:8,width:6,height:3,door:.95,window:1.4,bed:true};
-const elem=<T extends HTMLElement>(id:string):T=>{
+const elem=<T extends Element>(id:string):T=>{
  const x=document.getElementById(id);
  if(!x)throw Error("Missing UI element: "+id);
  return x as T;
@@ -24,7 +24,6 @@ let model:Draft={...defaults};
 let solids:Solid[]=[];
 let selected:string|null=null;
 let showRoof=false,showWalls=true;
-let cameraMode:"perspective"="perspective";
 
 function validate(candidate:unknown):Draft{
  if(!candidate||typeof candidate!=="object"||Array.isArray(candidate))throw Error("Invalid model package");
