@@ -23,7 +23,7 @@ const info=elem<HTMLElement>("inspect");
 let model:Draft={...defaults};
 let solids:Solid[]=[];
 let selected:string|null=null;
-let showRoof=false,showWalls=true;
+let showRoof=false,showWalls=true,showDimensions=true;
 
 function validate(candidate:unknown):Draft{
  if(!candidate||typeof candidate!=="object"||Array.isArray(candidate))throw Error("Invalid model package");
@@ -210,12 +210,14 @@ function planView(){
    svg.append(item);
   }
  }
+ if(showDimensions){
  const ext=18;
  svg.append(svgNode("path",{d:"M"+left+" "+(top-ext)+"V"+(top-37)+" M"+(left+model.length*scale)+" "+(top-ext)+"V"+(top-37)+" M"+left+" "+(top-30)+"H"+(left+model.length*scale),stroke:"#456575","stroke-width":1.5,fill:"none"}));
  svg.append(textNode(left+model.length*scale/2,top-38,model.length.toFixed(2)+" m",14));
  svg.append(svgNode("path",{d:"M"+(left-18)+" "+top+"H"+(left-34)+" M"+(left-18)+" "+(top+model.width*scale)+"H"+(left-34)+" M"+(left-28)+" "+top+"V"+(top+model.width*scale),stroke:"#456575","stroke-width":1.5,fill:"none"}));
  const side=textNode(left-41,top+model.width*scale/2,model.width.toFixed(2)+" m",13);
  side.setAttribute("transform","rotate(-90 "+(left-41)+" "+(top+model.width*scale/2)+")");svg.append(side);
+ }
  svg.append(textNode(300,29,"LINKED PLAN · ONE-BAY DEMONSTRATION",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
@@ -336,6 +338,7 @@ for(const key of ["length","width","height","door","window"]){
 elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
+elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
 elem<HTMLButtonElement>("applyText").onclick=()=>interpret(elem<HTMLTextAreaElement>("instruction").value);
 elem<HTMLButtonElement>("fit").onclick=fit;
 elem<HTMLButtonElement>("clearSelect").onclick=()=>select(null);
