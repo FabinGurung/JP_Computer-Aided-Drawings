@@ -64,6 +64,6 @@ for page in current_pages:
 home=(root/"index.html").read_text()
 for anchor in ('id="capabilities"','id="research"','id="projects"','id="releases"','href="./cad/aad/"','href="./cad/brief/"','href="./cad/"'):
     assert anchor in home, ("missing product-first homepage control", anchor)
-for title in ("WORKING · LIMITED ROOM DEMO","MASS PREVIEW ONLY","ENGINEERING"):
+for title in ("WORKING · LIMITED ROOM DEMO","MASS PREVIEW ONLY","PRODUCTION CONNECTION PENDING"):
     assert title in home+((root/"assets/css/cad-unified-theme.css").read_text()),("missing UI capability context",title)
 print("CAD_UNIFIED_STATIC_SITE_QA=PASS",len(required),"required paths; 7 unchanged Narayani stage families")
