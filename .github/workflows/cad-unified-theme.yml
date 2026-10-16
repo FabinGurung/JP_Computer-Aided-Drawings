@@ -1,0 +1,49 @@
+name: CAD Unified Navigation and Theme
+on:
+  pull_request:
+    paths:
+      - "index.html"
+      - "public/assets/css/cad-unified-theme.css"
+      - "public/assets/js/cad-site-shell.js"
+      - "public/guide/**"
+      - "public/projects/**"
+      - "public/research/index.html"
+      - "public/research/open-architecture-engine/index.html"
+      - "public/research/open-architecture-engine/v0.2/index.html"
+      - "public/releases/index.html"
+      - "public/source/index.html"
+      - "cad/index.html"
+      - "cad/aad/index.html"
+      - "cad/brief/index.html"
+      - "tools/site/cad-unified-shell-smoke.mjs"
+      - "tools/site/check_public_routes.py"
+      - ".github/workflows/cad-unified-theme.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-unified-theme-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  portal-product-and-preservation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 17
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Build all current CAD product routes and verify immutable stages
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          python tools/site/check_public_routes.py dist
+      - name: Exercise site shell, 13 routes, responsive disclosure and registry
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5177 > /tmp/cad-theme-vite.log 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5177/ >/dev/null && break; sleep 2; done
+          CAD_SITE_URL=http://127.0.0.1:5177/ node tools/site/cad-unified-shell-smoke.mjs
+          echo CAD_PRODUCT_FIRST_THEME_QA_PASS

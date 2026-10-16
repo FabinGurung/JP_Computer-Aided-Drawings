@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M06</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"></head>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Open Architecture · CAD Workspace M06</title><meta name="description" content="Five-engine CAD research workspace: Three.js, web-ifc, IfcOpenShell, OCCT and ezdxf."><link rel="stylesheet" href="./style.css"><link rel="stylesheet" href="../assets/css/cad-unified-theme.css"></head>
 <body><div class="app">
 <header class="top"><a href="../" class="home">← Project Drawings</a><a class="home" href="./aad/">AI Design Studio · linked 2D + 3D</a><a class="home" href="./brief/">Describe → 3D</a><a class="home" href="../guide/">How It Works</a><div class="brand"><strong>OPEN ARCHITECTURE</strong><span>CAD Studio · M06</span></div><span class="pill">RESEARCH / DRAFT ONLY</span></header>
 <div class="toolbar" aria-label="CAD operations">
@@ -58,4 +58,4 @@
 <h2>Interchange</h2><label class="upload">Import IFC (web-ifc)<input type="file" id="importIfc" accept=".ifc"></label><button id="downloadJson" type="button">Export draft JSON</button><button id="resetDemo" type="button">Reset active project</button>
 <p class="sub">IFC import is read-only and separate from draft editing. For IFC / STEP / DXF exports, use the tested optional Python bridge locally.</p></div></aside>
 </div><nav class="mobile-nav" aria-label="Mobile CAD workspace navigation"><button type="button" data-mobile-target="stage" aria-current="page">Model</button><button type="button" data-mobile-target="explorer">Project</button><button type="button" data-mobile-target="inspector">Inspect</button><button type="button" data-mobile-target="export">Sources</button></nav><footer>Project packages are local draft data; the starter has fabricated example geometry, not measured dimensions. IFC authoring / CAD kernel / DXF are Python adapters, not browser-hosted services.</footer>
-</div><script type="module" src="./main.ts"></script></body></html>
+</div><script type="module" src="./main.ts"></script><script defer src="../assets/js/cad-site-shell.js" data-cad-root="../"></script></body></html>
