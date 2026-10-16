@@ -1,0 +1,126 @@
+/* CAD visual system v1: Midnight Blueprint. A7 remains read-only. 
+   Applied to current navigation/product pages. Historical stage snapshots untouched. */
+:root{color-scheme:dark;--cad-bg:#091522;--cad-surface:#101f30;--cad-raised:#152b3c;--cad-line:#2c465b;--cad-text:#e9f4fb;--cad-muted:#aac2d3;--cad-accent:#65dcca;--cad-warning:#f7bd7a;--cad-focus:#c2fcf0;--cad-radius:15px}
+html{scroll-behavior:smooth}
+body{background:var(--cad-bg);color:var(--cad-text)}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(ellipse 60% 44% at 85% 2%,#0d3a48a8,transparent 70%),linear-gradient(150deg,#091521,#08131f)}
+a{color:var(--cad-accent)}
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,textarea:focus-visible{outline:2px solid var(--cad-focus);outline-offset:3px}
+.cad-global-nav{position:relative;z-index:50;display:flex;gap:12px;align-items:center;justify-content:space-between;padding:11px clamp(12px,2.2vw,30px);background:#0c1928;border-bottom:1px solid var(--cad-line);font:600 12px/1.4 Inter,system-ui,sans-serif;color:var(--cad-text)}
+.cad-global-nav *{box-sizing:border-box}
+.cad-global-brand{white-space:nowrap;text-decoration:none;color:#f0fbff;font-size:14px;font-weight:850;letter-spacing:-.02em}
+.cad-global-brand b{color:var(--cad-accent)}
+.cad-global-links{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.cad-global-links>a,.cad-global-more summary{display:inline-flex;align-items:center;padding:9px 10px;text-decoration:none;color:#bfd5e3;border-radius:8px;font-size:12px;cursor:pointer}
+.cad-global-links>a:hover,.cad-global-more summary:hover,.cad-global-links>a[aria-current=page]{color:#e9fff8;background:#1b4150;text-decoration:none}
+.cad-global-links>a[aria-current=page]{border:1px solid #316e6b;padding:8px 9px}
+.cad-global-more{position:relative}.cad-global-more summary{list-style:none}.cad-global-more summary::-webkit-details-marker{display:none}
+.cad-global-more summary::after{content:"⌄";margin-left:6px}
+.cad-global-popover{position:absolute;top:calc(100% + 8px);right:0;background:#152839;border:1px solid #3a6174;box-shadow:0 15px 30px #020a14aa;border-radius:12px;padding:8px;min-width:200px;display:grid;gap:2px}
+.cad-global-popover a{padding:9px 12px;color:#d8e9f4;border-radius:7px;text-decoration:none}.cad-global-popover a:hover{background:#235163}
+.cad-global-tag{white-space:nowrap;color:#f4c58f;font-size:10px;letter-spacing:.035em}
+.cad-global-skip{position:absolute;left:-9999px;top:auto}.cad-global-skip:focus{left:10px;top:8px;z-index:9999;padding:10px;background:#e5fffa;color:#102431}
+.cad-shell-ready .topnav,.cad-shell-ready .project-page-nav{display:none!important}
+.cad-shell-ready .shell{margin:0 auto;padding-top:22px;max-width:1220px}
+.cad-shell-ready .shell>main{padding:0}
+.cad-shell-ready .shell>footer{padding:30px 8px;color:#9cb5c8}
+.cad-shell-ready .shell>footer a{color:var(--cad-accent)}
+/* Portal, guide and research pages can keep their old class names. */
+body .shell .hero,body .shell .tile,body .shell .callout,
+body .shell .guide-step,body .shell .guide-detail,body .shell .guide-legend>div,
+body .viewer-section,body .card{
+ background:var(--cad-surface);border:1px solid var(--cad-line);box-shadow:none;color:var(--cad-text)}
+body .shell .hero{padding:26px}
+body .shell .tile{padding:20px}
+body .shell .hero p,body .shell .tile p,body .shell .callout,body .shell .guide-step p,
+body .shell .guide-detail p,body .shell .guide-legend p,body .card p,
+body .viewer-note,body .soft,body .note,body .gate-list,body .project-subline{color:var(--cad-muted)}
+body .shell h1,body .shell h2,body .shell h3,body .shell strong,body .card h3{color:var(--cad-text)}
+body .shell .eyebrow,body .search-label{color:#86cbbf}
+body .shell .tag,body .shell .pill,body .pill,body .shell .guide-flow span{
+ background:#193849;color:#c7f5ee;border:1px solid #376777}
+body .shell .guide-step .num,body .shell .stage{color:var(--cad-accent)}
+body .shell .guide-detail summary{color:#b6f7ed}
+body .shell .guide-warning,body .notice{background:#302719;border:1px solid #7b5936;color:#f6d4a7}
+body .notice b,body .shell .guide-warning strong{color:#ffe0b7}
+body .shell .guide-legend strong{color:var(--cad-text)}
+body .shell .guide-flow b{color:var(--cad-muted)}
+body .shell .guide-flow span{color:var(--cad-text)}
+body .shell .action,body .button{background:#19635e;color:#effff9;border:1px solid #398e87}
+body .shell .action:hover,body .button:hover{background:#238077}
+body .shell .action.secondary,body .button.ghost{background:#1b3345;color:#d9ebf5;border:1px solid #426174}
+body .shell .callout{margin-top:16px}
+body .shell .preview,body .shell .plan,body iframe,body model-viewer{background:#fff;border-color:#406173}
+body .portal-search,body .shell input:not([type=checkbox]),body .shell select{background:#0a1b2b;color:var(--cad-text);border:1px solid #3a5d70}
+body .shell pre,body .architecture pre{background:#091827;color:#c3e4ed;border:1px solid var(--cad-line)}
+body .shell code{background:#203b4e;color:#e2faf7}
+body .hold{color:#ffd1aa;border-color:#89603a;background:#302519}
+body .frozen{color:#bbf1d4;border-color:#386958;background:#16362d}
+body .future{color:#bac7d4;background:#243347}
+/* Existing dedicated workspaces retain their complete tooling and layout. */
+body:has(#canvas3d) .cad-global-nav,body:has(#viewport) .cad-global-nav{min-height:45px}
+body:has(.app) .cad-global-nav{flex:none}
+body:has(.app) .top{height:auto;min-height:64px}
+body:has(#canvas3d) main{max-width:1920px}
+body:has(#canvas3d){--bg:var(--cad-bg);--panel:var(--cad-surface);--border:var(--cad-line);--ink:var(--cad-text);--muted:var(--cad-muted);--teal:var(--cad-accent)}
+body:has(#viewport):not(:has(.app)){--bg:var(--cad-bg);--panel:var(--cad-surface);--line:var(--cad-line);--text:var(--cad-text);--muted:var(--cad-muted);--mint:var(--cad-accent)}
+/* Research v0.1 is a preserved self-contained viewer; re-skin its surround only. */
+body .wrap{max-width:1220px;margin:auto;padding-top:26px}
+body .wrap>.hero,body .wrap>.panel,body .wrap .panel{background:var(--cad-surface);border:1px solid var(--cad-line);box-shadow:none;color:var(--cad-text)}
+body .wrap .hero p,body .wrap .note{color:var(--cad-muted)}
+body .wrap .eyebrow{color:#92d5c8}
+body .wrap h1,body .wrap h2{color:var(--cad-text)}
+body .wrap .pill{background:#1c3a4b;color:#c3ebdf;border-color:#376678}
+body .wrap .btn{background:#1b6d65;color:#e8fff9}
+body .wrap .btn.secondary{background:#223b4e;color:#e3f0f7}
+body .wrap .flow{background:#071827}
+/* Landing page: progressive disclosure and task-based navigation. */
+.cad-dashboard{max-width:1160px;margin:0 auto;padding:30px 20px 60px}
+.cad-kicker{color:#82d9cb;font-size:11px;font-weight:850;text-transform:uppercase;letter-spacing:.14em}
+.cad-dashboard h1{font-size:clamp(29px,5vw,55px);letter-spacing:-.06em;line-height:1.08;margin:11px 0}
+.cad-dashboard h2{font-size:19px;margin:0 0 8px;color:#eaf5fd}
+.cad-dashboard h3{font-size:15px;margin:0 0 7px;color:#ebf8fb}
+.cad-dashboard p{margin:7px 0;color:#adc7d5;line-height:1.6}
+.cad-intro{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(260px,.85fr);gap:16px;margin-bottom:24px}
+.cad-intro-main{border:1px solid #32616a;background:linear-gradient(130deg,#153445,#0b1c2b 72%);border-radius:20px;padding:28px}
+.cad-intro-main p{max-width:680px}
+.cad-intro-side{border:1px solid var(--cad-line);background:#101e2f;border-radius:20px;padding:22px;display:flex;flex-direction:column;gap:8px;justify-content:center}
+.cad-intro-side h2{margin-bottom:3px}
+.cad-intro-side p{font-size:12px}
+.cad-button{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:11px 14px;background:#1b7369;border:1px solid #3da698;border-radius:9px;color:#ecfff9;font-weight:780;font-size:13px;margin:8px 8px 0 0}
+.cad-button:hover{background:#248678;color:white;text-decoration:none}
+.cad-button.alt{background:#1e384b;border-color:#466a7c;color:#daedf7}
+.cad-eyeline{display:flex;gap:8px;flex-wrap:wrap;margin-top:17px}
+.cad-eyeline span{font-size:11px;color:#a4d7d2;padding:5px 10px;border:1px solid #416676;background:#183545;border-radius:20px}
+.cad-section{margin-top:23px}
+.cad-section-head{display:flex;align-items:baseline;justify-content:space-between;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.cad-section-head p{font-size:12px;margin:0}
+.cad-tool-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:13px}
+.cad-tool{border:1px solid var(--cad-line);background:#101e30;border-radius:15px;padding:19px;display:flex;flex-direction:column;gap:7px}
+.cad-tool:first-child{border-color:#3f8177;background:#142c37}
+.cad-tool p{font-size:12px}
+.cad-tool .cad-button{align-self:flex-start;margin-top:auto}
+.cad-tool .num{font-size:11px;color:#93d9cc;letter-spacing:.07em;font-weight:800}
+.cad-disclosures{display:grid;gap:9px;margin-top:14px}
+.cad-disclosure{border:1px solid var(--cad-line);border-radius:12px;background:#102031}
+.cad-disclosure summary{cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:14px;padding:15px 18px;color:#e6f3fa;font-size:14px;font-weight:780;list-style:none}
+.cad-disclosure summary::-webkit-details-marker{display:none}
+.cad-disclosure summary::after{content:"+";font-size:20px;color:var(--cad-accent);font-weight:400}
+.cad-disclosure[open] summary::after{content:"−"}
+.cad-disclosure summary span{display:block;color:#94acbb;font-size:11px;font-weight:500;margin-top:4px}
+.cad-disclosure .cad-detail{padding:0 18px 19px;border-top:1px solid #263e50}
+.cad-detail-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:11px;margin-top:15px}
+.cad-mini{border:1px solid #30495b;background:#13283a;border-radius:11px;padding:13px}
+.cad-mini strong{font-size:13px;color:#eef9fc}
+.cad-mini p{font-size:12px;margin:7px 0 12px}
+.cad-mini a{font-size:12px;text-decoration:none;font-weight:700}
+.cad-state{color:#93daca;font-size:11px;font-weight:800;letter-spacing:.025em}
+.cad-state.held{color:#fac28b}
+.cad-demo-steps{display:grid;gap:8px;margin-top:8px;color:#bfd5e1;font-size:12px;padding-left:20px}
+.cad-footer{margin-top:24px;border-top:1px solid #305164;padding-top:16px;color:#87a7b8;font-size:11px}
+.cad-panel-discreet{font-size:12px;border-left:2px solid #e3ad6b;background:#2b261f;padding:11px 13px;margin-top:13px;color:#dfb78a}
+.cad-dashboard .project-cards .card{background:#15293a;color:#e3f2fa}
+.cad-dashboard .project-cards .card a{color:#d3fff3}
+.cad-dashboard .project-cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+@media(max-width:950px){.cad-intro{grid-template-columns:1fr}.cad-tool-grid{grid-template-columns:1fr 1fr}.cad-global-tag{display:none}}
+@media(max-width:660px){.cad-global-nav{align-items:flex-start;flex-wrap:wrap;gap:7px;padding:9px 12px}.cad-global-brand{width:100%}.cad-global-links{gap:1px}.cad-global-links>a,.cad-global-more summary{font-size:11px;padding:8px}.cad-global-popover{left:auto;right:0;min-width:180px}.cad-dashboard{padding:20px 12px 40px}.cad-tool-grid{grid-template-columns:1fr}.cad-intro-main,.cad-intro-side{padding:19px}.cad-disclosure summary{padding:13px}}
