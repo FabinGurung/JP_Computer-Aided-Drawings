@@ -23,8 +23,8 @@ try{
   if(menu<8)throw Error(title+" missing global navigation");
  }
  await p.goto(prefix,{waitUntil:"networkidle"});
- const dark=await p.locator("body").evaluate(e=>getComputedStyle(e).backgroundColor);
- if(!/rgb\((\s*9,\s*21,\s*34|\s*8,\s*18,\s*31)/.test(dark))throw Error("Home is not unified midnight palette: "+dark);
+ const daylight=await p.locator("body").evaluate(e=>getComputedStyle(e).backgroundColor);
+ if(!/rgb\(\s*248,\s*249,\s*250\s*\)/.test(daylight))throw Error("Home is not Lucid Blueprint daylight palette: "+daylight);
  const cards=await p.locator(".cad-tool").count();
  if(cards!==3)throw Error("Default product journeys are not exactly three: "+cards);
  if(await p.locator("#capabilities .cad-detail").isVisible())throw Error("Advanced content must start collapsed");
@@ -37,13 +37,13 @@ try{
  await p.locator("#cad-global-navigation .cad-global-more summary").click();
  if(!(await p.getByRole("link",{name:"Research & prototypes"}).isVisible()))throw Error("More menu closed unexpectedly");
  if(errors.length)throw Error("Page errors: "+JSON.stringify(errors));
- await p.screenshot({path:"/tmp/cad-midnight-blueprint-home.png",fullPage:true});
+ await p.screenshot({path:"/tmp/cad-daylight-blueprint-home.png",fullPage:true});
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
  await mobile.goto(prefix,{waitUntil:"networkidle"});
  await mobile.locator("#cad-global-navigation").waitFor();
  const noOverflow=await mobile.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+5);
  if(!noOverflow)throw Error("Mobile dashboard horizontal overflow");
- await mobile.screenshot({path:"/tmp/cad-midnight-blueprint-mobile.png",fullPage:true});
- console.log("CAD_UNIFIED_NAV_AND_PROGRESSIVE_DISCLOSURE_PASS",JSON.stringify({routes:routes.length,journeys:cards,search:"narayani",theme:dark,mobileOverflow:false}));
+ await mobile.screenshot({path:"/tmp/cad-daylight-blueprint-mobile.png",fullPage:true});
+ console.log("CAD_UNIFIED_NAV_AND_PROGRESSIVE_DISCLOSURE_PASS",JSON.stringify({routes:routes.length,journeys:cards,search:"narayani",theme:daylight,mobileOverflow:false}));
  await mobile.close();await p.close();
 }finally{await browser.close();}
