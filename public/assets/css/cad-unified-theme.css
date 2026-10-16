@@ -215,3 +215,16 @@ body:has(.app) .app>.top{display:none}
 body:has(#viewport):not(:has(.app))>header{display:none}
 body:has(#canvas3d) .viewhead{pointer-events:none}
 body:has(#canvas3d) .aad-view-status{pointer-events:auto}
+
+/* RENDER-01 UX: a tall dimension form must never stretch the drawing area into
+   a thousand-pixel letterboxed void. Keep both drawings above the fold. */
+body:has(#canvas3d) .workspace{align-items:start}
+body:has(#canvas3d) .viewer{align-self:start}
+body:has(#canvas3d) .views{height:clamp(420px,64vh,680px);min-height:0;flex:none;align-items:stretch}
+body:has(#canvas3d) .views>.view{height:100%;min-height:0}
+body:has(#canvas3d) .views #canvas3d,
+body:has(#canvas3d) .views #plan{height:100%;min-height:0}
+@media(max-width:850px){body:has(#canvas3d) .views{height:clamp(390px,60vh,560px)}}
+@media(max-width:580px){body:has(#canvas3d) .views{display:grid;grid-template-columns:1fr;height:auto;min-height:0}
+body:has(#canvas3d) .views>.view{height:350px;min-height:350px}
+body:has(#canvas3d) .views #canvas3d,body:has(#canvas3d) .views #plan{height:350px;min-height:0}}
