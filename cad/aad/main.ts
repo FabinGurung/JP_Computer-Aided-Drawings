@@ -11,9 +11,9 @@ type Solid = {id:string;name:string;kind:Category;x:number;y:number;z:number;dx:
 const SCHEMA="jp-cad://linked-one-bay-demo/0.1";
 const defaults:Draft={schema:SCHEMA,length:8,width:6,height:3,door:.95,window:1.4,bed:true};
 const elem=<T extends Element>(id:string):T=>{
- const x=document.getElementById(id);
+ const x=document.querySelector<T>("#"+id);
  if(!x)throw Error("Missing UI element: "+id);
- return x as T;
+ return x;
 };
 const svg=elem<SVGSVGElement>("plan");
 const holder=elem<HTMLDivElement>("canvas3d");
