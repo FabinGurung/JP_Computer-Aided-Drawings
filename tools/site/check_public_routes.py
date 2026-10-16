@@ -7,7 +7,7 @@ from html.parser import HTMLParser
 
 root=Path(sys.argv[1] if len(sys.argv)>1 else "dist")
 required=[
-"index.html","cad/brief/index.html","research/index.html","research/open-architecture-engine/index.html",
+"index.html","cad/brief/index.html","cad/aad/index.html","research/index.html","research/open-architecture-engine/index.html",
 "research/open-architecture-engine/v0.2/index.html","research/open-architecture-engine-v0.2/index.html",
 "research/open-architecture-engine-v0.2/plan.svg","research/open-architecture-engine-v0.2/plan.dxf",
 "research/open-architecture-engine-v0.2/model.gltf","research/open-architecture-engine-v0.2/rooms.json",
@@ -21,6 +21,9 @@ assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","VALIDATE"
 assert 'href="./guide/"' in (root/"index.html").read_text() and "How It Works" in (root/"index.html").read_text(),"home missing guide navigation"
 assert 'href="../../guide/"' in (root/"cad/brief/index.html").read_text(),"brief must reach guide"
 assert 'href="../guide/"' in (root/"cad/index.html").read_text(),"CAD studio must reach guide"
+assert 'href="./cad/aad/"' in (root/"index.html").read_text(),"Homepage must link live AAD studio"
+assert 'href="./aad/"' in (root/"cad/index.html").read_text(),"CAD studio must link AAD"
+assert 'src="./main.ts"' not in (root/"cad/aad/index.html").read_text(),"AAD TypeScript must be compiled to deployable JavaScript"
 assert not missing,"missing built pages: "+", ".join(missing)
 project=json.loads((root/"data/projects.json").read_text())
 assert all(re.fullmatch(r"projects/[a-z0-9-]+/",p["href"]) for p in project["projects"])
