@@ -1,0 +1,42 @@
+name: CAD AAD Linked 2D-3D Room Product
+on:
+  pull_request:
+    paths:
+      - "cad/aad/**"
+      - "cad/index.html"
+      - "index.html"
+      - "vite.config.ts"
+      - "tools/site/cad-aad-linked-smoke.mjs"
+      - "tools/site/check_public_routes.py"
+      - ".github/workflows/cad-aad-linked-room.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-aad-linked-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  linked-studio:
+    runs-on: ubuntu-latest
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - name: Strict TypeScript build and production static route QA
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          python tools/site/check_public_routes.py dist
+          test -s dist/cad/aad/index.html
+          echo CAD_AAD_LINKED_PRODUCTION_BUILD_PASS
+      - name: Browser acceptance of actual 2D/3D and parameter propagation
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5175 > /tmp/cad-aad-vite.log 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5175/cad/aad/ >/dev/null && break;sleep 2;done
+          CAD_AAD_URL=http://127.0.0.1:5175/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
+          echo CAD_AAD_BROWSER_LINKED_MODEL_PASS
