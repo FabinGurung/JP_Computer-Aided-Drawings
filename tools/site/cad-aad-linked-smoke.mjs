@@ -127,6 +127,7 @@ try{
       throw Error("Versioned component changes missing from saved draft");
    const readback=await page.locator("#upload");
    await readback.setInputFiles({name:"linked-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(serialized))});
+   await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
    if(!(await page.locator("#message").innerText()).includes("Loaded draft") ||
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
       throw Error("Validated draft reload lost the linked bed geometry");
@@ -134,12 +135,14 @@ try{
    await readback.setInputFiles({name:"legacy-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({
      schema:"jp-cad://linked-one-bay-demo/0.1",length:8,width:6,height:3,door:.95,window:1.4,bed:true
    }))});
+   await page.waitForFunction(()=>Math.abs(Number(document.querySelector('#plan rect[data-part="WINDOW-N"]')?.getAttribute("x"))-Number(document.querySelector('#plan rect[data-part="C-NW"]')?.getAttribute("x")))>0.1 && document.querySelector<HTMLInputElement>("#partA")?.value==="3.3",null,{timeout:12000});
    await page.locator('#plan rect[data-part="WINDOW-N"]').waitFor();
    if(!(await page.locator("#message").innerText()).includes("Loaded draft"))
       throw Error("Legacy v0.1 migration failed");
    // Reject unknown per-component data and retain last known-good geometry.
    const illegal={...serialized,columnSizes:{"C-UNKNOWN":{x:.3,z:.3}}};
    await readback.setInputFiles({name:"invalid-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(illegal))});
+   await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Unknown column ID"),null,{timeout:12000});
    if(!(await page.locator("#message").innerText()).includes("Unknown column ID"))
      throw Error("Unsupported element accepted from untrusted draft");
    if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Bad draft mutated valid model");
