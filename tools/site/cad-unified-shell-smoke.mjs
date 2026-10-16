@@ -14,7 +14,7 @@ try{
  const p=await browser.newPage({viewport:{width:1366,height:920}});
  const errors=[];p.on("pageerror",e=>errors.push(e.message));
  for(const [route,title] of routes){
-  const response=await p.goto(new URL(route,prefix),{waitUntil:"domcontentloaded",timeout:45000});
+  const response=await p.goto(new URL(route,prefix).href,{waitUntil:"domcontentloaded",timeout:45000});
   if(!response||response.status()>=400)throw Error(title+" route unavailable: "+response?.status());
   await p.locator("#cad-global-navigation").waitFor({timeout:12000});
   const sheet=await p.locator('link[href*="cad-unified-theme.css"]').count();
