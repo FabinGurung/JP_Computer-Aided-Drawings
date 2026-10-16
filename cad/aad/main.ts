@@ -157,6 +157,7 @@ function planView(){
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
     "stroke-width":selectedNow?4:kind==="beam"?1.6:kind==="furniture"?1.2:.6,
     "stroke-dasharray":kind==="beam"?"5 4":"none",
+    "pointer-events":"all",
     role:"button",tabindex:"0","aria-label":"Select "+e.name,"data-part":e.id
    });
    item.addEventListener("click",()=>select(e.id));
