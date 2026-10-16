@@ -23,7 +23,7 @@ const info=elem<HTMLElement>("inspect");
 let model:Draft={...defaults};
 let solids:Solid[]=[];
 let selected:string|null=null;
-let showRoof=false,showWalls=true;
+let showRoof=false,showWalls=true,showDimensions=true;
 
 function validate(candidate:unknown):Draft{
  if(!candidate||typeof candidate!=="object"||Array.isArray(candidate))throw Error("Invalid model package");
@@ -74,19 +74,53 @@ function geometry(p:Draft):Solid[]{
  return result;
 }
 
-const renderer=new THREE.WebGLRenderer({antialias:true,alpha:true});
-renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-holder.appendChild(renderer.domElement);
-const scene=new THREE.Scene();scene.background=new THREE.Color("#0c2332");
+// Render the SVG plan independently: unsupported WebGL must never blank BOTH views.
+let renderer:THREE.WebGLRenderer|null=null;
+let controls:OrbitControls|null=null;
+let rendererFailure:string|null=null;
+let isContextLost=false;
+const threeStatus=elem<HTMLElement>("threeStatus");
+const planStatus=elem<HTMLElement>("planStatus");
+const diagnostics=elem<HTMLElement>("diagnostics");
+const retry3d=elem<HTMLButtonElement>("retry3d");
+const ready=(node:HTMLElement,label:string)=>{node.textContent=label;node.setAttribute("data-state","ready");};
+const failed=(node:HTMLElement,label:string)=>{node.textContent=label;node.setAttribute("data-state","error");};
+function initWebGL(){
+ rendererFailure=null;isContextLost=false;
+ try{
+  renderer?.dispose();
+  const old=holder.querySelector("canvas");old?.remove();
+  const r=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"default"});
+  r.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
+  r.outputColorSpace=THREE.SRGBColorSpace;
+  r.domElement.style.width="100%";r.domElement.style.height="100%";
+  r.domElement.style.display="block";
+  holder.prepend(r.domElement);
+  r.domElement.addEventListener("webglcontextlost",(e)=>{e.preventDefault();isContextLost=true;rendererFailure="WebGL context lost";failed(threeStatus,"3D unavailable · graphics context lost");retry3d.hidden=false;},false);
+  r.domElement.addEventListener("webglcontextrestored",()=>{initWebGL();resize();fit();},false);
+  r.domElement.addEventListener("pointerdown",onPointerDown);
+  r.domElement.addEventListener("pointerup",onPointerUp);
+  renderer=r;
+  controls?.dispose();controls=new OrbitControls(camera,r.domElement);
+  controls.enableDamping=true;controls.dampingFactor=.08;
+  controls.maxPolarAngle=Math.PI*.49;controls.minDistance=2;controls.maxDistance=110;
+  retry3d.hidden=true;
+  ready(threeStatus,"3D model loading…");
+ }catch(error){
+  renderer=null;controls=null;
+  rendererFailure=error instanceof Error?error.message:String(error);
+  failed(threeStatus,"Unable to display 3D · use the working 2D plan");
+  retry3d.hidden=false;
+ }
+ diagnostics.textContent=rendererFailure?"3D renderer: "+rendererFailure:"3D renderer: initialized";
+}
+const scene=new THREE.Scene();scene.background=new THREE.Color("#f7fafc");
 scene.add(new THREE.HemisphereLight(0xe3f9ff,0x233c49,2.5));
 const light=new THREE.DirectionalLight(0xffe5c8,3.1);light.position.set(-4,12,9);scene.add(light);
-const grid=new THREE.GridHelper(34,34,0x436878,0x233d4c);grid.position.y=-.03;scene.add(grid);
+const grid=new THREE.GridHelper(34,34,0xa9bdd2,0xe1e8ef);grid.position.y=-.03;scene.add(grid);
 const group=new THREE.Group();scene.add(group);
 const camera=new THREE.PerspectiveCamera(48,1,.04,400);
-const controls=new OrbitControls(camera,renderer.domElement);
-controls.enableDamping=true;controls.dampingFactor=.08;
-controls.maxPolarAngle=Math.PI*.49;controls.minDistance=2;controls.maxDistance=110;
+
 const objects=new Map<string,THREE.Mesh>();
 const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9};
 let firstRender=true;
@@ -132,9 +166,10 @@ function threeView(){
 function fit(){
  const L=model.length,W=model.width,H=model.height;
  const radius=Math.max(L,W,H);
- controls.target.set(L/2,H*.43,W/2);
+ const center=new THREE.Vector3(L/2,H*.43,W/2);
+ if(controls)controls.target.copy(center);
  camera.position.set(L/2+radius*1.25,H+radius*.78,W/2+radius*1.23);
- camera.lookAt(controls.target);controls.update();
+ camera.lookAt(center);controls?.update();
 }
 function svgNode(tag:string,attributes:Record<string,string|number>={},text?:string):SVGElement{
  const e=document.createElementNS("http://www.w3.org/2000/svg",tag);
@@ -146,6 +181,7 @@ function textNode(x:number,y:number,text:string,size=13,anchor="middle"){
  return svgNode("text",{x,y,"font-size":size,"font-family":"ui-sans-serif,system-ui","text-anchor":anchor,fill:"#244453"},text);
 }
 function planView(){
+ try{
  svg.replaceChildren();
  const scale=Math.min(465/model.length,420/model.width);
  const left=(600-model.length*scale)/2,top=110+(440-model.width*scale)/2;
@@ -174,18 +210,25 @@ function planView(){
    svg.append(item);
   }
  }
+ if(showDimensions){
  const ext=18;
  svg.append(svgNode("path",{d:"M"+left+" "+(top-ext)+"V"+(top-37)+" M"+(left+model.length*scale)+" "+(top-ext)+"V"+(top-37)+" M"+left+" "+(top-30)+"H"+(left+model.length*scale),stroke:"#456575","stroke-width":1.5,fill:"none"}));
  svg.append(textNode(left+model.length*scale/2,top-38,model.length.toFixed(2)+" m",14));
  svg.append(svgNode("path",{d:"M"+(left-18)+" "+top+"H"+(left-34)+" M"+(left-18)+" "+(top+model.width*scale)+"H"+(left-34)+" M"+(left-28)+" "+top+"V"+(top+model.width*scale),stroke:"#456575","stroke-width":1.5,fill:"none"}));
  const side=textNode(left-41,top+model.width*scale/2,model.width.toFixed(2)+" m",13);
  side.setAttribute("transform","rotate(-90 "+(left-41)+" "+(top+model.width*scale/2)+")");svg.append(side);
+ }
  svg.append(textNode(300,29,"LINKED PLAN · ONE-BAY DEMONSTRATION",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
  if(selected){
   const e=solids.find(x=>x.id===selected);
   if(e){svg.append(textNode(300,577,e.name+" · "+e.id,12));}
+ }
+ ready(planStatus,"2D plan ready · "+solids.length+" linked model components");
+ }catch(error){
+  failed(planStatus,"Unable to display 2D plan");
+  diagnostics.textContent="2D plan: "+(error instanceof Error?error.message:String(error));
  }
 }
 function highlight(){
@@ -240,7 +283,15 @@ function syncInputs(){
  elem<HTMLInputElement>("bed").checked=model.bed;
 }
 function setModel(next:Draft,message:string){
- model=validate(next);syncInputs();render();note.textContent=message;
+ const verified=validate(next);
+ const prior=model;model=verified;
+ try{
+  syncInputs();render();
+  note.textContent=message+(rendererFailure?" (3D unavailable; 2D plan remains active.)":"");
+ }catch(error){
+  model=prior;syncInputs();render();
+  note.textContent="Could not update drawings: "+(error instanceof Error?error.message:String(error));
+ }
 }
 function numericChange(){
  try{
@@ -287,6 +338,7 @@ for(const key of ["length","width","height","door","window"]){
 elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
+elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
 elem<HTMLButtonElement>("applyText").onclick=()=>interpret(elem<HTMLTextAreaElement>("instruction").value);
 elem<HTMLButtonElement>("fit").onclick=fit;
 elem<HTMLButtonElement>("clearSelect").onclick=()=>select(null);
@@ -311,8 +363,9 @@ elem<HTMLInputElement>("upload").onchange=async event=>{
 };
 const picker=new THREE.Raycaster(),pointer=new THREE.Vector2();
 let downX=0,downY=0;
-renderer.domElement.addEventListener("pointerdown",event=>{downX=event.clientX;downY=event.clientY;});
-renderer.domElement.addEventListener("pointerup",event=>{
+function onPointerDown(event:PointerEvent){downX=event.clientX;downY=event.clientY;}
+function onPointerUp(event:PointerEvent){
+ if(!renderer)return;
  if(Math.hypot(event.clientX-downX,event.clientY-downY)>5)return;
  const rect=renderer.domElement.getBoundingClientRect();
  pointer.set((event.clientX-rect.left)/rect.width*2-1,-(event.clientY-rect.top)/rect.height*2+1);
@@ -323,11 +376,36 @@ renderer.domElement.addEventListener("pointerup",event=>{
   while(o&&!o.userData.id)o=o.parent;
   if(o?.userData.id)select(String(o.userData.id));
  }
-});
+};
 const resize=()=>{
  const w=Math.max(100,holder.clientWidth),h=Math.max(180,holder.clientHeight);
- camera.aspect=w/h;camera.updateProjectionMatrix();renderer.setSize(w,h,false);
+ camera.aspect=w/h;camera.updateProjectionMatrix();
+ // Crucial: false previously left the physical drawing buffer and CSS box
+ // at different sizes on high-DPI screens; explicitly synchronize both.
+ renderer?.setSize(w,h,false);
+ if(renderer){renderer.domElement.style.width=w+"px";renderer.domElement.style.height=h+"px";}
 };
 new ResizeObserver(resize).observe(holder);
-function animate(){requestAnimationFrame(animate);controls.update();renderer.render(scene,camera);}
-syncInputs();render();resize();animate();
+let frame=0;
+function animate(){
+ requestAnimationFrame(animate);controls?.update();
+ if(!renderer||isContextLost)return;
+ try{
+  renderer.render(scene,camera);
+  if(frame++%90===0 && solids.length){
+   // Distinguish a live scene from a canvas that merely exists.
+   const gl=renderer.getContext();
+   const pixels=new Uint8Array(4),palette=new Set<string>();
+   const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;
+   for(let ix=1;ix<=7;ix++)for(let iy=1;iy<=7;iy++){
+    gl.readPixels(Math.floor(w*ix/8),Math.floor(h*iy/8),1,1,gl.RGBA,gl.UNSIGNED_BYTE,pixels);
+    palette.add(pixels[0]+","+pixels[1]+","+pixels[2]);
+   }
+   const visible=palette.size>=3 && renderer.info.render.triangles>0;
+   if(visible){ready(threeStatus,"3D model ready · orbit and select elements");retry3d.hidden=true;}
+   else{failed(threeStatus,"3D graphics not visible · try reload");retry3d.hidden=false;diagnostics.textContent="Graphics pixels: "+palette.size+" colors; triangles: "+renderer.info.render.triangles;}
+  }
+ }catch(error){rendererFailure=error instanceof Error?error.message:String(error);failed(threeStatus,"Unable to display 3D · 2D plan remains editable");retry3d.hidden=false;diagnostics.textContent=rendererFailure;}
+}
+retry3d.onclick=()=>{initWebGL();resize();fit();};
+syncInputs();render();initWebGL();resize();fit();animate();

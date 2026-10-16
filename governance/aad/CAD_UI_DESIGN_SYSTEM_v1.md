@@ -1,4 +1,4 @@
-# CAD website design system — Midnight Blueprint v1
+# CAD website design system — Lucid Blueprint & Daylight v2
 
 **Owned by:** `JP_Computer-Aided-Drawings` / AAD-CAD domain. **A7:** read-only service catalogue, never a template writer.
 
@@ -24,14 +24,14 @@ The homepage is a **capability launcher**, not another geometry engine, project 
 - `public/assets/css/cad-unified-theme.css` — sole active cross-page style layer; import **after existing styles**.
 - `public/assets/js/cad-site-shell.js` — sole active cross-page primary navigation; use page-relative `data-cad-root`.
 - Component-specific CSS (CAD Studio, AAD, conversational preview) retains local interaction/layout ownership while inheriting theme colors.
-- Canonical palette: midnight `#091522`, surface `#101f30`, raised `#152b3c`, dividing line `#2c465b`, text `#e9f4fb`, muted `#aac2d3`, primary teal `#65dcca`, amber `#f7bd7a`.
-- Dark engineering desk by default. **White technical sheets, plans, canvases and drawings are intentional**, not a second app theme.
+- Canonical palette: daylight `#f8f9fa`, surface `#ffffff`, raised `#f1f5fb`, dividing line `#d9e2ec`, text `#1f2937`, muted `#5b6b7a`, blueprint blue `#2563eb`, coral accent `#e45253`, amber caution `#a75c07`.
+- Light drafting desk by default. **High-contrast technical sheets, SVG plans and 3D canvases are the primary product**, not an ornamental background.
 - 3D, 2D and the element inspector remain model-derived where supported, never redrawn separately from independent copies.
 
 ## Preserve historical projects and releases
 
 - Existing source engines, tests, native output artifacts, project files, URLs, stage viewers and public research files MUST NOT be removed or silently rewritten.
-- Frozen `public/stages/v02,v03,m40,m50,m60,m70,m80` and generated earlier research snapshots retain their internal layout and original evidence. Users reach them via the dark project/research portal, which provides the shared surrounding shell. A historic screenshot is not the current product.
+- Frozen `public/stages/v02,v03,m40,m50,m60,m70,m80` and generated earlier research snapshots retain their internal layout and original evidence. Users reach them via the shared daylight project/research portal, which provides the shared surrounding shell. A historic screenshot is not the current product.
 - New UI must never assert verified private project source, IFC engineering release, actual BOQ, DWG/DXF parity, signed IFC, construction readiness or real design approval that is absent in source authority.
 - Keep old routes functional; only change the discovery and surrounding app shell on mutable active pages.
 

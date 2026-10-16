@@ -34,9 +34,22 @@ jobs:
           echo CAD_AAD_LINKED_PRODUCTION_BUILD_PASS
       - name: Browser acceptance of actual 2D/3D and parameter propagation
         run: |
-          npm install --no-save --no-package-lock playwright@1.55.0
+          npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
           npx playwright install --with-deps chromium
           (npm run dev -- --host 127.0.0.1 --port 5175 > /tmp/cad-aad-vite.log 2>&1 &)
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5175/cad/aad/ >/dev/null && break;sleep 2;done
           CAD_AAD_URL=http://127.0.0.1:5175/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
           echo CAD_AAD_BROWSER_LINKED_MODEL_PASS
+      - name: Verify visible models at built GitHub Pages base path
+        run: |
+          (npm run preview -- --host 127.0.0.1 --port 5192 --base=/JP_Computer-Aided-Drawings/ > /tmp/cad-aad-prepublish.log 2>&1 &)
+          for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
+          CAD_AAD_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
+          echo CAD_AAD_PAGES_BASE_RENDER_VERIFIED
+      - name: Save real render screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-aad-daylight-browser-screenshots
+          path: /tmp/cad-aad-daylight-*.png
+          if-no-files-found: ignore

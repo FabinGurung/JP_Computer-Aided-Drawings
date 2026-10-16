@@ -35,6 +35,20 @@ jobs:
       - run: npm ci
       - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
       - run: python tools/site/check_public_routes.py dist
+      - name: Pre-publish visual acceptance on built Pages bundle
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
+          npx playwright install --with-deps chromium
+          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/cad-release-preview.log 2>&1 &)
+          for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
+          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
+      - name: Save render verification screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-pages-prepublish-render-proof
+          path: /tmp/cad-aad-daylight-*.png
+          if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - name: Install pinned geometry engines for Pages build

@@ -32,16 +32,18 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 </style>
 <link rel="stylesheet" href="../../assets/css/cad-unified-theme.css"></head>
 <body>
-<header><a href="../" class="brand">CAD<span> / AI DESIGN STUDIO</span></a><nav><a href="../">Full CAD</a><a href="../brief/">Language envelope</a><a href="../../guide/">How it works</a></nav><span class="tag">SYNTHETIC DRAFT · NOT FOR CONSTRUCTION</span></header>
+
 <main>
-<div class="intro"><div><h1>One model. Every view.</h1><p class="lede">Edit a simple four-column, four-beam, one-slab room. The plan, 3D model and element explorer share the same object IDs. Select a wall in one view and find the exact same wall in the other.</p></div><div class="summary"><span>01 STOREY</span><span>04 COLUMNS</span><span>04 BEAMS</span><span>01 ROOF SLAB</span></div></div>
+<div class="aad-breadcrumb"><a href="../../">Home</a><span aria-hidden="true">›</span><strong>AI Design Studio</strong><span class="aad-draft">Illustrative example · not for construction</span></div>
+<div class="intro"><div><h1>One model. Every view.</h1><p class="lede">Describe a room, adjust its size, and explore the same building in a 2D plan and an interactive 3D model. Select any component to see how the views connect.</p></div><div class="summary"><span>ONE STOREY</span><span>4 COLUMNS</span><span>4 BEAMS</span><span>1 ROOF SLAB</span></div></div>
+<div class="aad-steps" aria-label="How to use the studio"><span><b>1</b> Describe</span><span><b>2</b> Adjust</span><span><b>3</b> Explore</span><span><b>4</b> Save</span></div>
 <div class="workspace">
 <section class="panel pad left">
-<div><h2>Describe a change</h2><p class="sub">Prototype instruction interpreter: understands explicit length, width, height and bed commands. Example: “Make it 9 m long, 7 m wide and 3.2 m high, remove bed.”</p></div>
+<div><h2>Tell the model what to change</h2><p class="sub">Try “Make it 9 m long, 7 m wide and 3.2 m high, remove bed.” This prototype understands basic dimensions and selected room changes, not open-ended AI instructions.</p></div>
 <textarea id="instruction" aria-label="Describe the building change">Make it 8 m long, 6 m wide and 3 m high.</textarea>
 <div class="actions"><button type="button" class="primary" id="applyText">Apply instruction</button><button type="button" id="reset">Reset</button></div>
 <div id="message" class="status" role="status" aria-live="polite">Ready. Try changing a dimension.</div>
-<h3>Precise measurements</h3>
+<h3>Quick dimensions</h3>
 <div class="controls">
 <label for="length">Length (m)<input id="length" type="number" min="4" max="18" step=".1" value="8"></label>
 <label for="width">Width (m)<input id="width" type="number" min="4" max="14" step=".1" value="6"></label>
@@ -49,23 +51,24 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <label for="door">Door width (m)<input id="door" type="number" min=".75" max="1.6" step=".05" value=".95"></label>
 <label for="window">Window width (m)<input id="window" type="number" min=".8" max="2.4" step=".05" value="1.4"></label>
 </div>
-<div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div>
-<h3>Draft package</h3>
-<div class="actions"><button type="button" id="download">Save model JSON</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Load draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>
-<p class="sub">This is a real connected geometry demonstration, not an authenticated AI service. No Narayani drawing or private project data is used.</p>
+<details class="aad-fold" open><summary>Display options</summary><div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="dimensions" checked> Show plan dimensions</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div></details>
+<h3>Save or open design</h3>
+<div class="actions"><button type="button" id="download">Save draft</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Open draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>
+<p class="sub">This is a synthetic demonstration. No authenticated AI service, private Narayani drawing, or approved structural design is connected.</p>
 </section>
 <section class="panel viewer">
-<div class="viewerbar"><strong>LIVE LINKED DRAWINGS</strong><div class="actions"><button id="fit" type="button">Fit model</button><button type="button" id="clearSelect">Clear selection</button></div></div>
+<div class="viewerbar"><strong>2D Plan and 3D Model</strong><div class="actions"><button id="fit" type="button">Center view</button><button type="button" id="clearSelect">Deselect</button></div></div>
 <div class="views">
-<div class="view threed"><div class="viewhead">3D · PERSPECTIVE<span>Drag to orbit · scroll to zoom · click an element</span></div><div id="canvas3d" aria-label="Live interactive shared 3D geometry"></div></div>
-<div class="view plan"><div class="viewhead">2D · FLOOR PLAN<span>Click a component to link it to 3D</span></div><svg id="plan" viewBox="0 0 600 620" role="img" aria-label="Live floor plan from the same 3D model"></svg></div>
+<div class="view threed"><div class="viewhead">3D model<span>Drag to rotate · scroll to zoom · select a component</span></div><div id="canvas3d" aria-label="Interactive 3D geometry with fallback status"></div><div class="aad-view-status"><span id="threeStatus" role="status" aria-live="polite">Loading 3D model…</span><button id="retry3d" type="button" hidden>Retry 3D</button></div></div>
+<div class="view plan"><div class="viewhead">2D floor plan<span>Click any component to inspect it</span></div><svg id="plan" viewBox="0 0 600 620" role="img" aria-label="2D floor plan derived from the same semantic model"></svg><div class="aad-view-status"><span id="planStatus" role="status" aria-live="polite">Loading 2D plan…</span></div></div>
 </div>
+<details class="aad-diagnostics"><summary>View diagnostics</summary><pre id="diagnostics">Waiting for renderer…</pre></details>
 <div class="under"><span class="mini"><i class="swatch" style="background:#5fc6b0"></i>Column</span><span class="mini"><i class="swatch" style="background:#d0a365"></i>Beam</span><span class="mini"><i class="swatch" style="background:#7e9fb8"></i>Wall</span><span class="mini"><i class="swatch" style="background:#70b9eb"></i>Window / door</span> · Both views come from one in-memory semantic model.</div>
 </section>
 <section class="panel pad right">
-<h2>Element explorer</h2>
-<div><p class="sub" style="margin-bottom:12px">Select the same stable element in the model tree, plan or 3D. Change a dimension and its ID is retained.</p><div id="tree"></div></div>
-<div><h3>Selected component</h3><div id="inspect">Click a component in either view.</div><h3>Connected quantities · demo geometry</h3>
+<h2>Building components</h2>
+<div><p class="sub" style="margin-bottom:12px">Choose a component here or in either view. Its ID remains linked when you change a measurement.</p><div id="tree"></div></div>
+<div><h3>Selected component</h3><p class="sub">Select a column, beam, door, window or bed in either drawing.</p><div id="inspect">Click a component in either view.</div><h3>Connected quantities · demo geometry</h3>
 <div class="stat"><span>Column elements</span><strong id="columnCount">4</strong></div>
 <div class="stat"><span>Beam elements</span><strong id="beamCount">4</strong></div>
 <div class="stat"><span>Roof slabs</span><strong>1</strong></div>
