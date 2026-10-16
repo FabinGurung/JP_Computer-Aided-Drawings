@@ -100,7 +100,7 @@ export function deriveSolids(input:Draft):Solid[]{
   result.push({id,name,kind,x:round(x),y:round(y),z:round(z),dx:round(dx),dy:round(dy),dz:round(dz)});
  };
  const L=p.length,W=p.width,H=p.height,wall=p.wallThickness,outerH=H-.18;
- const xs=[.28,L-.28],zs=[.28,W-.28];
+ const xs:[number,number]=[.28,L-.28],zs:[number,number]=[.28,W-.28];
  for(const [id,x,z] of [
   ["C-NW",xs[0],zs[0]],["C-NE",xs[1],zs[0]],
   ["C-SW",xs[0],zs[1]],["C-SE",xs[1],zs[1]]
