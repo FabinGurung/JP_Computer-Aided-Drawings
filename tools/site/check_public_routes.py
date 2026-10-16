@@ -48,4 +48,22 @@ for page in navpages:
 for stage in ["v02","v03","m40","m50","m60","m70","m80"]:
  for name in ["index.html","stage.css","stage.js","stage-data.json","meta.json"]:
   assert (root/"stages"/stage/name).read_bytes()==(Path("public")/"stages"/stage/name).read_bytes(),"stage mutation "+stage+"/"+name
+# Unified current CAD site style and navigation. Preserve historical stage bytes.
+current_pages=[
+    "index.html","cad/index.html","cad/aad/index.html","cad/brief/index.html",
+    "guide/index.html","projects/index.html","research/index.html","releases/index.html","source/index.html",
+    "projects/narayani-parajuli/index.html","projects/ramachandra-devkota/index.html",
+    "research/open-architecture-engine/index.html","research/open-architecture-engine/v0.2/index.html",
+]
+assert (root/"assets/css/cad-unified-theme.css").is_file(), "CAD shared theme missing"
+assert (root/"assets/js/cad-site-shell.js").is_file(), "CAD shared nav missing"
+for page in current_pages:
+    content=(root/page).read_text()
+    assert "cad-unified-theme.css" in content,(page,"missing shared theme")
+    assert "cad-site-shell.js" in content,(page,"missing shared navigation")
+home=(root/"index.html").read_text()
+for anchor in ('id="capabilities"','id="research"','id="projects"','id="releases"','href="./cad/aad/"','href="./cad/brief/"','href="./cad/"'):
+    assert anchor in home, ("missing product-first homepage control", anchor)
+for title in ("WORKING · LIMITED ROOM DEMO","MASS PREVIEW ONLY","ENGINEERING"):
+    assert title in home+((root/"assets/css/cad-unified-theme.css").read_text()),("missing UI capability context",title)
 print("CAD_UNIFIED_STATIC_SITE_QA=PASS",len(required),"required paths; 7 unchanged Narayani stage families")
