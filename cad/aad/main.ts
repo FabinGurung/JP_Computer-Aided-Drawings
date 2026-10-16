@@ -27,6 +27,7 @@ let selected:string|null=null;
 let showRoof=false,showWalls=true,showDimensions=true;
 const validate=validateDraft;
 const geometry=deriveSolids;
+const round=(value:number)=>Math.round(value*1000)/1000;
 
 // Render the SVG plan independently: unsupported WebGL must never blank BOTH views.
 let renderer:THREE.WebGLRenderer|null=null;
