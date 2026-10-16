@@ -209,3 +209,9 @@ body .wrap .flow{background:#eef4fb;color:#25425e}
 @media(max-width:950px){.cad-intro{grid-template-columns:1fr}.cad-tool-grid{grid-template-columns:1fr 1fr}.cad-global-tag{display:none}}
 @media(max-width:850px){body:has(#canvas3d) .views{min-height:390px}}
 @media(max-width:660px){.cad-global-nav{align-items:flex-start;flex-wrap:wrap;gap:7px;padding:9px 12px}.cad-global-brand{width:100%}.cad-global-links{gap:1px}.cad-global-links>a,.cad-global-more summary{font-size:11px;padding:8px}.cad-global-popover{left:auto;right:0;min-width:180px}.cad-dashboard{padding:20px 12px 40px}.cad-tool-grid{grid-template-columns:1fr}.cad-intro-main,.cad-intro-side{padding:19px}.cad-disclosure summary{padding:13px}body:has(#canvas3d) .aad-draft{margin-left:0}body:has(#canvas3d) #canvas3d,body:has(#canvas3d) #plan{min-height:340px}}
+
+/* One navigational top bar. Retain existing advanced controls BELOW it. */
+body:has(.app) .app>.top{display:none}
+body:has(#viewport):not(:has(.app))>header{display:none}
+body:has(#canvas3d) .viewhead{pointer-events:none}
+body:has(#canvas3d) .aad-view-status{pointer-events:auto}
