@@ -72,6 +72,84 @@ try{
    if(!(await page.locator("#inspect").innerText()).includes("WINDOW-N"))throw Error("Window not linked");
    await page.locator("#reset").click();
    if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Reset did not restore model");
+   // Editable components are not independent overlays: each is serialized
+   // in one draft and drives the SAME SVG plan and Three.js scene.
+   await page.locator('#plan rect[data-part="WINDOW-N"]').click();
+   if(!(await page.locator("#componentEditor").isVisible()))throw Error("Window inspector edit not shown");
+   const oldNorthRight=Number(await page.locator('#plan rect[data-part="W-NR"]').getAttribute("x"));
+   await page.locator("#partA").fill("2.5");await page.locator("#partB").fill("1.25");
+   await page.locator("#applyPart").click();
+   const newNorthRight=Number(await page.locator('#plan rect[data-part="W-NR"]').getAttribute("x"));
+   if(!(newNorthRight<oldNorthRight))throw Error("Hosted window failed to regenerate north-wall jamb");
+   if(!(await page.locator("#inspect").innerText()).includes("WINDOW-N"))throw Error("Edited window lost semantic selection");
+   await page.locator('#plan rect[data-part="DOOR-S"]').click();
+   const oldSouthRight=Number(await page.locator('#plan rect[data-part="W-SR"]').getAttribute("x"));
+   await page.locator("#partA").fill("2.2");await page.locator("#partB").fill("1.1");
+   await page.locator("#applyPart").click();
+   if(!(Number(await page.locator('#plan rect[data-part="W-SR"]').getAttribute("x"))<oldSouthRight))
+     throw Error("Door moved but hosted wall jamb did not follow");
+   await page.locator('#plan rect[data-part="C-NW"]').click();
+   const colWidthBefore=Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("width"));
+   await page.locator("#partA").fill(".36");await page.locator("#partB").fill(".38");
+   await page.locator("#applyPart").click();
+   if(!(Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("width"))>colWidthBefore))
+     throw Error("Column size edit absent in 2D plan");
+   if(!(await page.locator("#inspect").innerText()).includes("C-NW"))throw Error("Column ID changed");
+   await page.locator('#plan rect[data-part="B-N"]').click();
+   await page.locator("#partA").fill(".46");
+   await page.locator("#applyPart").click();
+   if(!(await page.locator("#inspect").innerText()).includes("Vertical: 0.46 m"))
+     throw Error("Selected beam depth did not update model geometry");
+   await page.locator('#plan rect[data-part="W-NL"]').click();
+   await page.locator("#partA").fill(".20");
+   await page.locator("#applyPart").click();
+   if(!(await page.locator("#partMessage").innerText()).includes("W-NL"))
+     throw Error("Linked wall-thickness edit not acknowledged");
+   await page.locator("#bed").check();
+   await page.locator('#plan rect[data-part="BED"]').click();
+   const oldBedX=Number(await page.locator('#plan rect[data-part="BED"]').getAttribute("x"));
+   await page.locator("#partA").fill("2.1");await page.locator("#partB").fill("1.6");
+   await page.locator("#partC").fill("2.15");await page.locator("#partD").fill("1.5");
+   await page.locator("#applyPart").click();
+   if(!(Number(await page.locator('#plan rect[data-part="BED"]').getAttribute("x"))>oldBedX))
+     throw Error("Bed positioning did not update plan");
+   // A corrupt/unknown-id draft must not silently enter the drawing model.
+   await page.locator("#download").click();
+   const stored=await page.evaluate(async()=>{
+     // The editor's validated model has a versioned model package. Test the
+     // exact saved bytes independently below via Playwright's download event.
+     return document.querySelector("#area")?.textContent;
+   });
+   if(stored!=="48.0 m²")throw Error("Component editing unexpectedly altered building footprint");
+   const saved=page.waitForEvent("download");
+   await page.locator("#download").click();
+   const downloaded=await saved;
+   const fsDraft=await import("node:fs/promises");
+   const serialized=JSON.parse(await fsDraft.readFile(await downloaded.path(),"utf8"));
+   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.2"||!serialized.columnSizes["C-NW"]||
+      serialized.beamDepths["B-N"]!==.46||serialized.windowX!==2.5||
+      serialized.wallThickness!==.2||serialized.bedX!==2.1)
+      throw Error("Versioned component changes missing from saved draft");
+   const readback=await page.locator("#upload");
+   await readback.setInputFiles({name:"linked-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(serialized))});
+   if(!(await page.locator("#partMessage").innerText()).includes("W-NL") &&
+      await page.locator('#plan rect[data-part="BED"]').count()!==1)
+      throw Error("Draft load changed linked components");
+   // Legacy 0.1 input is upgraded with centered hosted openings.
+   await readback.setInputFiles({name:"legacy-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({
+     schema:"jp-cad://linked-one-bay-demo/0.1",length:8,width:6,height:3,door:.95,window:1.4,bed:true
+   }))});
+   await page.locator('#plan rect[data-part="WINDOW-N"]').waitFor();
+   if(!(await page.locator("#message").innerText()).includes("Loaded draft"))
+      throw Error("Legacy v0.1 migration failed");
+   // Reject unknown per-component data and retain last known-good geometry.
+   const illegal={...serialized,columnSizes:{"C-UNKNOWN":{x:.3,z:.3}}};
+   await readback.setInputFiles({name:"invalid-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(illegal))});
+   if(!(await page.locator("#message").innerText()).includes("Unknown column ID"))
+     throw Error("Unsupported element accepted from untrusted draft");
+   if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Bad draft mutated valid model");
+   await page.locator("#reset").click();
+   if(await page.locator("#partA").count()!==1)throw Error("Component editor was destroyed by reset");
    await page.screenshot({path:"/tmp/cad-aad-daylight-loaded.png",fullPage:true});
    // Force synthetic context-loss event: the plan remains usable.
    await page.evaluate(()=>document.querySelector("#canvas3d canvas")?.dispatchEvent(new Event("webglcontextlost",{cancelable:true})));
