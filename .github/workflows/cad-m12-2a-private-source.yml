@@ -1,0 +1,32 @@
+name: CAD M12.2A Private Source Attestation
+on:
+  pull_request:
+    paths:
+      - "backend/cad_bridge/private_source_attestation.py"
+      - "backend/cad_bridge/private_boundary.py"
+      - "backend/tests/test_m12_private_source_attestation.py"
+      - "cad/M12_2A_PRIVATE_SOURCE_ATTESTATION.md"
+      - ".github/workflows/cad-m12-2a-private-source.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-m12-2a-source-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  synthetic-source-attestation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Positive, refusal, version race and privacy coverage
+        run: |
+          python -m unittest backend.tests.test_m12_private_source_attestation -v
+          python -m unittest backend.tests.test_aad_ownership -v
+      - name: Preserve existing disconnected private boundary
+        run: |
+          python -m unittest backend.tests.test_source_bundle -v
+          echo "CAD_M12_2A_SYNTHETIC_PRIVATE_GATE_PASS_NO_PRODUCTION_ADAPTER"
