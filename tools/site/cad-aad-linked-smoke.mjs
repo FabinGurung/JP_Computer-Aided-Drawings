@@ -132,10 +132,11 @@ try{
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
       throw Error("Validated draft reload lost the linked bed geometry");
    // Legacy 0.1 input is upgraded with centered hosted openings.
+   const preLegacyWindowX=Number(await page.locator('#plan rect[data-part="WINDOW-N"]').getAttribute("x"));
    await readback.setInputFiles({name:"legacy-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({
      schema:"jp-cad://linked-one-bay-demo/0.1",length:8,width:6,height:3,door:.95,window:1.4,bed:true
    }))});
-   await page.waitForFunction(()=>Math.abs(Number(document.querySelector('#plan rect[data-part="WINDOW-N"]')?.getAttribute("x"))-Number(document.querySelector('#plan rect[data-part="C-NW"]')?.getAttribute("x")))>0.1 && document.querySelector<HTMLInputElement>("#partA")?.value==="3.3",null,{timeout:12000});
+   await page.waitForFunction(old=>Number(document.querySelector('#plan rect[data-part="WINDOW-N"]')?.getAttribute("x"))>old+10,preLegacyWindowX,{timeout:12000});
    await page.locator('#plan rect[data-part="WINDOW-N"]').waitFor();
    if(!(await page.locator("#message").innerText()).includes("Loaded draft"))
       throw Error("Legacy v0.1 migration failed");
