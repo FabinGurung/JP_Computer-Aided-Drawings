@@ -228,3 +228,15 @@ body:has(#canvas3d) .views #plan{height:100%;min-height:0}
 @media(max-width:580px){body:has(#canvas3d) .views{display:grid;grid-template-columns:1fr;height:auto;min-height:0}
 body:has(#canvas3d) .views>.view{height:350px;min-height:350px}
 body:has(#canvas3d) .views #canvas3d,body:has(#canvas3d) .views #plan{height:350px;min-height:0}}
+
+/* M12.3B — one selected component, context-specific editor, never an extra page. */
+body:has(#canvas3d) .aad-part-editor{margin-top:12px;padding:13px;background:#f6f9ff;border:1px solid #cddff4;border-radius:11px}
+body:has(#canvas3d) .aad-part-editor[hidden]{display:none}
+body:has(#canvas3d) .aad-part-editor h3{margin:0 0 6px;font-size:12px}
+body:has(#canvas3d) .aad-part-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}
+body:has(#canvas3d) .aad-part-fields label{font-size:11px;color:#496783;display:grid;gap:4px}
+body:has(#canvas3d) .aad-part-fields label[hidden]{display:none}
+body:has(#canvas3d) .aad-part-fields input{min-width:0;width:100%;border-radius:7px;padding:8px;background:#fff;border:1px solid #b8d1e9;color:#243b58;font-variant-numeric:tabular-nums}
+body:has(#canvas3d) .aad-part-message{font-size:11px;margin:8px 0 0;color:#276d51;min-height:16px;overflow-wrap:anywhere}
+body:has(#canvas3d) .aad-part-editor .actions{gap:7px}
+body:has(#canvas3d) .aad-part-editor button{font-size:11px}

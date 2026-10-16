@@ -5,11 +5,8 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-type Category = "column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture";
-type Draft = {schema:string;length:number;width:number;height:number;door:number;window:number;bed:boolean};
-type Solid = {id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
-const SCHEMA="jp-cad://linked-one-bay-demo/0.1";
-const defaults:Draft={schema:SCHEMA,length:8,width:6,height:3,door:.95,window:1.4,bed:true};
+import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
+const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
  if(!x)throw Error("Missing UI element: "+id);
@@ -20,59 +17,17 @@ const holder=elem<HTMLDivElement>("canvas3d");
 const note=elem<HTMLElement>("message");
 const tree=elem<HTMLElement>("tree");
 const info=elem<HTMLElement>("inspect");
-let model:Draft={...defaults};
+const partPanel=elem<HTMLElement>("componentEditor");
+const partHint=elem<HTMLElement>("partHint");
+const partMessage=elem<HTMLElement>("partMessage");
+const partInputs=["partA","partB","partC","partD"] as const;
+let model:Draft=validateDraft(defaults);
 let solids:Solid[]=[];
 let selected:string|null=null;
 let showRoof=false,showWalls=true,showDimensions=true;
-
-function validate(candidate:unknown):Draft{
- if(!candidate||typeof candidate!=="object"||Array.isArray(candidate))throw Error("Invalid model package");
- const c=candidate as Record<string,unknown>;
- const expected=["schema","length","width","height","door","window","bed"];
- if(Object.keys(c).sort().join("|")!==expected.sort().join("|")||c.schema!==SCHEMA||typeof c.bed!=="boolean")throw Error("Unsupported model schema or fields");
- for(const [k,lo,hi] of [["length",4,18],["width",4,14],["height",2.4,5],["door",.75,1.6],["window",.8,2.4]] as const){
-  if(typeof c[k]!=="number"||!Number.isFinite(c[k])||c[k]<lo||c[k]>hi)throw Error(k+" must be between "+lo+" and "+hi+" metres");
- }
- return c as Draft;
-}
-const round=(v:number)=>Math.round(v*1000)/1000;
-function geometry(p:Draft):Solid[]{
- const result:Solid[]=[];
- const add=(id:string,name:string,kind:Category,x:number,y:number,z:number,dx:number,dy:number,dz:number)=>{
-  if(Math.min(dx,dy,dz)<=0)throw Error("Invalid source geometry "+id);
-  result.push({id,name,kind,x:round(x),y:round(y),z:round(z),dx:round(dx),dy:round(dy),dz:round(dz)});
- };
- const L=p.length,W=p.width,H=p.height;
- const cw=.28,be=.30,wall=.16,outerH=H-.18;
- const xs=[.28,L-.28],zs=[.28,W-.28];
- add("C-NW","Column · northwest","column",xs[0]!-cw/2,0,zs[0]!-cw/2,cw,H-.16,cw);
- add("C-NE","Column · northeast","column",xs[1]!-cw/2,0,zs[0]!-cw/2,cw,H-.16,cw);
- add("C-SW","Column · southwest","column",xs[0]!-cw/2,0,zs[1]!-cw/2,cw,H-.16,cw);
- add("C-SE","Column · southeast","column",xs[1]!-cw/2,0,zs[1]!-cw/2,cw,H-.16,cw);
- const zBeam=H-.46;
- add("B-N","Beam · north","beam",xs[0]!,zBeam,zs[0]!-.14,L-.56,be,.28);
- add("B-S","Beam · south","beam",xs[0]!,zBeam,zs[1]!-.14,L-.56,be,.28);
- add("B-W","Beam · west","beam",xs[0]!-.14,zBeam,zs[0]!,.28,be,W-.56);
- add("B-E","Beam · east","beam",xs[1]!-.14,zBeam,zs[0]!,.28,be,W-.56);
- add("SLAB-ROOF","Roof slab · one bay","slab",0,H-.16,0,L,.16,W);
- // North wall has a real window void (sill and head wall solids). South wall
- // has a real door opening. No independent 2D tracing or model duplication.
- const wl=(L-p.window)/2,dr=(L-p.door)/2,sill=.9,head=Math.min(2.06,outerH-.10);
- const dh=Math.min(2.12,outerH-.08);
- add("W-NL","North wall · left","wall",0,0,0,wl,outerH,wall);
- add("W-NR","North wall · right","wall",wl+p.window,0,0,wl,outerH,wall);
- add("W-NSILL","North wall · under window","wall",wl,0,0,p.window,sill,wall);
- add("W-NHEAD","North wall · over window","wall",wl,head,0,p.window,outerH-head,wall);
- add("WINDOW-N","North window · glass","window",wl,sill,.05,p.window,head-sill,.06);
- add("W-SL","South wall · left","wall",0,0,W-wall,dr,outerH,wall);
- add("W-SR","South wall · right","wall",dr+p.door,0,W-wall,dr,outerH,wall);
- add("W-SHEAD","South wall · above door","wall",dr,dh,W-wall,p.door,outerH-dh,wall);
- add("DOOR-S","South entry door","door",dr,0,W-wall/2,p.door,dh,.04);
- add("W-W","West wall","wall",0,0,wall,.16,outerH,W-2*wall);
- add("W-E","East wall","wall",L-wall,0,wall,.16,outerH,W-2*wall);
- if(p.bed)add("BED","Bed · movable furniture","furniture",Math.max(.65,L*.24),.15,Math.max(.85,W*.3),1.95,.40,1.45);
- return result;
-}
+const validate=validateDraft;
+const geometry=deriveSolids;
+const round=(value:number)=>Math.round(value*1000)/1000;
 
 // Render the SVG plan independently: unsupported WebGL must never blank BOTH views.
 let renderer:THREE.WebGLRenderer|null=null;
@@ -203,6 +158,7 @@ function planView(){
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
     "stroke-width":selectedNow?4:kind==="beam"?1.6:kind==="furniture"?1.2:.6,
     "stroke-dasharray":kind==="beam"?"5 4":"none",
+    "pointer-events":"all",
     role:"button",tabindex:"0","aria-label":"Select "+e.name,"data-part":e.id
    });
    item.addEventListener("click",()=>select(e.id));
@@ -238,16 +194,116 @@ function highlight(){
   mat.emissiveIntensity=id===selected?.8:0;
  }
 }
+type EditableKey="columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
+type PartField={key:EditableKey;label:string;value:number;min:number;max:number};
+const partApply=elem<HTMLButtonElement>("applyPart");
+const partReset=elem<HTMLButtonElement>("resetPart");
+function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
+ const L=model.length,W=model.width;
+ const field=(key:EditableKey,label:string,value:number,min:number,max:number):PartField=>({key,label,value,min,max});
+ switch(e.kind){
+  case "column":{
+   const sec=model.columnSizes[e.id]??{x:.28,z:.28};
+   return {hint:"Change the selected column section around its fixed center. The frame alignment remains illustrative, not structurally verified.",
+    fields:[field("columnX","Section X (m)",sec.x,.20,.50),field("columnZ","Section Z (m)",sec.z,.20,.50)]};
+  }
+  case "beam":
+   return {hint:"Change only this beam's depth. The top face remains aligned with the roof; geometry is preliminary.",
+    fields:[field("beamDepth","Beam depth (m)",model.beamDepths[e.id]??.30,.20,.65)]};
+  case "window":
+   return {hint:"Move or widen the hosted north window. Both wall jambs, sill and head regenerate from the same opening.",
+    fields:[field("windowX","From west end (m)",model.windowX,.35,L-model.window-.35),
+    field("windowWidth","Opening width (m)",model.window,.8,Math.min(2.4,L-model.windowX-.35))]};
+  case "door":
+   return {hint:"Move or widen the south doorway. The wall jambs and overhead segment regenerate with the opening.",
+    fields:[field("doorX","From west end (m)",model.doorX,.35,L-model.door-.35),
+    field("doorWidth","Opening width (m)",model.door,.75,Math.min(1.6,L-model.doorX-.35))]};
+  case "wall":
+   return {hint:"Perimeter walls are a connected group. This editor changes their common thickness, not a detached wall segment.",
+    fields:[field("wallThickness","Linked wall thickness (m)",model.wallThickness,.10,.28)]};
+  case "furniture":{
+   const pad=model.wallThickness+.12;
+   return {hint:"Move and resize this illustrative bed; the 2D footprint and 3D solid update together.",
+    fields:[field("bedX","From west end (m)",model.bedX,pad,L-model.bedLength-pad),
+     field("bedZ","From north side (m)",model.bedZ,pad,W-model.bedWidth-pad),
+     field("bedLength","Bed length (m)",model.bedLength,.8,Math.min(2.8,L-model.bedX-pad)),
+     field("bedWidth","Bed width (m)",model.bedWidth,.65,Math.min(2.2,W-model.bedZ-pad))]};
+  }
+  default:return {hint:"Roof slab sizing follows the overall room model. Choose a column, beam, wall, opening or bed to adjust it.",fields:[]};
+ }
+}
+function renderComponentEditor(){
+ const e=solids.find(x=>x.id===selected);
+ partPanel.hidden=!e;
+ if(!e)return;
+ const spec=partFieldsFor(e);
+ partHint.textContent=spec.hint;
+ for(const [index,id] of partInputs.entries()){
+  const el=elem<HTMLInputElement>(id),wrapper=elem<HTMLElement>(id+"Wrap");
+  const field=spec.fields[index];
+  wrapper.hidden=!field;
+  if(!field)continue;
+  const label=wrapper.querySelector("span");if(label)label.textContent=field.label;
+  el.value=String(field.value);el.min=String(field.min);el.max=String(field.max);el.step=".01";
+ }
+ partApply.hidden=!spec.fields.length;
+ partReset.hidden=!spec.fields.length;
+}
+function editSelected(reset=false){
+ const e=solids.find(x=>x.id===selected);
+ if(!e)return;
+ const {fields}=partFieldsFor(e);
+ if(!fields.length)return;
+ const values=new Map<EditableKey,number>();
+ try{
+  for(const [i,field] of fields.entries()){
+   const raw=elem<HTMLInputElement>(partInputs[i]!).value;
+   if(!raw.trim())throw Error("Enter a measurement for "+field.label);
+   values.set(field.key,Number(raw));
+  }
+  const next:Draft={...model,columnSizes:{...model.columnSizes},beamDepths:{...model.beamDepths}};
+  if(e.kind==="column"){
+   if(reset)delete next.columnSizes[e.id];
+   else next.columnSizes[e.id]={x:values.get("columnX")!,z:values.get("columnZ")!};
+  }else if(e.kind==="beam"){
+   if(reset)delete next.beamDepths[e.id];
+   else next.beamDepths[e.id]=values.get("beamDepth")!;
+  }else if(e.kind==="window"){
+   next.windowX=reset?Number(((next.length-next.window)/2).toFixed(3)):values.get("windowX")!;
+   if(!reset)next.window=values.get("windowWidth")!;
+  }else if(e.kind==="door"){
+   next.doorX=reset?Number(((next.length-next.door)/2).toFixed(3)):values.get("doorX")!;
+   if(!reset)next.door=values.get("doorWidth")!;
+  }else if(e.kind==="wall"){
+   next.wallThickness=reset?.16:values.get("wallThickness")!;
+  }else if(e.kind==="furniture"){
+   const pad=next.wallThickness+.12;
+   next.bedX=reset?Math.max(pad,Number((next.length*.24).toFixed(3))):values.get("bedX")!;
+   next.bedZ=reset?Math.max(pad,Number((next.width*.3).toFixed(3))):values.get("bedZ")!;
+   if(!reset){next.bedLength=values.get("bedLength")!;next.bedWidth=values.get("bedWidth")!;}
+   if(reset){next.bedLength=1.95;next.bedWidth=1.45;}
+  }
+  const verified=validate(next);
+  setModel(verified,(reset?"Reset ":"Updated ")+e.name+" · linked plan and 3D regenerated.");
+  partMessage.textContent=(reset?"Reset":"Applied")+" · "+e.id;
+ }catch(error){
+  partMessage.textContent=error instanceof Error?error.message:"Cannot apply component change";
+ }
+}
+partApply.onclick=()=>editSelected();
+partReset.onclick=()=>editSelected(true);
+
 function select(id:string|null){
  selected=id&&solids.some(x=>x.id===id)?id:null;
  highlight();planView();drawTree();
  const chosen=solids.find(x=>x.id===selected);
- if(!chosen){info.textContent="Click a component in either view.";return;}
+ if(!chosen){info.textContent="Click a component in either view.";partMessage.textContent="";renderComponentEditor();return;}
  info.replaceChildren();
  const title=document.createElement("strong");title.textContent=chosen.name;info.append(title);
  for(const value of ["ID: "+chosen.id,"Type: "+chosen.kind,"Footprint: "+chosen.dx.toFixed(2)+" × "+chosen.dz.toFixed(2)+" m","Vertical: "+chosen.dy.toFixed(2)+" m","Origin: ("+chosen.x+", "+chosen.y+", "+chosen.z+") m"]){
   const line=document.createElement("div");line.textContent=value;info.append(line);
  }
+ renderComponentEditor();
 }
 function drawTree(){
  tree.replaceChildren();
@@ -302,7 +358,7 @@ function numericChange(){
    update[key]=Number(field.value);
   }
   update.bed=elem<HTMLInputElement>("bed").checked;
-  setModel(update,"Linked model updated. Plan and 3D use the same elements.");
+  setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
 }
 function quotedValue(text:string,key:"length"|"width"|"height"):number|undefined{
@@ -329,7 +385,7 @@ function interpret(input:string){
  if(/\b(?:remove|delete|without|no)\s+(?:the\s+)?bed\b/i.test(t)){next.bed=false;count++;}
  else if(/\b(?:add|include|with)\s+(?:a\s+|the\s+)?bed\b/i.test(t)){next.bed=true;count++;}
  if(!count){note.textContent="Recognized prototype commands: '8 m long', '6 m wide', '3 m high', 'remove bed' or 'add bed'. General AI interpretation is not yet connected.";return;}
- try{setModel(next,"Applied "+count+" explicit instruction"+(count===1?"":"s")+". All views are regenerated from one model.");}
+ try{setModel(fitToEnvelope(next),"Applied "+count+" explicit instruction"+(count===1?"":"s")+". All views are regenerated from one model.");}
  catch(error){note.textContent=error instanceof Error?error.message:"Unsupported dimensions";}
 }
 for(const key of ["length","width","height","door","window"]){

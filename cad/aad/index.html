@@ -68,7 +68,19 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <section class="panel pad right">
 <h2>Building components</h2>
 <div><p class="sub" style="margin-bottom:12px">Choose a component here or in either view. Its ID remains linked when you change a measurement.</p><div id="tree"></div></div>
-<div><h3>Selected component</h3><p class="sub">Select a column, beam, door, window or bed in either drawing.</p><div id="inspect">Click a component in either view.</div><h3>Connected quantities · demo geometry</h3>
+<div><h3>Selected component</h3><p class="sub">Select a column, beam, door, window or bed in either drawing.</p><div id="inspect">Click a component in either view.</div>
+<section id="componentEditor" class="aad-part-editor" aria-label="Edit selected component" hidden>
+<h3>Adjust selected component</h3>
+<p id="partHint" class="sub"></p>
+<div class="aad-part-fields">
+<label id="partAWrap" hidden><span>Measurement</span><input id="partA" type="number" step=".01" inputmode="decimal"></label>
+<label id="partBWrap" hidden><span>Measurement</span><input id="partB" type="number" step=".01" inputmode="decimal"></label>
+<label id="partCWrap" hidden><span>Measurement</span><input id="partC" type="number" step=".01" inputmode="decimal"></label>
+<label id="partDWrap" hidden><span>Measurement</span><input id="partD" type="number" step=".01" inputmode="decimal"></label>
+</div>
+<div class="actions"><button id="applyPart" type="button" class="primary">Apply component edit</button><button id="resetPart" type="button">Reset component</button></div>
+<p id="partMessage" class="aad-part-message" role="status" aria-live="polite"></p>
+</section><h3>Connected quantities · demo geometry</h3>
 <div class="stat"><span>Column elements</span><strong id="columnCount">4</strong></div>
 <div class="stat"><span>Beam elements</span><strong id="beamCount">4</strong></div>
 <div class="stat"><span>Roof slabs</span><strong>1</strong></div>
