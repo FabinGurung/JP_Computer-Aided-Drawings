@@ -21,9 +21,9 @@ try{
   if(sheet!==1)throw Error(title+" missing one shared stylesheet");
   const menu=await p.locator("#cad-global-navigation a").count();
   if(menu<7)throw Error(title+" missing global navigation");
-  if(await p.locator('#cad-global-navigation a[href$="/cad/"]').count()!==0)
+  if(await p.locator('#cad-global-navigation .cad-global-links > a[href$="/cad/"]').count()!==0)
     throw Error(title+" incorrectly promotes legacy CAD editor to primary navigation");
-  if(await p.locator('#cad-global-navigation a[href$="/cad/brief/"]').count()!==0)
+  if(await p.locator('#cad-global-navigation .cad-global-links > a[href$="/cad/brief/"]').count()!==0)
     throw Error(title+" incorrectly promotes legacy mass preview to primary navigation");
  }
  await p.goto(prefix,{waitUntil:"networkidle"});
