@@ -4,12 +4,15 @@
 
 ## One principal user journey
 
-**Home → choose a task → product screen → select an element → see details.**
+**Home → Design Studio → select a building component → edit and inspect its connected 2D/3D model.**
 
-The default user should only encounter:
-1. **AI Design Studio** (`/cad/aad/`): one synthetic connected 2D/3D room model; measured-parameter edits, stable element IDs and local JSON.
-2. **Describe a building** (`/cad/brief/`): restricted phrase parser giving a geometric mass, with dimension/missing-fact limits.
-3. **Full CAD Studio** (`/cad/`): CAD model editing, cameras, section/IFC/DXF/semantic overlays and local project drafts.
+Only **AI Design Studio** (`/cad/aad/`) is a current, promoted user-facing drawing product. Its one synthetic semantic model controls 2D and 3D views, validated parameters, hosted openings, connected column/grid/beam geometry, stable element IDs and local JSON drafts.
+
+The two earlier **standalone experiments** are retained but de-emphasized:
+- **Previous CAD Studio** (`/cad/`): cameras, snapping, section/IFC/DXF overlays, native investigations and local projects; kept as a compatibility/research route, not another primary editor.
+- **Previous words-to-mass preview** (`/cad/brief/`): limited dimensions-to-envelope parser; not a general AI compiler or the current common model.
+
+The homepage shows exactly one prominent editor launch. Earlier experiments are reachable only from an expandable capabilities section. Keep the old public URLs alive while their useful functions are folded into the single model editor.
 
 All other pages remain reachable under **expandable disclosure**:
 - Capabilities & engines: native tests, M01–M12, production/private execution boundaries.
@@ -17,7 +20,11 @@ All other pages remain reachable under **expandable disclosure**:
 - Projects: governed Narayani and Ramachandra portals; M80 remains HOLD.
 - Releases & Sources: immutable history and public-safe provenance.
 
-The homepage is a **capability launcher**, not another geometry engine, project authority, or duplicate A7 catalogue.
+The homepage is a **single-product entrypoint**, not another geometry engine, project authority, or duplicate A7 catalogue.
+
+## GitHub Actions scope
+
+The primary browser-model test (`cad-aad-linked-room.yml`) must cover `cad/aad/**` and the produced Pages bundle, including non-blank 2D/3D visuals and draft edits. Website navigation/theme QA remains separately scoped. Native CAD Studio regression workflows trigger on `cad/*.ts`, `cad/*.html` and `cad/*.css`, plus their own relevant native/backend files, **not every change below `cad/aad/`**. The published Pages build and live readback remain mandatory; native demonstration assets and frozen evidence remain preserved. Do not disable security/boundary or actual native-engine checks solely to reduce workflow count.
 
 ## Visual source of truth
 
