@@ -95,9 +95,40 @@ try{
    if(!(Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("width"))>colWidthBefore))
      throw Error("Column size edit absent in 2D plan");
    if(!(await page.locator("#inspect").innerText()).includes("C-NW"))throw Error("Column ID changed");
-   await page.locator('#plan rect[data-part="B-N"]').click();
-   await page.locator("#partA").fill(".46");
+   const westPairBefore=Number(await page.locator('#plan rect[data-part="C-SW"]').getAttribute("x"));
+   const northPairBefore=Number(await page.locator('#plan rect[data-part="C-NE"]').getAttribute("y"));
+   const westBeamBefore=Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("x"));
+   await page.locator("#partC").fill(".55"); // west shared grid
+   await page.locator("#partD").fill(".45"); // north shared grid
    await page.locator("#applyPart").click();
+   const westPairAfter=Number(await page.locator('#plan rect[data-part="C-SW"]').getAttribute("x"));
+   const northPairAfter=Number(await page.locator('#plan rect[data-part="C-NE"]').getAttribute("y"));
+   const westBeamAfter=Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("x"));
+   if(!(westPairAfter>westPairBefore+10 && northPairAfter>northPairBefore+8 &&
+        westBeamAfter>westBeamBefore+10))
+     throw Error("Moving shared gridlines did not update paired columns and beam start");
+   const gridJoints=await page.locator("#plan circle[data-joint]").count();
+   if(gridJoints!==4)throw Error("Expected four stable linked frame nodes, found "+gridJoints);
+   const jointX=Number(await page.locator('#plan circle[data-joint="J-NW"]').getAttribute("cx"));
+   const columnWestX=Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("x"));
+   const columnWestWidth=Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("width"));
+   if(Math.abs(jointX-(columnWestX+columnWestWidth/2))>.3)
+     throw Error("2D connection marker has detached from column center");
+   const beamStart=Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("x"));
+   const colEastX=Number(await page.locator('#plan rect[data-part="C-NE"]').getAttribute("x"));
+   const beamSpan=Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("width"));
+   if(Math.abs(beamStart-columnWestX-columnWestWidth)>.3 ||
+      Math.abs(beamStart+beamSpan-colEastX)>.3)
+     throw Error("Beam ends are not touching the connected column faces");
+   if(!(await page.locator("#inspect").innerText()).includes("J-NW"))
+     throw Error("Component inspector lacks dependent joint graph");
+   await page.locator('#plan rect[data-part="B-N"]').click();
+   const beamFootprintBefore=Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("height"));
+   await page.locator("#partA").fill(".46");
+   await page.locator("#partB").fill(".34");
+   await page.locator("#applyPart").click();
+   if(!(Number(await page.locator('#plan rect[data-part="B-N"]').getAttribute("height"))>beamFootprintBefore))
+     throw Error("Beam width failed to propagate to plan footprint");
    if(!(await page.locator("#inspect").innerText()).includes("Vertical: 0.46 m"))
      throw Error("Selected beam depth did not update model geometry");
    await page.locator('#plan rect[data-part="W-NL"]').click();
@@ -121,9 +152,10 @@ try{
    const downloaded=await saved;
    const fsDraft=await import("node:fs/promises");
    const serialized=JSON.parse(await fsDraft.readFile(await downloaded.path(),"utf8"));
-   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.2"||!serialized.columnSizes["C-NW"]||
-      serialized.beamDepths["B-N"]!==.46||serialized.windowX!==2.5||
-      serialized.wallThickness!==.2||serialized.bedX!==2.1)
+   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.3"||!serialized.columnSizes["C-NW"]||
+      serialized.beamDepths["B-N"]!==.46||serialized.beamWidths["B-N"]!==.34||
+      serialized.grid.west!==.55||serialized.grid.north!==.45||
+      serialized.windowX!==2.5||serialized.wallThickness!==.2||serialized.bedX!==2.1)
       throw Error("Versioned component changes missing from saved draft");
    const readback=await page.locator("#upload");
    await readback.setInputFiles({name:"linked-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(serialized))});
@@ -131,6 +163,14 @@ try{
    if(!(await page.locator("#message").innerText()).includes("Loaded draft") ||
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
       throw Error("Validated draft reload lost the linked bed geometry");
+   // Older v0.2 draft is admitted with safe default aligned grid and beam widths.
+   const legacy2={...serialized,schema:"jp-cad://linked-one-bay-demo/0.2"};
+   delete legacy2.grid;delete legacy2.beamWidths;
+   await readback.setInputFiles({name:"legacy-v02.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy2))});
+   await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
+   const legacyGridX=Number(await page.locator('#plan circle[data-joint="J-NW"]').getAttribute("cx"));
+   const legacyColX=Number(await page.locator('#plan rect[data-part="C-NW"]').getAttribute("x"));
+   if(!(legacyGridX-legacyColX>2))throw Error("v0.2 migration lost graph markers");
    // Legacy 0.1 input is upgraded with centered hosted openings.
    const preLegacyWindowX=Number(await page.locator('#plan rect[data-part="WINDOW-N"]').getAttribute("x"));
    await readback.setInputFiles({name:"legacy-draft.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify({
