@@ -63,7 +63,14 @@ for page in current_pages:
     assert "cad-site-shell.js" in content,(page,"missing shared navigation")
 home=(root/"index.html").read_text()
 for anchor in ('id="capabilities"','id="research"','id="projects"','id="releases"','href="./cad/aad/"','href="./cad/brief/"','href="./cad/"'):
-    assert anchor in home, ("missing product-first homepage control", anchor)
-for title in ("WORKING · LIMITED ROOM DEMO","MASS PREVIEW ONLY","PRODUCTION CONNECTION PENDING"):
-    assert title in home+((root/"assets/css/cad-unified-theme.css").read_text()),("missing UI capability context",title)
+    assert anchor in home, ("missing route or preserved legacy link", anchor)
+assert home.count('href="./cad/aad/"')==1,"Homepage must have one unambiguous primary Design Studio link"
+assert 'aria-label="Three main CAD tools"' not in home and "03 / ADVANCED WORKSPACE" not in home,"Old competing product launchers must be removed"
+assert 'aria-label="Product overview"' in home and 'class="cad-capability-strip"' in home,"Compact single-product overview missing"
+assert home.index('href="./cad/"')>home.index('id="capabilities"'),"Legacy CAD must only appear inside the advanced disclosure"
+assert home.index('href="./cad/brief/"')>home.index('id="capabilities"'),"Standalone language preview must not be a primary action"
+nav=(root/"assets/js/cad-site-shell.js").read_text()
+assert '["Design Studio","cad/aad/"]' in nav and '["CAD Studio","cad/"]' not in nav,"Legacy CAD should not be top-level navigation"
+assert '["Describe a building","cad/brief/"]' not in nav,"Previous mass preview must not be a top-level feature"
+assert "PRODUCTION CONNECTION PENDING" in home,"Do not conceal source-admission limitation"
 print("CAD_UNIFIED_STATIC_SITE_QA=PASS",len(required),"required paths; 7 unchanged Narayani stage families")

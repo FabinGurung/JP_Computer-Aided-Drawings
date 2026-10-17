@@ -10,13 +10,11 @@
   const current=clean(location.pathname);
   const pages=[
     ["Home",""],
-    ["AI Design Studio","cad/aad/"],
-    ["CAD Studio","cad/"],
+    ["Design Studio","cad/aad/"],
     ["Projects","projects/"],
     ["How It Works","guide/"]
   ];
   const more=[
-    ["Describe a building","cad/brief/"],
     ["Research & prototypes","research/"],
     ["Releases & history","releases/"],
     ["Source catalogue","source/"]

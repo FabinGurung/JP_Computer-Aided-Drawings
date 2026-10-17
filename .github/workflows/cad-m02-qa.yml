@@ -3,7 +3,7 @@ on:
   push:
     branches: [feature/cad-m02-constraints-sections-20261009]
   pull_request:
-    paths: ["cad/**","backend/**","public/cad/demo.json",".github/workflows/cad-m02-qa.yml"]
+    paths: ["cad/*.ts","cad/*.html","cad/*.css","backend/**","public/cad/demo.json",".github/workflows/cad-m02-qa.yml"]
 permissions:
   contents: read
 jobs:

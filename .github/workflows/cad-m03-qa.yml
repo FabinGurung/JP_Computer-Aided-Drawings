@@ -3,7 +3,7 @@ on:
   push:
     branches: [feature/cad-m03-project-packages-20261009]
   pull_request:
-    paths: ["cad/**","backend/**","public/cad/**","tools/site/cad-m03-smoke.mjs",".github/workflows/cad-m03-qa.yml"]
+    paths: ["cad/*.ts","cad/*.html","cad/*.css","backend/**","public/cad/**","tools/site/cad-m03-smoke.mjs",".github/workflows/cad-m03-qa.yml"]
 permissions:
   contents: read
 jobs:

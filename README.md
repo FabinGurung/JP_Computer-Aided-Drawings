@@ -1,9 +1,9 @@
-# Open Architecture — CAD Studio
+# CAD / AI-Aided Design — One Connected Design Workspace
 
-**Human-first AI-Aided Drawing guide:** [How It Works](https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/) · [Describe → 3D](https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/brief/). The **CAD/AAD repository owns its AI-Aided Design template** at [governance/aad/aad-domain-template.v0.1.json](governance/aad/aad-domain-template.v0.1.json); **A7 is a read-only catalogue/index**, not the template authority; GitHub is the deterministic engine/code authority, not an AI model. See [versioned CAD guide adoption](governance/AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md).
+**Current product:** [AI Design Studio — linked 2D and 3D](https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/aad/) · **Guide:** [How It Works](https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/). The **CAD/AAD repository owns its AI-Aided Design template** at [governance/aad/aad-domain-template.v0.1.json](governance/aad/aad-domain-template.v0.1.json); **A7 is a read-only catalogue/index**, not the template authority; GitHub is the deterministic engine/code authority, not an AI model. See [versioned CAD guide adoption](governance/AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md).
 
 
-The repository's **main objective is reusable, browser-first CAD/BIM engineering software**. The homepage opens the working `/cad/` studio; project-specific viewers are secondary adapter/evidence layers.
+The repository's **main product** is the versioned semantic-model editor at `/cad/aad/`, where one synthetic draft drives linked 2D and 3D views, connected frame/grid geometry, hosted openings and local JSON. The homepage provides a single entry to this editor. Earlier standalone `/cad/` and `/cad/brief/` remain accessible as **historical prototypes**, not competing active products; their engines are retained for future capability migration. Project-specific viewers remain separate evidence layers.
 
 ## Five-engine M01
 
@@ -13,7 +13,7 @@ The repository's **main objective is reusable, browser-first CAD/BIM engineering
 - **OpenCascade Technology (cadquery-ocp)** — Python geometry-kernel boxes, STEP and solid/plane section.
 - **ezdxf** — Python DXF plan extraction with semantic layers.
 
-See [the full M01 build/use guide](cad/README.md) and the in-browser [CAD Studio](/cad/).
+See [the historical M01 build/use guide](cad/README.md) and its [preserved standalone CAD prototype](https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/).
 
 ```bash
 npm ci
@@ -27,7 +27,8 @@ The sample model is a synthetic demonstration: `public/cad/demo.json`, with expl
 
 ### Separation and future
 ```text
-cad/                      Three.js + web-ifc browser editor
+cad/aad/                  Current shared-model 2D + 3D design workspace
+cad/                      Preserved earlier Three.js + web-ifc browser editor
 backend/cad_bridge/       IfcOpenShell + OCCT + ezdxf Python bridge
 public/cad/demo.json      canonical shared synthetic test model
 public/stages/             older governed project viewers (separate)

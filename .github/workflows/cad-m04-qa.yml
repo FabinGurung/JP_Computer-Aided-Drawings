@@ -3,7 +3,7 @@ on:
   push:
     branches: [feature/cad-m04-dxf-review-overlay-20261009]
   pull_request:
-    paths: ["cad/**","backend/**","tools/site/cad-m04-smoke.mjs",".github/workflows/cad-m04-qa.yml"]
+    paths: ["cad/*.ts","cad/*.html","cad/*.css","backend/**","tools/site/cad-m04-smoke.mjs",".github/workflows/cad-m04-qa.yml"]
 permissions:
   contents: read
 jobs:

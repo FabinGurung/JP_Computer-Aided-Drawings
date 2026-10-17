@@ -3,7 +3,7 @@ on:
   push:
     branches: [feature/mobile-cad-workspace-responsive-20261010]
   pull_request:
-    paths: ["cad/**","tools/site/cad-responsive-smoke.mjs",".github/workflows/cad-mobile-qa.yml"]
+    paths: ["cad/*.ts","cad/*.html","cad/*.css","tools/site/cad-responsive-smoke.mjs",".github/workflows/cad-mobile-qa.yml"]
 permissions: {contents: read}
 jobs:
   responsive-cad:

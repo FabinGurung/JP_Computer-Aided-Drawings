@@ -20,16 +20,28 @@ try{
   const sheet=await p.locator('link[href*="cad-unified-theme.css"]').count();
   if(sheet!==1)throw Error(title+" missing one shared stylesheet");
   const menu=await p.locator("#cad-global-navigation a").count();
-  if(menu<8)throw Error(title+" missing global navigation");
+  if(menu<7)throw Error(title+" missing global navigation");
+  if(await p.locator('#cad-global-navigation a[href$="/cad/"]').count()!==0)
+    throw Error(title+" incorrectly promotes legacy CAD editor to primary navigation");
+  if(await p.locator('#cad-global-navigation a[href$="/cad/brief/"]').count()!==0)
+    throw Error(title+" incorrectly promotes legacy mass preview to primary navigation");
  }
  await p.goto(prefix,{waitUntil:"networkidle"});
  const daylight=await p.locator("body").evaluate(e=>getComputedStyle(e).backgroundColor);
  if(!/rgb\(\s*248,\s*249,\s*250\s*\)/.test(daylight))throw Error("Home is not Lucid Blueprint daylight palette: "+daylight);
  const cards=await p.locator(".cad-tool").count();
- if(cards!==3)throw Error("Default product journeys are not exactly three: "+cards);
+ if(cards!==0)throw Error("Competing tool launcher cards still visible: "+cards);
+ if(await p.locator('.cad-intro-main > a.cad-button').count()!==1)
+   throw Error("Homepage must have exactly one primary product launch action");
+ if(await p.locator(".cad-capability-strip > div").count()!==4)
+   throw Error("Missing four concise steps for the single active product");
+ if(await p.locator('a[href="./cad/"]').isVisible())
+   throw Error("Legacy editor should be hidden in the closed advanced section");
  if(await p.locator("#capabilities .cad-detail").isVisible())throw Error("Advanced content must start collapsed");
  await p.locator("#capabilities summary").click();
  if(!(await p.locator("#capabilities .cad-detail").isVisible()))throw Error("Details expansion failed");
+ if(!(await p.locator('#capabilities a[href="./cad/"]').isVisible()))throw Error("Archived CAD editor route must remain discoverable");
+ if(!(await p.locator('#capabilities a[href="./cad/brief/"]').isVisible()))throw Error("Archived language preview must remain discoverable");
  await p.locator("#projects summary").click();
  await p.locator("#cards .project-card").first().waitFor({timeout:12000});
  await p.locator("#projectSearch").fill("narayani");
@@ -44,6 +56,6 @@ try{
  const noOverflow=await mobile.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+5);
  if(!noOverflow)throw Error("Mobile dashboard horizontal overflow");
  await mobile.screenshot({path:"/tmp/cad-daylight-blueprint-mobile.png",fullPage:true});
- console.log("CAD_UNIFIED_NAV_AND_PROGRESSIVE_DISCLOSURE_PASS",JSON.stringify({routes:routes.length,journeys:cards,search:"narayani",theme:daylight,mobileOverflow:false}));
+ console.log("CAD_UNIFIED_NAV_AND_PROGRESSIVE_DISCLOSURE_PASS",JSON.stringify({routes:routes.length,competingPrimaryTools:cards,search:"narayani",theme:daylight,mobileOverflow:false}));
  await mobile.close();await p.close();
 }finally{await browser.close();}

@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="CAD Design Workspace: create from words, edit one linked 2D/3D building model, and explore preserved tools, projects and research.">
-<title>CAD Design Workspace · Start Here</title>
+<meta name="description" content="AI Design Studio: one connected building model, editable in both 2D and 3D. Earlier CAD tools and research are preserved in the archive.">
+<title>AI Design Studio · One Model, Every View</title>
 <link rel="stylesheet" href="./assets/css/site.css">
 <link rel="stylesheet" href="./assets/css/consolidated-site.css">
 <link rel="stylesheet" href="./assets/css/cad-unified-theme.css">
@@ -10,8 +10,8 @@
 <section class="cad-intro" aria-label="Start designing">
 <div class="cad-intro-main">
 <div class="cad-kicker">AI-Aided Design & Drawing · One model, many views</div>
-<h1>Design a building.<br>Understand every view.</h1>
-<p>Start with a sentence or edit one shared building model. Your 2D plan and 3D model should come from the same geometry, not separate drawings. Our small connected room demo already proves this workflow.</p>
+<h1>One design workspace.<br>2D and 3D together.</h1>
+<p>Set dimensions, select components, move connected frame gridlines, and see one shared draft model in 2D and 3D. The same workspace will grow into multi-room floor plans.</p>
 <figure class="cad-hero-proof" aria-label="Blueprint plan and related 3D room illustration">
 <svg viewBox="0 0 570 125" role="img" aria-label="A flat plan on the left maps to the same extruded room on the right">
 <g fill="none" stroke="#2563eb" stroke-width="1.8">
@@ -30,15 +30,14 @@
 <text x="120" y="117" fill="#4a6e98" font-size="11" text-anchor="middle">2D FLOOR PLAN</text>
 <text x="441" y="117" fill="#4a6e98" font-size="11" text-anchor="middle">SAME MODEL · 3D</text>
 </svg><figcaption>2D ↔ 3D · one model</figcaption></figure>
-<a class="cad-button" href="./cad/aad/">Open AI Design Studio →</a>
-<a class="cad-button alt" href="./cad/brief/">Try words → 3D</a>
-<div class="cad-eyeline"><span>Linked 2D + 3D</span><span>Stable element IDs</span><span>Native CAD engines retained</span><span>Draft only</span></div>
+<a class="cad-button" href="./cad/aad/">Start designing →</a>
+<div class="cad-eyeline"><span>One shared model</span><span>2D + 3D linked</span><span>Save your draft</span><span>Illustrative only</span></div>
 </div>
 <aside class="cad-intro-side">
-<div class="cad-kicker">First visit · 3 actions</div>
+<div class="cad-kicker">First visit · Try this</div>
 <h2>Try the actual product</h2>
 <ol class="cad-demo-steps">
-<li>Open <b>AI Design Studio</b> to see the same room in 2D and 3D.</li>
+<li>Open <b>Design Studio</b> to see the same room in 2D and 3D.</li>
 <li>Change length from <b>8 m to 9 m</b>; watch both views update.</li>
 <li>Click the window or column in either view to inspect its shared ID.</li>
 </ol>
@@ -47,34 +46,25 @@
 </aside>
 </section>
 
-<section class="cad-section" aria-label="Three main CAD tools">
-<div class="cad-section-head"><h2>Choose what you want to do</h2><p>Three tools. Each has its own purpose.</p></div>
-<div class="cad-tool-grid">
-<article class="cad-tool"><span class="num">01 / PRIMARY PRODUCT</span>
-<h3>Edit one linked 2D + 3D building</h3>
-<p>One-bay example: four columns, four beams, a slab, walls, door, window and bed. Change dimensions and select the same component across the plan and 3D.</p>
-<p class="cad-state">WORKING · LIMITED ROOM DEMO</p>
-<a class="cad-button" href="./cad/aad/">Open AI Design Studio →</a></article>
-<article class="cad-tool"><span class="num">02 / WORDS TO GEOMETRY</span>
-<h3>Describe a building in plain English</h3>
-<p>Enter a length, width, storey count and floor height. The browser interprets a small set of phrases and creates an interactive multi-storey geometric envelope.</p>
-<p class="cad-state">WORKING · MASS PREVIEW ONLY</p>
-<a class="cad-button alt" href="./cad/brief/">Open conversational preview →</a></article>
-<article class="cad-tool"><span class="num">03 / ADVANCED WORKSPACE</span>
-<h3>Inspect and edit CAD elements</h3>
-<p>Choose plan, elevation or 3D. Use object selection, numeric edits, snapping, section views, local project JSON and gated IFC/DXF/column overlays.</p>
-<p class="cad-state">WORKING · RESEARCH/DRAFT TOOLING</p>
-<a class="cad-button alt" href="./cad/">Open full CAD Studio →</a></article>
+<section class="cad-section" aria-label="Product overview">
+<div class="cad-section-head"><h2>What you can do today</h2><p>One workspace. Select a component to reveal its controls.</p></div>
+<div class="cad-capability-strip">
+<div><b>Describe</b><span>Set a simple room size or supported change</span></div>
+<div><b>Edit</b><span>Columns, beams, walls, doors, windows and furniture</span></div>
+<div><b>Explore</b><span>Linked 2D plan, 3D view and connected frame joints</span></div>
+<div><b>Save</b><span>Local versioned JSON draft</span></div>
 </div>
+<p class="cad-limit">Current scope: synthetic one-bay demonstration; not yet a complete multi-room BIM editor or approved construction drawing.</p>
 </section>
 
 <section class="cad-section" aria-label="Capability library">
 <div class="cad-section-head"><h2>Everything else we built</h2><p>Click any section to reveal more; no tools or history are discarded.</p></div>
 <div class="cad-disclosures">
 <details class="cad-disclosure" id="capabilities">
-<summary><div>CAD functions and engine milestones<span>What already works beyond the three start screens</span></div></summary>
+<summary><div>Previous tools and advanced CAD capabilities<span>Earlier prototypes and engine proofs, preserved rather than promoted as separate products</span></div></summary>
 <div class="cad-detail"><div class="cad-detail-grid">
-<article class="cad-mini"><strong>3D/plan/elevation/section</strong><p>Three.js browser scene, camera modes, picking, clipping, local edits and parameter constraints.</p><span class="cad-state">WORKING IN CAD STUDIO</span></article>
+<article class="cad-mini"><strong>Earlier CAD Studio</strong><p>Older standalone editor with plan/elevation cameras, snapping, clipping and IFC overlays. Kept as a research reference while useful functions are integrated into Design Studio.</p><a href="./cad/">Open previous CAD editor →</a></article>
+<article class="cad-mini"><strong>Earlier language-to-mass preview</strong><p>Standalone limited phrase parser with multi-storey mass visualization. This is not the single-model editing experience.</p><a href="./cad/brief/">Open earlier mass preview →</a></article>
 <article class="cad-mini"><strong>IFC, DXF and STEP pipeline</strong><p>web-ifc browser interrogation plus Python IfcOpenShell, ezdxf and OpenCascade/OCP bridges. Native generation operates in controlled Python/CI workflows; not directly through static GitHub Pages.</p><span class="cad-state">ENGINE PROOFS · RUNNER REQUIRED</span></article>
 <article class="cad-mini"><strong>Assemblies and multistorey models</strong><p>Completed synthetic multi-level geometry and native-format regression proofs (M11); these are not approved client building drawings.</p><span class="cad-state">SYNTHETIC ENGINE TESTS</span></article>
 <article class="cad-mini"><strong>Private source admission</strong><p>Authenticated source attestation boundary exists as tested code (M12.2A). No production Drive runner or verified Narayani DWG conversion is active.</p><span class="cad-state held">PRODUCTION CONNECTION PENDING</span></article>
@@ -107,7 +97,7 @@
 </details>
 </div>
 </section>
-<footer class="cad-footer">CAD / AI-Aided Design & Drawing · A single design workspace with preserved research, projects and release history · Engineering acceptance remains separate · <a href="./cad/">CAD Studio</a> · <a href="./guide/">How It Works</a></footer>
+<footer class="cad-footer">CAD / AI-Aided Design & Drawing · One active workspace, preserved historical research and projects · Engineering acceptance remains separate · <a href="./guide/">How It Works</a></footer>
 </main>
 <script defer src="./assets/js/cad-site-shell.js" data-cad-root="./"></script>
 <script type="module" src="/src/main.ts"></script>
