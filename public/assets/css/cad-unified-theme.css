@@ -244,3 +244,12 @@ body:has(#canvas3d) .aad-part-editor button{font-size:11px}
 /* Orthogonal grid/joint graph information derives from the one CAD model. */
 body:has(#canvas3d) .aad-connection-note{margin-top:8px;border-top:1px solid #d5e5f4;padding-top:8px;font-size:11px;color:#1a5a9a;font-weight:650;line-height:1.5}
 body:has(#canvas3d) #plan [data-joint]{opacity:.9}
+
+/* Product-first home: a single workspace, four outcomes; historical tools are disclosed. */
+.cad-capability-strip{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}
+.cad-capability-strip>div{border:1px solid #d9e2ec;background:#fff;padding:15px;border-radius:11px;display:flex;flex-direction:column;gap:5px}
+.cad-capability-strip b{font-size:13px;color:#244e8d}
+.cad-capability-strip span{font-size:11px;color:#576b7c;line-height:1.5}
+.cad-limit{font-size:11px;color:#755520;margin-top:11px!important}
+@media(max-width:780px){.cad-capability-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.cad-capability-strip{grid-template-columns:1fr 1fr}.cad-capability-strip>div{padding:11px}}
