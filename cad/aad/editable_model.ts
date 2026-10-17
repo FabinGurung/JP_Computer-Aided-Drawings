@@ -4,8 +4,9 @@
  * No structural connectivity or engineering approval is inferred from the synthetic frame.
  */
 import {deriveFrameGraph,columnAt} from "./frame_connectivity";
+import {deriveRoomSolids,roomBoundaryPositions,type RoomKind} from "./room_layout";
 export type FrameGrid={west:number;east:number;north:number;south:number};
-export type Category="column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture";
+export type Category="column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture"|"room";
 export type Solid={id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
 export type ColumnSection={x:number;z:number};
 export type Draft={
@@ -14,8 +15,11 @@ export type Draft={
  bedX:number;bedZ:number;bedLength:number;bedWidth:number;
  columnSizes:Record<string,ColumnSection>;beamDepths:Record<string,number>;
  grid:FrameGrid;beamWidths:Record<string,number>;
+ roomCount:1|2|3;roomSplit1:number;roomSplit2:number;roomTypes:[RoomKind,RoomKind,RoomKind];
+ interiorDoorZ:number;interiorDoorWidth:number;
 };
-export const SCHEMA="jp-cad://linked-one-bay-demo/0.3";
+export const SCHEMA="jp-cad://linked-one-bay-demo/0.4";
+export const PREVIOUS_V03_SCHEMA="jp-cad://linked-one-bay-demo/0.3";
 export const PREVIOUS_SCHEMA="jp-cad://linked-one-bay-demo/0.2";
 export const LEGACY_SCHEMA="jp-cad://linked-one-bay-demo/0.1";
 export const COLUMN_IDS=["C-NW","C-NE","C-SW","C-SE"] as const;
@@ -24,7 +28,8 @@ export const DEFAULT_DRAFT:Draft={
  schema:SCHEMA,length:8,width:6,height:3,door:.95,window:1.4,bed:true,
  doorX:3.525,windowX:3.3,wallThickness:.16,
  bedX:1.92,bedZ:1.8,bedLength:1.95,bedWidth:1.45,
- columnSizes:{},beamDepths:{},grid:{west:.28,east:.28,north:.28,south:.28},beamWidths:{}
+ columnSizes:{},beamDepths:{},grid:{west:.28,east:.28,north:.28,south:.28},beamWidths:{},
+ roomCount:1,roomSplit1:4.4,roomSplit2:6.24,roomTypes:["bedroom","living","study"],interiorDoorZ:2.55,interiorDoorWidth:.9
 };
 const round=(v:number)=>Math.round(v*1000)/1000;
 function numberAt(v:unknown,name:string,min:number,max:number):number{
@@ -45,21 +50,34 @@ function legacyUpgrade(c:Record<string,unknown>):Draft{
   door,window,bed:c.bed as boolean,
   doorX:round((L-door)/2),windowX:round((L-window)/2),
   bedX:round(Math.max(.65,L*.24)),bedZ:round(Math.max(.85,W*.3)),
-  columnSizes:{},beamDepths:{},grid:{...DEFAULT_DRAFT.grid},beamWidths:{}
+  columnSizes:{},beamDepths:{},grid:{...DEFAULT_DRAFT.grid},beamWidths:{},
+  roomCount:1,roomSplit1:round(L*.55),roomSplit2:round(L*.78),roomTypes:["bedroom","living","study"],
+  interiorDoorZ:round(W*.5-.45),interiorDoorWidth:.9
  };
 }
 export function validateDraft(candidate:unknown):Draft{
  const c=record(candidate,"Model");
  const oldKeys=["schema","length","width","height","door","window","bed"];
+ const newKeys=["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth"];
  let raw:Record<string,unknown>=c;
  if(c.schema===LEGACY_SCHEMA){
   if(!sameKeys(c,oldKeys)||typeof c.bed!=="boolean")throw Error("Malformed legacy v0.1 model");
   raw=legacyUpgrade(c) as unknown as Record<string,unknown>;
  }
  if(raw.schema===PREVIOUS_SCHEMA){
-  const legacyKeys=Object.keys(DEFAULT_DRAFT).filter(k=>k!=="grid"&&k!=="beamWidths");
+  const legacyKeys=Object.keys(DEFAULT_DRAFT).filter(k=>k!=="grid"&&k!=="beamWidths"&&!newKeys.includes(k));
   if(!sameKeys(raw,legacyKeys)||typeof raw.bed!=="boolean")throw Error("Malformed legacy v0.2 model");
-  raw={...raw,schema:SCHEMA,grid:{...DEFAULT_DRAFT.grid},beamWidths:{}};
+  const L=Number(raw.length),W=Number(raw.width);
+  raw={...raw,schema:SCHEMA,grid:{...DEFAULT_DRAFT.grid},beamWidths:{},
+    roomCount:1,roomSplit1:round(L*.55),roomSplit2:round(L*.78),roomTypes:["bedroom","living","study"],
+    interiorDoorZ:round(W*.5-.45),interiorDoorWidth:.9};
+ }
+ if(raw.schema===PREVIOUS_V03_SCHEMA){
+  const oldV03=Object.keys(DEFAULT_DRAFT).filter(k=>!newKeys.includes(k));
+  if(!sameKeys(raw,oldV03)||typeof raw.bed!=="boolean")throw Error("Malformed legacy v0.3 model");
+  const L=Number(raw.length),W=Number(raw.width);
+  raw={...raw,schema:SCHEMA,roomCount:1,roomSplit1:round(L*.55),roomSplit2:round(L*.78),
+     roomTypes:["bedroom","living","study"],interiorDoorZ:round(W*.5-.45),interiorDoorWidth:.9};
  }
  if(raw.schema!==SCHEMA||!sameKeys(raw,Object.keys(DEFAULT_DRAFT))||typeof raw.bed!=="boolean")
   throw Error("Unsupported model version or unrecognized fields");
@@ -77,6 +95,23 @@ export function validateDraft(candidate:unknown):Draft{
  const sections=record(raw.columnSizes,"column sections");
  const depths=record(raw.beamDepths,"beam depths");
  const widths=record(raw.beamWidths,"beam widths");
+ const roomCount=numberAt(raw.roomCount,"room count",1,3);
+ if(!Number.isInteger(roomCount))throw Error("Room count must be 1, 2, or 3");
+ const roomTypesRaw=raw.roomTypes;
+ if(!Array.isArray(roomTypesRaw)||roomTypesRaw.length!==3||!roomTypesRaw.every(x=>x==="bedroom"||x==="living"||x==="study"))throw Error("Invalid reusable room types");
+ const roomTypes=[...roomTypesRaw] as [RoomKind,RoomKind,RoomKind];
+ const roomSplit1=numberAt(raw.roomSplit1,"first room split",0,18);
+ const roomSplit2=numberAt(raw.roomSplit2,"second room split",0,18);
+ const interiorDoorWidth=numberAt(raw.interiorDoorWidth,"interior door width",.75,1.3);
+ const interiorDoorZ=numberAt(raw.interiorDoorZ,"interior door position",wallThickness+.45,W-interiorDoorWidth-wallThickness-.45);
+ if(roomCount>=2){
+  if(roomSplit1<2||roomSplit1>L-2)throw Error("Two-room split must leave 2 m at both ends");
+  if(raw.bed && roomSplit1>bedX-.05 && roomSplit1<bedX+bedLength+.08)
+   throw Error("First room wall would intersect the bed; move furniture first");
+ }
+ if(roomCount===3 && (roomSplit2-roomSplit1<1.75||L-roomSplit2<1.75))
+  throw Error("Three rooms need at least 1.75 m per additional room");
+
  const gridRaw=record(raw.grid,"frame grid");
  if(!sameKeys(gridRaw,["west","east","north","south"]))throw Error("Frame grid needs west, east, north, south offsets");
  const grid:FrameGrid={west:numberAt(gridRaw.west,"west grid",.2,1.2),east:numberAt(gridRaw.east,"east grid",.2,1.2),north:numberAt(gridRaw.north,"north grid",.2,1.2),south:numberAt(gridRaw.south,"south grid",.2,1.2)};
@@ -113,7 +148,8 @@ export function validateDraft(candidate:unknown):Draft{
   if(width/2>inset+1e-6)throw Error("Beam width exceeds perimeter grid clearance: "+id);
  }
  return {schema:SCHEMA,length:L,width:W,height:H,door,window,bed:raw.bed,
-  doorX,windowX,wallThickness,bedX,bedZ,bedLength,bedWidth,columnSizes,beamDepths,beamWidths,grid};
+  doorX,windowX,wallThickness,bedX,bedZ,bedLength,bedWidth,columnSizes,beamDepths,beamWidths,grid,
+  roomCount:roomCount as 1|2|3,roomSplit1,roomSplit2,roomTypes,interiorDoorZ,interiorDoorWidth};
 }
 /** When overall dimensions shrink, slide hosted objects inside the new bounds;
     do not silently scale a column section or detach opening infills. */
@@ -128,6 +164,11 @@ export function fitToEnvelope(d:Draft):Draft{
  const margin=n.wallThickness+.12;
  n.bedX=round(Math.max(margin,Math.min(n.bedX,n.length-n.bedLength-margin)));
  n.bedZ=round(Math.max(margin,Math.min(n.bedZ,n.width-n.bedWidth-margin)));
+ n.interiorDoorZ=round(Math.max(n.wallThickness+.45,Math.min(n.interiorDoorZ,n.width-n.interiorDoorWidth-n.wallThickness-.45)));
+ if(n.roomCount>1){
+  n.roomSplit1=round(Math.min(n.length-2,Math.max(2,n.roomSplit1)));
+  if(n.bed && n.roomSplit1<n.bedX+n.bedLength+.08)n.roomSplit1=round(n.bedX+n.bedLength+.12);
+ }
  return n;
 }
 export function deriveSolids(input:Draft):Solid[]{
@@ -174,5 +215,6 @@ export function deriveSolids(input:Draft):Solid[]{
  add("W-W","West wall","wall",0,0,wall,wall,outerH,W-2*wall);
  add("W-E","East wall","wall",L-wall,0,wall,wall,outerH,W-2*wall);
  if(p.bed)add("BED","Bed · movable furniture","furniture",p.bedX,.15,p.bedZ,p.bedLength,.40,p.bedWidth);
+ result.push(...deriveRoomSolids(p));
  return result;
 }
