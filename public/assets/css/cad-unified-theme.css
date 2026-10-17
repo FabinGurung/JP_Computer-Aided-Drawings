@@ -240,3 +240,7 @@ body:has(#canvas3d) .aad-part-fields input{min-width:0;width:100%;border-radius:
 body:has(#canvas3d) .aad-part-message{font-size:11px;margin:8px 0 0;color:#276d51;min-height:16px;overflow-wrap:anywhere}
 body:has(#canvas3d) .aad-part-editor .actions{gap:7px}
 body:has(#canvas3d) .aad-part-editor button{font-size:11px}
+
+/* Orthogonal grid/joint graph information derives from the one CAD model. */
+body:has(#canvas3d) .aad-connection-note{margin-top:8px;border-top:1px solid #d5e5f4;padding-top:8px;font-size:11px;color:#1a5a9a;font-weight:650;line-height:1.5}
+body:has(#canvas3d) #plan [data-joint]{opacity:.9}

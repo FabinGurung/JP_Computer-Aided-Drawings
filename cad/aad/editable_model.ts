@@ -3,6 +3,8 @@
  * Hosted openings mutate their wall segmentation; no detached door/window geometry.
  * No structural connectivity or engineering approval is inferred from the synthetic frame.
  */
+import {deriveFrameGraph,columnAt} from "./frame_connectivity";
+export type FrameGrid={west:number;east:number;north:number;south:number};
 export type Category="column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture";
 export type Solid={id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
 export type ColumnSection={x:number;z:number};
@@ -11,8 +13,10 @@ export type Draft={
  doorX:number;windowX:number;wallThickness:number;
  bedX:number;bedZ:number;bedLength:number;bedWidth:number;
  columnSizes:Record<string,ColumnSection>;beamDepths:Record<string,number>;
+ grid:FrameGrid;beamWidths:Record<string,number>;
 };
-export const SCHEMA="jp-cad://linked-one-bay-demo/0.2";
+export const SCHEMA="jp-cad://linked-one-bay-demo/0.3";
+export const PREVIOUS_SCHEMA="jp-cad://linked-one-bay-demo/0.2";
 export const LEGACY_SCHEMA="jp-cad://linked-one-bay-demo/0.1";
 export const COLUMN_IDS=["C-NW","C-NE","C-SW","C-SE"] as const;
 export const BEAM_IDS=["B-N","B-S","B-W","B-E"] as const;
@@ -20,7 +24,7 @@ export const DEFAULT_DRAFT:Draft={
  schema:SCHEMA,length:8,width:6,height:3,door:.95,window:1.4,bed:true,
  doorX:3.525,windowX:3.3,wallThickness:.16,
  bedX:1.92,bedZ:1.8,bedLength:1.95,bedWidth:1.45,
- columnSizes:{},beamDepths:{}
+ columnSizes:{},beamDepths:{},grid:{west:.28,east:.28,north:.28,south:.28},beamWidths:{}
 };
 const round=(v:number)=>Math.round(v*1000)/1000;
 function numberAt(v:unknown,name:string,min:number,max:number):number{
@@ -41,7 +45,7 @@ function legacyUpgrade(c:Record<string,unknown>):Draft{
   door,window,bed:c.bed as boolean,
   doorX:round((L-door)/2),windowX:round((L-window)/2),
   bedX:round(Math.max(.65,L*.24)),bedZ:round(Math.max(.85,W*.3)),
-  columnSizes:{},beamDepths:{}
+  columnSizes:{},beamDepths:{},grid:{...DEFAULT_DRAFT.grid},beamWidths:{}
  };
 }
 export function validateDraft(candidate:unknown):Draft{
@@ -51,6 +55,11 @@ export function validateDraft(candidate:unknown):Draft{
  if(c.schema===LEGACY_SCHEMA){
   if(!sameKeys(c,oldKeys)||typeof c.bed!=="boolean")throw Error("Malformed legacy v0.1 model");
   raw=legacyUpgrade(c) as unknown as Record<string,unknown>;
+ }
+ if(raw.schema===PREVIOUS_SCHEMA){
+  const legacyKeys=Object.keys(DEFAULT_DRAFT).filter(k=>k!=="grid"&&k!=="beamWidths");
+  if(!sameKeys(raw,legacyKeys)||typeof raw.bed!=="boolean")throw Error("Malformed legacy v0.2 model");
+  raw={...raw,schema:SCHEMA,grid:{...DEFAULT_DRAFT.grid},beamWidths:{}};
  }
  if(raw.schema!==SCHEMA||!sameKeys(raw,Object.keys(DEFAULT_DRAFT))||typeof raw.bed!=="boolean")
   throw Error("Unsupported model version or unrecognized fields");
@@ -67,8 +76,14 @@ export function validateDraft(candidate:unknown):Draft{
  const bedZ=numberAt(raw.bedZ,"bed Z",bedMin,W-bedWidth-bedMin);
  const sections=record(raw.columnSizes,"column sections");
  const depths=record(raw.beamDepths,"beam depths");
+ const widths=record(raw.beamWidths,"beam widths");
+ const gridRaw=record(raw.grid,"frame grid");
+ if(!sameKeys(gridRaw,["west","east","north","south"]))throw Error("Frame grid needs west, east, north, south offsets");
+ const grid:FrameGrid={west:numberAt(gridRaw.west,"west grid",.2,1.2),east:numberAt(gridRaw.east,"east grid",.2,1.2),north:numberAt(gridRaw.north,"north grid",.2,1.2),south:numberAt(gridRaw.south,"south grid",.2,1.2)};
+ if(L-grid.west-grid.east<1.6||W-grid.north-grid.south<1.6)throw Error("Connected gridlines require at least 1.6 m between column centers");
  const columnSizes:Record<string,ColumnSection>={};
  const beamDepths:Record<string,number>={};
+ const beamWidths:Record<string,number>={};
  for(const [id,obj] of Object.entries(sections)){
   if(!COLUMN_IDS.includes(id as typeof COLUMN_IDS[number]))throw Error("Unknown column ID "+id);
   const v=record(obj,id);
@@ -79,13 +94,35 @@ export function validateDraft(candidate:unknown):Draft{
   if(!BEAM_IDS.includes(id as typeof BEAM_IDS[number]))throw Error("Unknown beam ID "+id);
   beamDepths[id]=numberAt(val,id+" beam depth",.20,.65);
  }
+ for(const [id,val] of Object.entries(widths)){
+  if(!BEAM_IDS.includes(id as typeof BEAM_IDS[number]))throw Error("Unknown beam width ID "+id);
+  beamWidths[id]=numberAt(val,id+" beam width",.18,.50);
+ }
+ // Inset lines must leave room for the entire section inside the draft
+ // footprint, including the adjusted beam width at perimeter lines.
+ for(const id of COLUMN_IDS){
+  const sec=columnSizes[id]??{x:.28,z:.28};
+  const xInset=id.endsWith("W")?grid.west:grid.east;
+  const zInset=id.startsWith("C-N")?grid.north:grid.south;
+  if(sec.x/2>xInset+1e-6||sec.z/2>zInset+1e-6)
+   throw Error("Column section extends outside the modeled room: "+id);
+ }
+ for(const id of BEAM_IDS){
+  const width=beamWidths[id]??.28;
+  const inset=id==="B-N"?grid.north:id==="B-S"?grid.south:id==="B-W"?grid.west:grid.east;
+  if(width/2>inset+1e-6)throw Error("Beam width exceeds perimeter grid clearance: "+id);
+ }
  return {schema:SCHEMA,length:L,width:W,height:H,door,window,bed:raw.bed,
-  doorX,windowX,wallThickness,bedX,bedZ,bedLength,bedWidth,columnSizes,beamDepths};
+  doorX,windowX,wallThickness,bedX,bedZ,bedLength,bedWidth,columnSizes,beamDepths,beamWidths,grid};
 }
 /** When overall dimensions shrink, slide hosted objects inside the new bounds;
     do not silently scale a column section or detach opening infills. */
 export function fitToEnvelope(d:Draft):Draft{
- const n={...d};
+ const n={...d,grid:{...d.grid}};
+ n.grid.west=Math.max(.2,Math.min(n.grid.west,n.length-1.8-n.grid.east));
+ n.grid.east=Math.max(.2,Math.min(n.grid.east,n.length-1.8-n.grid.west));
+ n.grid.north=Math.max(.2,Math.min(n.grid.north,n.width-1.8-n.grid.south));
+ n.grid.south=Math.max(.2,Math.min(n.grid.south,n.width-1.8-n.grid.north));
  n.doorX=round(Math.max(.35,Math.min(n.doorX,n.length-n.door-.35)));
  n.windowX=round(Math.max(.35,Math.min(n.windowX,n.length-n.window-.35)));
  const margin=n.wallThickness+.12;
@@ -100,22 +137,27 @@ export function deriveSolids(input:Draft):Solid[]{
   result.push({id,name,kind,x:round(x),y:round(y),z:round(z),dx:round(dx),dy:round(dy),dz:round(dz)});
  };
  const L=p.length,W=p.width,H=p.height,wall=p.wallThickness,outerH=H-.18;
- const xs:[number,number]=[.28,L-.28],zs:[number,number]=[.28,W-.28];
- for(const [id,x,z] of [
-  ["C-NW",xs[0],zs[0]],["C-NE",xs[1],zs[0]],
-  ["C-SW",xs[0],zs[1]],["C-SE",xs[1],zs[1]]
- ] as [string,number,number][]){
-  const section=p.columnSizes[id]??{x:.28,z:.28};
-  add(id,"Column · "+id.slice(2),"column",x-section.x/2,0,z-section.z/2,section.x,H-.16,section.z);
+ // Orthogonal frame graph is the single authority for column centers,
+ // beam clear spans and the four derived connection points.
+ const frame=deriveFrameGraph(p);
+ for(const joint of frame.joints){
+  const sec=columnAt(p,joint.column);
+  add(joint.column,"Column · "+joint.column.slice(2),"column",
+      joint.x-sec.x/2,0,joint.z-sec.z/2,sec.x,H-.16,sec.z);
  }
- for(const [id,name,x,z,dx,dz] of [
-  ["B-N","Beam · north",xs[0],zs[0]-.14,L-.56,.28],
-  ["B-S","Beam · south",xs[0],zs[1]-.14,L-.56,.28],
-  ["B-W","Beam · west",xs[0]-.14,zs[0],.28,W-.56],
-  ["B-E","Beam · east",xs[1]-.14,zs[0],.28,W-.56]
- ] as [string,string,number,number,number,number][]){
-  const depth=p.beamDepths[id]??.30;
-  add(id,name,"beam",x,H-.16-depth,z,dx,depth,dz);
+ for(const span of frame.spans){
+  const start=frame.joints.find(j=>j.id===span.start)!;
+  const end=frame.joints.find(j=>j.id===span.end)!;
+  const startSec=columnAt(p,start.column),endSec=columnAt(p,end.column);
+  const depth=p.beamDepths[span.id]??.3,beamWidth=p.beamWidths[span.id]??.28;
+  const axisX=span.axis==="x";
+  const x=axisX?start.x+startSec.x/2:start.x-beamWidth/2;
+  const z=axisX?start.z-beamWidth/2:start.z+startSec.z/2;
+  const dx=axisX?span.clearLength:beamWidth,dz=axisX?beamWidth:span.clearLength;
+  add(span.id,"Beam · "+span.id.slice(2),"beam",x,H-.16-depth,z,dx,depth,dz);
+  // Axis faces terminate against both column faces; never use fixed spans.
+  if(axisX&&Math.abs(x+dx-(end.x-endSec.x/2))>.002)throw Error("Beam end disconnected: "+span.id);
+  if(!axisX&&Math.abs(z+dz-(end.z-endSec.z/2))>.002)throw Error("Beam end disconnected: "+span.id);
  }
  add("SLAB-ROOF","Roof slab · one bay","slab",0,H-.16,0,L,.16,W);
  const wl=p.windowX,wr=L-wl-p.window,dr=p.doorX,drR=L-dr-p.door;
