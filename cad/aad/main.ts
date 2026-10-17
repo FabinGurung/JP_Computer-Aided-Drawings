@@ -374,6 +374,12 @@ function render(){
  elem<HTMLElement>("totalHeight").textContent=model.height.toFixed(2)+" m";
  elem<HTMLElement>("columnCount").textContent=String(solids.filter(x=>x.kind==="column").length);
  elem<HTMLElement>("beamCount").textContent=String(solids.filter(x=>x.kind==="beam").length);
+ elem<HTMLElement>("roomTotal").textContent=String(model.roomCount);
+ const list=elem<HTMLElement>("roomList");list.replaceChildren();
+ for(const room of deriveRooms(model)){
+  const card=document.createElement("button");card.type="button";card.className="aad-room-card";
+  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(room.id);list.append(card);
+ }
  if(firstRender){fit();firstRender=false;}
 }
 function syncInputs(){
@@ -381,6 +387,19 @@ function syncInputs(){
   elem<HTMLInputElement>(key).value=String(model[key]);
  }
  elem<HTMLInputElement>("bed").checked=model.bed;
+ elem<HTMLSelectElement>("roomCount").value=String(model.roomCount);
+ elem<HTMLInputElement>("roomSplit1").value=String(model.roomSplit1);
+ elem<HTMLInputElement>("roomSplit2").value=String(model.roomSplit2);
+ elem<HTMLInputElement>("interiorDoorZ").value=String(model.interiorDoorZ);
+ elem<HTMLInputElement>("interiorDoorWidth").value=String(model.interiorDoorWidth);
+ for(const [i,id] of ["roomType1","roomType2","roomType3"].entries()){
+  elem<HTMLSelectElement>(id).value=model.roomTypes[i]!;
+  elem<HTMLElement>(id+"Wrap").hidden=i>=model.roomCount;
+ }
+ elem<HTMLElement>("roomSplit1Wrap").hidden=model.roomCount<2;
+ elem<HTMLElement>("roomSplit2Wrap").hidden=model.roomCount<3;
+ elem<HTMLElement>("interiorDoorWrap").hidden=model.roomCount<2;
+ elem<HTMLElement>("innerDoorWidthWrap").hidden=model.roomCount<2;
 }
 function setModel(next:Draft,message:string){
  const verified=validate(next);
@@ -404,6 +423,26 @@ function numericChange(){
   update.bed=elem<HTMLInputElement>("bed").checked;
   setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
+}
+function roomChange(countChanged=false){
+ try{
+  const count=Number(elem<HTMLSelectElement>("roomCount").value);
+  if(count!==1&&count!==2&&count!==3)throw Error("Choose one to three rooms");
+  const preset=countChanged?roomPreset(model,count):{...model,roomCount:count};
+  const next:Draft={...preset,roomCount:count,roomTypes:[...preset.roomTypes] as [RoomKind,RoomKind,RoomKind]};
+  for(const [i,id] of ["roomType1","roomType2","roomType3"].entries()){
+   const kind=elem<HTMLSelectElement>(id).value as RoomKind;
+   if(!ROOM_TEMPLATES[kind])throw Error("Unknown room template");
+   next.roomTypes[i]=kind;
+  }
+  if(!countChanged){
+   next.roomSplit1=Number(elem<HTMLInputElement>("roomSplit1").value);
+   next.roomSplit2=Number(elem<HTMLInputElement>("roomSplit2").value);
+   next.interiorDoorZ=Number(elem<HTMLInputElement>("interiorDoorZ").value);
+   next.interiorDoorWidth=Number(elem<HTMLInputElement>("interiorDoorWidth").value);
+  }
+  setModel(next,"Applied "+count+" reusable room"+(count===1?"":"s")+". Shared walls and door openings regenerated in plan and 3D.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply room layout";}
 }
 function quotedValue(text:string,key:"length"|"width"|"height"):number|undefined{
  const names:Record<typeof key,string>={length:"(?:length|long)",width:"(?:width|wide)",height:"(?:height|high|tall)"};
@@ -439,6 +478,10 @@ elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
+elem<HTMLSelectElement>("roomCount").onchange=()=>roomChange(true);
+for(const id of ["roomType1","roomType2","roomType3","roomSplit1","roomSplit2","interiorDoorZ","interiorDoorWidth"]){
+ elem<HTMLInputElement|HTMLSelectElement>(id).addEventListener("change",()=>roomChange(false));
+}
 elem<HTMLButtonElement>("applyText").onclick=()=>interpret(elem<HTMLTextAreaElement>("instruction").value);
 elem<HTMLButtonElement>("fit").onclick=fit;
 elem<HTMLButtonElement>("clearSelect").onclick=()=>select(null);
@@ -447,7 +490,7 @@ elem<HTMLButtonElement>("download").onclick=()=>{
  const bytes=JSON.stringify(model,null,2)+"\n";
  const blob=new Blob([bytes],{type:"application/json"});
  const url=URL.createObjectURL(blob);
- const link=document.createElement("a");link.href=url;link.download="aad-linked-one-bay-draft.json";
+ const link=document.createElement("a");link.href=url;link.download="aad-linked-multiroom-draft.json";
  document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);
  note.textContent="Saved shared draft model JSON locally (no engineering approval).";
 };
@@ -455,7 +498,7 @@ elem<HTMLInputElement>("upload").onchange=async event=>{
  const input=event.target as HTMLInputElement;
  const file=input.files?.[0];if(!file)return;
  try{
-  if(file.size>20000)throw Error("Draft JSON exceeds 20 KB");
+  if(file.size>40000)throw Error("Draft JSON exceeds 40 KB");
   const next=validate(JSON.parse(await file.text()));
   setModel(next,"Loaded draft. Both views share the imported validated model.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Invalid draft JSON";}
