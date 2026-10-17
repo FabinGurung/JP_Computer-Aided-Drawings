@@ -253,3 +253,10 @@ body:has(#canvas3d) #plan [data-joint]{opacity:.9}
 .cad-limit{font-size:11px;color:#755520;margin-top:11px!important}
 @media(max-width:780px){.cad-capability-strip{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.cad-capability-strip{grid-template-columns:1fr 1fr}.cad-capability-strip>div{padding:11px}}
+
+/* Preserved prototype routes: transparent status, not competing product headers. */
+.cad-legacy-note{display:flex;align-items:center;gap:10px 18px;flex-wrap:wrap;padding:11px 18px;background:#fff7e9;color:#77541d;border-bottom:1px solid #e8d3a8;font:12px/1.5 Inter,system-ui,sans-serif}
+.cad-legacy-note strong{font-size:12px;color:#79511a}
+.cad-legacy-note span{color:#6d5a39}
+.cad-legacy-note a{font-weight:750;color:#245bbb;text-decoration:underline}
+@media(max-width:650px){.cad-legacy-note{padding:9px 12px;gap:3px}}
