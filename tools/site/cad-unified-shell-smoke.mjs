@@ -52,7 +52,7 @@ try{
  await p.locator(".cad-more-group > summary").filter({hasText:"Research & prototypes"}).click();
  if(!(await p.getByRole("link",{name:"Research catalogue"}).isVisible()))throw Error("Nested research links unavailable");
  await p.locator(".cad-more-group > summary").filter({hasText:"Earlier design tools"}).click();
- if(!(await p.getByRole("link",{name:"Previous CAD editor"}).isVisible()))throw Error("Legacy CAD editor path missing");
+ if(!(await p.locator("#cad-global-navigation").getByRole("link",{name:"Previous CAD editor"}).isVisible()))throw Error("Legacy CAD editor path missing");
  if(errors.length)throw Error("Page errors: "+JSON.stringify(errors));
  await p.screenshot({path:"/tmp/cad-daylight-blueprint-home.png",fullPage:true});
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
