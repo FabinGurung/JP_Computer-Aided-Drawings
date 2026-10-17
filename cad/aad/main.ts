@@ -226,7 +226,7 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
  switch(e.kind){
   case "column":{
    const sec=model.columnSizes[e.id]??{x:.28,z:.28};
-   const xKey=e.id.includes("-W")?"west":"east",zKey=e.id.endsWith("N")?"north":"south";
+   const xKey=e.id.endsWith("W")?"west":"east",zKey=e.id.startsWith("C-N")?"north":"south";
    return {hint:"This column belongs to a shared grid intersection. Moving either gridline moves BOTH columns on that line and recomputes connected beam ends and joints; section changes adjust beam bearing faces.",
     fields:[field("columnX","Column X size (m)",sec.x,.20,.50),
             field("columnZ","Column Z size (m)",sec.z,.20,.50),
@@ -292,7 +292,7 @@ function editSelected(reset=false){
   if(e.kind==="column"){
    if(reset)delete next.columnSizes[e.id];
    else next.columnSizes[e.id]={x:values.get("columnX")!,z:values.get("columnZ")!};
-   const xKey=e.id.includes("-W")?"west":"east",zKey=e.id.endsWith("N")?"north":"south";
+   const xKey=e.id.endsWith("W")?"west":"east",zKey=e.id.startsWith("C-N")?"north":"south";
    next.grid[xKey]=reset?.28:values.get("gridX")!;
    next.grid[zKey]=reset?.28:values.get("gridZ")!;
   }else if(e.kind==="beam"){
