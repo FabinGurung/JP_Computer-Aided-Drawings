@@ -43,18 +43,16 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <textarea id="instruction" aria-label="Describe the building change">Make it 8 m long, 6 m wide and 3 m high.</textarea>
 <div class="actions"><button type="button" class="primary" id="applyText">Apply instruction</button><button type="button" id="reset">Reset</button></div>
 <div id="message" class="status" role="status" aria-live="polite">Ready. Try changing a dimension.</div>
-<h3>Quick dimensions</h3>
-<div class="controls">
+<details class="aad-fold" open id="quickDimensions"><summary>Quick dimensions</summary><div class="controls">
 <label for="length">Length (m)<input id="length" type="number" min="4" max="18" step=".1" value="8"></label>
 <label for="width">Width (m)<input id="width" type="number" min="4" max="14" step=".1" value="6"></label>
 <label for="height">Height (m)<input id="height" type="number" min="2.4" max="5" step=".1" value="3"></label>
 <label for="door">Door width (m)<input id="door" type="number" min=".75" max="1.6" step=".05" value=".95"></label>
 <label for="window">Window width (m)<input id="window" type="number" min=".8" max="2.4" step=".05" value="1.4"></label>
-</div>
-<details class="aad-fold" open><summary>Display options</summary><div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="dimensions" checked> Show plan dimensions</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div></details>
-<h3>Save or open design</h3>
-<div class="actions"><button type="button" id="download">Save draft</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Open draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>
-<p class="sub">This is a synthetic demonstration. No authenticated AI service, private Narayani drawing, or approved structural design is connected.</p>
+</div></details>
+<details class="aad-fold" id="displayOptions"><summary>Display options</summary><div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="dimensions" checked> Show plan dimensions</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div></details>
+<details class="aad-fold" id="saveOptions"><summary>Save or open design</summary><div class="actions"><button type="button" id="download">Save draft</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Open draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>
+<p class="sub">Synthetic demonstration; no authenticated private drawings or construction approval.</p></details>
 </section>
 <section class="panel viewer">
 <div class="viewerbar"><strong>2D Plan and 3D Model</strong><div class="actions"><button id="fit" type="button">Center view</button><button type="button" id="clearSelect">Deselect</button></div></div>
@@ -67,7 +65,7 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 </section>
 <section class="panel pad right">
 <h2>Building components</h2>
-<div><p class="sub" style="margin-bottom:12px">Choose a component here or in either view. Its ID remains linked when you change a measurement.</p><div id="tree"></div></div>
+<details class="aad-fold" open id="buildingComponents"><summary>Component explorer</summary><p class="sub">Select an element here or in either view.</p><div id="tree"></div></details>
 <div><h3>Selected component</h3><p class="sub">Select a column, beam, door, window or bed in either drawing.</p><div id="inspect">Click a component in either view.</div>
 <section id="componentEditor" class="aad-part-editor" aria-label="Edit selected component" hidden>
 <h3>Adjust selected component</h3>
@@ -80,15 +78,14 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 </div>
 <div class="actions"><button id="applyPart" type="button" class="primary">Apply component edit</button><button id="resetPart" type="button">Reset component</button></div>
 <p id="partMessage" class="aad-part-message" role="status" aria-live="polite"></p>
-</section><h3>Connected quantities · demo geometry</h3>
+</section><details class="aad-fold" id="modelFacts"><summary>Draft quantities and geometry</summary>
 <div class="stat"><span>Column elements</span><strong id="columnCount">4</strong></div>
 <div class="stat"><span>Beam elements</span><strong id="beamCount">4</strong></div>
 <div class="stat"><span>Connected frame joints</span><strong>4</strong></div>
 <div class="stat"><span>Roof slabs</span><strong>1</strong></div>
 <div class="stat"><span>Plan footprint</span><strong id="area">48.0 m²</strong></div>
 <div class="stat"><span>Overall height</span><strong id="totalHeight">3.0 m</strong></div>
-<h3>Engineering boundary</h3>
-<div class="note">Prototype layout only. Column/beam sizes, wall thickness, openings and bed positions are illustrative defaults — not extracted from a survey, permit drawing or structural design. No reinforcement, load calculation, IFC release, validated QTO or construction approval.</div></div>
+</details><details class="aad-fold" id="engineeringBoundary"><summary>Engineering limitations</summary><div class="note">Prototype layout only. Column/beam sizes, wall thickness, openings and bed positions are illustrative defaults — not extracted from a survey, permit drawing or structural design. No reinforcement, load calculation, IFC release, validated QTO or construction approval.</div></details></div>
 </section></div>
 </main>
 <footer>AI Design Studio · Proof of shared semantic model and synchronized 2D/3D derivatives · CAD/AAD owns model rules; A7 is a read-only directory · Engineering approval: HOLD</footer>
