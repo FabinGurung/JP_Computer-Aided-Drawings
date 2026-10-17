@@ -35,7 +35,7 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 
 <main>
 <div class="aad-breadcrumb"><a href="../../">Home</a><span aria-hidden="true">›</span><strong>AI Design Studio</strong><span class="aad-draft">Illustrative example · not for construction</span></div>
-<div class="intro"><div><h1>One model. Every view.</h1><p class="lede">Describe a room, adjust its size, and explore the same building in a 2D plan and an interactive 3D model. Select any component to see how the views connect.</p></div><div class="summary"><span>ONE STOREY</span><span>4 COLUMNS</span><span>4 BEAMS</span><span>1 ROOF SLAB</span></div></div>
+<div class="intro"><div><h1>One model. Every view.</h1><p class="lede">Choose up to three connected rooms, adjust their sizes, and explore the same building in a 2D plan and an interactive 3D model. Select any component to see how the views connect.</p></div><div class="summary"><span>ONE STOREY</span><span>4 COLUMNS</span><span>4 BEAMS</span><span>1 ROOF SLAB</span></div></div>
 <div class="aad-steps" aria-label="How to use the studio"><span><b>1</b> Describe</span><span><b>2</b> Adjust</span><span><b>3</b> Explore</span><span><b>4</b> Save</span></div>
 <div class="workspace">
 <section class="panel pad left">
@@ -50,6 +50,28 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <label for="door">Door width (m)<input id="door" type="number" min=".75" max="1.6" step=".05" value=".95"></label>
 <label for="window">Window width (m)<input id="window" type="number" min=".8" max="2.4" step=".05" value="1.4"></label>
 </div></details>
+<details class="aad-fold" id="roomsOptions" open>
+<summary>Rooms · connected walls</summary>
+<p class="sub">Reuse bedroom, living and study components. Shared partitions and interior door openings stay connected in 2D and 3D.</p>
+<div class="controls aad-room-controls">
+<label for="roomCount">Number of rooms
+<select id="roomCount"><option value="1">1 · open room</option><option value="2">2 · connected rooms</option><option value="3">3 · connected rooms</option></select></label>
+<label id="roomType1Wrap">Room 1 template
+<select id="roomType1"><option value="bedroom">Bedroom</option><option value="living">Living</option><option value="study">Study</option></select></label>
+<label id="roomType2Wrap" hidden>Room 2 template
+<select id="roomType2"><option value="living" selected>Living</option><option value="bedroom">Bedroom</option><option value="study">Study</option></select></label>
+<label id="roomType3Wrap" hidden>Room 3 template
+<select id="roomType3"><option value="study" selected>Study</option><option value="living">Living</option><option value="bedroom">Bedroom</option></select></label>
+<label id="roomSplit1Wrap" hidden>First shared wall from west (m)
+<input id="roomSplit1" type="number" min="2" max="16" step=".05" value="4.4"></label>
+<label id="roomSplit2Wrap" hidden>Second shared wall from west (m)
+<input id="roomSplit2" type="number" min="4" max="17" step=".05" value="6.24"></label>
+<label id="interiorDoorWrap" hidden>Interior door from north (m)
+<input id="interiorDoorZ" type="number" min=".65" max="11" step=".05" value="2.55"></label>
+<label id="innerDoorWidthWrap" hidden>Interior door opening width (m)
+<input id="interiorDoorWidth" type="number" min=".75" max="1.3" step=".05" value=".9"></label>
+</div>
+</details>
 <details class="aad-fold" id="displayOptions"><summary>Display options</summary><div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="dimensions" checked> Show plan dimensions</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div></details>
 <details class="aad-fold" id="saveOptions"><summary>Save or open design</summary><div class="actions"><button type="button" id="download">Save draft</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Open draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>
 <p class="sub">Synthetic demonstration; no authenticated private drawings or construction approval.</p></details>
@@ -64,7 +86,7 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <div class="under"><span class="mini"><i class="swatch" style="background:#5fc6b0"></i>Column</span><span class="mini"><i class="swatch" style="background:#d0a365"></i>Beam</span><span class="mini"><i class="swatch" style="background:#7e9fb8"></i>Wall</span><span class="mini"><i class="swatch" style="background:#70b9eb"></i>Window / door</span> <span class="mini"><i class="swatch" style="background:#ea664f"></i>Frame joints</span> · Both views come from one in-memory semantic model.</div>
 </section>
 <section class="panel pad right">
-<h2>Building components</h2>
+<h2>Building components</h2><div class="aad-room-summary"><strong>Rooms</strong> <span id="roomTotal">1</span><div id="roomList"></div></div>
 <details class="aad-fold" open id="buildingComponents"><summary>Component explorer</summary><p class="sub">Select an element here or in either view.</p><div id="tree"></div></details>
 <div><h3>Selected component</h3><p class="sub">Select a column, beam, door, window or bed in either drawing.</p><div id="inspect">Click a component in either view.</div>
 <section id="componentEditor" class="aad-part-editor" aria-label="Edit selected component" hidden>
