@@ -75,6 +75,39 @@ try{
    if(!(await page.locator("#inspect").innerText()).includes("WINDOW-N"))throw Error("Window not linked");
    await page.locator("#reset").click();
    if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Reset did not restore model");
+   // Shared multi-room model: one/two/three room templates, connected
+   // partitions with a physical interior door gap in the SAME 2D/3D solids.
+   await page.locator("#roomCount").selectOption("2");
+   await page.locator('#plan rect[data-part="ROOM-02"]').waitFor();
+   if(await page.locator('#plan rect[data-part="PART-01-N"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="PART-01-S"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="INT-DOOR-01"]').count()!==1)
+     throw Error("Two rooms did not create a shared hosted interior door wall");
+   if(await page.locator('#plan text[data-room-label]').count()!==2)
+     throw Error("Two-room semantic labels missing");
+   const partBefore=Number(await page.locator('#plan rect[data-part="PART-01-N"]').getAttribute("x"));
+   await page.locator("#roomSplit1").fill("4.5");await page.locator("#roomSplit1").press("Tab");
+   const partAfter=Number(await page.locator('#plan rect[data-part="PART-01-N"]').getAttribute("x"));
+   const insideDoor=Number(await page.locator('#plan rect[data-part="INT-DOOR-01"]').getAttribute("x"));
+   if(!(partAfter>partBefore+8 && Math.abs(insideDoor-partAfter)<10))
+     throw Error("Shared partition and interior door did not move together");
+   await page.locator("#roomCount").selectOption("3");
+   await page.locator('#plan rect[data-part="PART-02-N"]').waitFor();
+   if(await page.locator('#plan rect[data-part="ROOM-03"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="INT-DOOR-02"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="FURN-ROOM-03-DESK"]').count()!==1)
+     throw Error("Three-room template did not generate shared walls and reusable desk");
+   await page.locator("#roomType2").selectOption("study");
+   if(await page.locator('#plan rect[data-part="FURN-ROOM-02-DESK"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="FURN-ROOM-02-SOFA"]').count()!==0)
+     throw Error("Changing room template did not rebuild furnishing");
+   await page.locator('#plan rect[data-part="ROOM-02"]').click();
+   if(!(await page.locator("#inspect").innerText()).includes("ROOM-02"))throw Error("Room zone not selectable");
+   await page.locator("#roomCount").selectOption("1");
+   if(await page.locator('#plan rect[data-part="PART-01-N"]').count()!==0)
+     throw Error("Removing a room retained orphan shared-wall geometry");
+   if(await page.locator('#plan text[data-room-label]').count()!==1)
+     throw Error("Returning to one room lost the semantic room label");
    // Editable components are not independent overlays: each is serialized
    // in one draft and drives the SAME SVG plan and Three.js scene.
    await page.locator('#plan rect[data-part="WINDOW-N"]').click();
@@ -155,7 +188,7 @@ try{
    const downloaded=await saved;
    const fsDraft=await import("node:fs/promises");
    const serialized=JSON.parse(await fsDraft.readFile(await downloaded.path(),"utf8"));
-   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.3"||!serialized.columnSizes["C-NW"]||
+   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.4"||!serialized.columnSizes["C-NW"]||
       serialized.beamDepths["B-N"]!==.46||serialized.beamWidths["B-N"]!==.34||
       serialized.grid.west!==.55||serialized.grid.north!==.45||
       serialized.windowX!==2.5||serialized.wallThickness!==.2||serialized.bedX!==2.1)
@@ -166,9 +199,17 @@ try{
    if(!(await page.locator("#message").innerText()).includes("Loaded draft") ||
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
       throw Error("Validated draft reload lost the linked bed geometry");
+   // v0.3 frame drafts upgrade to the new room schema without losing
+   // their component sections, doors or shared frame connections.
+   const legacy3={...serialized,schema:"jp-cad://linked-one-bay-demo/0.3"};
+   for(const key of ["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth"])delete legacy3[key];
+   await readback.setInputFiles({name:"legacy-v03.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy3))});
+   await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
+   if(await page.locator("#roomCount").inputValue()!=="1")throw Error("v0.3 migration lost single-room default");
    // Older v0.2 draft is admitted with safe default aligned grid and beam widths.
    const legacy2={...serialized,schema:"jp-cad://linked-one-bay-demo/0.2"};
    delete legacy2.grid;delete legacy2.beamWidths;
+   for(const key of ["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth"])delete legacy2[key];
    await readback.setInputFiles({name:"legacy-v02.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy2))});
    await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
    const legacyGridX=Number(await page.locator('#plan circle[data-joint="J-NW"]').getAttribute("cx"));
