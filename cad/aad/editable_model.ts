@@ -98,6 +98,20 @@ export function validateDraft(candidate:unknown):Draft{
   if(!BEAM_IDS.includes(id as typeof BEAM_IDS[number]))throw Error("Unknown beam width ID "+id);
   beamWidths[id]=numberAt(val,id+" beam width",.18,.50);
  }
+ // Inset lines must leave room for the entire section inside the draft
+ // footprint, including the adjusted beam width at perimeter lines.
+ for(const id of COLUMN_IDS){
+  const sec=columnSizes[id]??{x:.28,z:.28};
+  const xInset=id.endsWith("W")?grid.west:grid.east;
+  const zInset=id.startsWith("C-N")?grid.north:grid.south;
+  if(sec.x/2>xInset+1e-6||sec.z/2>zInset+1e-6)
+   throw Error("Column section extends outside the modeled room: "+id);
+ }
+ for(const id of BEAM_IDS){
+  const width=beamWidths[id]??.28;
+  const inset=id==="B-N"?grid.north:id==="B-S"?grid.south:id==="B-W"?grid.west:grid.east;
+  if(width/2>inset+1e-6)throw Error("Beam width exceeds perimeter grid clearance: "+id);
+ }
  return {schema:SCHEMA,length:L,width:W,height:H,door,window,bed:raw.bed,
   doorX,windowX,wallThickness,bedX,bedZ,bedLength,bedWidth,columnSizes,beamDepths,beamWidths,grid};
 }
