@@ -18,7 +18,6 @@ export function deriveRooms(p:Draft):RoomView[]{
  const borders=[0,...roomBoundaryPositions(p),p.length];
  return Array.from({length:p.roomCount},(_,i)=>{
   const left=borders[i]!,right=borders[i+1]!;
-  const side=(i===0?p.wallThickness/2:0)+(i===p.roomCount-1?p.wallThickness/2:0);
   const width=right-left-(i===0?p.wallThickness/2:p.wallThickness/2)-(i===p.roomCount-1?p.wallThickness/2:p.wallThickness/2);
   const kind=p.roomTypes[i]!,name=ROOM_TEMPLATES[kind].name;
   return {id:"ROOM-"+String(i+1).padStart(2,"0"),kind,name,x:round(left+p.wallThickness/2),z:round(p.wallThickness/2),
