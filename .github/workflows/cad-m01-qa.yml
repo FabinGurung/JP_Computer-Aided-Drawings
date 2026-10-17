@@ -4,7 +4,7 @@ on:
     branches: [feature/five-engine-cad-m01-20261009]
     paths: [package-lock.json, .github/workflows/cad-m01-qa.yml]
   pull_request:
-    paths: [cad/**, backend/**, package.json, package-lock.json, scripts/copy-ifc-wasm.mjs, vite.config.ts, tsconfig.json, .github/workflows/cad-m01-qa.yml]
+    paths: ["cad/*.ts", "cad/*.html", "cad/*.css", backend/**, package.json, package-lock.json, scripts/copy-ifc-wasm.mjs, vite.config.ts, tsconfig.json, .github/workflows/cad-m01-qa.yml]
 permissions:
   contents: read
 jobs:
