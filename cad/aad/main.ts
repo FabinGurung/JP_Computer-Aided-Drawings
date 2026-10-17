@@ -6,6 +6,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
+import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -77,6 +78,7 @@ const group=new THREE.Group();scene.add(group);
 const camera=new THREE.PerspectiveCamera(48,1,.04,400);
 
 const objects=new Map<string,THREE.Mesh>();
+const jointVisuals=new Map<string,THREE.Mesh>();
 const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9};
 let firstRender=true;
 
@@ -88,7 +90,7 @@ function dispose(){
    if(Array.isArray(mat))mat.forEach(m=>m.dispose());else mat.dispose();
   }
  });
- group.clear();objects.clear();
+ group.clear();objects.clear();jointVisuals.clear();
 }
 function threeView(){
  dispose();
@@ -115,6 +117,14 @@ function threeView(){
    mesh.add(pillow);
   }
   group.add(mesh);objects.set(e.id,mesh);
+ }
+ // The four graph junctions are visual markers, not fabricated joint details.
+ // Not in the pickable objects map: selection stays owned by columns/beams.
+ for(const joint of deriveFrameGraph(model).joints){
+  const dot=new THREE.Mesh(new THREE.SphereGeometry(.075,12,10),
+   new THREE.MeshBasicMaterial({color:0xef6b57,transparent:true,opacity:.92,depthTest:false}));
+  dot.position.set(joint.x,joint.y,joint.z);dot.renderOrder=5;
+  dot.name=joint.id;group.add(dot);jointVisuals.set(joint.id,dot);
  }
  highlight();
 }
@@ -174,6 +184,13 @@ function planView(){
  const side=textNode(left-41,top+model.width*scale/2,model.width.toFixed(2)+" m",13);
  side.setAttribute("transform","rotate(-90 "+(left-41)+" "+(top+model.width*scale/2)+")");svg.append(side);
  }
+ // Joint symbols project the exact same graph points shown by the 3D markers.
+ for(const joint of deriveFrameGraph(model).joints){
+  const circle=svgNode("circle",{cx:left+joint.x*scale,cy:top+joint.z*scale,
+   r:4.5,fill:"#ea664f",stroke:"#fff","stroke-width":1.1,
+   "pointer-events":"none","data-joint":joint.id});
+  svg.append(circle);
+ }
  svg.append(textNode(300,29,"LINKED PLAN · ONE-BAY DEMONSTRATION",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
@@ -193,8 +210,13 @@ function highlight(){
   mat.emissive.setHex(id===selected?0x70401d:0x000000);
   mat.emissiveIntensity=id===selected?.8:0;
  }
+ const activeJoints=selected?new Set(incidentJoints(deriveFrameGraph(model),selected).map(j=>j.id)):new Set<string>();
+ for(const [id,mesh] of jointVisuals){
+  const mat=mesh.material as THREE.MeshBasicMaterial;
+  mat.color.setHex(activeJoints.has(id)?0x2563eb:0xef6b57);
+ }
 }
-type EditableKey="columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
+type EditableKey="gridX"|"gridZ"|"beamWidth"|"columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
 type PartField={key:EditableKey;label:string;value:number;min:number;max:number};
 const partApply=elem<HTMLButtonElement>("applyPart");
 const partReset=elem<HTMLButtonElement>("resetPart");
@@ -204,12 +226,17 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
  switch(e.kind){
   case "column":{
    const sec=model.columnSizes[e.id]??{x:.28,z:.28};
-   return {hint:"Change the selected column section around its fixed center. The frame alignment remains illustrative, not structurally verified.",
-    fields:[field("columnX","Section X (m)",sec.x,.20,.50),field("columnZ","Section Z (m)",sec.z,.20,.50)]};
+   const xKey=e.id.includes("-W")?"west":"east",zKey=e.id.endsWith("N")?"north":"south";
+   return {hint:"This column belongs to a shared grid intersection. Moving either gridline moves BOTH columns on that line and recomputes connected beam ends and joints; section changes adjust beam bearing faces.",
+    fields:[field("columnX","Column X size (m)",sec.x,.20,.50),
+            field("columnZ","Column Z size (m)",sec.z,.20,.50),
+            field("gridX",xKey+" grid inset (m)",model.grid[xKey],.20,1.2),
+            field("gridZ",zKey+" grid inset (m)",model.grid[zKey],.20,1.2)]};
   }
   case "beam":
-   return {hint:"Change only this beam's depth. The top face remains aligned with the roof; geometry is preliminary.",
-    fields:[field("beamDepth","Beam depth (m)",model.beamDepths[e.id]??.30,.20,.65)]};
+   return {hint:"Beam ends automatically meet the connected column faces. Change this beam's depth or width; both graph joints and the plan remain linked.",
+    fields:[field("beamDepth","Beam depth (m)",model.beamDepths[e.id]??.30,.20,.65),
+            field("beamWidth","Beam width (m)",model.beamWidths[e.id]??.28,.18,.50)]};
   case "window":
    return {hint:"Move or widen the hosted north window. Both wall jambs, sill and head regenerate from the same opening.",
     fields:[field("windowX","From west end (m)",model.windowX,.35,L-model.window-.35),
@@ -261,13 +288,16 @@ function editSelected(reset=false){
    if(!raw.trim())throw Error("Enter a measurement for "+field.label);
    values.set(field.key,Number(raw));
   }
-  const next:Draft={...model,columnSizes:{...model.columnSizes},beamDepths:{...model.beamDepths}};
+  const next:Draft={...model,grid:{...model.grid},columnSizes:{...model.columnSizes},beamDepths:{...model.beamDepths},beamWidths:{...model.beamWidths}};
   if(e.kind==="column"){
    if(reset)delete next.columnSizes[e.id];
    else next.columnSizes[e.id]={x:values.get("columnX")!,z:values.get("columnZ")!};
+   const xKey=e.id.includes("-W")?"west":"east",zKey=e.id.endsWith("N")?"north":"south";
+   next.grid[xKey]=reset?.28:values.get("gridX")!;
+   next.grid[zKey]=reset?.28:values.get("gridZ")!;
   }else if(e.kind==="beam"){
-   if(reset)delete next.beamDepths[e.id];
-   else next.beamDepths[e.id]=values.get("beamDepth")!;
+   if(reset){delete next.beamDepths[e.id];delete next.beamWidths[e.id];}
+   else{next.beamDepths[e.id]=values.get("beamDepth")!;next.beamWidths[e.id]=values.get("beamWidth")!;}
   }else if(e.kind==="window"){
    next.windowX=reset?Number(((next.length-next.window)/2).toFixed(3)):values.get("windowX")!;
    if(!reset)next.window=values.get("windowWidth")!;
@@ -302,6 +332,12 @@ function select(id:string|null){
  const title=document.createElement("strong");title.textContent=chosen.name;info.append(title);
  for(const value of ["ID: "+chosen.id,"Type: "+chosen.kind,"Footprint: "+chosen.dx.toFixed(2)+" × "+chosen.dz.toFixed(2)+" m","Vertical: "+chosen.dy.toFixed(2)+" m","Origin: ("+chosen.x+", "+chosen.y+", "+chosen.z+") m"]){
   const line=document.createElement("div");line.textContent=value;info.append(line);
+ }
+ const joints=incidentJoints(deriveFrameGraph(model),chosen.id);
+ if(joints.length){
+  const line=document.createElement("div");line.className="aad-connection-note";
+  line.textContent="Connected graph: "+joints.map(j=>j.id+" ↔ "+j.beams.join(", ")).join(" · ");
+  info.append(line);
  }
  renderComponentEditor();
 }
