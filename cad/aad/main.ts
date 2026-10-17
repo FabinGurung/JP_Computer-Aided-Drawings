@@ -7,6 +7,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
+import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -79,7 +80,7 @@ const camera=new THREE.PerspectiveCamera(48,1,.04,400);
 
 const objects=new Map<string,THREE.Mesh>();
 const jointVisuals=new Map<string,THREE.Mesh>();
-const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9};
+const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9,room:0xc8e6f3};
 let firstRender=true;
 
 function dispose(){
@@ -98,7 +99,7 @@ function threeView(){
   const glass=e.kind==="window";
   const material=new THREE.MeshStandardMaterial({
    color:palette[e.kind],roughness:glass?.12:.7,
-   metalness:glass?.1:0,transparent:glass,opacity:glass?.48:1,
+   metalness:glass?.1:0,transparent:glass||e.kind==="room",opacity:glass?.48:e.kind==="room"?.27:1,
    side:THREE.DoubleSide
   });
   const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
@@ -154,7 +155,7 @@ function planView(){
  for(let x=0;x<=600;x+=25)svg.append(svgNode("path",{d:"M"+x+" 0V620",stroke:"#dfe8e6","stroke-width":.55}));
  for(let y=0;y<=620;y+=25)svg.append(svgNode("path",{d:"M0 "+y+"H600",stroke:"#dfe8e6","stroke-width":.55}));
  svg.append(svgNode("rect",{x:left,y:top,width:model.length*scale,height:model.width*scale,fill:"#fdfdf9",stroke:"#82939b","stroke-width":2}));
- const order:Category[]=["wall","beam","door","window","furniture","column"];
+ const order:Category[]=["room","wall","beam","door","window","furniture","column"];
  for(const kind of order){
   for(const e of solids.filter(v=>v.kind===kind)){
    // Vertical plan traces of wall heads and jambs should collapse to their
@@ -164,7 +165,7 @@ function planView(){
    const item=svgNode("rect",{
     x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale),
     fill:kind==="beam"?"none":"#"+palette[kind].toString(16).padStart(6,"0"),
-    "fill-opacity":kind==="wall"?.78:1,
+    "fill-opacity":kind==="wall"?.78:kind==="room"?.20:1,
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
     "stroke-width":selectedNow?4:kind==="beam"?1.6:kind==="furniture"?1.2:.6,
     "stroke-dasharray":kind==="beam"?"5 4":"none",
@@ -191,7 +192,13 @@ function planView(){
    "pointer-events":"none","data-joint":joint.id});
   svg.append(circle);
  }
- svg.append(textNode(300,29,"LINKED PLAN · ONE-BAY DEMONSTRATION",15));
+ for(const room of deriveRooms(model)){
+  const xc=left+(room.x+room.width/2)*scale,yc=top+(room.z+room.depth/2)*scale;
+  const label=textNode(xc,yc,room.name+" · "+room.area.toFixed(1)+" m²",Math.max(9,Math.min(13,scale*.24)));
+  label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
+  svg.append(label);
+ }
+ svg.append(textNode(300,29,"LINKED PLAN · SHARED ROOM MODEL",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
  if(selected){
@@ -216,7 +223,7 @@ function highlight(){
   mat.color.setHex(activeJoints.has(id)?0x2563eb:0xef6b57);
  }
 }
-type EditableKey="gridX"|"gridZ"|"beamWidth"|"columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
+type EditableKey="interiorDoorZ"|"interiorDoorWidth"|"partitionX"|"gridX"|"gridZ"|"beamWidth"|"columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
 type PartField={key:EditableKey;label:string;value:number;min:number;max:number};
 const partApply=elem<HTMLButtonElement>("applyPart");
 const partReset=elem<HTMLButtonElement>("resetPart");
@@ -242,10 +249,20 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
     fields:[field("windowX","From west end (m)",model.windowX,.35,L-model.window-.35),
     field("windowWidth","Opening width (m)",model.window,.8,Math.min(2.4,L-model.windowX-.35))]};
   case "door":
+   if(e.id.startsWith("INT-DOOR-")){
+    return {hint:"This opening is hosted by the shared partition. Both the door and its wall segments regenerate together.",
+     fields:[field("interiorDoorZ","Door from north (m)",model.interiorDoorZ,.55,model.width-model.interiorDoorWidth-.55),
+             field("interiorDoorWidth","Interior door width (m)",model.interiorDoorWidth,.75,1.3)]};
+   }
    return {hint:"Move or widen the south doorway. The wall jambs and overhead segment regenerate with the opening.",
     fields:[field("doorX","From west end (m)",model.doorX,.35,L-model.door-.35),
     field("doorWidth","Opening width (m)",model.door,.75,Math.min(1.6,L-model.doorX-.35))]};
   case "wall":
+   if(e.id.startsWith("PART-")){
+    const second=e.id.startsWith("PART-02");
+    return {hint:"This is one of the linked partition wall segments. Move the full shared wall; both neighboring rooms and its doorway update.",
+     fields:[field("partitionX","Shared wall from west (m)",second?model.roomSplit2:model.roomSplit1,2,model.length-1.75)]};
+   }
    return {hint:"Perimeter walls are a connected group. This editor changes their common thickness, not a detached wall segment.",
     fields:[field("wallThickness","Linked wall thickness (m)",model.wallThickness,.10,.28)]};
   case "furniture":{
@@ -256,7 +273,7 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
      field("bedLength","Bed length (m)",model.bedLength,.8,Math.min(2.8,L-model.bedX-pad)),
      field("bedWidth","Bed width (m)",model.bedWidth,.65,Math.min(2.2,W-model.bedZ-pad))]};
   }
-  default:return {hint:"Roof slab sizing follows the overall room model. Choose a column, beam, wall, opening or bed to adjust it.",fields:[]};
+  default:return {hint:"This room is a reusable semantic component. Choose its template and partition measurements in the Rooms panel to regenerate both views.",fields:[]};
  }
 }
 function renderComponentEditor(){
@@ -301,9 +318,16 @@ function editSelected(reset=false){
   }else if(e.kind==="window"){
    next.windowX=reset?Number(((next.length-next.window)/2).toFixed(3)):values.get("windowX")!;
    if(!reset)next.window=values.get("windowWidth")!;
+  }else if(e.kind==="door"&&e.id.startsWith("INT-DOOR-")){
+   next.interiorDoorZ=reset?Number(((next.width-next.interiorDoorWidth)/2).toFixed(3)):values.get("interiorDoorZ")!;
+   if(!reset)next.interiorDoorWidth=values.get("interiorDoorWidth")!;
   }else if(e.kind==="door"){
    next.doorX=reset?Number(((next.length-next.door)/2).toFixed(3)):values.get("doorX")!;
    if(!reset)next.door=values.get("doorWidth")!;
+  }else if(e.kind==="wall"&&e.id.startsWith("PART-")){
+   const second=e.id.startsWith("PART-02");
+   if(second)next.roomSplit2=reset?Number((next.length*.755).toFixed(3)):values.get("partitionX")!;
+   else next.roomSplit1=reset?Number((next.length*.5).toFixed(3)):values.get("partitionX")!;
   }else if(e.kind==="wall"){
    next.wallThickness=reset?.16:values.get("wallThickness")!;
   }else if(e.kind==="furniture"){
@@ -344,6 +368,7 @@ function select(id:string|null){
 function drawTree(){
  tree.replaceChildren();
  const groups:{label:string;category:Category}[]=[
+  {label:"Rooms",category:"room"},
   {label:"Columns (4)",category:"column"},{label:"Beams (4)",category:"beam"},
   {label:"Roof slab (1)",category:"slab"},{label:"Walls and infill",category:"wall"},
   {label:"Door",category:"door"},{label:"Window",category:"window"},
@@ -366,6 +391,12 @@ function render(){
  elem<HTMLElement>("totalHeight").textContent=model.height.toFixed(2)+" m";
  elem<HTMLElement>("columnCount").textContent=String(solids.filter(x=>x.kind==="column").length);
  elem<HTMLElement>("beamCount").textContent=String(solids.filter(x=>x.kind==="beam").length);
+ elem<HTMLElement>("roomTotal").textContent=String(model.roomCount);
+ const list=elem<HTMLElement>("roomList");list.replaceChildren();
+ for(const room of deriveRooms(model)){
+  const card=document.createElement("button");card.type="button";card.className="aad-room-card";
+  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(room.id);list.append(card);
+ }
  if(firstRender){fit();firstRender=false;}
 }
 function syncInputs(){
@@ -373,6 +404,19 @@ function syncInputs(){
   elem<HTMLInputElement>(key).value=String(model[key]);
  }
  elem<HTMLInputElement>("bed").checked=model.bed;
+ elem<HTMLSelectElement>("roomCount").value=String(model.roomCount);
+ elem<HTMLInputElement>("roomSplit1").value=String(model.roomSplit1);
+ elem<HTMLInputElement>("roomSplit2").value=String(model.roomSplit2);
+ elem<HTMLInputElement>("interiorDoorZ").value=String(model.interiorDoorZ);
+ elem<HTMLInputElement>("interiorDoorWidth").value=String(model.interiorDoorWidth);
+ for(const [i,id] of ["roomType1","roomType2","roomType3"].entries()){
+  elem<HTMLSelectElement>(id).value=model.roomTypes[i]!;
+  elem<HTMLElement>(id+"Wrap").hidden=i>=model.roomCount;
+ }
+ elem<HTMLElement>("roomSplit1Wrap").hidden=model.roomCount<2;
+ elem<HTMLElement>("roomSplit2Wrap").hidden=model.roomCount<3;
+ elem<HTMLElement>("interiorDoorWrap").hidden=model.roomCount<2;
+ elem<HTMLElement>("innerDoorWidthWrap").hidden=model.roomCount<2;
 }
 function setModel(next:Draft,message:string){
  const verified=validate(next);
@@ -396,6 +440,26 @@ function numericChange(){
   update.bed=elem<HTMLInputElement>("bed").checked;
   setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
+}
+function roomChange(countChanged=false){
+ try{
+  const count=Number(elem<HTMLSelectElement>("roomCount").value);
+  if(count!==1&&count!==2&&count!==3)throw Error("Choose one to three rooms");
+  const preset=countChanged?roomPreset(model,count):{...model,roomCount:count};
+  const next:Draft={...preset,roomCount:count,roomTypes:[...preset.roomTypes] as [RoomKind,RoomKind,RoomKind]};
+  for(const [i,id] of ["roomType1","roomType2","roomType3"].entries()){
+   const kind=elem<HTMLSelectElement>(id).value as RoomKind;
+   if(!ROOM_TEMPLATES[kind])throw Error("Unknown room template");
+   next.roomTypes[i]=kind;
+  }
+  if(!countChanged){
+   next.roomSplit1=Number(elem<HTMLInputElement>("roomSplit1").value);
+   next.roomSplit2=Number(elem<HTMLInputElement>("roomSplit2").value);
+   next.interiorDoorZ=Number(elem<HTMLInputElement>("interiorDoorZ").value);
+   next.interiorDoorWidth=Number(elem<HTMLInputElement>("interiorDoorWidth").value);
+  }
+  setModel(next,"Applied "+count+" reusable room"+(count===1?"":"s")+". Shared walls and door openings regenerated in plan and 3D.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply room layout";}
 }
 function quotedValue(text:string,key:"length"|"width"|"height"):number|undefined{
  const names:Record<typeof key,string>={length:"(?:length|long)",width:"(?:width|wide)",height:"(?:height|high|tall)"};
@@ -431,15 +495,19 @@ elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
+elem<HTMLSelectElement>("roomCount").onchange=()=>roomChange(true);
+for(const id of ["roomType1","roomType2","roomType3","roomSplit1","roomSplit2","interiorDoorZ","interiorDoorWidth"]){
+ elem<HTMLInputElement|HTMLSelectElement>(id).addEventListener("change",()=>roomChange(false));
+}
 elem<HTMLButtonElement>("applyText").onclick=()=>interpret(elem<HTMLTextAreaElement>("instruction").value);
 elem<HTMLButtonElement>("fit").onclick=fit;
 elem<HTMLButtonElement>("clearSelect").onclick=()=>select(null);
-elem<HTMLButtonElement>("reset").onclick=()=>{firstRender=true;setModel({...defaults},"Reset to synthetic one-bay starter model.");};
+elem<HTMLButtonElement>("reset").onclick=()=>{firstRender=true;setModel({...defaults},"Reset to synthetic one-room starter model.");};
 elem<HTMLButtonElement>("download").onclick=()=>{
  const bytes=JSON.stringify(model,null,2)+"\n";
  const blob=new Blob([bytes],{type:"application/json"});
  const url=URL.createObjectURL(blob);
- const link=document.createElement("a");link.href=url;link.download="aad-linked-one-bay-draft.json";
+ const link=document.createElement("a");link.href=url;link.download="aad-linked-multiroom-draft.json";
  document.body.append(link);link.click();link.remove();URL.revokeObjectURL(url);
  note.textContent="Saved shared draft model JSON locally (no engineering approval).";
 };
@@ -447,7 +515,7 @@ elem<HTMLInputElement>("upload").onchange=async event=>{
  const input=event.target as HTMLInputElement;
  const file=input.files?.[0];if(!file)return;
  try{
-  if(file.size>20000)throw Error("Draft JSON exceeds 20 KB");
+  if(file.size>40000)throw Error("Draft JSON exceeds 40 KB");
   const next=validate(JSON.parse(await file.text()));
   setModel(next,"Loaded draft. Both views share the imported validated model.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Invalid draft JSON";}

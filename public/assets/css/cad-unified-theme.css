@@ -290,3 +290,17 @@ body:has(#canvas3d) .note{background:#fff7ec}
 .cad-more-group-links>a{padding:8px 10px;border-radius:6px;font-size:12px;color:#48617c}
 .cad-more-group-links>a:hover{background:#eef5ff;color:#1b51a0}
 @media(max-width:650px){.cad-global-popover{right:0;left:auto}.cad-global-links{width:100%}body:has(#canvas3d) .pad{padding:12px}}
+
+/* Reusable multi-room controls stay in the SAME shared-model editor. */
+body:has(#canvas3d) .aad-room-controls{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+body:has(#canvas3d) .aad-room-controls label{font-size:11px;line-height:1.5}
+body:has(#canvas3d) .aad-room-controls label[hidden]{display:none}
+body:has(#canvas3d) .aad-room-controls select,
+body:has(#canvas3d) .aad-room-controls input{display:block;min-width:0;width:100%;padding:8px;border-radius:8px;border:1px solid #bed0e0;background:#fff;color:#263c58}
+body:has(#canvas3d) .aad-room-summary{border:1px solid #d9e5f2;border-radius:11px;padding:10px;background:#f6faff;margin-bottom:8px;color:#2b4d74}
+body:has(#canvas3d) .aad-room-summary>strong{font-size:12px}
+body:has(#canvas3d) #roomTotal{display:inline-block;background:#2563eb;color:#fff;border-radius:12px;font-size:10px;font-weight:800;padding:2px 7px}
+body:has(#canvas3d) #roomList{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px}
+body:has(#canvas3d) .aad-room-card{font-size:10px!important;padding:7px 9px!important;background:#fff!important;color:#27529d!important;border:1px solid #c5d8ef!important}
+body:has(#canvas3d) .aad-room-card:hover{background:#e9f2ff!important}
+@media(max-width:1250px){body:has(#canvas3d) .aad-room-controls{grid-template-columns:1fr}}
