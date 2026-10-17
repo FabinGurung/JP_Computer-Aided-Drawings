@@ -4,7 +4,7 @@
  * No structural connectivity or engineering approval is inferred from the synthetic frame.
  */
 import {deriveFrameGraph,columnAt} from "./frame_connectivity";
-import {deriveRoomSolids,roomBoundaryPositions,type RoomKind} from "./room_layout";
+import {deriveRoomSolids,type RoomKind} from "./room_layout";
 export type FrameGrid={west:number;east:number;north:number;south:number};
 export type Category="column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture"|"room";
 export type Solid={id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
