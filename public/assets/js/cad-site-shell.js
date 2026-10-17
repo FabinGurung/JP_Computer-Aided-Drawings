@@ -3,7 +3,7 @@
  const source=document.currentScript;if(!source)return;
  const root=new URL(source.getAttribute("data-cad-root")||"./",document.baseURI);
  const path=(slug)=>new URL(slug,root).href;
- const normalized=(u)=>new URL(u,document.baseURI).pathname.replace(/(?:index\\.html)?\\/?$/,"/");
+ const normalized=(u)=>{let p=new URL(u,document.baseURI).pathname;if(p.endsWith("index.html"))p=p.slice(0,-10);return p.endsWith("/")?p:p+"/";};
  const current=normalized(location.href);
  const nav=document.createElement("nav");nav.id="cad-global-navigation";nav.className="cad-global-nav";nav.setAttribute("aria-label","CAD main navigation");
  const link=(name,slug)=>{
