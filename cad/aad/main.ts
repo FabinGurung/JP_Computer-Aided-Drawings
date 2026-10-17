@@ -223,7 +223,7 @@ function highlight(){
   mat.color.setHex(activeJoints.has(id)?0x2563eb:0xef6b57);
  }
 }
-type EditableKey="gridX"|"gridZ"|"beamWidth"|"columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
+type EditableKey="interiorDoorZ"|"interiorDoorWidth"|"partitionX"|"gridX"|"gridZ"|"beamWidth"|"columnX"|"columnZ"|"beamDepth"|"windowX"|"windowWidth"|"doorX"|"doorWidth"|"wallThickness"|"bedX"|"bedZ"|"bedLength"|"bedWidth";
 type PartField={key:EditableKey;label:string;value:number;min:number;max:number};
 const partApply=elem<HTMLButtonElement>("applyPart");
 const partReset=elem<HTMLButtonElement>("resetPart");
@@ -249,10 +249,20 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
     fields:[field("windowX","From west end (m)",model.windowX,.35,L-model.window-.35),
     field("windowWidth","Opening width (m)",model.window,.8,Math.min(2.4,L-model.windowX-.35))]};
   case "door":
+   if(e.id.startsWith("INT-DOOR-")){
+    return {hint:"This opening is hosted by the shared partition. Both the door and its wall segments regenerate together.",
+     fields:[field("interiorDoorZ","Door from north (m)",model.interiorDoorZ,.55,model.width-model.interiorDoorWidth-.55),
+             field("interiorDoorWidth","Interior door width (m)",model.interiorDoorWidth,.75,1.3)]};
+   }
    return {hint:"Move or widen the south doorway. The wall jambs and overhead segment regenerate with the opening.",
     fields:[field("doorX","From west end (m)",model.doorX,.35,L-model.door-.35),
     field("doorWidth","Opening width (m)",model.door,.75,Math.min(1.6,L-model.doorX-.35))]};
   case "wall":
+   if(e.id.startsWith("PART-")){
+    const second=e.id.startsWith("PART-02");
+    return {hint:"This is one of the linked partition wall segments. Move the full shared wall; both neighboring rooms and its doorway update.",
+     fields:[field("partitionX","Shared wall from west (m)",second?model.roomSplit2:model.roomSplit1,2,model.length-1.75)]};
+   }
    return {hint:"Perimeter walls are a connected group. This editor changes their common thickness, not a detached wall segment.",
     fields:[field("wallThickness","Linked wall thickness (m)",model.wallThickness,.10,.28)]};
   case "furniture":{
@@ -308,9 +318,16 @@ function editSelected(reset=false){
   }else if(e.kind==="window"){
    next.windowX=reset?Number(((next.length-next.window)/2).toFixed(3)):values.get("windowX")!;
    if(!reset)next.window=values.get("windowWidth")!;
+  }else if(e.kind==="door"&&e.id.startsWith("INT-DOOR-")){
+   next.interiorDoorZ=reset?Number(((next.width-next.interiorDoorWidth)/2).toFixed(3)):values.get("interiorDoorZ")!;
+   if(!reset)next.interiorDoorWidth=values.get("interiorDoorWidth")!;
   }else if(e.kind==="door"){
    next.doorX=reset?Number(((next.length-next.door)/2).toFixed(3)):values.get("doorX")!;
    if(!reset)next.door=values.get("doorWidth")!;
+  }else if(e.kind==="wall"&&e.id.startsWith("PART-")){
+   const second=e.id.startsWith("PART-02");
+   if(second)next.roomSplit2=reset?Number((next.length*.755).toFixed(3)):values.get("partitionX")!;
+   else next.roomSplit1=reset?Number((next.length*.5).toFixed(3)):values.get("partitionX")!;
   }else if(e.kind==="wall"){
    next.wallThickness=reset?.16:values.get("wallThickness")!;
   }else if(e.kind==="furniture"){
