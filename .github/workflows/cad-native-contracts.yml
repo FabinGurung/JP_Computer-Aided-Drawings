@@ -1,0 +1,85 @@
+name: CAD Native and Legacy Contracts
+on:
+  pull_request:
+    paths:
+      - "backend/**"
+      - "design_jobs/**"
+      - "models/**"
+      - "tools/site/cad-m0*.py"
+      - "tools/site/cad-browser-smoke.mjs"
+      - "tools/site/cad-m0*-smoke.mjs"
+      - "tools/site/cad-responsive-smoke.mjs"
+      - "cad/*.ts"
+      - "cad/*.html"
+      - "cad/*.css"
+      - "cad/ifc.ts"
+      - "cad/project.ts"
+      - "cad/M0*.md"
+      - "cad/M1*.md"
+      - "package.json"
+      - "package-lock.json"
+      - ".github/workflows/cad-native-contracts.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: cad-native-contracts-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  native-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - name: Install approved native CAD geometry engines
+        run: python -m pip install -r backend/requirements.txt
+      - name: Execute full existing native and private-boundary tests
+        run: python -m unittest discover -s backend/tests -v
+      - name: Generate proof artefacts for preserved IFC, STEP and DXF engines
+        run: |
+          mkdir -p /tmp/cad-native-regression
+          python -m backend.cad_bridge.cli --format dxf --out /tmp/cad-native-regression/example.dxf
+          python -m backend.cad_bridge.cli --format ifc --out /tmp/cad-native-regression/example.ifc
+          python -m backend.cad_bridge.cli --format step --out /tmp/cad-native-regression/example.step
+          python -m backend.cad_bridge.cli --format section --section-z-mm 1000
+          python -m backend.cad_bridge.design_cli --job design_jobs/synthetic/m08_demo.job.json --repo-root . --out /tmp/cad-native-regression/m08
+          python tools/site/cad-m08-verify.py --out /tmp/cad-native-regression/m08 --job design_jobs/synthetic/m08_demo.job.json
+          test -s /tmp/cad-native-regression/example.dxf
+          test -s /tmp/cad-native-regression/example.ifc
+          test -s /tmp/cad-native-regression/example.step
+          test -s /tmp/cad-native-regression/m08/manifest.json
+      - name: Preserve contract evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-native-contract-evidence
+          path: /tmp/cad-native-regression/
+          if-no-files-found: ignore
+  legacy-browser-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm}
+      - uses: actions/setup-python@v5
+        with: {python-version: "3.11"}
+      - run: npm ci
+      - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
+      - run: python tools/site/check_public_routes.py dist
+      - name: Exercise preserved CAD editor on three screen sizes
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run dev -- --host 127.0.0.1 --port 5174 > /tmp/cad-legacy-dev.log 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5174/cad/ >/dev/null && break; sleep 2; done
+          CAD_MOBILE_URL=http://127.0.0.1:5174/cad/ node tools/site/cad-responsive-smoke.mjs
+      - name: Keep regression screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cad-legacy-browser-regression
+          path: artifacts/
+          if-no-files-found: ignore

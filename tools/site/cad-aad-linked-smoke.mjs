@@ -55,6 +55,9 @@ try{
   const threeColors=imageVariance(threeShot,config.label+" 3D",7);
   const planColors=imageVariance(planShot,config.label+" 2D",4);
   if(config.label==="desktop"){
+   await page.locator("#modelFacts > summary").click();
+   await page.locator("#displayOptions > summary").click();
+   await page.locator("#saveOptions > summary").click();
    if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Starter footprint failed");
    await page.locator('#plan rect[data-part="C-NW"]').click();
    if(!(await page.locator("#inspect").innerText()).includes("C-NW"))throw Error("Plan selection missing");
