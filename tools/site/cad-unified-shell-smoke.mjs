@@ -46,8 +46,13 @@ try{
  await p.locator("#cards .project-card").first().waitFor({timeout:12000});
  await p.locator("#projectSearch").fill("narayani");
  if(await p.locator("#cards .project-card").count()!==1)throw Error("Preserved project search broken");
- await p.locator("#cad-global-navigation .cad-global-more summary").click();
- if(!(await p.getByRole("link",{name:"Research & prototypes"}).isVisible()))throw Error("More menu closed unexpectedly");
+ await p.locator("#cad-global-navigation .cad-global-more > summary").click();
+ for(const group of ["Earlier design tools","Research & prototypes","Projects & history","Guides & reference"])
+   if(!(await p.locator(".cad-more-group > summary").filter({hasText:group}).isVisible()))throw Error("More section hidden: "+group);
+ await p.locator(".cad-more-group > summary").filter({hasText:"Research & prototypes"}).click();
+ if(!(await p.getByRole("link",{name:"Research catalogue"}).isVisible()))throw Error("Nested research links unavailable");
+ await p.locator(".cad-more-group > summary").filter({hasText:"Earlier design tools"}).click();
+ if(!(await p.getByRole("link",{name:"Previous CAD editor"}).isVisible()))throw Error("Legacy CAD editor path missing");
  if(errors.length)throw Error("Page errors: "+JSON.stringify(errors));
  await p.screenshot({path:"/tmp/cad-daylight-blueprint-home.png",fullPage:true});
  const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:1});
