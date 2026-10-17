@@ -502,7 +502,7 @@ for(const id of ["roomType1","roomType2","roomType3","roomSplit1","roomSplit2","
 elem<HTMLButtonElement>("applyText").onclick=()=>interpret(elem<HTMLTextAreaElement>("instruction").value);
 elem<HTMLButtonElement>("fit").onclick=fit;
 elem<HTMLButtonElement>("clearSelect").onclick=()=>select(null);
-elem<HTMLButtonElement>("reset").onclick=()=>{firstRender=true;setModel({...defaults},"Reset to synthetic one-bay starter model.");};
+elem<HTMLButtonElement>("reset").onclick=()=>{firstRender=true;setModel({...defaults},"Reset to synthetic one-room starter model.");};
 elem<HTMLButtonElement>("download").onclick=()=>{
  const bytes=JSON.stringify(model,null,2)+"\n";
  const blob=new Blob([bytes],{type:"application/json"});
