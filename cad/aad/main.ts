@@ -7,6 +7,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
+import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -79,7 +80,7 @@ const camera=new THREE.PerspectiveCamera(48,1,.04,400);
 
 const objects=new Map<string,THREE.Mesh>();
 const jointVisuals=new Map<string,THREE.Mesh>();
-const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9};
+const palette:Record<Category,number>={column:0x5fc6b0,beam:0xd0a365,slab:0x8495b8,wall:0x9bb3c5,door:0xcc9b65,window:0x70b9eb,furniture:0x8b87d9,room:0xc8e6f3};
 let firstRender=true;
 
 function dispose(){
@@ -98,7 +99,7 @@ function threeView(){
   const glass=e.kind==="window";
   const material=new THREE.MeshStandardMaterial({
    color:palette[e.kind],roughness:glass?.12:.7,
-   metalness:glass?.1:0,transparent:glass,opacity:glass?.48:1,
+   metalness:glass?.1:0,transparent:glass||e.kind==="room",opacity:glass?.48:e.kind==="room"?.27:1,
    side:THREE.DoubleSide
   });
   const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
@@ -154,7 +155,7 @@ function planView(){
  for(let x=0;x<=600;x+=25)svg.append(svgNode("path",{d:"M"+x+" 0V620",stroke:"#dfe8e6","stroke-width":.55}));
  for(let y=0;y<=620;y+=25)svg.append(svgNode("path",{d:"M0 "+y+"H600",stroke:"#dfe8e6","stroke-width":.55}));
  svg.append(svgNode("rect",{x:left,y:top,width:model.length*scale,height:model.width*scale,fill:"#fdfdf9",stroke:"#82939b","stroke-width":2}));
- const order:Category[]=["wall","beam","door","window","furniture","column"];
+ const order:Category[]=["room","wall","beam","door","window","furniture","column"];
  for(const kind of order){
   for(const e of solids.filter(v=>v.kind===kind)){
    // Vertical plan traces of wall heads and jambs should collapse to their
@@ -164,7 +165,7 @@ function planView(){
    const item=svgNode("rect",{
     x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale),
     fill:kind==="beam"?"none":"#"+palette[kind].toString(16).padStart(6,"0"),
-    "fill-opacity":kind==="wall"?.78:1,
+    "fill-opacity":kind==="wall"?.78:kind==="room"?.20:1,
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
     "stroke-width":selectedNow?4:kind==="beam"?1.6:kind==="furniture"?1.2:.6,
     "stroke-dasharray":kind==="beam"?"5 4":"none",
@@ -191,7 +192,13 @@ function planView(){
    "pointer-events":"none","data-joint":joint.id});
   svg.append(circle);
  }
- svg.append(textNode(300,29,"LINKED PLAN · ONE-BAY DEMONSTRATION",15));
+ for(const room of deriveRooms(model)){
+  const xc=left+(room.x+room.width/2)*scale,yc=top+(room.z+room.depth/2)*scale;
+  const label=textNode(xc,yc,room.name+" · "+room.area.toFixed(1)+" m²",Math.max(9,Math.min(13,scale*.24)));
+  label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
+  svg.append(label);
+ }
+ svg.append(textNode(300,29,"LINKED PLAN · SHARED ROOM MODEL",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
  if(selected){
@@ -256,7 +263,7 @@ function partFieldsFor(e:Solid):{fields:PartField[];hint:string}{
      field("bedLength","Bed length (m)",model.bedLength,.8,Math.min(2.8,L-model.bedX-pad)),
      field("bedWidth","Bed width (m)",model.bedWidth,.65,Math.min(2.2,W-model.bedZ-pad))]};
   }
-  default:return {hint:"Roof slab sizing follows the overall room model. Choose a column, beam, wall, opening or bed to adjust it.",fields:[]};
+  default:return {hint:"This room is a reusable semantic component. Choose its template and partition measurements in the Rooms panel to regenerate both views.",fields:[]};
  }
 }
 function renderComponentEditor(){
@@ -344,6 +351,7 @@ function select(id:string|null){
 function drawTree(){
  tree.replaceChildren();
  const groups:{label:string;category:Category}[]=[
+  {label:"Rooms",category:"room"},
   {label:"Columns (4)",category:"column"},{label:"Beams (4)",category:"beam"},
   {label:"Roof slab (1)",category:"slab"},{label:"Walls and infill",category:"wall"},
   {label:"Door",category:"door"},{label:"Window",category:"window"},
