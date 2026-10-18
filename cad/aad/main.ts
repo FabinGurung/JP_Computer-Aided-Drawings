@@ -135,7 +135,7 @@ function threeView(){
  }
  // The four graph junctions are visual markers, not fabricated joint details.
  // Not in the pickable objects map: selection stays owned by columns/beams.
- for(const joint of deriveFrameGraph(model).joints){
+ for(const joint of (model.floorGraph?.perimeter?.length?[]:deriveFrameGraph(model).joints)){
   const dot=new THREE.Mesh(new THREE.SphereGeometry(.075,12,10),
    new THREE.MeshBasicMaterial({color:0xef6b57,transparent:true,opacity:.92,depthTest:false}));
   dot.position.set(joint.x,joint.y,joint.z);dot.renderOrder=5;
