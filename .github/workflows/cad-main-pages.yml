@@ -6,6 +6,8 @@ on:
       - "cad/**"
       - "public/**"
       - "tools/site/check_public_routes.py"
+      - "tools/site/cad-aad-linked-smoke.mjs"
+      - "tools/site/cad-unified-shell-smoke.mjs"
       - "backend/cad_bridge/design_*.py"
       - "design_jobs/synthetic/**"
       - "tools/site/cad-m08-verify.py"
