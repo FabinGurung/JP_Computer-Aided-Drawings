@@ -201,7 +201,55 @@ function planView(){
   label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
   svg.append(label);
  }
- svg.append(textNode(300,29,"LINKED PLAN · SHARED ROOM MODEL",15));
+ if(model.floorGraph){
+  const graphNodes=new Map(model.floorGraph.nodes.map(n=>[n.id,n]));
+  for(const wall of model.floorGraph.walls){
+   const a=graphNodes.get(wall.a)!,b=graphNodes.get(wall.b)!;
+   const hit=svgNode("line",{
+    x1:left+a.x*scale,y1:top+a.z*scale,x2:left+b.x*scale,y2:top+b.z*scale,
+    stroke:"#2563eb","stroke-opacity":.45,"stroke-width":12,
+    "pointer-events":"stroke",style:"cursor:grab","data-graph-wall":wall.id,
+    role:"slider",tabindex:0,"aria-label":"Drag connected wall "+wall.id
+   });
+   let startX=0,startY=0,dragging=false;
+   hit.addEventListener("pointerdown",event=>{
+    const e=event as PointerEvent;startX=e.clientX;startY=e.clientY;dragging=true;
+    e.preventDefault();hit.setPointerCapture(e.pointerId);
+   });
+   hit.addEventListener("pointerup",event=>{
+    if(!dragging)return;dragging=false;
+    const e=event as PointerEvent;
+    if(Math.hypot(e.clientX-startX,e.clientY-startY)<6){
+     const segment=solids.find(piece=>piece.id.startsWith(wall.id+"-SEG-"));
+     select(segment?.id||null);return;
+    }
+    const rect=svg.getBoundingClientRect();
+    const rawX=(e.clientX-rect.left)*600/rect.width;
+    const rawY=(e.clientY-rect.top)*620/rect.height;
+    const vertical=Math.abs(a.x-b.x)<.001;
+    const newPosition=(vertical?rawX-left:rawY-top)/scale;
+    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
+      "Moved "+wall.id+" and connected intersections; inferred rooms and openings regenerated.");}
+    catch(error){note.textContent=error instanceof Error?error.message:"Wall drag rejected";planView();}
+   });
+   hit.addEventListener("keydown",event=>{
+    const e=event as KeyboardEvent;
+    if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))return;
+    e.preventDefault();
+    const vertical=Math.abs(a.x-b.x)<.001;
+    const delta=(e.key==="ArrowRight"||e.key==="ArrowDown")?.1:-.1;
+    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
+       model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
+    catch(error){note.textContent=error instanceof Error?error.message:"Move rejected";}
+   });
+   svg.append(hit);
+  }
+  for(const j of floorState?.intersections||[]){
+   svg.append(svgNode("circle",{cx:left+j.x*scale,cy:top+j.z*scale,r:3.5,
+    fill:"#1c65b8",stroke:"#fff","stroke-width":1,"pointer-events":"none","data-wall-joint":j.id}));
+  }
+ }
+ svg.append(textNode(300,29,model.floorGraph?"LINKED PLAN · EDITABLE WALL GRAPH":"LINKED PLAN · SHARED ROOM MODEL",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
  if(selected){
