@@ -316,8 +316,7 @@ try{
    const dxfText=dxfGroups.map(g=>g.join("\n")).join("\n")+"\n";
    await page.locator("#dxfIntake > summary").click();
    await page.locator("#dxfUpload").setInputFiles({name:"synthetic-wall.dxf",mimeType:"text/plain",buffer:Buffer.from(dxfText)});
-   if(!(await page.locator("#dxfStatus").innerText()).includes("millimeters"))
-     throw Error("DXF source units lost");
+   await page.waitForFunction(()=>document.querySelector("#dxfStatus")?.textContent?.includes("millimeters"),null,{timeout:10000});
    await page.locator("#dxfBuild").click();
    if(await page.locator('#plan polygon[data-part^="ROOM-"]').count()!==2)
      throw Error("CAD-native diagonal tracing failed to derive two room polygons");
