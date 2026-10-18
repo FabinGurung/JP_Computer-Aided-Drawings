@@ -309,6 +309,20 @@ try{
    await page.locator("#addGraphOpening").click();
    if(!(await page.locator('#plan rect[data-part="O-EDIT-2"]').getAttribute("transform"))?.includes("rotate("))
      throw Error("Hosted diagonal opening not rotated");
+   const dxfSegments=[[0,0,8000,0],[8000,0,8000,6000],[8000,6000,0,6000],[0,6000,0,0],[0,0,8000,6000]];
+   const dxfGroups=[[0,"SECTION"],[2,"HEADER"],[9,"$INSUNITS"],[70,4],[0,"ENDSEC"],
+     [0,"SECTION"],[2,"ENTITIES"],...dxfSegments.flatMap(([x1,y1,x2,y2])=>
+     [[0,"LINE"],[8,"A-WALL"],[10,x1],[20,y1],[11,x2],[21,y2]]),[0,"ENDSEC"],[0,"EOF"]];
+   const dxfText=dxfGroups.map(g=>g.join("\\n")).join("\\n")+"\\n";
+   await page.locator("#dxfIntake > summary").click();
+   await page.locator("#dxfUpload").setInputFiles({name:"synthetic-wall.dxf",mimeType:"text/plain",buffer:Buffer.from(dxfText)});
+   if(!(await page.locator("#dxfStatus").innerText()).includes("millimeters"))
+     throw Error("DXF source units lost");
+   await page.locator("#dxfBuild").click();
+   if(await page.locator('#plan polygon[data-part^="ROOM-"]').count()!==2)
+     throw Error("CAD-native diagonal tracing failed to derive two room polygons");
+   if(await page.locator('#plan rect[data-graph-wall^="W-DXF-"]').count()!==5)
+     throw Error("DXF five line segments not retained as wall edges");
    await page.locator("#disableGraph").click();
    if(await page.locator('#plan rect[data-graph-wall]').count()!==0)
      throw Error("Switching back to legacy template left orphan free-form geometry");
