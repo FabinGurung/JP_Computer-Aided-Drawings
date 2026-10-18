@@ -8,6 +8,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
+import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,validatePlanGraph} from "./floor_graph";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -25,6 +26,8 @@ const partMessage=elem<HTMLElement>("partMessage");
 const partInputs=["partA","partB","partC","partD"] as const;
 let model:Draft=validateDraft(defaults);
 let solids:Solid[]=[];
+let floorState:DerivedPlan|null=null;
+let graphHistory:PlanGraph[]=[];
 let selected:string|null=null;
 let showRoof=false,showWalls=true,showDimensions=true;
 const validate=validateDraft;
@@ -192,13 +195,67 @@ function planView(){
    "pointer-events":"none","data-joint":joint.id});
   svg.append(circle);
  }
- for(const room of deriveRooms(model)){
-  const xc=left+(room.x+room.width/2)*scale,yc=top+(room.z+room.depth/2)*scale;
+ for(const room of (floorState?.zones??deriveRooms(model))){
+  const xc=left+(floorState?room.x:room.x+("width" in room?room.width/2:0))*scale;
+  const yc=top+(floorState?room.z:room.z+("depth" in room?room.depth/2:0))*scale;
   const label=textNode(xc,yc,room.name+" · "+room.area.toFixed(1)+" m²",Math.max(9,Math.min(13,scale*.24)));
   label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
   svg.append(label);
  }
- svg.append(textNode(300,29,"LINKED PLAN · SHARED ROOM MODEL",15));
+ if(model.floorGraph){
+  const graphNodes=new Map(model.floorGraph.nodes.map(n=>[n.id,n]));
+  for(const wall of model.floorGraph.walls){
+   const a=graphNodes.get(wall.a)!,b=graphNodes.get(wall.b)!;
+   const verticalWall=Math.abs(a.x-b.x)<.001;
+   const p1x=left+a.x*scale,p2x=left+b.x*scale,p1y=top+a.z*scale,p2y=top+b.z*scale;
+   const hit=svgNode("rect",{
+    x:verticalWall?p1x-6:Math.min(p1x,p2x),
+    y:verticalWall?Math.min(p1y,p2y):p1y-6,
+    width:verticalWall?12:Math.abs(p2x-p1x),
+    height:verticalWall?Math.abs(p2y-p1y):12,
+    fill:"#2563eb","fill-opacity":.22,stroke:"#1b57ad","stroke-opacity":.5,"stroke-width":.7,
+    "pointer-events":"all",style:"cursor:grab","data-graph-wall":wall.id,
+    role:"slider",tabindex:0,"aria-label":"Drag connected wall "+wall.id
+   });
+   let startX=0,startY=0,dragging=false;
+   hit.addEventListener("pointerdown",event=>{
+    const e=event as PointerEvent;startX=e.clientX;startY=e.clientY;dragging=true;
+    e.preventDefault();hit.setPointerCapture(e.pointerId);
+   });
+   hit.addEventListener("pointerup",event=>{
+    if(!dragging)return;dragging=false;
+    const e=event as PointerEvent;
+    if(Math.hypot(e.clientX-startX,e.clientY-startY)<6){
+     const segment=solids.find(piece=>piece.id.startsWith(wall.id+"-SEG-"));
+     select(segment?.id||null);return;
+    }
+    const rect=svg.getBoundingClientRect();
+    const rawX=(e.clientX-rect.left)*600/rect.width;
+    const rawY=(e.clientY-rect.top)*620/rect.height;
+    const vertical=Math.abs(a.x-b.x)<.001;
+    const newPosition=(vertical?rawX-left:rawY-top)/scale;
+    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
+      "Moved "+wall.id+" and connected intersections; inferred rooms and openings regenerated.");}
+    catch(error){note.textContent=error instanceof Error?error.message:"Wall drag rejected";planView();}
+   });
+   hit.addEventListener("keydown",event=>{
+    const e=event as KeyboardEvent;
+    if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))return;
+    e.preventDefault();
+    const vertical=Math.abs(a.x-b.x)<.001;
+    const delta=(e.key==="ArrowRight"||e.key==="ArrowDown") ? .1 : -.1;
+    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
+       model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
+    catch(error){note.textContent=error instanceof Error?error.message:"Move rejected";}
+   });
+   svg.append(hit);
+  }
+  for(const j of floorState?.intersections||[]){
+   svg.append(svgNode("circle",{cx:left+j.x*scale,cy:top+j.z*scale,r:3.5,
+    fill:"#1c65b8",stroke:"#fff","stroke-width":1,"pointer-events":"none","data-wall-joint":j.id}));
+  }
+ }
+ svg.append(textNode(300,29,model.floorGraph?"LINKED PLAN · EDITABLE WALL GRAPH":"LINKED PLAN · SHARED ROOM MODEL",15));
  svg.append(textNode(300,52,"Select any outline, column, door, window or bed",11));
  svg.append(textNode(300,597,"N ↑        SOUTH ENTRY BELOW        ALL DIMENSIONS IN METRES",11));
  if(selected){
@@ -385,17 +442,18 @@ function drawTree(){
 }
 function render(){
  solids=geometry(model);
+ floorState=model.floorGraph?derivePlanGraph(model.floorGraph,model.length,model.width,model.height):null;
  if(selected&&!solids.some(e=>e.id===selected))selected=null;
  threeView();planView();drawTree();select(selected);
  elem<HTMLElement>("area").textContent=(model.length*model.width).toFixed(1)+" m²";
  elem<HTMLElement>("totalHeight").textContent=model.height.toFixed(2)+" m";
  elem<HTMLElement>("columnCount").textContent=String(solids.filter(x=>x.kind==="column").length);
  elem<HTMLElement>("beamCount").textContent=String(solids.filter(x=>x.kind==="beam").length);
- elem<HTMLElement>("roomTotal").textContent=String(model.roomCount);
+ elem<HTMLElement>("roomTotal").textContent=String(floorState?.zones.length??model.roomCount);
  const list=elem<HTMLElement>("roomList");list.replaceChildren();
- for(const room of deriveRooms(model)){
+ for(const room of (floorState?.zones??deriveRooms(model))){
   const card=document.createElement("button");card.type="button";card.className="aad-room-card";
-  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(room.id);list.append(card);
+  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(floorState?room.id+"-CELL-01":room.id);list.append(card);
  }
  if(firstRender){fit();firstRender=false;}
 }
@@ -417,6 +475,7 @@ function syncInputs(){
  elem<HTMLElement>("roomSplit2Wrap").hidden=model.roomCount<3;
  elem<HTMLElement>("interiorDoorWrap").hidden=model.roomCount<2;
  elem<HTMLElement>("innerDoorWidthWrap").hidden=model.roomCount<2;
+ syncGraphControls();
 }
 function setModel(next:Draft,message:string){
  const verified=validate(next);
@@ -440,6 +499,83 @@ function numericChange(){
   update.bed=elem<HTMLInputElement>("bed").checked;
   setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
+}
+function syncGraphControls(){
+ const enabled=!!model.floorGraph;
+ elem<HTMLElement>("roomsOptions").hidden=enabled;
+ elem<HTMLElement>("graphEditing").hidden=!enabled;
+ elem<HTMLButtonElement>("activateGraph").hidden=enabled;
+ elem<HTMLButtonElement>("disableGraph").hidden=!enabled;
+ elem<HTMLButtonElement>("undoGraph").disabled=!enabled||graphHistory.length===0;
+ for(const id of ["length","width","roomCount"]){
+  elem<HTMLInputElement|HTMLSelectElement>(id).disabled=enabled;
+ }
+ const host=elem<HTMLSelectElement>("graphHostWall");host.replaceChildren();
+ if(model.floorGraph){
+  for(const wall of model.floorGraph.walls){
+   const option=document.createElement("option");option.value=wall.id;option.textContent=wall.id;host.append(option);
+  }
+ }
+ const noteDisplay=elem<HTMLElement>("graphProjectNote");
+ noteDisplay.textContent=model.projectNote;
+ elem<HTMLElement>("graphStats").textContent=enabled?
+  model.floorGraph!.walls.length+" walls · "+model.floorGraph!.openings.length+" hosted openings · "+
+  (floorState?.zones.length??0)+" inferred room zones":"";
+}
+function commitGraph(next:PlanGraph,message:string){
+ if(!model.floorGraph)throw Error("Enable graph editing first");
+ const verified=validatePlanGraph(next,model.length,model.width,model.height);
+ const previous=model.floorGraph;
+ setModel({...model,floorGraph:verified},message);
+ graphHistory.push(previous);if(graphHistory.length>25)graphHistory.shift();
+ syncGraphControls();
+}
+function activateGraph(){
+ try{
+  const graph=makeEditablePlan(model.length,model.width,model.wallThickness);
+  graphHistory=[];
+  setModel({...model,bed:false,floorGraph:graph,projectNote:"Editable synthetic floor graph. Dimensions and openings are illustrative until a verified project draft is imported."},
+    "Editable wall graph enabled. Drag a blue wall in the 2D plan; openings and detected rooms update.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"Graph could not be enabled";}
+}
+const graphNum=(id:string)=>{const field=elem<HTMLInputElement>(id);if(!field.value.trim())throw Error("Enter "+id);return Math.round(Number(field.value)*1000)/1000;};
+function addGraphWall(){
+ if(!model.floorGraph)return;
+ try{
+  const x1=graphNum("graphX1"),z1=graphNum("graphZ1"),x2=graphNum("graphX2"),z2=graphNum("graphZ2");
+  const p=model.floorGraph;
+  const nodes=p.nodes.map(n=>({...n})),walls=p.walls.map(w=>({...w}));
+  let counter=1;
+  const nodeId=(x:number,z:number)=>{
+   const found=nodes.find(n=>Math.abs(n.x-x)<.002&&Math.abs(n.z-z)<.002);if(found)return found.id;
+   let id="N-EDIT-"+counter++;
+   while(nodes.some(n=>n.id===id))id="N-EDIT-"+counter++;
+   nodes.push({id,x,z});return id;
+  };
+  const a=nodeId(x1,z1),b=nodeId(x2,z2);
+  let index=1;while(walls.some(w=>w.id==="W-EDIT-"+index))index++;
+  const id="W-EDIT-"+index;
+  walls.push({id,a,b,thickness:model.wallThickness});
+  commitGraph({...p,nodes,walls},"Added connected wall "+id+". Room zones detected again.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"Could not add wall";}
+}
+function addHostedOpening(){
+ if(!model.floorGraph)return;
+ try{
+  const g=model.floorGraph,wallId=elem<HTMLSelectElement>("graphHostWall").value;
+  const kind=elem<HTMLSelectElement>("graphOpeningKind").value as "door"|"window";
+  const width=graphNum("graphOpeningWidth"),offset=graphNum("graphOpeningOffset");
+  let i=1;while(g.openings.some(x=>x.id==="O-EDIT-"+i))i++;
+  const id="O-EDIT-"+i;
+  const opening={id,wallId,kind,offset,width,sill:kind==="door"?0:.9,height:kind==="door"?2.1:1.2};
+  commitGraph({...g,openings:[...g.openings,opening]},"Added "+kind+" "+id+" hosted by "+wallId);
+ }catch(error){note.textContent=error instanceof Error?error.message:"Cannot host opening";}
+}
+function undoGraphChange(){
+ const last=graphHistory.pop();if(!last)return;
+ try{setModel({...model,floorGraph:last},"Restored previous floor graph and detected rooms.");}
+ catch(error){graphHistory.push(last);note.textContent=error instanceof Error?error.message:"Undo failed";}
+ syncGraphControls();
 }
 function roomChange(countChanged=false){
  try{
@@ -495,6 +631,14 @@ elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
+elem<HTMLButtonElement>("activateGraph").onclick=activateGraph;
+elem<HTMLButtonElement>("disableGraph").onclick=()=>{
+ if(!model.floorGraph)return;
+ graphHistory=[];setModel({...model,floorGraph:null,projectNote:DEFAULT_DRAFT.projectNote},"Returned to original reusable-room editor. Save graph drafts before switching modes.");
+};
+elem<HTMLButtonElement>("undoGraph").onclick=undoGraphChange;
+elem<HTMLButtonElement>("addGraphWall").onclick=addGraphWall;
+elem<HTMLButtonElement>("addGraphOpening").onclick=addHostedOpening;
 elem<HTMLSelectElement>("roomCount").onchange=()=>roomChange(true);
 for(const id of ["roomType1","roomType2","roomType3","roomSplit1","roomSplit2","interiorDoorZ","interiorDoorWidth"]){
  elem<HTMLInputElement|HTMLSelectElement>(id).addEventListener("change",()=>roomChange(false));
