@@ -313,7 +313,7 @@ try{
    const dxfGroups=[[0,"SECTION"],[2,"HEADER"],[9,"$INSUNITS"],[70,4],[0,"ENDSEC"],
      [0,"SECTION"],[2,"ENTITIES"],...dxfSegments.flatMap(([x1,y1,x2,y2])=>
      [[0,"LINE"],[8,"A-WALL"],[10,x1],[20,y1],[11,x2],[21,y2]]),[0,"ENDSEC"],[0,"EOF"]];
-   const dxfText=dxfGroups.map(g=>g.join("\\n")).join("\\n")+"\\n";
+   const dxfText=dxfGroups.map(g=>g.join("\n")).join("\n")+"\n";
    await page.locator("#dxfIntake > summary").click();
    await page.locator("#dxfUpload").setInputFiles({name:"synthetic-wall.dxf",mimeType:"text/plain",buffer:Buffer.from(dxfText)});
    if(!(await page.locator("#dxfStatus").innerText()).includes("millimeters"))
