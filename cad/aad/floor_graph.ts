@@ -4,6 +4,7 @@
  * Not an arbitrary-angle DXF parser, certified BIM authoring, or structural model.
  */
 import type {Draft,Solid} from "./editable_model";
+import {deriveAngledPlan,moveAngledWall} from "./angled_graph";
 export type PlanNode={id:string;x:number;z:number};
 export type PlanWall={id:string;a:string;b:string;thickness:number};
 export type PlanOpening={id:string;wallId:string;kind:"door"|"window";offset:number;width:number;sill:number;height:number};
@@ -44,20 +45,21 @@ export function validatePlanGraph(raw:unknown,L:number,W:number,H:number):PlanGr
   const id=idCheck(w.id,"wall ID"),a=idCheck(w.a,"node reference"),b=idCheck(w.b,"node reference");
   if(a===b||!ns.has(a)||!ns.has(b))throw Error("Wall "+id+" references disconnected nodes");
   const A=ns.get(a)!,B=ns.get(b)!;
-  if(!close(A.x,B.x)&&!close(A.z,B.z))throw Error("Only orthogonal walls supported: "+id);
-  if(Math.abs(A.x-B.x)+Math.abs(A.z-B.z)<.45)throw Error("Wall too short: "+id);
+  // Arbitrary-angle vectors share graph node references.
+  if(Math.hypot(A.x-B.x,A.z-B.z)<.45)throw Error("Wall too short: "+id);
   return {id,a,b,thickness:value(w.thickness,"wall thickness",.09,.40)};
  });
  const ws=new Map(walls.map(w=>[w.id,w]));if(ws.size!==walls.length)throw Error("Duplicate wall IDs");
  // Prevent a wall being duplicated or partially overlapping another on a line.
  for(let i=0;i<walls.length;i++)for(let j=i+1;j<walls.length;j++){
   const a=walls[i]!,b=walls[j]!,p=ns.get(a.a)!,q=ns.get(a.b)!,r=ns.get(b.a)!,s=ns.get(b.b)!;
-  const v=close(p.x,q.x),v2=close(r.x,s.x);
-  if(v!==v2)continue;
-  if(v&&close(p.x,r.x)&&Math.min(Math.max(p.z,q.z),Math.max(r.z,s.z))-Math.max(Math.min(p.z,q.z),Math.min(r.z,s.z))>.002)
-   throw Error("Overlapping walls: "+a.id+" and "+b.id);
-  if(!v&&close(p.z,r.z)&&Math.min(Math.max(p.x,q.x),Math.max(r.x,s.x))-Math.max(Math.min(p.x,q.x),Math.min(r.x,s.x))>.002)
-   throw Error("Overlapping walls: "+a.id+" and "+b.id);
+  const vx=q.x-p.x,vz=q.z-p.z;
+  const cross1=vx*(r.z-p.z)-vz*(r.x-p.x),cross2=vx*(s.z-p.z)-vz*(s.x-p.x);
+  if(Math.abs(cross1)>.003||Math.abs(cross2)>.003)continue;
+  const len=Math.hypot(vx,vz),ux=vx/len,uz=vz/len;
+  const t1=(r.x-p.x)*ux+(r.z-p.z)*uz,t2=(s.x-p.x)*ux+(s.z-p.z)*uz;
+  const overlap=Math.min(len,Math.max(t1,t2))-Math.max(0,Math.min(t1,t2));
+  if(overlap>.002)throw Error("Overlapping walls: "+a.id+" and "+b.id);
  }
  const openings:PlanOpening[]=r.openings.map((obj,i)=>{
   const o=rec(obj,"Opening "+i);if(!keys(o,["id","wallId","kind","offset","width","sill","height"]))throw Error("Unknown opening fields");
@@ -65,7 +67,7 @@ export function validatePlanGraph(raw:unknown,L:number,W:number,H:number):PlanGr
   const wall=ws.get(wallId);if(!wall)throw Error("Opening "+id+" has no host wall");
   if(o.kind!=="door"&&o.kind!=="window")throw Error("Unknown opening type");
   const a=ns.get(wall.a)!,b=ns.get(wall.b)!;
-  const span=Math.abs(a.x-b.x)+Math.abs(a.z-b.z);
+  const span=Math.hypot(a.x-b.x,a.z-b.z);
   const width=value(o.width,"opening width",.45,Math.min(3.2,span-.30));
   const offset=value(o.offset,"opening offset",.15,span-width-.15);
   const sill=value(o.sill,"opening sill",0,H-1.05);
@@ -125,6 +127,7 @@ export function makeEditablePlan(L:number,W:number,t=.16):PlanGraph{
 export function shiftWallLine(graph:PlanGraph,wallId:string,position:number,L:number,W:number,H:number):PlanGraph{
  const wall=graph.walls.find(w=>w.id===wallId);if(!wall)throw Error("Unknown wall "+wallId);
  const a=graph.nodes.find(n=>n.id===wall.a)!,b=graph.nodes.find(n=>n.id===wall.b)!;
+ if(!close(a.x,b.x)&&!close(a.z,b.z))throw Error("Use vector drag for an angled wall");
  const vertical=close(a.x,b.x),old=vertical?a.x:a.z,bound=vertical?L:W;
  if(old<.001||old>bound-.001)throw Error("Exterior boundary cannot be moved; change overall dimensions");
  const target=round(Math.max(.4,Math.min(bound-.4,position)));
@@ -137,6 +140,7 @@ export function shiftWallLine(graph:PlanGraph,wallId:string,position:number,L:nu
 const dedupe=(nums:number[])=>[...new Set(nums.map(round))].sort((a,b)=>a-b);
 export function derivePlanGraph(graph:PlanGraph,L:number,W:number,H:number):DerivedPlan{
  const g=validatePlanGraph(graph,L,W,H),nodes=new Map(g.nodes.map(n=>[n.id,n]));
+ if(g.walls.some(w=>{const a=nodes.get(w.a)!,b=nodes.get(w.b)!;return !close(a.x,b.x)&&!close(a.z,b.z);}))return deriveAngledPlan(g,L,W,H);
  const solids:Solid[]=[];
  const add=(id:string,name:string,kind:Solid["kind"],x:number,y:number,z:number,dx:number,dy:number,dz:number)=>{
   if(Math.min(dx,dy,dz)<.002)throw Error("Invalid floor model geometry "+id);
@@ -225,4 +229,8 @@ export function derivePlanGraph(graph:PlanGraph,L:number,W:number,H:number):Deri
   return {id,name:g.labels[id]||"Room "+(index+1),area:round(area),x:round(cx),z:round(cz),cells:pieces};
  });
  return {solids,zones,intersections};
+}
+
+export function translateAngledWall(g:PlanGraph,id:string,dx:number,dz:number,L:number,W:number,H:number):PlanGraph{
+ return validatePlanGraph(moveAngledWall(g,id,dx,dz,L,W,H),L,W,H);
 }
