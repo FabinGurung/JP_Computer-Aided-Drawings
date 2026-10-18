@@ -124,7 +124,22 @@ export function deriveAngledPlan(g:PlanGraph,L:number,W:number,H:number):Derived
     cells:[{id:id+"-CELL-01",roomId:id,x:r(minX),z:r(minZ),width:r(maxX-minX),depth:r(maxZ-minZ)}]};
  });
  const sum=zones.reduce((acc,z)=>acc+z.area,0);
- if(Math.abs(sum-L*W)>.1)throw Error("Room regions do not cover the enclosed floor: "+sum.toFixed(2)+" / "+(L*W).toFixed(2)+" m²");
+ let expected=L*W;
+ if(g.perimeter?.length){
+  const ws=new Map(g.walls.map(w=>[w.id,w])),first=ws.get(g.perimeter[0]!)!;
+  const ordered=(start:string,next:string)=>{
+   const chain=[start,next];
+   for(const id of g.perimeter!.slice(1)){
+    const w=ws.get(id)!,last=chain[chain.length-1]!;
+    if(w.a===last)chain.push(w.b);else if(w.b===last)chain.push(w.a);else return null;
+   }
+   return chain[chain.length-1]===start?chain.slice(0,-1):null;
+  };
+  const ids=ordered(first.a,first.b)??ordered(first.b,first.a);
+  if(!ids)throw Error("Unclosed source perimeter");
+  expected=Math.abs(area(ids.map(id=>ns.get(id)!)));
+ }
+ if(Math.abs(sum-expected)>.1)throw Error("Room regions do not cover the enclosed floor: "+sum.toFixed(2)+" / "+expected.toFixed(2)+" m²");
  const junctions:PlanIntersection[]=[...intersections.entries()].map(([k,x])=>
   ({id:"J-"+k,x:x.x,z:x.z,wallIds:[...x.wallIds].sort()}));
  return {solids,zones,intersections:junctions};
