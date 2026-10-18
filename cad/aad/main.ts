@@ -9,6 +9,7 @@ import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSo
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
 import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,translateAngledWall,validatePlanGraph} from "./floor_graph";
+import {parseAsciiDxf,traceDxfLayer,type DxfTrace} from "./dxf_trace";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -524,6 +525,45 @@ function numericChange(){
   setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
 }
+let stagedDxf:DxfTrace|null=null;
+function dxfPreview(){
+ const status=elem<HTMLElement>("dxfStatus");
+ const layer=elem<HTMLSelectElement>("dxfLayer");
+ status.textContent=stagedDxf?
+   stagedDxf.segments.length+" source line segments; units: "+stagedDxf.units+
+   "; layers: "+stagedDxf.layers.length+". "+
+   (stagedDxf.warnings.join(" ")||"Straight-line intake only; wall classification is provisional."):
+   "No local DXF loaded. Original file stays on your device.";
+ layer.replaceChildren();
+ for(const name of stagedDxf?.layers||[]){
+  const opt=document.createElement("option");opt.value=name;opt.textContent=name;layer.append(opt);
+ }
+ const likely=stagedDxf?.layers.find(x=>/WALL|PARTITION/i.test(x));
+ if(likely)layer.value=likely;
+}
+async function readLocalDxf(){
+ const file=elem<HTMLInputElement>("dxfUpload").files?.[0];if(!file)return;
+ try{
+  if(file.size>15_000_000)throw Error("DXF too large: export only the relevant wall layer");
+  stagedDxf=parseAsciiDxf(await file.text());
+  dxfPreview();
+ }catch(error){stagedDxf=null;dxfPreview();note.textContent=error instanceof Error?error.message:"DXF is not readable";}
+ elem<HTMLInputElement>("dxfUpload").value="";
+}
+function importDxfGraph(){
+ try{
+  if(!stagedDxf)throw Error("Read a local ASCII DXF first");
+  const result=traceDxfLayer(stagedDxf,elem<HTMLSelectElement>("dxfLayer").value);
+  const noteText="PROVISIONAL LOCAL DXF CENTERLINES. Units: "+stagedDxf.units+
+    "; "+result.sourceSegments+" line segments, one nominated layer. Wall thickness 0.16 m assumed."+
+    " Openings, frame geometry and structural meaning have NOT been inferred.";
+  const next=fitToEnvelope({...model,length:result.length,width:result.width,bed:false,roomCount:1,
+    roomSplit1:round(result.length*.55),roomSplit2:round(result.length*.78),
+    floorGraph:result.graph,projectNote:noteText});
+  graphHistory=[];
+  setModel(next,"Imported provisional DXF wall linework. Confirm layer, dimension scale and missing openings against original source.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"DXF intake rejected";}
+}
 function syncGraphControls(){
  const enabled=!!model.floorGraph;
  elem<HTMLElement>("roomsOptions").hidden=enabled;
@@ -655,6 +695,9 @@ elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
+elem<HTMLInputElement>("dxfUpload").onchange=readLocalDxf;
+elem<HTMLButtonElement>("dxfBuild").onclick=importDxfGraph;
+dxfPreview();
 elem<HTMLButtonElement>("activateGraph").onclick=activateGraph;
 elem<HTMLButtonElement>("disableGraph").onclick=()=>{
  if(!model.floorGraph)return;
