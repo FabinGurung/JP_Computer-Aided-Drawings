@@ -307,7 +307,7 @@ try{
    await page.locator("#graphOpeningOffset").fill(".9");
    await page.locator("#graphOpeningWidth").fill(".8");
    await page.locator("#addGraphOpening").click();
-   if(!(await page.locator('#plan rect[data-part="O-EDIT-2"]').getAttribute("transform"))?.includes("rotate("))
+   if(!(await page.locator('#plan rect[data-part="O-EDIT-1"]').getAttribute("transform"))?.includes("rotate("))
      throw Error("Hosted diagonal opening not rotated");
    const dxfSegments=[[0,0,8000,0],[8000,0,8000,6000],[8000,6000,0,6000],[0,6000,0,0],[0,0,8000,6000]];
    const dxfGroups=[[0,"SECTION"],[2,"HEADER"],[9,"$INSUNITS"],[70,4],[0,"ENDSEC"],
