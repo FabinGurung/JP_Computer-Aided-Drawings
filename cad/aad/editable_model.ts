@@ -8,7 +8,7 @@ import {deriveRoomSolids,type RoomKind} from "./room_layout";
 import {type PlanGraph,validatePlanGraph,derivePlanGraph} from "./floor_graph";
 export type FrameGrid={west:number;east:number;north:number;south:number};
 export type Category="column"|"beam"|"slab"|"wall"|"door"|"window"|"furniture"|"room";
-export type Solid={id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number};
+export type Solid={id:string;name:string;kind:Category;x:number;y:number;z:number;dx:number;dy:number;dz:number;angleDeg?:number;outline?:{x:number;z:number}[]};
 export type ColumnSection={x:number;z:number};
 export type Draft={
  schema:string;length:number;width:number;height:number;door:number;window:number;bed:boolean;
