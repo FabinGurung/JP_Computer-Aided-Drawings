@@ -27,6 +27,14 @@ try{
   page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text())});
   const address=process.env.CAD_AAD_URL||"http://127.0.0.1:5175/cad/aad/";
   await page.goto(address,{waitUntil:"networkidle",timeout:60000});
+  // Private drafts must be discoverable at the top of the existing editor.
+  const opener=page.locator('.aad-local-project label[for="upload"]');
+  await opener.waitFor({state:"visible"});
+  const isLinked=await opener.evaluate(x=>document.getElementById(x.htmlFor)?.getAttribute("type")==="file");
+  if(!isLinked)throw Error("Open project control is not wired to the local JSON file input");
+  if(!await opener.evaluate(x=>{const r=x.getBoundingClientRect();return r.width>80&&r.height>25;}))
+    throw Error("Private model import CTA is visually unusable");
+
   await page.locator('#plan rect[data-part="C-NW"]').waitFor({timeout:20000});
   await page.locator('#threeStatus[data-state="ready"]').waitFor({timeout:20000});
   await page.locator('#planStatus[data-state="ready"]').waitFor({timeout:20000});
