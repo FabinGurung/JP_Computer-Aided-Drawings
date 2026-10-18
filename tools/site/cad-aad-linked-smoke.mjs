@@ -337,6 +337,35 @@ try{
    if(await page.locator('#plan rect[data-part="ROOM-02"]').count()!==1)
      throw Error("Legacy two-room template failed after leaving graph mode");
    await page.locator("#reset").click();
+   // Public synthetic irregular-floor regression. No private client geometry.
+   const polyNodes=[[1,1],[14,1],[14,4],[23,4],[23,13],[1,13],[14,13]]
+     .map(([x,z],i)=>({id:"P"+(i+1),x,z}));
+   const polyWalls=[
+     ["OUT1","P1","P2"],["OUT2","P2","P3"],["OUT3","P3","P4"],
+     ["OUT4","P4","P5"],["OUT5","P5","P6"],["OUT6","P6","P1"],
+     ["SPLIT","P3","P7"]
+   ].map(([id,a,b])=>({id,a,b,thickness:.20}));
+   const polyDraft={...serialized,length:24,width:14,bed:false,
+     columnSizes:{},beamDepths:{},beamWidths:{},
+     projectNote:"PUBLIC SYNTHETIC TEST: irregular L footprint, no client data.",
+     floorGraph:{nodes:polyNodes,walls:polyWalls,
+       openings:[{id:"D1",wallId:"SPLIT",kind:"door",offset:1,width:.9,sill:0,height:2.1}],
+       labels:{"ROOM-01":"Teaching zone A","ROOM-02":"Teaching zone B"},
+       perimeter:["OUT1","OUT2","OUT3","OUT4","OUT5","OUT6"]}};
+   await readback.setInputFiles({name:"synthetic-irregular.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(polyDraft))});
+   await page.locator('#plan rect[data-part="D1"]').waitFor({timeout:12000});
+   if(await page.locator("#area").innerText()!=="237.0 m²")throw Error("Irregular area did not follow polygon");
+   if(await page.locator("#roomTotal").innerText()!=="2")throw Error("Irregular closed plan did not generate both zones");
+   if(await page.locator('#plan rect[data-part="C-NW"]').count()!==0)
+     throw Error("Synthetic one-bay structural column leaked into source-traced mode");
+   if(await page.locator('#threeStatus[data-state="ready"]').count()!==1)
+     throw Error("3D did not render irregular wall geometry");
+   const polySave=page.waitForEvent("download");await page.locator("#download").click();
+   const polyDownloaded=await polySave;
+   const polyJSON=JSON.parse(await fsDraft.readFile(await polyDownloaded.path(),"utf8"));
+   if(polyJSON.floorGraph.perimeter.length!==6||polyJSON.floorGraph.walls.length!==7)
+     throw Error("Source perimeter was not retained across saved JSON");
+   await page.locator("#reset").click();
    await page.screenshot({path:"/tmp/cad-aad-daylight-loaded.png",fullPage:true});
    // Force synthetic context-loss event: the plan remains usable.
    await page.evaluate(()=>document.querySelector("#canvas3d canvas")?.dispatchEvent(new Event("webglcontextlost",{cancelable:true})));
