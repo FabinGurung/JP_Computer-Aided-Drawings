@@ -79,7 +79,7 @@ export function traceDxfLayer(source:DxfTrace,layer:string):{graph:PlanGraph;len
  const xs=picked.flatMap(s=>[s.ax,s.bx]),zs=picked.flatMap(s=>[s.az,s.bz]);
  const minX=Math.min(...xs),maxX=Math.max(...xs),minZ=Math.min(...zs),maxZ=Math.max(...zs);
  const length=r(maxX-minX),width=r(maxZ-minZ);
- if(length<4||length>18||width<4||width>14)throw Error("DXF extents "+length+" × "+width+" m exceed editable 4–18 × 4–14 m envelope; review scale/layer selection");
+ if(length<4||length>28||width<4||width>20)throw Error("DXF extents "+length+" × "+width+" m exceed editable 4–28 × 4–20 m envelope; review scale/layer selection");
  const nodes:PlanNode[]=[],walls:PlanWall[]=[];
  const node=(x:number,z:number)=>{
   const X=r(x-minX),Z=r(z-minZ);
