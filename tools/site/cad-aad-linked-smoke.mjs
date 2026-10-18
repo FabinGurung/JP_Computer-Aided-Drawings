@@ -278,7 +278,7 @@ try{
    await page.locator("#addGraphOpening").click();
    if(await page.locator('#plan rect[data-part="O-EDIT-1"]').count()!==1)
      throw Error("Added door not hosted by edited partition");
-   await page.locator("#saveOptions > summary").click();
+   if(!(await page.locator("#download").isVisible()))await page.locator("#saveOptions > summary").click();
    const graphSave=page.waitForEvent("download");
    await page.locator("#download").click();
    const graphDownload=await graphSave;
