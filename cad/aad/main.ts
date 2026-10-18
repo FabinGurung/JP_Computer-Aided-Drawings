@@ -237,7 +237,7 @@ function planView(){
     if(!["ArrowUp","ArrowDown","ArrowLeft","ArrowRight"].includes(e.key))return;
     e.preventDefault();
     const vertical=Math.abs(a.x-b.x)<.001;
-    const delta=(e.key==="ArrowRight"||e.key==="ArrowDown")?.1:-.1;
+    const delta=(e.key==="ArrowRight"||e.key==="ArrowDown") ? .1 : -.1;
     try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
        model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
     catch(error){note.textContent=error instanceof Error?error.message:"Move rejected";}
