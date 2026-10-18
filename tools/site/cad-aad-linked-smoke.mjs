@@ -291,6 +291,24 @@ try{
    await page.locator("#undoGraph").click();
    if(await page.locator('#plan rect[data-part="O-EDIT-1"]').count()!==0)
      throw Error("Graph undo failed to remove latest hosted opening");
+   // Angled partition added to the same shared model.
+   await page.locator("#graphX1").fill("0");
+   await page.locator("#graphZ1").fill("0");
+   await page.locator("#graphX2").fill("3.5");
+   await page.locator("#graphZ2").fill("6");
+   await page.locator("#addGraphWall").click();
+   await page.locator('#plan rect[data-graph-wall="W-EDIT-2"]').waitFor();
+   if(await page.locator('#plan polygon[data-part^="ROOM-"]').count()<2)
+     throw Error("Diagonal room detection missing polygonal zones");
+   if(!(await page.locator('#plan rect[data-part="W-EDIT-2-SEG-00"]').getAttribute("transform"))?.includes("rotate("))
+     throw Error("Angled wall did not rotate in plan");
+   await page.locator("#graphHostWall").selectOption("W-EDIT-2");
+   await page.locator("#graphOpeningKind").selectOption("window");
+   await page.locator("#graphOpeningOffset").fill(".9");
+   await page.locator("#graphOpeningWidth").fill(".8");
+   await page.locator("#addGraphOpening").click();
+   if(!(await page.locator('#plan rect[data-part="O-EDIT-2"]').getAttribute("transform"))?.includes("rotate("))
+     throw Error("Hosted diagonal opening not rotated");
    await page.locator("#disableGraph").click();
    if(await page.locator('#plan rect[data-graph-wall]').count()!==0)
      throw Error("Switching back to legacy template left orphan free-form geometry");
