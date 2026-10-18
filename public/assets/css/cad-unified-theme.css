@@ -304,3 +304,19 @@ body:has(#canvas3d) #roomList{display:flex;gap:5px;flex-wrap:wrap;margin-top:8px
 body:has(#canvas3d) .aad-room-card{font-size:10px!important;padding:7px 9px!important;background:#fff!important;color:#27529d!important;border:1px solid #c5d8ef!important}
 body:has(#canvas3d) .aad-room-card:hover{background:#e9f2ff!important}
 @media(max-width:1250px){body:has(#canvas3d) .aad-room-controls{grid-template-columns:1fr}}
+
+/* v0.5 optional orthogonal floor editor. Current staged room editor remains default. */
+body:has(#canvas3d) .aad-graph-launch{display:grid;gap:6px;padding:13px;border:1px solid #d5e4f7;border-radius:10px;background:#f1f7ff}
+body:has(#canvas3d) .aad-graph-launch>button{justify-self:start;background:#2563eb;color:#fff;border-color:#2563eb}
+body:has(#canvas3d) .aad-graph-launch>span{font-size:11px;color:#4b6788}
+body:has(#canvas3d) #graphEditing{background:#f8fbff;border:1px solid #b9d6f2}
+body:has(#canvas3d) #graphEditing[hidden],body:has(#canvas3d) #roomsOptions[hidden]{display:none!important}
+body:has(#canvas3d) #graphEditing>summary{color:#174fa6;font-weight:800}
+body:has(#canvas3d) .aad-graph-sub{border:1px solid #d9e6f4;background:#fff;border-radius:8px;margin-top:9px;padding:9px}
+body:has(#canvas3d) .aad-graph-sub>summary{font-size:11px;font-weight:750;color:#315785;cursor:pointer}
+body:has(#canvas3d) .aad-graph-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:9px 0}
+body:has(#canvas3d) .aad-graph-grid label{min-width:0}
+body:has(#canvas3d) .aad-graph-grid input,body:has(#canvas3d) .aad-graph-grid select{width:100%;background:white;border:1px solid #c0d5eb;border-radius:7px;padding:7px 8px;color:#1e405d}
+body:has(#canvas3d) .aad-graph-count{font-size:11px;font-weight:750;color:#2b5f8d;padding:8px}
+body:has(#canvas3d) #plan [data-graph-wall]:hover{stroke-opacity:.85;stroke:#e45253}
+@media(max-width:420px){body:has(#canvas3d) .aad-graph-grid{grid-template-columns:1fr}}
