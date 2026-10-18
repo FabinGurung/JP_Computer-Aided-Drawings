@@ -8,7 +8,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
-import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,validatePlanGraph} from "./floor_graph";
+import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,translateAngledWall,validatePlanGraph} from "./floor_graph";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -105,8 +105,18 @@ function threeView(){
    metalness:glass?.1:0,transparent:glass||e.kind==="room",opacity:glass?.48:e.kind==="room"?.27:1,
    side:THREE.DoubleSide
   });
-  const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
-  mesh.position.set(e.x+e.dx/2,e.y+e.dy/2,e.z+e.dz/2);
+  const shape=e.outline?.length?new THREE.Shape():null;
+  if(shape&&e.outline){
+   shape.moveTo(e.outline[0]!.x,e.outline[0]!.z);
+   for(const point of e.outline.slice(1))shape.lineTo(point.x,point.z);
+   shape.closePath();
+  }
+  const mesh=new THREE.Mesh(shape?new THREE.ShapeGeometry(shape):new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
+  if(shape){mesh.geometry.rotateX(Math.PI/2);mesh.position.set(0,e.y+.02,0);}
+  else {
+   mesh.position.set(e.x+e.dx/2,e.y+e.dy/2,e.z+e.dz/2);
+   if(e.angleDeg!==undefined)mesh.rotation.y=-e.angleDeg*Math.PI/180;
+  }
   mesh.name=e.id;mesh.userData.id=e.id;
   mesh.visible=(e.kind!=="slab"||showRoof)&&(e.kind!=="wall"||showWalls);
   if(e.kind==="beam"||e.kind==="column"||e.kind==="door"||e.kind==="window"){
@@ -165,8 +175,12 @@ function planView(){
    // shared footprint; stable segment IDs still refer to the same 3D solids.
    if(e.id==="W-NSILL"||e.id==="W-NHEAD"||e.id==="W-SHEAD")continue;
    const selectedNow=e.id===selected;
-   const item=svgNode("rect",{
-    x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale),
+   const centerX=left+(e.x+e.dx/2)*scale,centerY=top+(e.z+e.dz/2)*scale;
+   const hasOutline=!!e.outline?.length;
+   const item=svgNode(hasOutline?"polygon":"rect",{
+    ...(hasOutline?{points:e.outline!.map(pt=>(left+pt.x*scale)+","+(top+pt.z*scale)).join(" ")}:
+     {x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale)}),
+    ...(e.angleDeg===undefined?{}:{transform:"rotate("+e.angleDeg+" "+centerX+" "+centerY+")"}),
     fill:kind==="beam"?"none":"#"+palette[kind].toString(16).padStart(6,"0"),
     "fill-opacity":kind==="wall"?.78:kind==="room"?.20:1,
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
