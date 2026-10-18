@@ -92,7 +92,7 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <label>Offset from wall start (m)<input id="graphOpeningOffset" type="number" step=".05" value=".8"></label>
 <label>Opening width (m)<input id="graphOpeningWidth" type="number" step=".05" value=".9"></label>
 </div><button id="addGraphOpening" type="button">Add hosted opening</button></details>
-<details class="aad-graph-sub"><summary>Source and assumption notes</summary><p id="graphProjectNote" class="sub"></p></details>
+<details id="dxfIntake"><summary>DXF wall tracing</summary><input id="dxfUpload" type="file" accept=".dxf"><p id="dxfStatus">No DXF loaded</p><select id="dxfLayer"></select><button id="dxfBuild" type="button">Trace selected layer</button></details><details class="aad-graph-sub"><summary>Source and assumption notes</summary><p id="graphProjectNote" class="sub"></p></details>
 </details>
 <details class="aad-fold" id="displayOptions"><summary>Display options</summary><div><label class="check"><input type="checkbox" id="roof"> Show roof slab in 3D</label><label class="check"><input type="checkbox" id="walls" checked> Show walls in 3D</label><label class="check"><input type="checkbox" id="dimensions" checked> Show plan dimensions</label><label class="check"><input type="checkbox" id="bed" checked> Include bed</label></div></details>
 <details class="aad-fold" id="saveOptions"><summary>Save or open design</summary><div class="actions"><button type="button" id="download">Save draft</button><label for="upload" style="border:1px solid #426277;border-radius:8px;padding:9px 12px;background:#1a3447;font-size:12px;font-weight:750;cursor:pointer">Open draft JSON</label><input id="upload" type="file" accept=".json,application/json"></div>

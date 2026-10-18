@@ -8,7 +8,8 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
-import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,validatePlanGraph} from "./floor_graph";
+import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,translateAngledWall,validatePlanGraph} from "./floor_graph";
+import {parseAsciiDxf,traceDxfLayer,type DxfTrace} from "./dxf_trace";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -105,8 +106,18 @@ function threeView(){
    metalness:glass?.1:0,transparent:glass||e.kind==="room",opacity:glass?.48:e.kind==="room"?.27:1,
    side:THREE.DoubleSide
   });
-  const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
-  mesh.position.set(e.x+e.dx/2,e.y+e.dy/2,e.z+e.dz/2);
+  const shape=e.outline?.length?new THREE.Shape():null;
+  if(shape&&e.outline){
+   shape.moveTo(e.outline[0]!.x,e.outline[0]!.z);
+   for(const point of e.outline.slice(1))shape.lineTo(point.x,point.z);
+   shape.closePath();
+  }
+  const mesh=new THREE.Mesh(shape?new THREE.ShapeGeometry(shape):new THREE.BoxGeometry(e.dx,e.dy,e.dz),material);
+  if(shape){mesh.geometry.rotateX(Math.PI/2);mesh.position.set(0,e.y+.02,0);}
+  else {
+   mesh.position.set(e.x+e.dx/2,e.y+e.dy/2,e.z+e.dz/2);
+   if(e.angleDeg!==undefined)mesh.rotation.y=-e.angleDeg*Math.PI/180;
+  }
   mesh.name=e.id;mesh.userData.id=e.id;
   mesh.visible=(e.kind!=="slab"||showRoof)&&(e.kind!=="wall"||showWalls);
   if(e.kind==="beam"||e.kind==="column"||e.kind==="door"||e.kind==="window"){
@@ -165,8 +176,12 @@ function planView(){
    // shared footprint; stable segment IDs still refer to the same 3D solids.
    if(e.id==="W-NSILL"||e.id==="W-NHEAD"||e.id==="W-SHEAD")continue;
    const selectedNow=e.id===selected;
-   const item=svgNode("rect",{
-    x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale),
+   const centerX=left+(e.x+e.dx/2)*scale,centerY=top+(e.z+e.dz/2)*scale;
+   const hasOutline=!!e.outline?.length;
+   const item=svgNode(hasOutline?"polygon":"rect",{
+    ...(hasOutline?{points:e.outline!.map(pt=>(left+pt.x*scale)+","+(top+pt.z*scale)).join(" ")}:
+     {x:left+e.x*scale,y:top+e.z*scale,width:Math.max(3,e.dx*scale),height:Math.max(3,e.dz*scale)}),
+    ...(e.angleDeg===undefined?{}:{transform:"rotate("+e.angleDeg+" "+centerX+" "+centerY+")"}),
     fill:kind==="beam"?"none":"#"+palette[kind].toString(16).padStart(6,"0"),
     "fill-opacity":kind==="wall"?.78:kind==="room"?.20:1,
     stroke:selectedNow?"#ef692c":kind==="beam"?"#d0a365":"#385261",
@@ -208,11 +223,14 @@ function planView(){
    const a=graphNodes.get(wall.a)!,b=graphNodes.get(wall.b)!;
    const verticalWall=Math.abs(a.x-b.x)<.001;
    const p1x=left+a.x*scale,p2x=left+b.x*scale,p1y=top+a.z*scale,p2y=top+b.z*scale;
+   const angled=Math.abs(a.x-b.x)>.001&&Math.abs(a.z-b.z)>.001;
+   const hx=(p1x+p2x)/2,hy=(p1y+p2y)/2,angle=Math.atan2(p2y-p1y,p2x-p1x)*180/Math.PI;
    const hit=svgNode("rect",{
-    x:verticalWall?p1x-6:Math.min(p1x,p2x),
-    y:verticalWall?Math.min(p1y,p2y):p1y-6,
-    width:verticalWall?12:Math.abs(p2x-p1x),
-    height:verticalWall?Math.abs(p2y-p1y):12,
+    x:angled?hx-Math.hypot(p2x-p1x,p2y-p1y)/2:verticalWall?p1x-6:Math.min(p1x,p2x),
+    y:angled?hy-6:verticalWall?Math.min(p1y,p2y):p1y-6,
+    width:angled?Math.hypot(p2x-p1x,p2y-p1y):verticalWall?12:Math.abs(p2x-p1x),
+    height:angled?12:verticalWall?Math.abs(p2y-p1y):12,
+    ...(angled?{transform:"rotate("+angle+" "+hx+" "+hy+")"}:{}),
     fill:"#2563eb","fill-opacity":.22,stroke:"#1b57ad","stroke-opacity":.5,"stroke-width":.7,
     "pointer-events":"all",style:"cursor:grab","data-graph-wall":wall.id,
     role:"slider",tabindex:0,"aria-label":"Drag connected wall "+wall.id
@@ -234,7 +252,11 @@ function planView(){
     const rawY=(e.clientY-rect.top)*620/rect.height;
     const vertical=Math.abs(a.x-b.x)<.001;
     const newPosition=(vertical?rawX-left:rawY-top)/scale;
-    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
+    const deltaX=(e.clientX-startX)*600/rect.width/scale;
+    const deltaZ=(e.clientY-startY)*620/rect.height/scale;
+    try{commitGraph(angled?
+       translateAngledWall(model.floorGraph!,wall.id,deltaX,deltaZ,model.length,model.width,model.height):
+       shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
       "Moved "+wall.id+" and connected intersections; inferred rooms and openings regenerated.");}
     catch(error){note.textContent=error instanceof Error?error.message:"Wall drag rejected";planView();}
    });
@@ -244,8 +266,11 @@ function planView(){
     e.preventDefault();
     const vertical=Math.abs(a.x-b.x)<.001;
     const delta=(e.key==="ArrowRight"||e.key==="ArrowDown") ? .1 : -.1;
-    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
-       model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
+    try{commitGraph(angled?
+       translateAngledWall(model.floorGraph!,wall.id,(e.key==="ArrowLeft"?-.1:e.key==="ArrowRight"?.1:0),
+         (e.key==="ArrowUp"?-.1:e.key==="ArrowDown"?.1:0),model.length,model.width,model.height):
+       shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
+        model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
     catch(error){note.textContent=error instanceof Error?error.message:"Move rejected";}
    });
    svg.append(hit);
@@ -500,6 +525,45 @@ function numericChange(){
   setModel(fitToEnvelope(update),"Linked model updated. Plan and 3D use the same elements.");
  }catch(error){note.textContent=error instanceof Error?error.message:"Cannot apply dimensions";}
 }
+let stagedDxf:DxfTrace|null=null;
+function dxfPreview(){
+ const status=elem<HTMLElement>("dxfStatus");
+ const layer=elem<HTMLSelectElement>("dxfLayer");
+ status.textContent=stagedDxf?
+   stagedDxf.segments.length+" source line segments; units: "+stagedDxf.units+
+   "; layers: "+stagedDxf.layers.length+". "+
+   (stagedDxf.warnings.join(" ")||"Straight-line intake only; wall classification is provisional."):
+   "No local DXF loaded. Original file stays on your device.";
+ layer.replaceChildren();
+ for(const name of stagedDxf?.layers||[]){
+  const opt=document.createElement("option");opt.value=name;opt.textContent=name;layer.append(opt);
+ }
+ const likely=stagedDxf?.layers.find(x=>/WALL|PARTITION/i.test(x));
+ if(likely)layer.value=likely;
+}
+async function readLocalDxf(){
+ const file=elem<HTMLInputElement>("dxfUpload").files?.[0];if(!file)return;
+ try{
+  if(file.size>15_000_000)throw Error("DXF too large: export only the relevant wall layer");
+  stagedDxf=parseAsciiDxf(await file.text());
+  dxfPreview();
+ }catch(error){stagedDxf=null;dxfPreview();note.textContent=error instanceof Error?error.message:"DXF is not readable";}
+ elem<HTMLInputElement>("dxfUpload").value="";
+}
+function importDxfGraph(){
+ try{
+  if(!stagedDxf)throw Error("Read a local ASCII DXF first");
+  const result=traceDxfLayer(stagedDxf,elem<HTMLSelectElement>("dxfLayer").value);
+  const noteText="PROVISIONAL LOCAL DXF CENTERLINES. Units: "+stagedDxf.units+
+    "; "+result.sourceSegments+" line segments, one nominated layer. Wall thickness 0.16 m assumed."+
+    " Openings, frame geometry and structural meaning have NOT been inferred.";
+  const next=fitToEnvelope({...model,length:result.length,width:result.width,bed:false,roomCount:1,
+    roomSplit1:round(result.length*.55),roomSplit2:round(result.length*.78),
+    floorGraph:result.graph,projectNote:noteText});
+  graphHistory=[];
+  setModel(next,"Imported provisional DXF wall linework. Confirm layer, dimension scale and missing openings against original source.");
+ }catch(error){note.textContent=error instanceof Error?error.message:"DXF intake rejected";}
+}
 function syncGraphControls(){
  const enabled=!!model.floorGraph;
  elem<HTMLElement>("roomsOptions").hidden=enabled;
@@ -631,6 +695,9 @@ elem<HTMLInputElement>("bed").onchange=numericChange;
 elem<HTMLInputElement>("roof").onchange=event=>{showRoof=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("walls").onchange=event=>{showWalls=(event.target as HTMLInputElement).checked;threeView();};
 elem<HTMLInputElement>("dimensions").onchange=event=>{showDimensions=(event.target as HTMLInputElement).checked;planView();};
+elem<HTMLInputElement>("dxfUpload").onchange=readLocalDxf;
+elem<HTMLButtonElement>("dxfBuild").onclick=importDxfGraph;
+dxfPreview();
 elem<HTMLButtonElement>("activateGraph").onclick=activateGraph;
 elem<HTMLButtonElement>("disableGraph").onclick=()=>{
  if(!model.floorGraph)return;
