@@ -242,7 +242,7 @@ try{
    if(await page.locator("#partA").count()!==1)throw Error("Component editor was destroyed by reset");
    // v0.5 free-form orthogonal graph: one schema drives all SVG and meshes.
    await page.locator("#activateGraph").click();
-   await page.locator('#plan line[data-graph-wall="W-PART-1"]').waitFor();
+   await page.locator('#plan rect[data-graph-wall="W-PART-1"]').waitFor();
    const initialZones=await page.locator('#plan text[data-room-label]').count();
    if(initialZones!==3||await page.locator('#roomTotal').innerText()!=="3")
      throw Error("Connected graph failed to auto-detect three enclosed rooms");
@@ -251,8 +251,8 @@ try{
    if(await page.locator('#plan rect[data-part="D-INTER-1"]').count()!==1 ||
       await page.locator('#plan rect[data-part="W-NORTH"]').count()!==1)
      throw Error("Hosted multiple openings disappeared from 2D/3D model");
-   const wallHandle=page.locator('#plan line[data-graph-wall="W-PART-1"]');
-   const firstA=Number(await wallHandle.getAttribute("x1"));
+   const wallHandle=page.locator('#plan rect[data-graph-wall="W-PART-1"]');
+   const firstA=Number(await wallHandle.getAttribute("x"));
    const handleBox=await wallHandle.boundingBox();
    if(!handleBox)throw Error("Draggable graph wall not visible");
    const centerX=handleBox.x+handleBox.width/2,centerY=handleBox.y+handleBox.height/2;
@@ -260,7 +260,7 @@ try{
    await page.mouse.down();
    await page.mouse.move(centerX+14,centerY,{steps:4});
    await page.mouse.up();
-   const movedX=Number(await page.locator('#plan line[data-graph-wall="W-PART-1"]').getAttribute("x1"));
+   const movedX=Number(await page.locator('#plan rect[data-graph-wall="W-PART-1"]').getAttribute("x"));
    if(movedX<=firstA+4)throw Error("Wall drag did not move connected gridline");
    if(await page.locator('#plan text[data-room-label]').count()!==3)
      throw Error("Automatic room detection broke after moving connected wall");
@@ -269,7 +269,7 @@ try{
    await page.locator("#graphX2").fill("4.25");
    await page.locator("#graphZ2").fill("3");
    await page.locator("#addGraphWall").click();
-   await page.locator('#plan line[data-graph-wall="W-EDIT-1"]').waitFor();
+   await page.locator('#plan rect[data-graph-wall="W-EDIT-1"]').waitFor();
    await page.locator("#graphHostWall").selectOption("W-EDIT-1");
    await page.locator("#graphOpeningOffset").fill("1");
    await page.locator("#graphOpeningWidth").fill(".85");
@@ -290,7 +290,7 @@ try{
    if(await page.locator('#plan rect[data-part="O-EDIT-1"]').count()!==0)
      throw Error("Graph undo failed to remove latest hosted opening");
    await page.locator("#disableGraph").click();
-   if(await page.locator('#plan line[data-graph-wall]').count()!==0)
+   if(await page.locator('#plan rect[data-graph-wall]').count()!==0)
      throw Error("Switching back to legacy template left orphan free-form geometry");
    await page.locator("#roomCount").selectOption("2");
    if(await page.locator('#plan rect[data-part="ROOM-02"]').count()!==1)
