@@ -222,11 +222,14 @@ function planView(){
    const a=graphNodes.get(wall.a)!,b=graphNodes.get(wall.b)!;
    const verticalWall=Math.abs(a.x-b.x)<.001;
    const p1x=left+a.x*scale,p2x=left+b.x*scale,p1y=top+a.z*scale,p2y=top+b.z*scale;
+   const angled=Math.abs(a.x-b.x)>.001&&Math.abs(a.z-b.z)>.001;
+   const hx=(p1x+p2x)/2,hy=(p1y+p2y)/2,angle=Math.atan2(p2y-p1y,p2x-p1x)*180/Math.PI;
    const hit=svgNode("rect",{
-    x:verticalWall?p1x-6:Math.min(p1x,p2x),
-    y:verticalWall?Math.min(p1y,p2y):p1y-6,
-    width:verticalWall?12:Math.abs(p2x-p1x),
-    height:verticalWall?Math.abs(p2y-p1y):12,
+    x:angled?hx-Math.hypot(p2x-p1x,p2y-p1y)/2:verticalWall?p1x-6:Math.min(p1x,p2x),
+    y:angled?hy-6:verticalWall?Math.min(p1y,p2y):p1y-6,
+    width:angled?Math.hypot(p2x-p1x,p2y-p1y):verticalWall?12:Math.abs(p2x-p1x),
+    height:angled?12:verticalWall?Math.abs(p2y-p1y):12,
+    ...(angled?{transform:"rotate("+angle+" "+hx+" "+hy+")"}:{}),
     fill:"#2563eb","fill-opacity":.22,stroke:"#1b57ad","stroke-opacity":.5,"stroke-width":.7,
     "pointer-events":"all",style:"cursor:grab","data-graph-wall":wall.id,
     role:"slider",tabindex:0,"aria-label":"Drag connected wall "+wall.id
@@ -248,7 +251,11 @@ function planView(){
     const rawY=(e.clientY-rect.top)*620/rect.height;
     const vertical=Math.abs(a.x-b.x)<.001;
     const newPosition=(vertical?rawX-left:rawY-top)/scale;
-    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
+    const deltaX=(e.clientX-startX)*600/rect.width/scale;
+    const deltaZ=(e.clientY-startY)*620/rect.height/scale;
+    try{commitGraph(angled?
+       translateAngledWall(model.floorGraph!,wall.id,deltaX,deltaZ,model.length,model.width,model.height):
+       shiftWallLine(model.floorGraph!,wall.id,newPosition,model.length,model.width,model.height),
       "Moved "+wall.id+" and connected intersections; inferred rooms and openings regenerated.");}
     catch(error){note.textContent=error instanceof Error?error.message:"Wall drag rejected";planView();}
    });
@@ -258,8 +265,11 @@ function planView(){
     e.preventDefault();
     const vertical=Math.abs(a.x-b.x)<.001;
     const delta=(e.key==="ArrowRight"||e.key==="ArrowDown") ? .1 : -.1;
-    try{commitGraph(shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
-       model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
+    try{commitGraph(angled?
+       translateAngledWall(model.floorGraph!,wall.id,(e.key==="ArrowLeft"?-.1:e.key==="ArrowRight"?.1:0),
+         (e.key==="ArrowUp"?-.1:e.key==="ArrowDown"?.1:0),model.length,model.width,model.height):
+       shiftWallLine(model.floorGraph!,wall.id,(vertical?a.x:a.z)+delta,
+        model.length,model.width,model.height),"Keyboard-adjusted connected wall "+wall.id);}
     catch(error){note.textContent=error instanceof Error?error.message:"Move rejected";}
    });
    svg.append(hit);
