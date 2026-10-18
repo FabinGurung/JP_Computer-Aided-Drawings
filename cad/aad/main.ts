@@ -8,6 +8,7 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import {type Category,type Draft,type Solid,DEFAULT_DRAFT,validateDraft,deriveSolids,fitToEnvelope} from "./editable_model";
 import {deriveFrameGraph,incidentJoints} from "./frame_connectivity";
 import {deriveRooms,roomPreset,ROOM_TEMPLATES,type RoomKind} from "./room_layout";
+import {type DerivedPlan,type PlanGraph,derivePlanGraph,makeEditablePlan,shiftWallLine,validatePlanGraph} from "./floor_graph";
 const defaults:Draft=DEFAULT_DRAFT;
 const elem=<T extends Element>(id:string):T=>{
  const x=document.querySelector<T>("#"+id);
@@ -25,6 +26,8 @@ const partMessage=elem<HTMLElement>("partMessage");
 const partInputs=["partA","partB","partC","partD"] as const;
 let model:Draft=validateDraft(defaults);
 let solids:Solid[]=[];
+let floorState:DerivedPlan|null=null;
+let graphHistory:PlanGraph[]=[];
 let selected:string|null=null;
 let showRoof=false,showWalls=true,showDimensions=true;
 const validate=validateDraft;
@@ -192,7 +195,7 @@ function planView(){
    "pointer-events":"none","data-joint":joint.id});
   svg.append(circle);
  }
- for(const room of deriveRooms(model)){
+ for(const room of (floorState?.zones??deriveRooms(model))){
   const xc=left+(room.x+room.width/2)*scale,yc=top+(room.z+room.depth/2)*scale;
   const label=textNode(xc,yc,room.name+" · "+room.area.toFixed(1)+" m²",Math.max(9,Math.min(13,scale*.24)));
   label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
@@ -385,17 +388,18 @@ function drawTree(){
 }
 function render(){
  solids=geometry(model);
+ floorState=model.floorGraph?derivePlanGraph(model.floorGraph,model.length,model.width,model.height):null;
  if(selected&&!solids.some(e=>e.id===selected))selected=null;
  threeView();planView();drawTree();select(selected);
  elem<HTMLElement>("area").textContent=(model.length*model.width).toFixed(1)+" m²";
  elem<HTMLElement>("totalHeight").textContent=model.height.toFixed(2)+" m";
  elem<HTMLElement>("columnCount").textContent=String(solids.filter(x=>x.kind==="column").length);
  elem<HTMLElement>("beamCount").textContent=String(solids.filter(x=>x.kind==="beam").length);
- elem<HTMLElement>("roomTotal").textContent=String(model.roomCount);
+ elem<HTMLElement>("roomTotal").textContent=String(floorState?.zones.length??model.roomCount);
  const list=elem<HTMLElement>("roomList");list.replaceChildren();
- for(const room of deriveRooms(model)){
+ for(const room of (floorState?.zones??deriveRooms(model))){
   const card=document.createElement("button");card.type="button";card.className="aad-room-card";
-  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(room.id);list.append(card);
+  card.textContent=room.name+" · "+room.area.toFixed(1)+" m²";card.title="Select "+room.id;card.onclick=()=>select(floorState?room.id+"-CELL-01":room.id);list.append(card);
  }
  if(firstRender){fit();firstRender=false;}
 }
@@ -417,6 +421,7 @@ function syncInputs(){
  elem<HTMLElement>("roomSplit2Wrap").hidden=model.roomCount<3;
  elem<HTMLElement>("interiorDoorWrap").hidden=model.roomCount<2;
  elem<HTMLElement>("innerDoorWidthWrap").hidden=model.roomCount<2;
+ syncGraphControls();
 }
 function setModel(next:Draft,message:string){
  const verified=validate(next);
