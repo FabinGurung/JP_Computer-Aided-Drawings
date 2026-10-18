@@ -355,7 +355,7 @@ try{
    await readback.setInputFiles({name:"synthetic-irregular.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(polyDraft))});
    await page.locator('#plan rect[data-part="D1"]').waitFor({timeout:12000});
    if(await page.locator("#area").innerText()!=="237.0 m²")throw Error("Irregular area did not follow polygon");
-   if(await page.locator("#roomTotal").innerText()!=="2")throw Error("Irregular closed plan did not generate both zones");
+   if(await page.locator("#roomTotal").innerText()!=="2")throw Error("Irregular closed plan room count: "+await page.locator("#roomTotal").innerText()+"; "+await page.locator("#roomList").innerText());
    if(await page.locator('#plan rect[data-part="C-NW"]').count()!==0)
      throw Error("Synthetic one-bay structural column leaked into source-traced mode");
    if(await page.locator('#threeStatus[data-state="ready"]').count()!==1)
