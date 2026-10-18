@@ -196,7 +196,8 @@ function planView(){
   svg.append(circle);
  }
  for(const room of (floorState?.zones??deriveRooms(model))){
-  const xc=left+(room.x+room.width/2)*scale,yc=top+(room.z+room.depth/2)*scale;
+  const xc=left+(floorState?room.x:room.x+("width" in room?room.width/2:0))*scale;
+  const yc=top+(floorState?room.z:room.z+("depth" in room?room.depth/2:0))*scale;
   const label=textNode(xc,yc,room.name+" · "+room.area.toFixed(1)+" m²",Math.max(9,Math.min(13,scale*.24)));
   label.setAttribute("data-room-label",room.id);label.setAttribute("fill","#315b84");label.setAttribute("pointer-events","none");
   svg.append(label);
