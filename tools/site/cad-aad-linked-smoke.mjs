@@ -188,7 +188,7 @@ try{
    const downloaded=await saved;
    const fsDraft=await import("node:fs/promises");
    const serialized=JSON.parse(await fsDraft.readFile(await downloaded.path(),"utf8"));
-   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.4"||!serialized.columnSizes["C-NW"]||
+   if(serialized.schema!=="jp-cad://linked-one-bay-demo/0.5"||!serialized.columnSizes["C-NW"]||
       serialized.beamDepths["B-N"]!==.46||serialized.beamWidths["B-N"]!==.34||
       serialized.grid.west!==.55||serialized.grid.north!==.45||
       serialized.windowX!==2.5||serialized.wallThickness!==.2||serialized.bedX!==2.1)
@@ -199,16 +199,23 @@ try{
    if(!(await page.locator("#message").innerText()).includes("Loaded draft") ||
       await page.locator('#plan rect[data-part="BED"]').count()!==1)
       throw Error("Validated draft reload lost the linked bed geometry");
+   // Legacy v0.4 import must keep the previously validated multi-room model.
+   const legacy4={...serialized,schema:"jp-cad://linked-one-bay-demo/0.4"};
+   delete legacy4.floorGraph;delete legacy4.projectNote;
+   await readback.setInputFiles({name:"legacy-v04.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy4))});
+   await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
+   if(await page.locator("#roomCount").inputValue()!=="1")throw Error("v0.4 room-model migration failed");
    // v0.3 frame drafts upgrade to the new room schema without losing
    // their component sections, doors or shared frame connections.
    const legacy3={...serialized,schema:"jp-cad://linked-one-bay-demo/0.3"};
-   for(const key of ["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth"])delete legacy3[key];
+   for(const key of ["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth","floorGraph","projectNote"])delete legacy3[key];
    await readback.setInputFiles({name:"legacy-v03.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy3))});
    await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
    if(await page.locator("#roomCount").inputValue()!=="1")throw Error("v0.3 migration lost single-room default");
    // Older v0.2 draft is admitted with safe default aligned grid and beam widths.
    const legacy2={...serialized,schema:"jp-cad://linked-one-bay-demo/0.2"};
    delete legacy2.grid;delete legacy2.beamWidths;
+   delete legacy2.floorGraph;delete legacy2.projectNote;
    for(const key of ["roomCount","roomSplit1","roomSplit2","roomTypes","interiorDoorZ","interiorDoorWidth"])delete legacy2[key];
    await readback.setInputFiles({name:"legacy-v02.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(legacy2))});
    await page.waitForFunction(()=>document.querySelector("#message")?.textContent?.includes("Loaded draft"),null,{timeout:12000});
@@ -233,6 +240,62 @@ try{
    if(await page.locator("#area").innerText()!=="48.0 m²")throw Error("Bad draft mutated valid model");
    await page.locator("#reset").click();
    if(await page.locator("#partA").count()!==1)throw Error("Component editor was destroyed by reset");
+   // v0.5 free-form orthogonal graph: one schema drives all SVG and meshes.
+   await page.locator("#activateGraph").click();
+   await page.locator('#plan line[data-graph-wall="W-PART-1"]').waitFor();
+   const initialZones=await page.locator('#plan text[data-room-label]').count();
+   if(initialZones!==3||await page.locator('#roomTotal').innerText()!=="3")
+     throw Error("Connected graph failed to auto-detect three enclosed rooms");
+   if(await page.locator('#plan circle[data-wall-joint]').count()<4)
+     throw Error("Connected intersections not projected into plan");
+   if(await page.locator('#plan rect[data-part="D-INTER-1"]').count()!==1 ||
+      await page.locator('#plan rect[data-part="W-NORTH"]').count()!==1)
+     throw Error("Hosted multiple openings disappeared from 2D/3D model");
+   const wallHandle=page.locator('#plan line[data-graph-wall="W-PART-1"]');
+   const firstA=Number(await wallHandle.getAttribute("x1"));
+   const handleBox=await wallHandle.boundingBox();
+   if(!handleBox)throw Error("Draggable graph wall not visible");
+   const centerX=handleBox.x+handleBox.width/2,centerY=handleBox.y+handleBox.height/2;
+   await page.mouse.move(centerX,centerY);
+   await page.mouse.down();
+   await page.mouse.move(centerX+14,centerY,{steps:4});
+   await page.mouse.up();
+   const movedX=Number(await page.locator('#plan line[data-graph-wall="W-PART-1"]').getAttribute("x1"));
+   if(movedX<=firstA+4)throw Error("Wall drag did not move connected gridline");
+   if(await page.locator('#plan text[data-room-label]').count()!==3)
+     throw Error("Automatic room detection broke after moving connected wall");
+   await page.locator("#graphX1").fill("0");
+   await page.locator("#graphZ1").fill("3");
+   await page.locator("#graphX2").fill("4.25");
+   await page.locator("#graphZ2").fill("3");
+   await page.locator("#addGraphWall").click();
+   await page.locator('#plan line[data-graph-wall="W-EDIT-1"]').waitFor();
+   await page.locator("#graphHostWall").selectOption("W-EDIT-1");
+   await page.locator("#graphOpeningOffset").fill("1");
+   await page.locator("#graphOpeningWidth").fill(".85");
+   await page.locator("#addGraphOpening").click();
+   if(await page.locator('#plan rect[data-part="O-EDIT-1"]').count()!==1)
+     throw Error("Added door not hosted by edited partition");
+   await page.locator("#saveOptions > summary").click();
+   const graphSave=page.waitForEvent("download");
+   await page.locator("#download").click();
+   const graphDownload=await graphSave;
+   const graphJson=JSON.parse(await fsDraft.readFile(await graphDownload.path(),"utf8"));
+   if(!graphJson.floorGraph||graphJson.schema!=="jp-cad://linked-one-bay-demo/0.5"||
+      !graphJson.floorGraph.openings.some(x=>x.id==="O-EDIT-1"))
+     throw Error("Free-form walls, openings and provenance not retained in one JSON document");
+   await readback.setInputFiles({name:"v05-connected-plan.json",mimeType:"application/json",buffer:Buffer.from(JSON.stringify(graphJson))});
+   await page.locator('#plan rect[data-part="O-EDIT-1"]').waitFor();
+   await page.locator("#undoGraph").click();
+   if(await page.locator('#plan rect[data-part="O-EDIT-1"]').count()!==0)
+     throw Error("Graph undo failed to remove latest hosted opening");
+   await page.locator("#disableGraph").click();
+   if(await page.locator('#plan line[data-graph-wall]').count()!==0)
+     throw Error("Switching back to legacy template left orphan free-form geometry");
+   await page.locator("#roomCount").selectOption("2");
+   if(await page.locator('#plan rect[data-part="ROOM-02"]').count()!==1)
+     throw Error("Legacy two-room template failed after leaving graph mode");
+   await page.locator("#reset").click();
    await page.screenshot({path:"/tmp/cad-aad-daylight-loaded.png",fullPage:true});
    // Force synthetic context-loss event: the plan remains usable.
    await page.evaluate(()=>document.querySelector("#canvas3d canvas")?.dispatchEvent(new Event("webglcontextlost",{cancelable:true})));
