@@ -206,10 +206,15 @@ function planView(){
   const graphNodes=new Map(model.floorGraph.nodes.map(n=>[n.id,n]));
   for(const wall of model.floorGraph.walls){
    const a=graphNodes.get(wall.a)!,b=graphNodes.get(wall.b)!;
-   const hit=svgNode("line",{
-    x1:left+a.x*scale,y1:top+a.z*scale,x2:left+b.x*scale,y2:top+b.z*scale,
-    stroke:"#2563eb","stroke-opacity":.45,"stroke-width":12,
-    "pointer-events":"stroke",style:"cursor:grab","data-graph-wall":wall.id,
+   const verticalWall=Math.abs(a.x-b.x)<.001;
+   const p1x=left+a.x*scale,p2x=left+b.x*scale,p1y=top+a.z*scale,p2y=top+b.z*scale;
+   const hit=svgNode("rect",{
+    x:verticalWall?p1x-6:Math.min(p1x,p2x),
+    y:verticalWall?Math.min(p1y,p2y):p1y-6,
+    width:verticalWall?12:Math.abs(p2x-p1x),
+    height:verticalWall?Math.abs(p2y-p1y):12,
+    fill:"#2563eb","fill-opacity":.22,stroke:"#1b57ad","stroke-opacity":.5,"stroke-width":.7,
+    "pointer-events":"all",style:"cursor:grab","data-graph-wall":wall.id,
     role:"slider",tabindex:0,"aria-label":"Drag connected wall "+wall.id
    });
    let startX=0,startY=0,dragging=false;
