@@ -19,7 +19,8 @@ export function perimeterPoints(g:PlanGraph):PlanNode[]{
  if(ids.length<4||new Set(ids).size!==ids.length)throw Error("Perimeter needs at least four distinct walls");
  const ns=new Map(g.nodes.map(n=>[n.id,n])),ws=new Map(g.walls.map(w=>[w.id,w]));
  const first=ws.get(ids[0]!);if(!first)throw Error("Missing perimeter wall");
- for(const [start,next] of [[first.a,first.b],[first.b,first.a]]){
+ const orientations: Array<[string,string]>=[[first.a,first.b],[first.b,first.a]];
+ for(const [start,next] of orientations){
   const chain=[start,next];let valid=true;
   for(const id of ids.slice(1)){
    const wall=ws.get(id),last=chain[chain.length-1]!;
