@@ -203,7 +203,7 @@ export function derivePlanGraph(graph:PlanGraph,L:number,W:number,H:number):Deri
   const region:PlanCell[]=[],stack=[key];seen.add(key);
   while(stack.length){
    const id=stack.pop()!,here=cells.get(id)!;region.push(here);
-   const [ii,kk]=id.split(",").map(Number);
+   const ij=id.split(",");const ii=Number(ij[0]??0),kk=Number(ij[1]??0);
    for(const candidate of [cellKey(ii-1,kk),cellKey(ii+1,kk),cellKey(ii,kk-1),cellKey(ii,kk+1)]){
     if(seen.has(candidate)||!cells.has(candidate)||blocks(here,cells.get(candidate)!))continue;
     seen.add(candidate);stack.push(candidate);
