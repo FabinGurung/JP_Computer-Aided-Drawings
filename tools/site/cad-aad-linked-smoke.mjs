@@ -264,12 +264,14 @@ try{
    if(movedX<=firstA+4)throw Error("Wall drag did not move connected gridline");
    if(await page.locator('#plan text[data-room-label]').count()!==3)
      throw Error("Automatic room detection broke after moving connected wall");
+   await page.locator("#graphEditing .aad-graph-sub").nth(0).locator("summary").click();
    await page.locator("#graphX1").fill("0");
    await page.locator("#graphZ1").fill("3");
    await page.locator("#graphX2").fill("4.25");
    await page.locator("#graphZ2").fill("3");
    await page.locator("#addGraphWall").click();
    await page.locator('#plan rect[data-graph-wall="W-EDIT-1"]').waitFor();
+   await page.locator("#graphEditing .aad-graph-sub").nth(1).locator("summary").click();
    await page.locator("#graphHostWall").selectOption("W-EDIT-1");
    await page.locator("#graphOpeningOffset").fill("1");
    await page.locator("#graphOpeningWidth").fill(".85");
