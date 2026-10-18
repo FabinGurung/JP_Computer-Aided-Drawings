@@ -70,7 +70,7 @@ export function validateDraft(candidate:unknown):Draft{
   raw=legacyUpgrade(c) as unknown as Record<string,unknown>;
  }
  if(raw.schema===PREVIOUS_SCHEMA){
-  const legacyKeys=Object.keys(DEFAULT_DRAFT).filter(k=>k!=="grid"&&k!=="beamWidths"&&!newKeys.includes(k));
+  const legacyKeys=Object.keys(DEFAULT_DRAFT).filter(k=>k!=="grid"&&k!=="beamWidths"&&!newKeys.includes(k)&&!graphKeys.includes(k));
   if(!sameKeys(raw,legacyKeys)||typeof raw.bed!=="boolean")throw Error("Malformed legacy v0.2 model");
   const L=Number(raw.length),W=Number(raw.width);
   raw={...raw,schema:SCHEMA,grid:{...DEFAULT_DRAFT.grid},beamWidths:{},
