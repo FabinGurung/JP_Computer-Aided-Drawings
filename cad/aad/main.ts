@@ -470,7 +470,7 @@ function render(){
  floorState=model.floorGraph?derivePlanGraph(model.floorGraph,model.length,model.width,model.height):null;
  if(selected&&!solids.some(e=>e.id===selected))selected=null;
  threeView();planView();drawTree();select(selected);
- elem<HTMLElement>("area").textContent=(model.length*model.width).toFixed(1)+" m²";
+ elem<HTMLElement>("area").textContent=(model.floorGraph?.perimeter?.length ? (floorState?.zones.reduce((a,z)=>a+z.area,0)??0) : model.length*model.width).toFixed(1)+" m²";
  elem<HTMLElement>("totalHeight").textContent=model.height.toFixed(2)+" m";
  elem<HTMLElement>("columnCount").textContent=String(solids.filter(x=>x.kind==="column").length);
  elem<HTMLElement>("beamCount").textContent=String(solids.filter(x=>x.kind==="beam").length);
