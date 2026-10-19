@@ -63,7 +63,7 @@ function addBox(elements,id,kind,ifcType,level,x,y,z,dx,dy,dz,opts={}){
   host:opts.host||null,name:opts.name||id,profile:null,steps:null};
  elements.push(e);return e;
 }
-export function assembleBuilding(manifest,models){
+export function assembleBuilding(manifest,models,options={}){
  const levels=normalizeManifest(manifest),elements=[],diagnostics=[],placements=[],projectId=manifest.projectId;
  const seen=new Set();
  const put=e=>{if(seen.has(e.id))throw Error("Nonunique building element ID "+e.id);seen.add(e.id);};
@@ -72,7 +72,11 @@ export function assembleBuilding(manifest,models){
   const model=models[level.id];if(!model)throw Error("Missing floor model "+level.id);
   const g=model.floorGraph,perimeter=modelPerimeter(model),world=perimeter.map(p=>localToWorld(p,level.transform));
   const square=Math.abs(area(world)),diff=square-level.sourceArea;
-  if(Math.abs(diff)>.02)throw Error("Unreconciled area on "+level.id+": "+square+" vs "+level.sourceArea);
+  if(Math.abs(diff)>.02){
+   if(!options.allowAreaDrift)throw Error("Unreconciled area on "+level.id+": "+square+" vs "+level.sourceArea);
+   diagnostics.push({severity:"WARNING",code:"DRAFT_AREA_DEVIATION",level:level.id,
+    message:"Working draft floor area "+round(square)+" m² differs from frozen source schedule "+level.sourceArea+" m²; source truth has not been modified"});
+  }
   areaSum.source+=level.sourceArea;areaSum.model+=square;
   const nodes=new Map(g.nodes.map(n=>[n.id,n])),wallmap=new Map(g.walls.map(w=>[w.id,w]));
   const source="SOURCE_ALIGNED_ARCHITECTURAL_DRAFT";
