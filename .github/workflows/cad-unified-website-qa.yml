@@ -23,6 +23,8 @@ jobs:
         with: {node-version: "22", cache: "npm"}
       - run: npm ci
       - run: npm run typecheck
+      - name: Validate Narayani DXF provenance and three-floor AAD project payload
+        run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
         run: |
           npm run build -- --base=/JP_Computer-Aided-Drawings/
