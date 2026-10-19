@@ -152,7 +152,7 @@ function engineLink(level){
 function resizeFrame(){
  try{
   const doc=frame.contentDocument;if(!doc)return;
-  const h=doc.documentElement.scrollHeight;
+  const h=doc.body.scrollHeight;
   if(Number.isFinite(h)&&h>500){
    const target=Math.min(2550,Math.max(790,h+18));
    if(Math.abs(frame.offsetHeight-target)>24)frame.style.height=target+"px";
@@ -160,7 +160,7 @@ function resizeFrame(){
  }catch(_){}
 }
 const projectCSS=[
-".aad-breadcrumb,.intro,.aad-steps,.aad-local-project{display:none!important}",
+".cad-global-nav,.aad-breadcrumb,.intro,.aad-steps,.aad-local-project{display:none!important}",
 "main{max-width:none!important;padding:8px!important}",
 ".workspace{display:grid!important;grid-template-columns:minmax(248px,285px) minmax(0,1fr)!important;grid-template-areas:'edit viewer' 'inspect inspect'!important;gap:10px!important}",
 ".workspace>.left{grid-area:edit!important}.workspace>.viewer{grid-area:viewer!important}.workspace>.right{grid-area:inspect!important;display:block!important}",
