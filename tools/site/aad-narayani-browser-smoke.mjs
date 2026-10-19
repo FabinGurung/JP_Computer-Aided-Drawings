@@ -9,7 +9,7 @@ try{
  assert.equal(await page.locator("iframe").count(),1,"Project page must host one unified AAD application");
  assert.equal(await page.locator("#aad-unified-engine").count(),1);
  const editor=page.frameLocator("#aad-unified-engine");
- await editor.locator("#viewer2d .aad-wall").first().waitFor({timeout:35000});
+ await editor.locator("#viewer2d .aad-wall").first().waitFor({state:"attached",timeout:35000}); // SVG horizontal lines have zero-height rectangles despite visible strokes
  await editor.locator("#viewer3d canvas").waitFor({timeout:35000});
  await editor.locator("#action-status").filter({hasText:"Shared AAD building assembly ready"}).waitFor({timeout:35000});
  assert.equal(await editor.locator("#aad-storey option").count(),4);
@@ -17,7 +17,7 @@ try{
  const normal=await editor.locator("#viewport2d").boundingBox(),visual=await editor.locator("#viewport3d").boundingBox();
  assert.ok(normal && visual && normal.x<visual.x,"2D plan must be to the left of 3D building");
  await editor.locator("#aad-storey").selectOption("gf");
- await editor.locator('[data-part="gf:EXT-01"]').first().click();
+ await editor.locator('[data-part="gf:EXT-01"]').first().dispatchEvent("click");
  assert.equal(await editor.locator("#aad-field-a").inputValue(),"0.230");
  await editor.locator("#aad-field-a").fill("0.330");
  await editor.locator("#aad-apply-edit").click();
@@ -44,10 +44,10 @@ try{
  await page.reload({waitUntil:"networkidle"});
  await page.frameLocator("#aad-unified-engine").locator("#viewer2d .aad-wall").first().waitFor({timeout:35000});
  await page.frameLocator("#aad-unified-engine").locator("#aad-storey").selectOption("gf");
- await page.frameLocator("#aad-unified-engine").locator('[data-part="gf:EXT-01"]').first().click();
+ await page.frameLocator("#aad-unified-engine").locator('[data-part="gf:EXT-01"]').first().dispatchEvent("click");
  assert.equal(await page.frameLocator("#aad-unified-engine").locator("#aad-field-a").inputValue(),"0.330","Draft persists in one shared workspace across reload");
  await page.frameLocator("#aad-unified-engine").locator("#aad-reset").click();
- await page.frameLocator("#aad-unified-engine").locator('[data-part="gf:EXT-01"]').first().click();
+ await page.frameLocator("#aad-unified-engine").locator('[data-part="gf:EXT-01"]').first().dispatchEvent("click");
  assert.equal(await page.frameLocator("#aad-unified-engine").locator("#aad-field-a").inputValue(),"0.230","Reset must restore original versioned wall thickness");
  if(errors.length)throw Error(errors.join("; "));
  console.log("AAD_NARAYANI_UNIFIED_BROWSER_PASS");
