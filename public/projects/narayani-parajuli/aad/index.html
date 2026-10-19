@@ -243,7 +243,7 @@ const projectCSS=[
 "@media(max-width:990px){.workspace{grid-template-columns:1fr!important;grid-template-areas:'viewer' 'edit' 'inspect'!important}.views{min-height:480px!important}.view,#canvas3d,#plan{min-height:480px!important}}",
 "@media(max-width:580px){.views{grid-template-columns:1fr!important}.view,#canvas3d,#plan{min-height:340px!important;height:350px!important}}",
 "body[data-aad-project-layout=\"2d-left\"] .views{grid-template-columns:1fr 1.15fr!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views{grid-template-columns:1.15fr 1fr!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.threed{order:-1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.plan{order:1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views{grid-template-columns:1fr!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout] .view+.view{border-left:0!important}\\n@media(max-width:580px){body[data-aad-project-layout] .views{grid-template-columns:1fr!important}}"
-].join("\n");
+].join("\n").replaceAll("\\n","\n");
 frame.addEventListener("load",function(){
  const expected=loadSerial;
  try{
