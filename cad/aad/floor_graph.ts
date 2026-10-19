@@ -8,11 +8,32 @@ import {deriveAngledPlan,moveAngledWall} from "./angled_graph";
 export type PlanNode={id:string;x:number;z:number};
 export type PlanWall={id:string;a:string;b:string;thickness:number};
 export type PlanOpening={id:string;wallId:string;kind:"door"|"window";offset:number;width:number;sill:number;height:number};
-export type PlanGraph={nodes:PlanNode[];walls:PlanWall[];openings:PlanOpening[];labels:Record<string,string>};
+export type PlanGraph={nodes:PlanNode[];walls:PlanWall[];openings:PlanOpening[];labels:Record<string,string>;perimeter?:string[]};
 export type PlanCell={id:string;roomId:string;x:number;z:number;width:number;depth:number};
 export type PlanZone={id:string;name:string;area:number;x:number;z:number;cells:PlanCell[]};
 export type PlanIntersection={id:string;x:number;z:number;wallIds:string[]};
 export type DerivedPlan={solids:Solid[];zones:PlanZone[];intersections:PlanIntersection[]};
+/** In-order wall IDs of the verified nonrectangular external cycle. */
+export function perimeterPoints(g:PlanGraph):PlanNode[]{
+ const ids=g.perimeter??[];
+ if(ids.length<4||new Set(ids).size!==ids.length)throw Error("Perimeter needs at least four distinct walls");
+ const ns=new Map(g.nodes.map(n=>[n.id,n])),ws=new Map(g.walls.map(w=>[w.id,w]));
+ const first=ws.get(ids[0]!);if(!first)throw Error("Missing perimeter wall");
+ const orientations: Array<[string,string]>=[[first.a,first.b],[first.b,first.a]];
+ for(const [start,next] of orientations){
+  const chain=[start,next];let valid=true;
+  for(const id of ids.slice(1)){
+   const wall=ws.get(id),last=chain[chain.length-1]!;
+   if(!wall){valid=false;break;}
+   if(wall.a===last)chain.push(wall.b);
+   else if(wall.b===last)chain.push(wall.a);
+   else {valid=false;break;}
+  }
+  if(valid&&chain[chain.length-1]===start&&new Set(chain.slice(0,-1)).size===ids.length)
+   return chain.slice(0,-1).map(id=>ns.get(id)!);
+ }
+ throw Error("Perimeter must be one closed consecutive simple loop");
+}
 const round=(v:number)=>Math.round(v*1000)/1000;
 const close=(a:number,b:number)=>Math.abs(a-b)<0.0011;
 const rec=(v:unknown,name:string):Record<string,unknown>=>{
@@ -30,7 +51,7 @@ const idCheck=(v:unknown,name:string)=>{
 };
 export function validatePlanGraph(raw:unknown,L:number,W:number,H:number):PlanGraph{
  const r=rec(raw,"Free-form plan");
- if(!keys(r,["nodes","walls","openings","labels"]))throw Error("Unknown free-form graph fields");
+ if(!keys(r,["nodes","walls","openings","labels"])&&!keys(r,["nodes","walls","openings","labels","perimeter"]))throw Error("Unknown free-form graph fields");
  if(!Array.isArray(r.nodes)||r.nodes.length<4||r.nodes.length>72)throw Error("Plan needs 4–72 nodes");
  if(!Array.isArray(r.walls)||r.walls.length<4||r.walls.length>90)throw Error("Plan needs 4–90 connected walls");
  if(!Array.isArray(r.openings)||r.openings.length>90)throw Error("Too many openings");
@@ -80,6 +101,21 @@ export function validatePlanGraph(raw:unknown,L:number,W:number,H:number):PlanGr
   for(let i=1;i<openingsFor.length;i++)if(openingsFor[i]!.offset<openingsFor[i-1]!.offset+openingsFor[i-1]!.width+.15)
    throw Error("Hosted openings overlap in "+w.id);
  }
+ const perimeter=Array.isArray(r.perimeter)?r.perimeter.map(x=>idCheck(x,"perimeter wall")):undefined;
+ if(r.perimeter!==undefined&&!perimeter)throw Error("Perimeter must be an array");
+ if(perimeter){
+  const poly=perimeterPoints({nodes,walls,openings,labels:{},perimeter});
+  const signed=poly.reduce((a,p,i)=>{const q=poly[(i+1)%poly.length]!;return a+p.x*q.z-q.x*p.z;},0);
+  if(Math.abs(signed)/2<2)throw Error("Perimeter area is too small");
+  for(let i=0;i<poly.length;i++)for(let j=i+1;j<poly.length;j++){
+   if(j===i+1||(i===0&&j===poly.length-1))continue;
+   const a=poly[i]!,b=poly[(i+1)%poly.length]!,p=poly[j]!,q=poly[(j+1)%poly.length]!;
+   const vx=b.x-a.x,vz=b.z-a.z,wx=q.x-p.x,wz=q.z-p.z,den=vx*wz-vz*wx;
+   if(Math.abs(den)<1e-9)continue;
+   const dx=p.x-a.x,dz=p.z-a.z,t=(dx*wz-dz*wx)/den,u=(dx*vz-dz*vx)/den;
+   if(t>1e-6&&t<1-1e-6&&u>1e-6&&u<1-1e-6)throw Error("Perimeter self-intersects");
+  }
+ }
  // Require explicit enclosing perimeter edges; do not infer walls across a missing boundary.
  const segmentCovers=(side:"N"|"S"|"W"|"E")=>{
   const horizontal=side==="N"||side==="S",constant=side==="N"?0:side==="S"?W:side==="W"?0:L;
@@ -92,13 +128,13 @@ export function validatePlanGraph(raw:unknown,L:number,W:number,H:number):PlanGr
   for(const span of ranges){if(span[0]!>cursor+.002)return false;cursor=Math.max(cursor,span[1]!);}
   return cursor>=(horizontal?L:W)-.002;
  };
- if(!(["N","S","W","E"] as const).every(segmentCovers))throw Error("Plan needs four closed exterior wall boundaries");
+ if(!perimeter&&!(["N","S","W","E"] as const).every(segmentCovers))throw Error("Plan needs four closed exterior wall boundaries");
  const labelR=rec(r.labels,"room labels"),labels:Record<string,string>={};
  for(const [key,label] of Object.entries(labelR)){
   if(!/^ROOM-[0-9]{2,3}$/.test(key)||typeof label!=="string"||label.trim().length<1||label.length>60)throw Error("Invalid room label");
   labels[key]=label.trim();
  }
- return {nodes,walls,openings,labels};
+ return {nodes,walls,openings,labels,...(perimeter?{perimeter}:{})};
 }
 export function makeEditablePlan(L:number,W:number,t=.16):PlanGraph{
  const half=round(L*.52),third=round(W*.47);
@@ -140,7 +176,7 @@ export function shiftWallLine(graph:PlanGraph,wallId:string,position:number,L:nu
 const dedupe=(nums:number[])=>[...new Set(nums.map(round))].sort((a,b)=>a-b);
 export function derivePlanGraph(graph:PlanGraph,L:number,W:number,H:number):DerivedPlan{
  const g=validatePlanGraph(graph,L,W,H),nodes=new Map(g.nodes.map(n=>[n.id,n]));
- if(g.walls.some(w=>{const a=nodes.get(w.a)!,b=nodes.get(w.b)!;return !close(a.x,b.x)&&!close(a.z,b.z);}))return deriveAngledPlan(g,L,W,H);
+ if(g.perimeter?.length||g.walls.some(w=>{const a=nodes.get(w.a)!,b=nodes.get(w.b)!;return !close(a.x,b.x)&&!close(a.z,b.z);}))return deriveAngledPlan(g,L,W,H);
  const solids:Solid[]=[];
  const add=(id:string,name:string,kind:Solid["kind"],x:number,y:number,z:number,dx:number,dy:number,dz:number)=>{
   if(Math.min(dx,dy,dz)<.002)throw Error("Invalid floor model geometry "+id);

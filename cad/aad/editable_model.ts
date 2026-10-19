@@ -47,7 +47,7 @@ function record(v:unknown,name:string):Record<string,unknown>{
  return v as Record<string,unknown>;
 }
 function legacyUpgrade(c:Record<string,unknown>):Draft{
- const L=numberAt(c.length,"length",4,18),W=numberAt(c.width,"width",4,14);
+ const L=numberAt(c.length,"length",4,28),W=numberAt(c.width,"width",4,20);
  const door=numberAt(c.door,"door",.75,1.6),window=numberAt(c.window,"window",.8,2.4);
  return {
   ...DEFAULT_DRAFT,schema:SCHEMA,length:L,width:W,height:numberAt(c.height,"height",2.4,5),
@@ -92,7 +92,7 @@ export function validateDraft(candidate:unknown):Draft{
  }
  if(raw.schema!==SCHEMA||!sameKeys(raw,Object.keys(DEFAULT_DRAFT))||typeof raw.bed!=="boolean")
   throw Error("Unsupported model version or unrecognized fields");
- const L=numberAt(raw.length,"length",4,18),W=numberAt(raw.width,"width",4,14);
+ const L=numberAt(raw.length,"length",4,28),W=numberAt(raw.width,"width",4,20);
  const H=numberAt(raw.height,"height",2.4,5);
  if(typeof raw.projectNote!=="string"||raw.projectNote.length>1400)throw Error("Project note must be under 1400 characters");
  const floorGraph=raw.floorGraph===null?null:validatePlanGraph(raw.floorGraph,L,W,H);
@@ -113,8 +113,8 @@ export function validateDraft(candidate:unknown):Draft{
  const roomTypesRaw=raw.roomTypes;
  if(!Array.isArray(roomTypesRaw)||roomTypesRaw.length!==3||!roomTypesRaw.every(x=>x==="bedroom"||x==="living"||x==="study"))throw Error("Invalid reusable room types");
  const roomTypes=[...roomTypesRaw] as [RoomKind,RoomKind,RoomKind];
- const roomSplit1=numberAt(raw.roomSplit1,"first room split",0,18);
- const roomSplit2=numberAt(raw.roomSplit2,"second room split",0,18);
+ const roomSplit1=numberAt(raw.roomSplit1,"first room split",0,28);
+ const roomSplit2=numberAt(raw.roomSplit2,"second room split",0,28);
  const interiorDoorWidth=numberAt(raw.interiorDoorWidth,"interior door width",.75,1.3);
  const interiorDoorZ=numberAt(raw.interiorDoorZ,"interior door position",wallThickness+.45,W-interiorDoorWidth-wallThickness-.45);
  if(roomCount>=2){
@@ -192,6 +192,8 @@ export function deriveSolids(input:Draft):Solid[]{
   result.push({id,name,kind,x:round(x),y:round(y),z:round(z),dx:round(dx),dy:round(dy),dz:round(dz)});
  };
  const L=p.length,W=p.width,H=p.height,wall=p.wallThickness,outerH=H-.18;
+ // For explicit source-traced irregular perimeters, never add an unrelated synthetic frame or rectangular roof.
+ if(p.floorGraph?.perimeter?.length)return derivePlanGraph(p.floorGraph,L,W,H).solids;
  // Orthogonal frame graph is the single authority for column centers,
  // beam clear spans and the four derived connection points.
  const frame=deriveFrameGraph(p);
