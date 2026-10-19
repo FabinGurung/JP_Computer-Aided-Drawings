@@ -31,8 +31,46 @@ for(const [key,values] of Object.entries(expected)){
  assert.ok(data.annotations.length>0,key+" should retain source annotation objects");
  assert.ok(data.dimensions.every(row=>/^\d/.test(String(row[2]))),"Numeric source dimension absent");
 }
-const model=JSON.parse(fs.readFileSync("public/data/projects/narayani-parajuli/aad-ground-floor-model.json","utf8"));
-assert.equal(model.schema,"jp-cad://linked-one-bay-demo/0.5");
-assert.equal(model.floorGraph.perimeter.length,10);
-assert.ok(model.projectNote.includes("233.62"));
+const manifest=JSON.parse(fs.readFileSync("public/data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json","utf8"));
+assert.equal(manifest.schema,"jp-cad://project-aad-qa-manifest/2.0");
+const expectedAreas={gf:205.16,ff:200.67,sf:175.62};
+let combined=0;
+for(const [level,official] of Object.entries(expectedAreas)){
+ const f=manifest.levels.find(e=>e.id===level);
+ assert.ok(f,"Missing model in project manifest: "+level);
+ const model=JSON.parse(fs.readFileSync("public/data/projects/narayani-parajuli/"+f.file,"utf8"));
+ assert.equal(model.schema,"jp-cad://linked-one-bay-demo/0.5");
+ assert.equal(model.height,3);
+ assert.equal(model.bed,false);
+ const g=model.floorGraph;
+ assert.ok(g.perimeter.length>=10);
+ assert.ok(g.walls.length>g.perimeter.length);
+ assert.ok(g.openings.length>5);
+ assert.ok(Object.keys(g.labels).length>=6);
+ const nodes=new Map(g.nodes.map(x=>[x.id,x]));
+ const edges=new Map(g.walls.map(x=>[x.id,x]));
+ let sum=0;
+ const start=edges.get(g.perimeter[0]).a;
+ let current=start;
+ for(const id of g.perimeter){
+  const w=edges.get(id);
+  assert.ok(w);
+  const first=nodes.get(current);
+  assert.ok(first);
+  let next=w.a===current?w.b:w.b===current?w.a:null;
+  assert.ok(next,"Unconnected perimeter "+id);
+  const other=nodes.get(next);
+  sum+=first.x*other.z-other.x*first.z;
+  current=next;
+ }
+ assert.equal(current,start);
+ const area=Math.abs(sum)/2;
+ assert.ok(Math.abs(area-official)<.01,level+" area discrepancy "+area+" versus "+official);
+ assert.ok(model.projectNote.includes("ASSUMPT")||model.projectNote.includes("assum")||model.projectNote.includes("AI "),level+" provenance must identify assumptions");
+ combined+=area;
+}
+assert.ok(Math.abs(combined-581.45)<.015);
+assert.match(doc,/data-model="ff"/);
+assert.match(doc,/data-model="sf"/);
+assert.match(doc,/MODEL_QA_MANIFEST_v2.json/);
 console.log("AAD_NARAYANI_SOURCE_PROJECT_PASS");
