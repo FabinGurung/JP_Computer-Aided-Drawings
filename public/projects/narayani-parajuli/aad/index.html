@@ -44,7 +44,7 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <div><small>BLOCK B · FIRST FLOOR</small><strong>200.67 m²</strong><small>Architectural DXF sheet</small></div>
 <div><small>BLOCK B · SECOND FLOOR</small><strong>175.62 m²</strong><small>Architectural DXF sheet</small></div>
 </div>
-<div class="warning"><b>Evidence and model distinction:</b> 2D layer lines, annotations and numerical dimension entities come from the revised DXF. Selected sheet dimensions are millimetres. The preliminary 3D project still has a 233.62 m² derived envelope against the stated 205.16 m² ground-floor area; wall thicknesses and openings in that model require further DXF-entity reconciliation. Engineering acceptance is not implied. Existing M80 structural HOLD remains unchanged.</div>
+<div class="warning"><b>Architecture area reconciliation complete; engineering approvals remain separate.</b> Native AAD project geometry yields GF <b>205.162 m²</b>, FF <b>200.670 m²</b>, SF <b>175.618 m²</b>, matching the source schedules to ≤0.002 m². Dimensions from measured CAD geometry and area-calibrated or semantically assumed geometry are distinguished in the <a href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json">model decision ledger</a>. 3.00 m storey heights, some room boundaries and openings are modeling assumptions. This is not structural analysis or an issued construction drawing. M80 structural HOLD is unchanged.</div>
 <div class="tabs" role="group" aria-label="View mode"><button id="aad-tab-dxf" aria-pressed="true">2D · Original DXF</button><button id="aad-tab-3d" aria-pressed="false">3D · Shared AAD Studio</button></div>
 <section id="aad-dxf-pane">
 <div class="toolbar" role="group" aria-label="Source floor">
@@ -69,7 +69,7 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <div class="dimension-scroll"><table><thead><tr><th>#</th><th>mm</th><th>Source coordinate</th></tr></thead><tbody id="aad-dimension-list"></tbody></table></div>
 </aside></div>
 </section>
-<section id="aad-studio-pane" class="panel" hidden><div class="panelheader"><h2>Linked 3D/2D editable semantic model</h2><a id="aad-open-studio" class="action" href="../../../cad/aad/" target="_blank" rel="noopener">Open AAD Studio full page ↗</a></div>
+<section id="aad-studio-pane" class="panel" hidden><div class="panelheader"><h2>Linked 3D/2D editable semantic model</h2><a id="aad-open-studio" class="action" href="../../../cad/aad/" target="_blank" rel="noopener">Open AAD Studio full page ↗</a></div><div class="padded"><div class="tabs" role="group" aria-label="3D floor model"><button data-model="gf" aria-pressed="true">GF · 205.16 m²</button><button data-model="ff" aria-pressed="false">FF · 200.67 m²</button><button data-model="sf" aria-pressed="false">SF · 175.62 m²</button></div><div class="mini" id="aad-model-provenance">Ground floor · independently authored 3D model · 0.00–3.00 m assumed vertical datum · editable linked 2D/3D</div></div>
 <iframe id="aad-engine" loading="lazy" title="Reusable AAD 3D semantic model"></iframe>
 </section>
 <div class="view-layout" style="margin-top:16px"><section class="panel padded"><h2>Project source authority</h2>
@@ -83,11 +83,20 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <script src="../../../assets/js/aad-project-viewer.js"></script>
 <script>
 (() => {const d=document.getElementById("aad-dxf-pane"),s=document.getElementById("aad-studio-pane"),b1=document.getElementById("aad-tab-dxf"),b2=document.getElementById("aad-tab-3d");
-const studio=new URL("../../../cad/aad/",location.href);const model=new URL("../../../data/projects/narayani-parajuli/aad-ground-floor-model.json",location.href);
-studio.searchParams.set("projectModel",model.pathname);
-document.getElementById("aad-open-studio").href=studio.href;
+const frame=document.getElementById("aad-engine");const full=document.getElementById("aad-open-studio");
+const modelByLevel={gf:"aad-ground-floor-model.json",ff:"aad-first-floor-model.json",sf:"aad-second-floor-model.json"};
+const labels={gf:"Ground floor · 0.00–3.00 m",ff:"First floor · 3.00–6.00 m",sf:"Second floor · 6.00–9.00 m"};
+let selected="gf";
+function linkFor(level){const studio=new URL("../../../cad/aad/",location.href);const model=new URL("../../../data/projects/narayani-parajuli/"+modelByLevel[level],location.href);studio.searchParams.set("projectModel",model.pathname);return studio.href;}
+function selectModel(level){if(!modelByLevel[level])return;selected=level;const url=linkFor(level);full.href=url;
+ document.querySelectorAll("[data-model]").forEach(el=>el.setAttribute("aria-pressed",String(el.dataset.model===level)));
+ document.getElementById("aad-model-provenance").textContent=labels[level]+" assumed vertical datum · source-aligned floor plate and AI-authored partitions/openings · NOT IFC/structural approval";
+ if(!s.hidden)frame.src=url;
+}
+document.querySelectorAll("[data-model]").forEach(el=>el.addEventListener("click",()=>selectModel(el.dataset.model)));
+selectModel("gf");
 b1.addEventListener("click",()=>{d.hidden=false;s.hidden=true;b1.setAttribute("aria-pressed","true");b2.setAttribute("aria-pressed","false")});
-b2.addEventListener("click",()=>{d.hidden=true;s.hidden=false;b1.setAttribute("aria-pressed","false");b2.setAttribute("aria-pressed","true");const frame=document.getElementById("aad-engine");if(!frame.src)frame.src=studio.href;});
+b2.addEventListener("click",()=>{d.hidden=true;s.hidden=false;b1.setAttribute("aria-pressed","false");b2.setAttribute("aria-pressed","true");frame.src=linkFor(selected);});
 })();
 </script><script defer src="../../../assets/js/cad-site-shell.js" data-cad-root="../../../"></script>
 </body></html>
