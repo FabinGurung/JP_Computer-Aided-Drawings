@@ -30,6 +30,35 @@ try {
  assert.ok(projectMode.sameOrigin&&projectMode.native2d&&projectMode.native3d,"Narayani must run real native AAD linked engine, not plotted SVG only");
  assert.ok(projectMode.introHidden,"Remove synthetic generic-engine intro from project experience");
  assert.ok(projectMode.viewerY<180,"Put native live 2D/3D workspace at the beginning of the project experience: "+projectMode.viewerY);
+ await page.waitForFunction(()=>{
+  const f=document.getElementById("aad-engine");
+  const d=f?.contentDocument;
+  return d?.body?.dataset.aadProjectLayout==="2d-left"&&d.querySelector(".plan")?.getBoundingClientRect().left<d.querySelector(".threed")?.getBoundingClientRect().left;
+ },null,{timeout:20000});
+ assert.equal(await page.locator("#aad-view-order").inputValue(),"2d-left");
+ await page.locator("#aad-view-order").selectOption("3d-left");
+ await page.waitForFunction(()=>{
+  const d=document.getElementById("aad-engine")?.contentDocument;
+  return d?.body?.dataset.aadProjectLayout==="3d-left"&&d.querySelector(".threed")?.getBoundingClientRect().left<d.querySelector(".plan")?.getBoundingClientRect().left;
+ },null,{timeout:20000});
+ await page.locator("#aad-view-order").selectOption("2d-left");
+ await page.locator("[data-register-counts] .aad-count-tile").first().waitFor({timeout:20000});
+ await page.waitForFunction(()=>document.querySelectorAll("[data-register-body] tr").length===147,null,{timeout:20000});
+ const modeledCount=await page.locator("[data-register-body] tr").count();
+ assert.equal(modeledCount,147,"All authored wall, door, window and semantic-label records should be tabulated");
+ const firstWall=await page.locator('[data-register-body] tr[data-kind="wall"]').first().innerText();
+ assert.match(firstWall,/EXT-01/);
+ assert.match(firstWall,/IfcWall/);
+ assert.match(firstWall,/20\.147/);
+ assert.equal(await page.locator('.aad-count-tile[data-status="unmodeled"]').count(),5,"Absent IFC categories must not be invented");
+ await page.locator('[data-register-type]').selectOption("window");
+ assert.equal(await page.locator("[data-register-body] tr").count(),23);
+ await page.locator('[data-register-type]').selectOption("all");
+ await page.locator('[data-register-floor]').selectOption("gf");
+ assert.equal(await page.locator("[data-register-body] tr").count(),42);
+ await page.locator('[data-register-floor]').selectOption("all");
+ assert.match(await page.locator("#aad-bim-assembly").innerText(),/Shared building coordinates/);
+
  const hub=await browser.newPage({viewport:{width:1180,height:800}});
  await hub.goto(new URL("../",url).href,{waitUntil:"domcontentloaded"});
  const label=await hub.locator(".aad-project-entry").innerText();

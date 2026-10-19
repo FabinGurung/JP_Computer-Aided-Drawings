@@ -67,6 +67,41 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
 [hidden]{display:none!important}
 @media(max-width:840px){.reference-grid{grid-template-columns:1fr}.appbar{gap:7px}.headline{gap:5px}.editor iframe{min-height:800px}}
 @media(max-width:520px){main{padding:9px 7px 24px}.bar{padding:9px}.floor-tabs{width:100%}.floor-tabs button{flex:1;min-width:92px;padding:10px 7px}.floor-tabs button small{display:block;margin:1px 0 0}.controls{width:100%}.action{flex:1;text-align:center}.headline h1{font-size:20px}}
+
+/* Project view preferences; same native AAD renderer, selectable layout only. */
+.view-settings{display:flex;align-items:center;gap:7px;flex-wrap:wrap;border-left:1px solid var(--line);padding-left:12px}
+.view-settings label{font-size:12px;font-weight:650;color:#425d6d}
+.view-settings select{font:inherit;font-size:12px;border:1px solid #b3cdd3;color:#153749;background:#f7fbfc;padding:8px 10px;border-radius:7px;max-width:225px}
+.component-section{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.component-header{display:flex;align-items:start;justify-content:space-between;gap:14px;padding:17px 18px 10px;flex-wrap:wrap}
+.component-header h2{font-size:19px;letter-spacing:-.025em;margin:0 0 4px}
+.component-header p,.component-note{color:var(--muted);font-size:12px;margin:0;line-height:1.65}
+.component-counts{display:grid;grid-template-columns:repeat(9,minmax(90px,1fr));gap:7px;padding:5px 16px 13px}
+.aad-count-tile{display:flex;flex-direction:column;min-width:0;border:1px solid #d7e6e9;background:#f5fafb;border-radius:9px;padding:9px 10px}
+.aad-count-tile strong{font-size:24px;color:#176c69}.aad-count-tile span{font-size:11px;font-weight:750}
+.aad-count-tile small{font-size:10px;color:#617a8b;overflow-wrap:anywhere}
+.aad-count-tile[data-status=unmodeled]{background:#fbfcfc;color:#627380}.aad-count-tile[data-status=unmodeled] strong{color:#7c8c97}
+.component-note{padding:10px 17px;background:#edf5f6;border-top:1px solid #dbe8e9}
+.component-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line)}
+.component-toolbar label{font-size:12px;display:flex;align-items:center;gap:5px}
+.component-toolbar select,.component-toolbar input{font:inherit;font-size:12px;background:#fff;border:1px solid #c4d7dc;color:var(--ink);padding:8px 10px;border-radius:7px}
+.component-toolbar input{min-width:210px}
+.component-toolbar button{background:#143d51;border:0;color:#fff;padding:9px 12px;border-radius:7px;font-size:12px;cursor:pointer}
+.component-table-wrap{overflow-x:auto;max-height:760px;border-top:1px solid var(--line)}
+.component-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}
+.component-table thead{position:sticky;top:0;z-index:2;background:#dcebed;color:#173d4c}
+.component-table td,.component-table th{text-align:left;padding:8px 11px;border-bottom:1px solid #e0e9ec;font-variant-numeric:tabular-nums}
+.component-table tbody tr:hover{background:#eaf6f4}.component-table tbody tr[data-kind=space]{background:#f9fafb;color:#5b6d78}
+.component-status{padding:9px 16px;color:#526979;font-size:11px}
+.assembly-section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:19px;margin-top:15px}
+.assembly-section h2{font-size:18px;letter-spacing:-.025em;margin:0 0 8px}
+.assembly-section p{color:var(--muted);font-size:12px}
+.assembly-section table{border-collapse:collapse;width:100%;font-size:12px}
+.assembly-section th,.assembly-section td{text-align:left;vertical-align:top;padding:10px 9px;border-bottom:1px solid var(--line)}
+.assembly-section th{background:#e9f4f4}
+@media(max-width:1200px){.component-counts{grid-template-columns:repeat(5,minmax(90px,1fr))}}
+@media(max-width:680px){.component-counts{grid-template-columns:repeat(3,minmax(90px,1fr))}.view-settings{border-left:0;padding-left:0}.component-toolbar input{min-width:135px;max-width:100%}}
+
 </style>
 </head>
 <body data-aad-project>
@@ -85,6 +120,7 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
         <button type="button" data-model="ff" aria-pressed="false">First floor <small>200.67 m²</small></button>
         <button type="button" data-model="sf" aria-pressed="false">Second floor <small>175.62 m²</small></button>
       </div>
+      <div class="view-settings"><label for="aad-view-order">View settings</label><select id="aad-view-order" aria-label="Linked editor 2D and 3D view order"><option value="2d-left">2D left · 3D right (standard)</option><option value="3d-left">3D left · 2D right</option><option value="stacked">2D above · 3D below</option></select></div>
       <div class="controls">
         <button class="action" type="button" id="aad-save-current">Save edited floor JSON</button>
         <a id="aad-open-studio" class="action emph" target="_blank" rel="noopener" href="../../../cad/aad/">Open full-screen editor ↗</a>
@@ -98,6 +134,34 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
       <div><span id="aad-studio-status" role="status" aria-live="polite">Loading ground floor…</span> · <a href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json">Read assumptions / decisions</a></div>
     </div>
   </section>
+  <section class="component-section" data-aad-component-register data-project-data-root="../../../data/projects/narayani-parajuli/" id="aad-components">
+  <div class="component-header"><div><h2>Project components · actual modeled locations</h2><p>All three floor-model files · authored walls, hosted doors/windows and semantic room labels · prospective IFC classifications</p></div><a class="action" href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json" target="_blank" rel="noopener">Open source / assumption ledger ↗</a></div>
+  <div class="component-counts" data-register-counts><span>Loading the versioned project component register…</span></div>
+  <div class="component-note"><b>Map axes:</b> coordinates below are in metres: (X,Z) is the floor plan, Y is height. Ground/first/second are assigned Y bases of 0.000/3.000/6.000 m. Each floor currently has its own architectural local origin: identical X,Z coordinates across floors do <b>not</b> prove alignment. Door/window centers are calculated from their stored host-wall offset. Room labels are semantic names, not independently stored IFC space solids; their centroid is obtained from the native AAD viewer only after opening that floor. IFC entity names are <b>classification candidates, not exported IFC records</b>.</div>
+  <div class="component-toolbar">
+    <label for="aad-register-floor">Floor <select id="aad-register-floor" data-register-floor><option value="all">All floors</option><option value="gf">Ground</option><option value="ff">First</option><option value="sf">Second</option></select></label>
+    <label for="aad-register-type">Component <select id="aad-register-type" data-register-type><option value="all">All modeled records</option><option value="wall">Walls</option><option value="door">Doors</option><option value="window">Windows</option><option value="space">Room labels</option></select></label>
+    <label for="aad-register-search">Find <input id="aad-register-search" data-register-search type="search" placeholder="Element ID, room name, host wall"></label>
+    <button data-register-export type="button">Export register (.csv)</button>
+  </div>
+  <div class="component-table-wrap"><table class="component-table"><thead><tr><th>Floor</th><th>Native ID</th><th>Actual component / label</th><th>IFC mapping (candidate)</th><th>Hosted by</th><th>Center map (X,Z) m</th><th>Elevation Y m</th><th>Map start → end (X,Z) m</th><th>Actual dimensions</th><th>Provenance</th></tr></thead><tbody data-register-body></tbody></table></div>
+  <div class="component-status" data-register-status role="status" aria-live="polite">Loading source models…</div>
+</section>
+<section class="assembly-section" id="aad-bim-assembly">
+ <h2>Requirements for one assembled multistorey BIM model</h2>
+ <p>Three individually editable storeys are not yet one building model. The following must be modeled and verified using the same governed AAD principles before calling it multistorey BIM:</p>
+ <div style="overflow-x:auto"><table><thead><tr><th>Work package</th><th>Required output</th><th>Present situation</th></tr></thead><tbody>
+ <tr><td>1. Shared building coordinates</td><td>One measured grid, datum, orientation and world transform per storey; reconciliation of the currently different floor-local origins</td><td>Open — independent floor coordinates only</td></tr>
+ <tr><td>2. Building, levels and storeys</td><td>Persistent building/site/storey IDs, levels, elevations, story ownership and stable cross-storey element references</td><td>Assumed levels 0, 3, 6, 9 m; no unified hierarchy</td></tr>
+ <tr><td>3. Structural frames and slabs</td><td>Verified columns, beam axes, slab thicknesses, foundations and engineering classifications, connected to structural DXF schedules</td><td>Absent from current semantic AAD models; previous structural releases remain separate</td></tr>
+ <tr><td>4. Floor and vertical connections</td><td>Real stair flights/landings, risers/treads, openings through floor slabs, lift/shafts if present, and consistent vertical clearances</td><td>Only stair-named rooms and partitions; no staircase solids</td></tr>
+ <tr><td>5. Architectural BIM objects</td><td>Buildable wall types, real opening/fill relationships, window/door properties, slab edges, space boundaries and roof/terrace design</td><td>Wall graph and hosted openings; partial assumed semantics</td></tr>
+ <tr><td>6. IFC identity and data export</td><td>IfcProject → IfcSite → IfcBuilding → IfcBuildingStorey with unique persistent IDs, placements, containment, relationship objects, units and property sets</td><td>IfcWall/IfcDoor/IfcWindow labels are conceptual mappings only</td></tr>
+ <tr><td>7. Reproducible validation</td><td>Geometry and overlap tests, inter-storey alignment, numeric QA, coordinate/area reports, IFC round-trip and visual checks</td><td>Floor-level tests exist; building-wide tests and IFC validation pending</td></tr>
+ </tbody></table></div>
+ <p><b>Implementation boundary:</b> This package adds a project component register and a project-level view preference. Assembling the building requires a separately reviewed, versioned multistorey data contract and structural/spatial validation; this change does not modify or silently extend the existing AAD engine.</p>
+</section>
+
   <details class="side-panel" id="aad-original-dxf">
     <summary>Original DXF drawings and dimension ledger <span>Source reference, not the live editor · architectural floors and structural layout</span></summary>
     <div class="reference">
@@ -135,6 +199,7 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
 <script src="../../../data/projects/narayani-parajuli/aad-source-v1.js"></script>
 <script src="../../../data/projects/narayani-parajuli/aad-structure-v1.js"></script>
 <script src="../../../assets/js/aad-project-viewer.js"></script>
+<script src="../../../assets/js/aad-project-component-register.js"></script>
 <script>
 (function(){
 "use strict";
@@ -143,6 +208,15 @@ const note=document.getElementById("aad-studio-status"),active=document.getEleme
 const root="../../../data/projects/narayani-parajuli/";
 const levels={gf:{file:"aad-ground-floor-model.json",label:"Ground floor · 205.16 m²"},ff:{file:"aad-first-floor-model.json",label:"First floor · 200.67 m²"},sf:{file:"aad-second-floor-model.json",label:"Second floor · 175.62 m²"}};
 let selected="gf", resizeObserver=null, loadSerial=0;
+const viewSetting=document.getElementById("aad-view-order"),KEY="cad:aad:project:view-layout:v1";
+let layout="2d-left";
+try{const saved=localStorage.getItem(KEY);if(["2d-left","3d-left","stacked"].includes(saved))layout=saved;}catch(_){}
+viewSetting.value=layout;
+function applyLayout(){try{const doc=frame.contentDocument;if(doc?.body)doc.body.dataset.aadProjectLayout=layout;}catch(_){}}
+viewSetting.addEventListener("change",()=>{
+ layout=viewSetting.value;try{localStorage.setItem(KEY,layout);}catch(_){}
+ applyLayout();
+});
 function engineLink(level){
  const u=new URL("../../../cad/aad/",location.href);
  const model=new URL(root+levels[level].file,location.href);
@@ -167,14 +241,17 @@ const projectCSS=[
 ".views{min-height:610px!important}.view,#canvas3d,#plan{min-height:610px!important}",
 ".aad-graph-launch,#reset,#disableGraph{display:none!important}",
 "@media(max-width:990px){.workspace{grid-template-columns:1fr!important;grid-template-areas:'viewer' 'edit' 'inspect'!important}.views{min-height:480px!important}.view,#canvas3d,#plan{min-height:480px!important}}",
-"@media(max-width:580px){.views{grid-template-columns:1fr!important}.view,#canvas3d,#plan{min-height:340px!important;height:350px!important}}"
-].join("\n");
+"@media(max-width:580px){.views{grid-template-columns:1fr!important}.view,#canvas3d,#plan{min-height:340px!important;height:350px!important}}",
+"body[data-aad-project-layout=\"2d-left\"] .views{grid-template-columns:1fr 1.15fr!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views{grid-template-columns:1.15fr 1fr!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.threed{order:-1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.plan{order:1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views{grid-template-columns:1fr!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout] .view+.view{border-left:0!important}\\n@media(max-width:580px){body[data-aad-project-layout] .views{grid-template-columns:1fr!important}}"
+].join("\n").replaceAll("\\n","\n");
 frame.addEventListener("load",function(){
  const expected=loadSerial;
  try{
   const doc=frame.contentDocument;
   if(!doc||!doc.querySelector("#canvas3d")||!doc.querySelector("#plan")){note.textContent="Editor not yet available. Open full-screen editor.";return;}
   const style=doc.createElement("style");style.dataset.narayaniUi="project-presentation";style.textContent=projectCSS;doc.head.append(style);
+  applyLayout();
+  if(window.NarayaniAADComponentRegister){window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
   if(resizeObserver)resizeObserver.disconnect();
   resizeObserver=new frame.contentWindow.ResizeObserver(resizeFrame);
   resizeObserver.observe(doc.documentElement);
@@ -184,11 +261,11 @@ frame.addEventListener("load",function(){
    const mo=new frame.contentWindow.MutationObserver(function(){
     if(expected!==loadSerial)return;
     const text=status.textContent||"";
-    if(text.includes("Loaded hosted project draft"))note.textContent="Live model loaded · linked 2D/3D and dimensions ready";
+    if(text.includes("Loaded hosted project draft")){note.textContent="Live model loaded · linked 2D/3D and dimensions ready";if(window.NarayaniAADComponentRegister)window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
     else if(text.includes("Project import failed"))note.textContent=text;
    });
    mo.observe(status,{childList:true,characterData:true,subtree:true});
-   if(status.textContent.includes("Loaded hosted project draft"))note.textContent="Live model loaded · linked 2D/3D and dimensions ready";
+   if(status.textContent.includes("Loaded hosted project draft")){note.textContent="Live model loaded · linked 2D/3D and dimensions ready";if(window.NarayaniAADComponentRegister)window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
   }
  }catch(_){note.textContent="Use Open full-screen editor if the embed is blocked.";}
 });
