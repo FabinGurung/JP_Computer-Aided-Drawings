@@ -9,6 +9,9 @@ on:
       - "tools/site/cad-aad-linked-smoke.mjs"
       - "tools/site/aad-narayani-source-smoke.mjs"
       - "tools/site/aad-narayani-browser-smoke.mjs"
+      - "tools/site/aad-building-build.mjs"
+      - "tools/site/aad-ifc-independent-check.py"
+      - "tools/site/aad-building-browser-smoke.mjs"
       - "public/data/projects/narayani-parajuli/**"
       - "public/projects/narayani-parajuli/aad/**"
       - "tools/site/check_public_routes.py"
@@ -34,6 +37,9 @@ jobs:
         run: |
           npm run build -- --base=/JP_Computer-Aided-Drawings/
           python tools/site/check_public_routes.py dist
+          node tools/site/aad-building-build.mjs
+          test -s dist/cad/aad/multistorey/index.html
+          test -s dist/data/projects/narayani-parajuli/PRJ-000007_AAD_CONCEPTUAL_3STOREY_IFC4.ifc
           test -s dist/cad/aad/index.html
           echo CAD_AAD_LINKED_PRODUCTION_BUILD_PASS
       - name: Browser acceptance of actual 2D/3D and parameter propagation
@@ -51,7 +57,12 @@ jobs:
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
           CAD_AAD_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
+          AAD_BUILDING_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           echo CAD_AAD_PAGES_BASE_RENDER_VERIFIED
+      - name: Independent IFC4 parsing and spatial graph round-trip (IfcOpenShell)
+        run: |
+          python -m pip install ifcopenshell==0.8.4.post1
+          python tools/site/aad-ifc-independent-check.py
       - name: Save real render screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -60,4 +71,5 @@ jobs:
           path: |
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
+            /tmp/cad-aad-building-*.png
           if-no-files-found: ignore
