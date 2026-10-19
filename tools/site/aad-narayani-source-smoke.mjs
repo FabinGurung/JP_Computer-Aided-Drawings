@@ -80,5 +80,23 @@ for(const [level,official] of Object.entries(expectedAreas)){
 assert.ok(Math.abs(combined-581.45)<.015);
 assert.match(doc,/data-model="ff"/);
 assert.match(doc,/data-model="sf"/);
+assert.match(doc,/id="aad-view-order"/);
+assert.match(doc,/value="2d-left"/);
+assert.match(doc,/data-aad-component-register/);
+assert.match(doc,/data-register-body/);
+assert.match(doc,/aad-project-component-register.js/);
+assert.match(doc,/IfcBuildingStorey/);
+const registerScript=fs.readFileSync("public/assets/js/aad-project-component-register.js","utf8");
+assert.match(registerScript,/IfcWall/);
+assert.match(registerScript,/IfcColumn/);
+const inventoryCount={wall:0,door:0,window:0,space:0};
+for(const record of manifest.levels){
+ const model=JSON.parse(fs.readFileSync("public/data/projects/narayani-parajuli/"+record.file,"utf8"));
+ inventoryCount.wall+=model.floorGraph.walls.length;
+ inventoryCount.door+=model.floorGraph.openings.filter(x=>x.kind==="door").length;
+ inventoryCount.window+=model.floorGraph.openings.filter(x=>x.kind==="window").length;
+ inventoryCount.space+=Object.keys(model.floorGraph.labels).length;
+}
+assert.deepEqual(inventoryCount,{wall:68,door:20,window:23,space:36});
 assert.match(doc,/MODEL_QA_MANIFEST_v2.json/);
 console.log("AAD_NARAYANI_SOURCE_PROJECT_PASS");
