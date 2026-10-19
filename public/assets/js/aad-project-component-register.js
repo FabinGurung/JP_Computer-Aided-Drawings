@@ -140,6 +140,7 @@
   return readFloor(floor,await resp.json());
  })).then(group=>{
   baseline=group.flat();calc();floorFilter.value="all";render();
-  status.textContent=baseline.length+" authored project records loaded (68 walls, 20 doors, 23 windows, 36 room labels). Local coordinates use per-floor AAD origins.";
+  status.textContent=baseline.length+" authored records · "+baseline.filter(x=>x.type==="wall").length+" walls, "+baseline.filter(x=>x.type==="door").length+" doors, "+baseline.filter(x=>x.type==="window").length+" windows, "+baseline.filter(x=>x.type==="space").length+" semantic room labels. Each floor retains its local AAD coordinates.";
+  updateSpaceCentroids(document.getElementById("aad-engine"),active);
  }).catch(e=>{status.textContent="Component registry unavailable: "+e.message;});
 })();
