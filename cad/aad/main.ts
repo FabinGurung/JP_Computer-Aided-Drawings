@@ -786,10 +786,12 @@ async function openHostedProject(){
  if(!requested)return;
  try{
   const url=new URL(requested,location.href);
-  const safeBase=new URL(import.meta.env.BASE_URL+"data/projects/",location.origin).pathname;
+  // Resolve the project-data subtree relative to the actual served studio route.
+  // Works at localhost, prefixed GitHub Pages, and custom-domain deployments.
+  const safeBase=new URL("../../data/projects/",location.href).pathname;
   if(url.origin!==location.origin||!url.pathname.startsWith(safeBase)||
      !/^[-a-zA-Z0-9_./]+\\.json$/.test(url.pathname)||url.pathname.includes(".."))
-   throw Error("Hosted model must be a same-origin project JSON under the CAD project data route");
+   throw Error("Hosted model must be a same-origin project JSON under "+safeBase+" (got "+url.pathname+")");
   const response=await fetch(url.href,{cache:"no-store"});
   if(!response.ok)throw Error("Project model HTTP "+response.status);
   const body=await response.text();
