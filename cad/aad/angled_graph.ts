@@ -75,7 +75,11 @@ export function deriveAngledPlan(g:PlanGraph,L:number,W:number,H:number):Derived
   }
  };
  walls.forEach((w,i)=>{
-  const cuts=[...new Set(ts[i]!.map(t=>r(t)))].sort((a,b)=>a-b);
+  // Keep the exact intersection fractions until projecting into drawing coordinates.
+  // Rounding t first can move a T-junction millimeters on long spans,
+  // disconnecting an enclosed room even while the exterior seems complete.
+  const rawCuts=[...ts[i]!].sort((a,b)=>a-b);
+  const cuts=rawCuts.filter((t,k)=>k===0||Math.abs(t-rawCuts[k-1]!)>1e-8);
   for(let k=0;k<cuts.length-1;k++)addEdge(pos(w.a,w.b,cuts[k]!),pos(w.a,w.b,cuts[k+1]!));
  });
  for(const neighbors of adjacency.values())neighbors.sort((a,b)=>a.angle-b.angle);
