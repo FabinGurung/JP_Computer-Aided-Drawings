@@ -779,4 +779,30 @@ function animate(){
  }catch(error){rendererFailure=error instanceof Error?error.message:String(error);failed(threeStatus,"Unable to display 3D · 2D plan remains editable");retry3d.hidden=false;diagnostics.textContent=rendererFailure;}
 }
 retry3d.onclick=()=>{initWebGL();resize();fit();};
+// AAD is one reusable engine. An authored project package may preload from the
+// same deployed repository's project data route, not a remote/private source URL.
+async function openHostedProject(){
+ const requested=new URLSearchParams(location.search).get("projectModel");
+ if(!requested)return;
+ try{
+  const url=new URL(requested,location.href);
+  // Resolve the project-data subtree relative to the actual served studio route.
+  // Works at localhost, prefixed GitHub Pages, and custom-domain deployments.
+  const safeBase=new URL("../../data/projects/",location.href).pathname;
+  if(url.origin!==location.origin||!url.pathname.startsWith(safeBase)||
+     !/^[-a-zA-Z0-9_./]+\.json$/.test(url.pathname)||url.pathname.includes(".."))
+   throw Error("Hosted model must be a same-origin project JSON under "+safeBase+" (got "+url.pathname+")");
+  const response=await fetch(url.href,{cache:"no-store"});
+  if(!response.ok)throw Error("Project model HTTP "+response.status);
+  const body=await response.text();
+  if(body.length>40000)throw Error("Project model exceeds the 40 KB validated draft limit");
+  const loaded=validate(JSON.parse(body));
+  graphHistory=[];firstRender=true;
+  setModel(loaded,"Loaded hosted project draft from AAD project registry (not construction approved).");
+  elem<HTMLTextAreaElement>("instruction").value="Edit selected project dimensions via ChatGPT and update this versioned model; interactive text box accepts basic commands only.";
+ }catch(error){
+  note.textContent="Project import failed: "+(error instanceof Error?error.message:String(error));
+ }
+}
 syncInputs();render();initWebGL();resize();fit();animate();
+void openHostedProject();

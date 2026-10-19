@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Narayani · AAD Project Viewer</title>
+<meta name="description" content="Source-backed Narayani Parajuli project view following the reusable CAD AAD viewer template.">
+<link rel="stylesheet" href="../../../assets/css/cad-unified-theme.css">
+<style>
+:root{color-scheme:dark;font-family:Inter,system-ui,Arial,sans-serif;background:#0a1420;color:#e6f1fc}
+*{box-sizing:border-box}body{margin:0}a{color:#7dd4ed}button,select{font:inherit}button{cursor:pointer}
+header{padding:24px clamp(16px,4vw,55px);border-bottom:1px solid #314358;background:#0d1a2a}
+nav{display:flex;gap:14px;flex-wrap:wrap;font-size:13px}h1{font-size:clamp(26px,4vw,43px);margin:18px 0 7px;letter-spacing:-.04em}
+small,.sub{color:#abc0d4;line-height:1.6}main{max-width:1740px;margin:auto;padding:24px clamp(12px,2.7vw,44px)}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(140px,1fr));gap:12px;margin:18px 0}
+.summary>div{border:1px solid #314358;background:#122538;border-radius:12px;padding:14px}
+.summary strong{display:block;font-size:23px;margin:7px 0}.summary small{font-size:11px}
+.warning{border-left:3px solid #e2ad65;background:#2b251d;padding:12px 17px;border-radius:6px;margin:15px 0;font-size:12px;line-height:1.6}
+.tabs,.toolbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin:12px 0}
+button,.action{border:1px solid #41637a;background:#1c364d;padding:9px 13px;color:#eaf5fb;border-radius:8px;text-decoration:none;font-size:13px}
+button[aria-pressed=true]{background:#16655f;border-color:#57c8bc}button:hover{background:#2a5064}
+.view-layout{display:grid;grid-template-columns:minmax(0,1fr) 310px;gap:14px}
+.panel{border:1px solid #294457;border-radius:14px;background:#102132;overflow:hidden}
+.panel h2{font-size:15px;margin:0}.panelheader{display:flex;justify-content:space-between;gap:8px;align-items:center;padding:13px 15px;border-bottom:1px solid #294457;flex-wrap:wrap}
+#aad-source-svg{width:100%;height:clamp(410px,65vh,800px);display:block;touch-action:none;cursor:grab}
+#aad-source-svg:active{cursor:grabbing}
+.padded{padding:16px}.filters{display:grid;grid-template-columns:1fr 1fr;gap:9px;font-size:12px;margin-top:15px}.filters label{display:flex;align-items:center;gap:5px}
+.details{font-size:12px;line-height:1.65;color:#adc2d3}
+table{font-size:11px;width:100%;border-collapse:collapse}th,td{border-bottom:1px solid #2b4354;text-align:left;padding:7px 4px}
+.dimension-scroll{max-height:320px;overflow:auto}
+#aad-engine{width:100%;height:790px;border:0;background:#fff;display:block}
+[hidden]{display:none!important}.stack{display:grid;gap:8px}.mini{color:#a8c2d2;font-size:12px}
+footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
+@media(max-width:1000px){.view-layout{grid-template-columns:1fr}.summary{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:600px){.summary{grid-template-columns:1fr 1fr}.filters{grid-template-columns:1fr 1fr}}
+</style></head>
+<body data-aad-project>
+<header><nav><a href="../">← Narayani project</a><a href="../../../projects/">All projects</a><a href="../../../cad/aad/">Shared AAD Studio</a><a href="../../../guide/">How It Works</a></nav>
+<small>PRJ-000007 · CAD/AAD reusable project template · source revision July 2026</small>
+<h1>Narayani Parajuli · AAD Project Viewer</h1>
+<div class="sub">A dedicated project instance of the shared AI-Aided Design and Drawing engine. The 2D source views are extracted from the architectural DXF; the linked 3D editor is a provisional semantic reconstruction. The source architectural and structural drawings—not demo defaults—are the dimensional reference.</div>
+</header>
+<main>
+<div class="summary">
+<div><small>BLOCK B · GROUND FLOOR</small><strong>205.16 m²</strong><small>Architectural DXF sheet</small></div>
+<div><small>BLOCK B · FIRST FLOOR</small><strong>200.67 m²</strong><small>Architectural DXF sheet</small></div>
+<div><small>BLOCK B · SECOND FLOOR</small><strong>175.62 m²</strong><small>Architectural DXF sheet</small></div>
+</div>
+<div class="warning"><b>Evidence and model distinction:</b> 2D layer lines, annotations and numerical dimension entities come from the revised DXF. Selected sheet dimensions are millimetres. The preliminary 3D project still has a 233.62 m² derived envelope against the stated 205.16 m² ground-floor area; wall thicknesses and openings in that model require further DXF-entity reconciliation. Engineering acceptance is not implied. Existing M80 structural HOLD remains unchanged.</div>
+<div class="tabs" role="group" aria-label="View mode"><button id="aad-tab-dxf" aria-pressed="true">2D · Original DXF</button><button id="aad-tab-3d" aria-pressed="false">3D · Shared AAD Studio</button></div>
+<section id="aad-dxf-pane">
+<div class="toolbar" role="group" aria-label="Source floor">
+<button data-floor="gf" aria-pressed="true">Ground floor</button><button data-floor="ff" aria-pressed="false">First floor</button><button data-floor="sf" aria-pressed="false">Second floor</button>
+<button data-floor="footing" aria-pressed="false">Footing layout · Structural</button><button data-floor="beam_gf" aria-pressed="false">Ground beams · Structural</button>
+<span style="flex:1"></span><button data-zoom="in" aria-label="Zoom in">＋</button><button data-zoom="out" aria-label="Zoom out">－</button><button data-reset-view>Fit</button>
+</div>
+<div class="view-layout">
+<div class="panel"><div class="panelheader"><h2 id="aad-floor-title">Ground floor</h2><small id="aad-view-status">Loading DXF-derived geometry…</small></div>
+<svg xmlns="http://www.w3.org/2000/svg" id="aad-source-svg" aria-label="Source DXF 2D plan with selectable levels, dimension labels and pan/zoom" role="img"></svg>
+<div class="padded mini">Drag to pan · scroll or use +/− to zoom · all source coordinate measurements are in millimetres</div></div>
+<aside class="panel padded"><h2>Source layers and dimensions</h2>
+<div class="filters">
+<label><input type="checkbox" data-layer="W" checked> Walls</label><label><input type="checkbox" data-layer="O" checked> Openings</label>
+<label><input type="checkbox" data-layer="S" checked> Stairs</label><label><input type="checkbox" data-layer="G" checked> Grid lines</label>
+<label><input type="checkbox" data-layer="D" checked> Dimension lines</label><label><input type="checkbox" data-layer="F" checked> Furniture</label>
+<label><input type="checkbox" data-layer="A" checked> Other lines</label><label><input type="checkbox" id="aad-show-dims" checked> Numbers</label>
+<label><input type="checkbox" id="aad-show-labels" checked> Room labels</label></div>
+<p><strong id="aad-area">—</strong> <span class="mini">source-designated floor area</span></p>
+<p id="aad-dim-count" class="mini"></p><p id="aad-entity-count" class="mini"></p>
+<h2>Dimension ledger</h2><p class="mini">Object measurements recovered from original DXF, rather than PDF-scale estimates.</p>
+<div class="dimension-scroll"><table><thead><tr><th>#</th><th>mm</th><th>Source coordinate</th></tr></thead><tbody id="aad-dimension-list"></tbody></table></div>
+</aside></div>
+</section>
+<section id="aad-studio-pane" class="panel" hidden><div class="panelheader"><h2>Linked 3D/2D editable semantic model</h2><a id="aad-open-studio" class="action" href="../../../cad/aad/" target="_blank" rel="noopener">Open AAD Studio full page ↗</a></div>
+<iframe id="aad-engine" loading="lazy" title="Reusable AAD 3D semantic model"></iframe>
+</section>
+<div class="view-layout" style="margin-top:16px"><section class="panel padded"><h2>Project source authority</h2>
+<p class="details">The architectural and structural DXF sources were found in the established Narayani project and processed using ezdxf. The architectural source includes older historical floor schemes; this view selects the amended July 2026 floor trio (205.16, 200.67, 175.62 m²). Visual plotting coordinates have been rounded to 10 mm; the numeric dimension ledger retains source-derived millimetre measurements. The source is authoritative for drawing dimensions; the interactive browser is for review, not a substitute for the CAD original.</p>
+<div class="stack"><a href="https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view" target="_blank" rel="noopener">Architectural DXF · Drive original ↗</a><a href="https://drive.google.com/file/d/1Avndg013odsx5wX-RdaK3VGl4cIbP2Nq/view" target="_blank" rel="noopener">Structural DXF · Drive original ↗</a><a href="https://drive.google.com/drive/folders/1mosr2gahKr4j7xj6BmrIjz4vdCxBYetF" target="_blank" rel="noopener">Canonical Narayani project root ↗</a></div></section>
+<section class="panel padded"><h2>How new AAD projects work</h2><p class="details">AAD is the reusable CAD-owned viewer, validator and 2D/3D geometry engine. Each project supplies its own versioned source-backed data package; the engine remains shared. An AI assistant can read the project's CAD/DXF/PDF sources, generate a validated project adapter through the CAD repository, and publish the view through GitHub Actions. Developer prompts here are an authorized authoring workflow; other users may use their own AI interpreters against the same template and validators.</p><a href="https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/governance/aad/aad-domain-template.v0.1.json" target="_blank" rel="noopener">Shared AAD template contract ↗</a></section></div>
+</main>
+<footer>Narayani · AAD project instance · no changes to preserved structural V02–M80 modules</footer>
+<script src="../../../data/projects/narayani-parajuli/aad-source-v1.js"></script>
+<script src="../../../data/projects/narayani-parajuli/aad-structure-v1.js"></script>
+<script src="../../../assets/js/aad-project-viewer.js"></script>
+<script>
+(() => {const d=document.getElementById("aad-dxf-pane"),s=document.getElementById("aad-studio-pane"),b1=document.getElementById("aad-tab-dxf"),b2=document.getElementById("aad-tab-3d");
+const studio=new URL("../../../cad/aad/",location.href);const model=new URL("../../../data/projects/narayani-parajuli/aad-ground-floor-model.json",location.href);
+studio.searchParams.set("projectModel",model.pathname);
+document.getElementById("aad-open-studio").href=studio.href;
+b1.addEventListener("click",()=>{d.hidden=false;s.hidden=true;b1.setAttribute("aria-pressed","true");b2.setAttribute("aria-pressed","false")});
+b2.addEventListener("click",()=>{d.hidden=true;s.hidden=false;b1.setAttribute("aria-pressed","false");b2.setAttribute("aria-pressed","true");const frame=document.getElementById("aad-engine");if(!frame.src)frame.src=studio.href;});
+})();
+</script><script defer src="../../../assets/js/cad-site-shell.js" data-cad-root="../../../"></script>
+</body></html>
