@@ -7,6 +7,8 @@ on:
       - "public/**"
       - "tools/site/check_public_routes.py"
       - "tools/site/cad-aad-linked-smoke.mjs"
+      - "tools/site/aad-narayani-browser-smoke.mjs"
+      - "tools/site/aad-narayani-source-smoke.mjs"
       - "tools/site/cad-unified-shell-smoke.mjs"
       - "backend/cad_bridge/design_*.py"
       - "design_jobs/synthetic/**"
