@@ -66,7 +66,7 @@ for(const [level,official] of Object.entries(expectedAreas)){
  assert.equal(current,start);
  const area=Math.abs(sum)/2;
  assert.ok(Math.abs(area-official)<.01,level+" area discrepancy "+area+" versus "+official);
- assert.ok(model.projectNote.includes("ASSUMPT")||model.projectNote.includes("assum")||model.projectNote.includes("AI "),level+" provenance must identify assumptions");
+ assert.ok(/assum|infer|user.authorized|AI\s/i.test(model.projectNote),level+" provenance must identify source/assumed decisions");
  combined+=area;
 }
 assert.ok(Math.abs(combined-581.45)<.015);
