@@ -1,0 +1,474 @@
+{
+  "schema": "jp-cad://linked-one-bay-demo/0.5",
+  "length": 25,
+  "width": 16,
+  "height": 3,
+  "door": 0.95,
+  "window": 1.4,
+  "bed": false,
+  "doorX": 3.525,
+  "windowX": 3.3,
+  "wallThickness": 0.16,
+  "bedX": 1.92,
+  "bedZ": 1.8,
+  "bedLength": 1.95,
+  "bedWidth": 1.45,
+  "columnSizes": {},
+  "beamDepths": {},
+  "grid": {
+    "west": 0.28,
+    "east": 0.28,
+    "north": 0.28,
+    "south": 0.28
+  },
+  "beamWidths": {},
+  "roomCount": 1,
+  "roomSplit1": 4.4,
+  "roomSplit2": 6.24,
+  "roomTypes": [
+    "bedroom",
+    "living",
+    "study"
+  ],
+  "interiorDoorZ": 2.55,
+  "interiorDoorWidth": 0.9,
+  "floorGraph": {
+    "nodes": [
+      {
+        "id": "N01",
+        "x": 5.54,
+        "z": 0.87
+      },
+      {
+        "id": "N02",
+        "x": 5.54,
+        "z": 7.97
+      },
+      {
+        "id": "N03",
+        "x": 0.64,
+        "z": 7.97
+      },
+      {
+        "id": "N04",
+        "x": 0.64,
+        "z": 11.97
+      },
+      {
+        "id": "N05",
+        "x": 5.54,
+        "z": 11.97
+      },
+      {
+        "id": "N06",
+        "x": 5.54,
+        "z": 8.444
+      },
+      {
+        "id": "N07",
+        "x": 10.37,
+        "z": 8.444
+      },
+      {
+        "id": "N08",
+        "x": 10.37,
+        "z": 11.97
+      },
+      {
+        "id": "N09",
+        "x": 20.54,
+        "z": 11.97
+      },
+      {
+        "id": "N10",
+        "x": 20.54,
+        "z": 8.61
+      },
+      {
+        "id": "N11",
+        "x": 22.31,
+        "z": 8.61
+      },
+      {
+        "id": "N12",
+        "x": 22.31,
+        "z": 4.91
+      },
+      {
+        "id": "N13",
+        "x": 20.54,
+        "z": 4.91
+      },
+      {
+        "id": "N14",
+        "x": 20.54,
+        "z": 0.87
+      },
+      {
+        "id": "N15",
+        "x": 10.37,
+        "z": 0.87
+      },
+      {
+        "id": "N16",
+        "x": 14.29,
+        "z": 0.87
+      },
+      {
+        "id": "N17",
+        "x": 14.29,
+        "z": 11.97
+      },
+      {
+        "id": "N18",
+        "x": 5.54,
+        "z": 5.55
+      },
+      {
+        "id": "N19",
+        "x": 22.31,
+        "z": 5.55
+      },
+      {
+        "id": "N20",
+        "x": 22.31,
+        "z": 7.97
+      },
+      {
+        "id": "N21",
+        "x": 17.42,
+        "z": 0.87
+      },
+      {
+        "id": "N22",
+        "x": 17.42,
+        "z": 11.97
+      },
+      {
+        "id": "N23",
+        "x": 10.37,
+        "z": 3.65
+      },
+      {
+        "id": "N24",
+        "x": 14.29,
+        "z": 3.65
+      },
+      {
+        "id": "N25",
+        "x": 10.37,
+        "z": 9.92
+      },
+      {
+        "id": "N26",
+        "x": 14.29,
+        "z": 9.92
+      }
+    ],
+    "walls": [
+      {
+        "id": "EXT-01",
+        "a": "N01",
+        "b": "N02",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-02",
+        "a": "N02",
+        "b": "N03",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-03",
+        "a": "N03",
+        "b": "N04",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-04",
+        "a": "N04",
+        "b": "N05",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-05",
+        "a": "N05",
+        "b": "N06",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-06",
+        "a": "N06",
+        "b": "N07",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-07",
+        "a": "N07",
+        "b": "N08",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-08",
+        "a": "N08",
+        "b": "N09",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-09",
+        "a": "N09",
+        "b": "N10",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-10",
+        "a": "N10",
+        "b": "N11",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-11",
+        "a": "N11",
+        "b": "N12",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-12",
+        "a": "N12",
+        "b": "N13",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-13",
+        "a": "N13",
+        "b": "N14",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-14",
+        "a": "N14",
+        "b": "N01",
+        "thickness": 0.23
+      },
+      {
+        "id": "PART-CORE-W",
+        "a": "N15",
+        "b": "N07",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-CORE-E",
+        "a": "N16",
+        "b": "N17",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-ZONE-MID",
+        "a": "N18",
+        "b": "N19",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-ZONE-UP",
+        "a": "N02",
+        "b": "N20",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-WEST-CONNECT",
+        "a": "N02",
+        "b": "N06",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-NORTH-BED",
+        "a": "N21",
+        "b": "N22",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-SOUTH-WC",
+        "a": "N23",
+        "b": "N24",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-NORTH-WC",
+        "a": "N25",
+        "b": "N26",
+        "thickness": 0.15
+      }
+    ],
+    "openings": [
+      {
+        "id": "WIN01",
+        "wallId": "EXT-01",
+        "kind": "window",
+        "offset": 2.825,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN02",
+        "wallId": "EXT-02",
+        "kind": "window",
+        "offset": 1.725,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN03",
+        "wallId": "EXT-03",
+        "kind": "window",
+        "offset": 1.275,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN04",
+        "wallId": "EXT-04",
+        "kind": "window",
+        "offset": 1.725,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN05",
+        "wallId": "EXT-05",
+        "kind": "window",
+        "offset": 1.038,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN06",
+        "wallId": "EXT-06",
+        "kind": "window",
+        "offset": 1.69,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN07",
+        "wallId": "EXT-07",
+        "kind": "window",
+        "offset": 1.038,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN08",
+        "wallId": "EXT-08",
+        "kind": "window",
+        "offset": 4.36,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "D09",
+        "wallId": "PART-CORE-W",
+        "kind": "door",
+        "offset": 3.362,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D10",
+        "wallId": "PART-CORE-E",
+        "kind": "door",
+        "offset": 5.125,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D11",
+        "wallId": "PART-ZONE-MID",
+        "kind": "door",
+        "offset": 7.96,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D12",
+        "wallId": "PART-ZONE-UP",
+        "kind": "door",
+        "offset": 7.96,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D13",
+        "wallId": "PART-NORTH-BED",
+        "kind": "door",
+        "offset": 5.125,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D14",
+        "wallId": "PART-SOUTH-WC",
+        "kind": "door",
+        "offset": 1.535,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D15",
+        "wallId": "PART-NORTH-WC",
+        "kind": "door",
+        "offset": 1.535,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      }
+    ],
+    "labels": {
+      "ROOM-01": "Bedroom · SW",
+      "ROOM-02": "Bathroom / closet",
+      "ROOM-03": "Laundry room",
+      "ROOM-04": "Connecting landing · assumed",
+      "ROOM-05": "Closet / bath",
+      "ROOM-06": "Bath circulation · assumed",
+      "ROOM-07": "Connecting hall · assumed",
+      "ROOM-08": "Stair hall · assumed",
+      "ROOM-09": "Stair / landing",
+      "ROOM-10": "Multiuse / study · assumed",
+      "ROOM-11": "Service landing · assumed",
+      "ROOM-12": "Gym foyer · assumed",
+      "ROOM-13": "Bedroom · SE",
+      "ROOM-14": "Gym",
+      "ROOM-15": "Bedroom · NE"
+    },
+    "perimeter": [
+      "EXT-01",
+      "EXT-02",
+      "EXT-03",
+      "EXT-04",
+      "EXT-05",
+      "EXT-06",
+      "EXT-07",
+      "EXT-08",
+      "EXT-09",
+      "EXT-10",
+      "EXT-11",
+      "EXT-12",
+      "EXT-13",
+      "EXT-14"
+    ]
+  },
+  "projectNote": "ARCH-05 Jul-2026. Source-measured 15.000 x 11.100m core and 4.900 x 4.000m west wing with 1.770m east bay. Model assumes NW open-terrace recess 4.830 x 3.526m to reconcile 175.62m² scheduled SF area (modeled 175.618m²). Terrace is excluded from floor plate. 3.00m level heights, room divisions, hosted openings and exact recess depth are user-authorized ASSUMPTIONS. No engineering approval."
+}
