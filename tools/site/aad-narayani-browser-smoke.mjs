@@ -17,9 +17,18 @@ try{
  await page.screenshot({path:screenshotPath,fullPage:true});
  await page.locator("#aad-tab-3d").click();
  const frame=page.frameLocator("#aad-engine");
- await frame.locator("#plan [data-part]").first().waitFor({timeout:25000});
+ for(const [level,dim] of [["gf","26"],["ff","25"],["sf","25"]]){
+  await page.locator('[data-model="'+level+'"]').click();
+  const expectedFile={gf:"aad-ground-floor-model.json",ff:"aad-first-floor-model.json",sf:"aad-second-floor-model.json"}[level];
+  await page.waitForFunction(name=>document.getElementById("aad-engine")?.src.includes(name),expectedFile,{timeout:20000});
+  await frame.locator("#plan [data-part]").first().waitFor({timeout:25000});
+  await frame.locator("#message").filter({hasText:"Loaded hosted project draft"}).waitFor({timeout:25000});
+  const actualDim=await frame.locator("#length").inputValue();
+  assert.equal(actualDim,dim,"Wrong authored envelope for "+level);
+  await page.screenshot({path:"/tmp/cad-aad-narayani-"+level+"-3d.png",fullPage:false});
+ }
  const note=await frame.locator("#message").innerText();
- if(!note.includes("Loaded hosted project draft"))throw Error("Narayani hosted 3D model was not imported: "+note);
+ if(!note.includes("Loaded hosted project draft"))throw Error("Last Narayani model import failed: "+note);
  if(errors.length)throw Error("Browser exceptions: "+errors.join("; "));
  console.log("AAD_NARAYANI_BROWSER_VIEW_PASS");
 }finally{await page.close();await browser.close();}
