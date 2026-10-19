@@ -42,7 +42,7 @@ try{
  assert.equal(data.schema,"jp-cad://aad-working-draft/1");
  await page.screenshot({path:"/tmp/cad-aad-unified-narayani-linked.png",fullPage:false});
  await page.reload({waitUntil:"networkidle"});
- await page.frameLocator("#aad-unified-engine").locator("#viewer2d .aad-wall").first().waitFor({timeout:35000});
+ await page.frameLocator("#aad-unified-engine").locator("#viewer2d .aad-wall").first().waitFor({state:"attached",timeout:35000});
  await page.frameLocator("#aad-unified-engine").locator("#aad-storey").selectOption("gf");
  await page.frameLocator("#aad-unified-engine").locator('[data-part="gf:EXT-01"]').first().dispatchEvent("click");
  assert.equal(await page.frameLocator("#aad-unified-engine").locator("#aad-field-a").inputValue(),"0.330","Draft persists in one shared workspace across reload");
