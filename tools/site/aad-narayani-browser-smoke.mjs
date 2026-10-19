@@ -18,9 +18,14 @@ try{
  await page.locator("#aad-tab-3d").click();
  const frame=page.frameLocator("#aad-engine");
  for(const [level,dim] of [["gf","26"],["ff","25"],["sf","25"]]){
-  await page.locator('[data-model="'+level+'"]').click();
   const expectedFile={gf:"aad-ground-floor-model.json",ff:"aad-first-floor-model.json",sf:"aad-second-floor-model.json"}[level];
-  await page.waitForFunction(name=>document.getElementById("aad-engine")?.src.includes(name),expectedFile,{timeout:20000});
+  // Switching a <iframe src> is asynchronous: the DOM can still show the previous
+  // successfully loaded floor even though the outer src property already changed.
+  // Wait for a real child-frame navigation before examining the new native model.
+  await Promise.all([
+   page.waitForEvent("framenavigated",{predicate:target=>target!==page.mainFrame()&&target.url().includes(expectedFile),timeout:35000}),
+   page.locator('[data-model="'+level+'"]').click()
+  ]);
   await frame.locator("#plan [data-part]").first().waitFor({timeout:25000});
   await frame.locator("#message").filter({hasText:"Loaded hosted project draft"}).waitFor({timeout:25000});
   const actualDim=await frame.locator("#length").inputValue();
