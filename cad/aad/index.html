@@ -37,6 +37,21 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 .aad-import-cta{display:inline-block;background:#2563eb;color:#fff;font-size:12px;font-weight:760;cursor:pointer;border-radius:9px;padding:12px 17px;white-space:nowrap}
 .aad-import-cta:hover,.aad-import-cta:focus-visible{background:#174db3;outline:2px solid #8db6ff;outline-offset:2px}
 @media(max-width:580px){.aad-local-project{align-items:stretch;flex-direction:column}.aad-import-cta{white-space:normal;text-align:center}}
+
+/* Canonical AAD presentation preference: coordinates and geometry unchanged. */
+.aad-order-pref{display:inline-flex;gap:7px;align-items:center;color:#a8c4d3;font-size:11px;font-weight:650}
+.aad-order-pref select{background:#142e41;border:1px solid #42687c;color:#e9f4fb;border-radius:7px;padding:7px 9px;font:inherit;max-width:225px}
+body[data-aad-view-order="2d-left"] .views{grid-template-columns:1fr 1.15fr}
+body[data-aad-view-order="2d-left"] .views>.plan{order:-1}
+body[data-aad-view-order="2d-left"] .views>.threed{order:1}
+body[data-aad-view-order="3d-left"] .views>.threed{order:-1}
+body[data-aad-view-order="3d-left"] .views>.plan{order:1}
+body[data-aad-view-order="stacked"] .views{grid-template-columns:1fr}
+body[data-aad-view-order="stacked"] .views>.plan{order:-1}
+body[data-aad-view-order="stacked"] .views>.threed{order:1}
+body[data-aad-view-order] .view+.view{border-left:0}
+@media(max-width:580px){body[data-aad-view-order] .views{grid-template-columns:1fr}}
+
 </style>
 <link rel="stylesheet" href="../../assets/css/cad-unified-theme.css"></head>
 <body>
@@ -111,7 +126,7 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 <p class="sub">Synthetic demonstration; no authenticated private drawings or construction approval.</p></details>
 </section>
 <section class="panel viewer">
-<div class="viewerbar"><strong>2D Plan and 3D Model</strong><div class="actions"><button id="fit" type="button">Center view</button><button type="button" id="clearSelect">Deselect</button></div></div>
+<div class="viewerbar"><strong>2D Plan and 3D Model</strong><div class="actions"><label class="aad-order-pref" for="aad-native-view-order">View layout <select id="aad-native-view-order" aria-label="AAD shared 2D and 3D view order"><option value="2d-left">2D left · 3D right</option><option value="3d-left">3D left · 2D right</option><option value="stacked">2D above · 3D below</option></select></label><button id="fit" type="button">Center view</button><button type="button" id="clearSelect">Deselect</button></div></div>
 <div class="views">
 <div class="view threed"><div class="viewhead">3D model<span>Drag to rotate · scroll to zoom · select a component</span></div><div id="canvas3d" aria-label="Interactive 3D geometry with fallback status"></div><div class="aad-view-status"><span id="threeStatus" role="status" aria-live="polite">Loading 3D model…</span><button id="retry3d" type="button" hidden>Retry 3D</button></div></div>
 <div class="view plan"><div class="viewhead">2D floor plan<span>Click any component to inspect it</span></div><svg id="plan" viewBox="0 0 600 620" role="img" aria-label="2D floor plan derived from the same semantic model"></svg><div class="aad-view-status"><span id="planStatus" role="status" aria-live="polite">Loading 2D plan…</span></div></div>
@@ -145,5 +160,19 @@ input[type=file]{width:0;height:0;opacity:0;position:absolute}
 </section></div>
 </main>
 <footer>AI Design Studio · Proof of shared semantic model and synchronized 2D/3D derivatives · CAD/AAD owns model rules; A7 is a read-only directory · Engineering approval: HOLD</footer>
+<script>
+/* Shared AAD view preference only. This changes CSS display order, never model XYZ. */
+(()=>{
+ const key="cad:aad:project:view-layout:v1",select=document.getElementById("aad-native-view-order");
+ const supported=["2d-left","3d-left","stacked"];
+ let saved="2d-left";try{const candidate=localStorage.getItem(key);if(supported.includes(candidate))saved=candidate;}catch(_){}
+ function apply(value){document.body.dataset.aadViewOrder=value;select.value=value;}
+ apply(saved);
+ select.addEventListener("change",()=>{
+  apply(select.value);
+  try{localStorage.setItem(key,select.value);}catch(_){}
+ });
+})();
+</script>
 <script type="module" src="./main.ts"></script>
 <script defer src="../../assets/js/cad-site-shell.js" data-cad-root="../../"></script></body></html>
