@@ -12,6 +12,7 @@ on:
       - "tools/site/aad-building-build.mjs"
       - "tools/site/aad-ifc-independent-check.py"
       - "tools/site/aad-building-browser-smoke.mjs"
+      - "tools/site/aad-unified-workspace-smoke.mjs"
       - "public/data/projects/narayani-parajuli/**"
       - "public/projects/narayani-parajuli/aad/**"
       - "tools/site/check_public_routes.py"
@@ -49,7 +50,8 @@ jobs:
           (npm run dev -- --host 127.0.0.1 --port 5175 > /tmp/cad-aad-vite.log 2>&1 &)
           for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5175/cad/aad/ >/dev/null && break;sleep 2;done
           CAD_AAD_URL=http://127.0.0.1:5175/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
-          node tools/site/aad-narayani-source-smoke.mjs # project viewer asset test; browser route exercised against built Pages base
+          node tools/site/aad-narayani-source-smoke.mjs
+          node tools/site/aad-unified-workspace-smoke.mjs # project viewer asset test; browser route exercised against built Pages base
           echo CAD_AAD_BROWSER_LINKED_MODEL_PASS
       - name: Verify visible models at built GitHub Pages base path
         run: |

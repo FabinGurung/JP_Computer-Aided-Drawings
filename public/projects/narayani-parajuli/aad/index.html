@@ -1,322 +1,61 @@
 <!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Narayani | Live AAD Design Studio · PRJ-000007</title>
-<meta name="description" content="Edit Narayani ground, first and second-floor models with the same AAD linked 2D/3D, walls, openings and room-inspection engine used by every project.">
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Narayani | Unified AAD Building Studio · PRJ-000007</title>
+<meta name="description" content="One shared AAD architecture and BIM editor with synchronized multistorey 2D/3D viewports, storey selection, IFC4 export and source evidence.">
 <style>
-:root{font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color-scheme:light;--ink:#132a38;--muted:#506878;--line:#d5e2e8;--paper:#fff;--bg:#edf3f5;--teal:#096c66;--navy:#123348}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}body{margin:0;color:var(--ink);background:var(--bg)}
-button,a{font:inherit}button{cursor:pointer}
-a{color:#116b79;text-decoration:none}a:hover{text-decoration:underline}
-button:focus-visible,a:focus-visible,summary:focus-visible{outline:3px solid #20a89f;outline-offset:3px}
-.appbar{padding:12px clamp(14px,2.1vw,32px);display:flex;align-items:center;gap:14px;justify-content:space-between;flex-wrap:wrap;background:var(--paper);border-bottom:1px solid var(--line)}
-.brand{display:flex;gap:11px;align-items:center;min-width:0}
-.logo{display:grid;place-items:center;background:var(--navy);color:#fff;border-radius:10px;height:38px;width:38px;font-weight:800;font-size:13px;flex:none}
-.brand b{font-size:17px;letter-spacing:-.03em}.brand small{display:block;color:var(--muted);font-size:11px}
-.topnav{display:flex;gap:13px;align-items:center;flex-wrap:wrap;font-size:12px;font-weight:600}
-main{max-width:1920px;margin:auto;padding:14px clamp(10px,1.7vw,26px) 30px}
-.headline{display:flex;justify-content:space-between;align-items:center;gap:15px;flex-wrap:wrap;margin-bottom:12px}
-.headline h1{font-size:clamp(21px,2.3vw,30px);line-height:1.2;letter-spacing:-.035em;margin:0}
-.headline p{font-size:12px;color:var(--muted);margin:5px 0 0}
-.status{border:1px solid #dfcb92;background:#fff7e5;border-radius:6px;padding:7px 10px;font-size:11px;font-weight:700;color:#855717;white-space:normal}
-.bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding:10px 13px;background:var(--paper);border:1px solid var(--line);border-radius:12px 12px 0 0}
-.floor-tabs{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.floor-tabs button{border:1px solid #d3e2e7;border-radius:8px;padding:10px 15px;background:#f4f8fa;color:#264b5b;font-size:12px;font-weight:750}
-.floor-tabs button:hover{border-color:#6eaaa9;background:#ecf6f4}
-.floor-tabs button[aria-pressed=true]{background:#096c66;border-color:#096c66;color:#fff;box-shadow:0 0 0 2px #e7f5f0}
-.floor-tabs button small{font-weight:500;margin-left:5px;opacity:.82}
-.controls{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-.action{border:1px solid #bed3dd;background:#fff;padding:9px 12px;border-radius:7px;color:var(--navy);font-size:12px;font-weight:650;cursor:pointer}
-.action:hover{background:#e9f4f7;text-decoration:none}
-.action.emph{background:#133b50;color:white;border-color:#133b50}
-.editor{background:#fff;border:1px solid var(--line);border-top:0;box-shadow:0 9px 24px #22455713;overflow:hidden;border-radius:0 0 12px 12px}
-.editor iframe{display:block;width:100%;height:1100px;border:0;background:#f5f9fb}
-.context{display:flex;align-items:center;justify-content:space-between;gap:6px 16px;flex-wrap:wrap;padding:9px 13px;background:#e8f3f1;border:1px solid #c5ded8;border-top:0;border-radius:0 0 11px 11px;font-size:11px;color:#295a59}
-.context strong{color:#145c56}.context a{text-decoration:underline}
-.side-panel{margin-top:15px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.side-panel summary{padding:16px 17px;cursor:pointer;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;font-weight:750;list-style:none}
-.side-panel summary::-webkit-details-marker{display:none}.side-panel summary:after{content:"⌄";font-size:19px;color:var(--teal)}
-.side-panel[open] summary:after{content:"⌃"}
-.side-panel summary span{font-weight:400;font-size:12px;color:var(--muted)}
-.reference{padding:0 15px 16px}
-.source-bar{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin:7px 0 12px}
-.source-bar button{border:1px solid #bdd0da;background:#f5f9fa;border-radius:7px;padding:8px 11px;color:#24495d;font-size:12px}
-.source-bar button[aria-pressed=true]{background:#16665f;color:#fff}
-.source-bar .push{margin-left:auto}
-.reference-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,310px);gap:14px}
-.drawing{background:#0e2434;color:#e3eff5;border-radius:10px;overflow:hidden}
-.drawing-head{padding:10px 15px;border-bottom:1px solid #365063}
-.drawing-head strong{font-size:14px;color:#fff}
-.drawing-head p{font-size:11px;color:#adc7d5;margin:3px 0}
-#aad-source-svg{display:block;width:100%;height:min(66vh,650px);min-height:330px;touch-action:none;cursor:grab;background:#0d1724}
-.reference .filters{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:11px}
-.reference .filters label{display:flex;gap:6px;align-items:center}
-.reference aside{border:1px solid var(--line);border-radius:10px;padding:13px;overflow:hidden}
-.reference aside h3{font-size:13px;margin:8px 0}
-.reference aside p{font-size:11px;color:var(--muted)}
-.dimension-scroll{max-height:270px;overflow:auto;border-top:1px solid var(--line)}
-.dimension-scroll table{width:100%;border-collapse:collapse;font-size:11px}
-.dimension-scroll th,.dimension-scroll td{padding:7px 3px;border-bottom:1px solid var(--line);text-align:left}
-#source-links{margin:15px 0 0;display:flex;gap:14px;flex-wrap:wrap;font-size:12px}
-#source-links a{text-decoration:underline}
-.guidance{display:flex;gap:8px 20px;flex-wrap:wrap;justify-content:space-between;align-items:center;background:#f7fafb;border-top:1px solid var(--line);padding:12px 16px;font-size:11px;color:var(--muted)}
-.guidance strong{color:var(--ink)}
-footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-size:11px}
-[hidden]{display:none!important}
-@media(max-width:840px){.reference-grid{grid-template-columns:1fr}.appbar{gap:7px}.headline{gap:5px}.editor iframe{min-height:800px}}
-@media(max-width:520px){main{padding:9px 7px 24px}.bar{padding:9px}.floor-tabs{width:100%}.floor-tabs button{flex:1;min-width:92px;padding:10px 7px}.floor-tabs button small{display:block;margin:1px 0 0}.controls{width:100%}.action{flex:1;text-align:center}.headline h1{font-size:20px}}
-
-/* Project view preferences; same native AAD renderer, selectable layout only. */
-.view-settings{display:flex;align-items:center;gap:7px;flex-wrap:wrap;border-left:1px solid var(--line);padding-left:12px}
-.view-settings label{font-size:12px;font-weight:650;color:#425d6d}
-.view-settings select{font:inherit;font-size:12px;border:1px solid #b3cdd3;color:#153749;background:#f7fbfc;padding:8px 10px;border-radius:7px;max-width:225px}
-.component-section{margin-top:16px;background:#fff;border:1px solid var(--line);border-radius:12px;overflow:hidden}
-.component-header{display:flex;align-items:start;justify-content:space-between;gap:14px;padding:17px 18px 10px;flex-wrap:wrap}
-.component-header h2{font-size:19px;letter-spacing:-.025em;margin:0 0 4px}
-.component-header p,.component-note{color:var(--muted);font-size:12px;margin:0;line-height:1.65}
-.component-counts{display:grid;grid-template-columns:repeat(9,minmax(90px,1fr));gap:7px;padding:5px 16px 13px}
-.aad-count-tile{display:flex;flex-direction:column;min-width:0;border:1px solid #d7e6e9;background:#f5fafb;border-radius:9px;padding:9px 10px}
-.aad-count-tile strong{font-size:24px;color:#176c69}.aad-count-tile span{font-size:11px;font-weight:750}
-.aad-count-tile small{font-size:10px;color:#617a8b;overflow-wrap:anywhere}
-.aad-count-tile[data-status=unmodeled]{background:#fbfcfc;color:#627380}.aad-count-tile[data-status=unmodeled] strong{color:#7c8c97}
-.component-note{padding:10px 17px;background:#edf5f6;border-top:1px solid #dbe8e9}
-.component-toolbar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:12px 16px;border-top:1px solid var(--line)}
-.component-toolbar label{font-size:12px;display:flex;align-items:center;gap:5px}
-.component-toolbar select,.component-toolbar input{font:inherit;font-size:12px;background:#fff;border:1px solid #c4d7dc;color:var(--ink);padding:8px 10px;border-radius:7px}
-.component-toolbar input{min-width:210px}
-.component-toolbar button{background:#143d51;border:0;color:#fff;padding:9px 12px;border-radius:7px;font-size:12px;cursor:pointer}
-.component-table-wrap{overflow-x:auto;max-height:760px;border-top:1px solid var(--line)}
-.component-table{width:100%;border-collapse:separate;border-spacing:0;font-size:11px;white-space:nowrap}
-.component-table thead{position:sticky;top:0;z-index:2;background:#dcebed;color:#173d4c}
-.component-table td,.component-table th{text-align:left;padding:8px 11px;border-bottom:1px solid #e0e9ec;font-variant-numeric:tabular-nums}
-.component-table tbody tr:hover{background:#eaf6f4}.component-table tbody tr[data-kind=space]{background:#f9fafb;color:#5b6d78}
-.component-status{padding:9px 16px;color:#526979;font-size:11px}
-.assembly-section{background:#fff;border:1px solid var(--line);border-radius:12px;padding:19px;margin-top:15px}
-.assembly-section h2{font-size:18px;letter-spacing:-.025em;margin:0 0 8px}
-.assembly-section p{color:var(--muted);font-size:12px}
-.assembly-section table{border-collapse:collapse;width:100%;font-size:12px}
-.assembly-section th,.assembly-section td{text-align:left;vertical-align:top;padding:10px 9px;border-bottom:1px solid var(--line)}
-.assembly-section th{background:#e9f4f4}
-@media(max-width:1200px){.component-counts{grid-template-columns:repeat(5,minmax(90px,1fr))}}
-@media(max-width:680px){.component-counts{grid-template-columns:repeat(3,minmax(90px,1fr))}.view-settings{border-left:0;padding-left:0}.component-toolbar input{min-width:135px;max-width:100%}}
-
-
-.bim-primary{background:white;border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden}
-.bim-primary-title{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:#123e4f;color:#fff;padding:14px 16px}
-.bim-primary-title h2{font-size:18px;letter-spacing:-.02em;margin:0}.bim-primary-title p{font-size:11px;color:#c1dce3;margin:4px 0 0}
-.bim-primary-title a{background:#d5faf2;color:#075e58;border-radius:7px;padding:10px 12px;font-size:12px;font-weight:750}
-.bim-primary iframe{display:block;width:100%;height:1110px;border:0;background:#edf3f5}
-.bim-primary .bim-qa-strip{padding:10px 15px;background:#f5faf9;color:#486677;font-size:11px}
-.floor-studio-title{margin:15px 0 9px;font-size:18px}
-@media(max-width:870px){.bim-primary iframe{height:1450px}}
-</style>
-</head>
-<body data-aad-project>
-<header class="appbar">
-  <div class="brand"><span class="logo">AAD</span><div><b>Narayani Parajuli · Design Studio</b><small>PRJ-000007 / Block B · existing shared AAD engine</small></div></div>
-  <nav class="topnav" aria-label="Project navigation">
-    <a href="../">← Project overview</a><a href="../../../projects/">All projects</a><a href="../../../cad/aad/">Generic AAD template</a><a href="../../../guide/">How the engine works</a>
-  </nav>
-</header>
+:root{font:14px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:#edf3f5;color:#14313f}
+*{box-sizing:border-box}body{margin:0}a{color:#0b6a69;text-decoration:none}a:hover{text-decoration:underline}
+header{display:flex;justify-content:space-between;gap:16px;align-items:center;flex-wrap:wrap;padding:13px clamp(12px,2.2vw,30px);background:#fff;border-bottom:1px solid #d7e4e8}
+.logo{font-weight:850;border-radius:9px;background:#124454;color:#fff;padding:10px 9px;letter-spacing:-.03em;line-height:1}
+.identity{display:flex;align-items:center;gap:12px}.identity strong{display:block;font-size:16px}.identity small{color:#69818b;font-size:11px}
+nav{display:flex;gap:15px;flex-wrap:wrap;font-size:12px}
+main{padding:14px clamp(7px,1.8vw,24px) 25px;max-width:1940px;margin:auto}
+.heading{display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:11px}
+h1{font-size:clamp(21px,2.5vw,30px);margin:0;letter-spacing:-.04em}
+.lede{color:#5d7984;font-size:12px;margin:3px 0 0}
+.hold{font-weight:750;font-size:11px;padding:7px 11px;background:#fff5dd;color:#82611c;border:1px solid #ead4a0;border-radius:7px}
+.workspace{border:1px solid #cbdfe2;border-radius:12px;background:white;overflow:hidden}
+.workspacehead{background:#123e4f;color:#fff;display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:11px 15px}
+.workspacehead strong{font-size:14px}.workspacehead p{color:#c3e0e7;margin:2px 0 0;font-size:11px}
+.workspacehead a{border-radius:7px;padding:9px 13px;background:#d7f8f1;color:#0d5f57;font-size:12px;font-weight:750}
+iframe{display:block;width:100%;height:1660px;border:0;background:#eff6f7}
+.info{padding:10px 15px;color:#44626d;font-size:11px;background:#f5f9fa;border-top:1px solid #d3e1e5}
+.sources{margin-top:13px;border:1px solid #d3e1e6;border-radius:11px;background:#fff;overflow:hidden}
+.sources summary{cursor:pointer;font-weight:750;padding:13px 15px}
+.sources .content{padding:0 15px 15px;font-size:12px;color:#53707c}
+.sources a{margin-right:15px;display:inline-block;margin-top:7px;text-decoration:underline}
+footer{padding:10px 5px;color:#6c8290;font-size:11px}
+@media(max-width:720px){iframe{height:1900px}.heading{align-items:flex-start}.workspacehead a{width:100%;text-align:center}}
+</style></head>
+<body><header><div class="identity"><span class="logo">AAD</span><div><strong>Narayani Parajuli · Unified Design Studio</strong><small>PRJ-000007 · Block B · shared AAD building template</small></div></div>
+<nav><a href="../">← Project overview</a><a href="../../../projects/">All projects</a><a href="../../../cad/aad/">AAD floor template</a><a href="../../../guide/">Engine principles</a></nav></header>
 <main>
-  <div class="headline"><div><h1>Narayani AAD · assembled building + linked floor editing</h1><p>Drag walls and inspect connected rooms, edit hosted doors/windows and dimensions, orbit the 3D model, save a project draft.</p></div><span class="status">Architectural design draft · structural M80 HOLD</span></div>
-  <section class="bim-primary" aria-label="Unified multistorey building model" id="aad-assembled-building">
-<div class="bim-primary-title"><div><h2>One assembled building · 3D BIM / IFC4</h2><p>Shared AAD multistorey engine · three aligned storeys · source/assumption provenance · inspection, QA and IFC4 export</p></div>
-<a id="aad-open-multistorey" href="../../../cad/aad/multistorey/" target="_blank" rel="noopener">Open full multistorey editor ↗</a></div>
-<iframe id="aad-multistorey-engine" loading="eager" title="Reusable AAD assembled 3-storey 3D BIM viewer, component inspection and IFC4 export"></iframe>
-<div class="bim-qa-strip"><b>Engineering design status: HOLD.</b> The building includes source-aligned architectural wall and opening graphs plus explicitly inferred storey transforms, columns, beams, 180 mm slabs and stair geometry. IFC4 spatial/element relationships may be exported, but capacity checks, global surveyed alignment and foundation design remain unverified.</div>
+<div class="heading"><div><h1>One building model. Linked 2D + 3D.</h1><p class="lede">Choose a storey, edit a wall or opening, and inspect the same revision in 2D, 3D, the component register and IFC4.</p></div><span class="hold">Architectural design draft · structural M80 HOLD</span></div>
+<section class="workspace" aria-label="Narayani unified AAD authoring workspace" id="aad-unified-workspace">
+<div class="workspacehead"><div><strong>Shared AAD multistorey editor</strong><p>A single application instance · shared state · synchronized viewports · one BIM export</p></div>
+<a id="aad-open-full" href="../../../cad/aad/multistorey/" target="_blank" rel="noopener">Open full-screen workspace ↗</a></div>
+<iframe id="aad-unified-engine" title="Unified AAD shared 2D floor and 3D building editor, linked live model with storey selector" loading="eager" allow="fullscreen"></iframe>
+<div class="info">Edits are saved as local, versioned working drafts. They do not alter canonical architectural DXF or source GitHub files until separately committed. Area changes are identified in QA. IFC4 is regenerated from the currently displayed working geometry; engineering checks remain HOLD.</div>
 </section>
-<h2 class="floor-studio-title">Edit one floor in the canonical AAD 2D/3D engine</h2>
-<section aria-label="Narayani AAD workspace">
-    <div class="bar">
-      <div class="floor-tabs" role="group" aria-label="Live AAD floor models">
-        <button type="button" data-model="gf" aria-pressed="true">Ground floor <small>205.16 m²</small></button>
-        <button type="button" data-model="ff" aria-pressed="false">First floor <small>200.67 m²</small></button>
-        <button type="button" data-model="sf" aria-pressed="false">Second floor <small>175.62 m²</small></button>
-      </div>
-      <div class="view-settings"><label for="aad-view-order">View settings</label><select id="aad-view-order" aria-label="Linked editor 2D and 3D view order"><option value="2d-left">2D left · 3D right (standard)</option><option value="3d-left">3D left · 2D right</option><option value="stacked">2D above · 3D below</option></select></div>
-      <div class="controls">
-        <button class="action" type="button" id="aad-save-current">Save edited floor JSON</button>
-        <a id="aad-open-studio" class="action emph" target="_blank" rel="noopener" href="../../../cad/aad/">Open full-screen editor ↗</a>
-      </div>
-    </div>
-    <div class="editor">
-      <iframe id="aad-engine" loading="eager" title="Live AAD parametric 2D and 3D editable project model" allow="fullscreen" referrerpolicy="same-origin"></iframe>
-    </div>
-    <div class="context">
-      <div><strong id="aad-active-floor">Ground floor · model imported</strong> · Connected wall graph, hosted openings and room zones are editable in the actual AAD engine.</div>
-      <div><span id="aad-studio-status" role="status" aria-live="polite">Loading ground floor…</span> · <a href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json">Read assumptions / decisions</a></div>
-    </div>
-  </section>
-  <section class="component-section" data-aad-component-register data-project-data-root="../../../data/projects/narayani-parajuli/" id="aad-components">
-  <div class="component-header"><div><h2>Project components · actual modeled locations</h2><p>Original per-floor model files · authored walls, hosted doors/windows and semantic labels; assembled structural/vertical elements appear above · prospective IFC classifications</p></div><a class="action" href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json" target="_blank" rel="noopener">Open source / assumption ledger ↗</a></div>
-  <div class="component-counts" data-register-counts><span>Loading the versioned project component register…</span></div>
-  <div class="component-note"><b>Map axes:</b> coordinates below are in metres: (X,Z) is the floor plan, Y is height. Ground/first/second are assigned Y bases of 0.000/3.000/6.000 m. Each floor currently has its own architectural local origin: identical X,Z coordinates across floors do <b>not</b> prove alignment. Door/window centers are calculated from their stored host-wall offset. Room labels are semantic names, not independently stored IFC space solids; their centroid is obtained from the native AAD viewer only after opening that floor. IFC entity names are <b>classification candidates, not exported IFC records</b>.</div>
-  <div class="component-toolbar">
-    <label for="aad-register-floor">Floor <select id="aad-register-floor" data-register-floor><option value="all">All floors</option><option value="gf">Ground</option><option value="ff">First</option><option value="sf">Second</option></select></label>
-    <label for="aad-register-type">Component <select id="aad-register-type" data-register-type><option value="all">All modeled records</option><option value="wall">Walls</option><option value="door">Doors</option><option value="window">Windows</option><option value="space">Room labels</option></select></label>
-    <label for="aad-register-search">Find <input id="aad-register-search" data-register-search type="search" placeholder="Element ID, room name, host wall"></label>
-    <button data-register-export type="button">Export register (.csv)</button>
-  </div>
-  <div class="component-table-wrap"><table class="component-table"><thead><tr><th>Floor</th><th>Native ID</th><th>Actual component / label</th><th>IFC mapping (candidate)</th><th>Hosted by</th><th>Center map (X,Z) m</th><th>Elevation Y m</th><th>Map start → end (X,Z) m</th><th>Actual dimensions</th><th>Provenance</th></tr></thead><tbody data-register-body></tbody></table></div>
-  <div class="component-status" data-register-status role="status" aria-live="polite">Loading source models…</div>
-</section>
-<section class="assembly-section" id="aad-bim-assembly">
- <h2>Requirements for one assembled multistorey BIM model</h2>
- <p>Three individually editable storeys are not yet one building model. The following must be modeled and verified using the same governed AAD principles before calling it multistorey BIM:</p>
- <div style="overflow-x:auto"><table><thead><tr><th>Work package</th><th>Required output</th><th>Present situation</th></tr></thead><tbody>
- <tr><td>1. Shared building coordinates</td><td>One measured grid, datum, orientation and world transform per storey; reconciliation of the currently different floor-local origins</td><td>Open — independent floor coordinates only</td></tr>
- <tr><td>2. Building, levels and storeys</td><td>Persistent building/site/storey IDs, levels, elevations, story ownership and stable cross-storey element references</td><td>Assumed levels 0, 3, 6, 9 m; no unified hierarchy</td></tr>
- <tr><td>3. Structural frames and slabs</td><td>Verified columns, beam axes, slab thicknesses, foundations and engineering classifications, connected to structural DXF schedules</td><td>Absent from current semantic AAD models; previous structural releases remain separate</td></tr>
- <tr><td>4. Floor and vertical connections</td><td>Real stair flights/landings, risers/treads, openings through floor slabs, lift/shafts if present, and consistent vertical clearances</td><td>Only stair-named rooms and partitions; no staircase solids</td></tr>
- <tr><td>5. Architectural BIM objects</td><td>Buildable wall types, real opening/fill relationships, window/door properties, slab edges, space boundaries and roof/terrace design</td><td>Wall graph and hosted openings; partial assumed semantics</td></tr>
- <tr><td>6. IFC identity and data export</td><td>IfcProject → IfcSite → IfcBuilding → IfcBuildingStorey with unique persistent IDs, placements, containment, relationship objects, units and property sets</td><td>IfcWall/IfcDoor/IfcWindow labels are conceptual mappings only</td></tr>
- <tr><td>7. Reproducible validation</td><td>Geometry and overlap tests, inter-storey alignment, numeric QA, coordinate/area reports, IFC round-trip and visual checks</td><td>Floor-level tests exist; building-wide tests and IFC validation pending</td></tr>
- </tbody></table></div>
- <p><b>Implementation boundary:</b> This package adds a project component register and a project-level view preference. Assembling the building requires a separately reviewed, versioned multistorey data contract and structural/spatial validation; this change does not modify or silently extend the existing AAD engine.</p>
-</section>
-
-  <details class="side-panel" id="aad-original-dxf">
-    <summary>Original DXF drawings and dimension ledger <span>Source reference, not the live editor · architectural floors and structural layout</span></summary>
-    <div class="reference">
-      <div class="source-bar" role="group" aria-label="DXF reference sheet">
-        <button data-floor="gf" aria-pressed="true">Ground-floor source</button><button data-floor="ff" aria-pressed="false">First-floor source</button><button data-floor="sf" aria-pressed="false">Second-floor source</button>
-        <button data-floor="footing" aria-pressed="false">Footing layout</button><button data-floor="beam_gf" aria-pressed="false">Ground beams</button>
-        <span class="push"></span><button data-zoom="in">+</button><button data-zoom="out">−</button><button data-reset-view>Fit</button>
-      </div>
-      <div class="reference-grid">
-        <div class="drawing">
-          <div class="drawing-head"><strong id="aad-floor-title">Ground floor</strong><p id="aad-view-status">Loading source-derived DXF reference…</p></div>
-          <svg id="aad-source-svg" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="DXF source tracing, not editable project geometry"></svg>
-          <p style="padding:0 14px 10px;color:#b2cbd7;font-size:11px">Drag to pan · scroll or press +/- to zoom · dimension objects from source DXF</p>
-        </div>
-        <aside>
-          <h3>Original CAD layers</h3>
-          <div class="filters"><label><input type="checkbox" data-layer="W" checked> Walls</label><label><input type="checkbox" data-layer="O" checked> Openings</label><label><input type="checkbox" data-layer="S" checked> Stairs</label><label><input type="checkbox" data-layer="G" checked> Grids</label><label><input type="checkbox" data-layer="D" checked> Dimension lines</label><label><input type="checkbox" data-layer="F" checked> Furniture</label><label><input type="checkbox" data-layer="A" checked> Other lines</label><label><input type="checkbox" id="aad-show-dims" checked> Dimension values</label><label><input type="checkbox" id="aad-show-labels" checked> Text labels</label></div>
-          <h3>Source dimensions</h3>
-          <p><strong id="aad-area">—</strong> architectural scheduled area</p>
-          <p id="aad-dim-count">—</p><p id="aad-entity-count">—</p>
-          <div class="dimension-scroll"><table><thead><tr><th>#</th><th>mm</th><th>Source position</th></tr></thead><tbody id="aad-dimension-list"></tbody></table></div>
-        </aside>
-      </div>
-      <div id="source-links"><a href="https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view" target="_blank" rel="noopener">Original architectural DXF ↗</a><a href="https://drive.google.com/file/d/13k901-pejMY7lE_0VepomzxUZFiZyzox/view" target="_blank" rel="noopener">Existing structural DXF ↗</a><a href="https://drive.google.com/drive/folders/1mosr2gahKr4j7xj6BmrIjz4vdCxBYetF" target="_blank" rel="noopener">Narayani Drive source root ↗</a></div>
-    </div>
-  </details>
-  <section class="side-panel" aria-label="Project provenance and controls">
-    <div class="guidance">
-      <span><strong>Project data follows the shared engine.</strong> Ground, first and second-floor AAD models are separately authored and versioned; no static image is used as the editable design.</span>
-      <span>Switching floors reloads that floor's published draft. Save any edits before switching. Source-matched areas are not a substitute for independent architectural/structural certification.</span>
-    </div>
-  </section>
+<details class="sources"><summary>Source architectural DXF, structural references and assumptions</summary><div class="content">
+The architectural drawings supply the project dimensions and floor-area schedule; explicitly inferred geometry, structural member sizes and storey registration remain identified in the model manifest. Original DXF plans are preserved for audit, not displayed as a second editing application.
+<div><a href="https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view" target="_blank" rel="noopener">Architectural DXF original ↗</a><a href="https://drive.google.com/file/d/13k901-pejMY7lE_0VepomzxUZFiZyzox/view" target="_blank" rel="noopener">Structural DXF original ↗</a>
+<a href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json" target="_blank" rel="noopener">Source and assumption ledger ↗</a>
+<a href="../../../data/projects/narayani-parajuli/aad-building-v1.json" target="_blank" rel="noopener">Building source manifest ↗</a></div>
+</div></details>
+<footer>The canonical AAD floor editor and preserved Narayani structural work-package modules remain available in the repository. This page hosts only one live editor; the component table appears inside its shared workspace.</footer>
 </main>
-<footer>CAD/AAD · Narayani source-linked working model · V02–M80 historical structural modules are preserved · not issued for construction</footer>
 <script>
-(function(){
-const viewer=new URL("../../../cad/aad/multistorey/",location.href);
-const manifest=new URL("../../../data/projects/narayani-parajuli/aad-building-v1.json",location.href);
-viewer.searchParams.set("manifest",manifest.pathname);
-document.getElementById("aad-multistorey-engine").src=viewer.href;
-document.getElementById("aad-open-multistorey").href=viewer.href;
+(()=>{const site=new URL("../../../cad/aad/multistorey/",location.href),manifest=new URL("../../../data/projects/narayani-parajuli/aad-building-v1.json",location.href);
+site.searchParams.set("manifest",manifest.pathname);
+document.getElementById("aad-unified-engine").src=site.href;document.getElementById("aad-open-full").href=site.href;
+const frame=document.getElementById("aad-unified-engine");
+frame.addEventListener("load",()=>{
+try{
+const ro=new ResizeObserver(()=>{const d=frame.contentDocument;if(!d)return;
+const height=Math.min(3100,Math.max(850,d.documentElement.scrollHeight+12));
+if(Math.abs(frame.clientHeight-height)>20)frame.style.height=height+"px";});
+ro.observe(frame.contentDocument.documentElement);
+}catch(_){/* Allow fixed-height cross-origin iframe as fallback */}});
 })();
-</script>
-<script src="../../../data/projects/narayani-parajuli/aad-source-v1.js"></script>
-<script src="../../../data/projects/narayani-parajuli/aad-structure-v1.js"></script>
-<script src="../../../assets/js/aad-project-viewer.js"></script>
-<script src="../../../assets/js/aad-project-component-register.js"></script>
-<script>
-(function(){
-"use strict";
-const frame=document.getElementById("aad-engine"),full=document.getElementById("aad-open-studio");
-const note=document.getElementById("aad-studio-status"),active=document.getElementById("aad-active-floor");
-const root="../../../data/projects/narayani-parajuli/";
-const levels={gf:{file:"aad-ground-floor-model.json",label:"Ground floor · 205.16 m²"},ff:{file:"aad-first-floor-model.json",label:"First floor · 200.67 m²"},sf:{file:"aad-second-floor-model.json",label:"Second floor · 175.62 m²"}};
-let selected="gf", resizeObserver=null, loadSerial=0;
-const viewSetting=document.getElementById("aad-view-order"),KEY="cad:aad:project:view-layout:v1";
-let layout="2d-left";
-try{const saved=localStorage.getItem(KEY);if(["2d-left","3d-left","stacked"].includes(saved))layout=saved;}catch(_){}
-viewSetting.value=layout;
-function applyLayout(){try{const doc=frame.contentDocument;if(doc?.body)doc.body.dataset.aadProjectLayout=layout;}catch(_){}}
-viewSetting.addEventListener("change",()=>{
- layout=viewSetting.value;try{localStorage.setItem(KEY,layout);}catch(_){}
- applyLayout();
-});
-function engineLink(level){
- const u=new URL("../../../cad/aad/",location.href);
- const model=new URL(root+levels[level].file,location.href);
- u.searchParams.set("projectModel",model.pathname);
- return u.href;
-}
-function resizeFrame(){
- try{
-  const doc=frame.contentDocument;if(!doc)return;
-  const h=doc.body.scrollHeight;
-  if(Number.isFinite(h)&&h>500){
-   const target=Math.min(2550,Math.max(790,h+18));
-   if(Math.abs(frame.offsetHeight-target)>24)frame.style.height=target+"px";
-  }
- }catch(_){}
-}
-const projectCSS=[
-".cad-global-nav,.aad-breadcrumb,.intro,.aad-steps,.aad-local-project{display:none!important}",
-"main{max-width:none!important;padding:8px!important}",
-".workspace{display:grid!important;grid-template-columns:minmax(248px,285px) minmax(0,1fr)!important;grid-template-areas:'edit viewer' 'inspect inspect'!important;gap:10px!important}",
-".workspace>.left{grid-area:edit!important}.workspace>.viewer{grid-area:viewer!important}.workspace>.right{grid-area:inspect!important;display:block!important}",
-".views{min-height:610px!important}.view,#canvas3d,#plan{min-height:610px!important}",
-".aad-graph-launch,#reset,#disableGraph{display:none!important}",
-"@media(max-width:990px){.workspace{grid-template-columns:1fr!important;grid-template-areas:'viewer' 'edit' 'inspect'!important}.views{min-height:480px!important}.view,#canvas3d,#plan{min-height:480px!important}}",
-"@media(max-width:580px){.views{grid-template-columns:1fr!important}.view,#canvas3d,#plan{min-height:340px!important;height:350px!important}}",
-"body[data-aad-project-layout=\"2d-left\"] .views{grid-template-columns:1fr 1.15fr!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"2d-left\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views{grid-template-columns:1.15fr 1fr!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.threed{order:-1!important}\\nbody[data-aad-project-layout=\"3d-left\"] .views>.plan{order:1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views{grid-template-columns:1fr!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.plan{order:-1!important}\\nbody[data-aad-project-layout=\"stacked\"] .views>.threed{order:1!important}\\nbody[data-aad-project-layout] .view+.view{border-left:0!important}\\n@media(max-width:580px){body[data-aad-project-layout] .views{grid-template-columns:1fr!important}}"
-].join("\n").replaceAll("\\n","\n");
-frame.addEventListener("load",function(){
- const expected=loadSerial;
- try{
-  const doc=frame.contentDocument;
-  if(!doc||!doc.querySelector("#canvas3d")||!doc.querySelector("#plan")){note.textContent="Editor not yet available. Open full-screen editor.";return;}
-  const style=doc.createElement("style");style.dataset.narayaniUi="project-presentation";style.textContent=projectCSS;doc.head.append(style);
-  applyLayout();
-  if(window.NarayaniAADComponentRegister){window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
-  if(resizeObserver)resizeObserver.disconnect();
-  resizeObserver=new frame.contentWindow.ResizeObserver(resizeFrame);
-  resizeObserver.observe(doc.documentElement);
-  resizeFrame();
-  const status=doc.getElementById("message");
-  if(status){
-   const mo=new frame.contentWindow.MutationObserver(function(){
-    if(expected!==loadSerial)return;
-    const text=status.textContent||"";
-    if(text.includes("Loaded hosted project draft")){note.textContent="Live model loaded · linked 2D/3D and dimensions ready";if(window.NarayaniAADComponentRegister)window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
-    else if(text.includes("Project import failed"))note.textContent=text;
-   });
-   mo.observe(status,{childList:true,characterData:true,subtree:true});
-   if(status.textContent.includes("Loaded hosted project draft")){note.textContent="Live model loaded · linked 2D/3D and dimensions ready";if(window.NarayaniAADComponentRegister)window.NarayaniAADComponentRegister.updateSpaceCentroids(frame,selected);}
-  }
- }catch(_){note.textContent="Use Open full-screen editor if the embed is blocked.";}
-});
-function select(level){
- if(!levels[level])return;
- selected=level;loadSerial++;
- const url=engineLink(level);
- active.textContent=levels[level].label+" · editable source-linked model";
- full.href=url;
- document.querySelectorAll("[data-model]").forEach(el=>el.setAttribute("aria-pressed",String(el.dataset.model===level)));
- note.textContent="Opening "+levels[level].label+" in the AAD engine…";
- if(resizeObserver){resizeObserver.disconnect();resizeObserver=null;}
- frame.src=url;
- const next=new URL(location.href);next.searchParams.set("floor",level);
- history.replaceState(null,"",next.pathname+next.search+next.hash);
-}
-document.querySelectorAll("[data-model]").forEach(el=>el.addEventListener("click",()=>{if(el.dataset.model!==selected)select(el.dataset.model);}));
-document.getElementById("aad-save-current").addEventListener("click",()=>{
- try{
-  const btn=frame.contentDocument&&frame.contentDocument.getElementById("download");
-  if(!btn)throw Error("Studio not ready");
-  btn.click();note.textContent="Project draft download started · keep the JSON to preserve your edits.";
- }catch(_){note.textContent="Open the full-screen editor and use Save draft after it loads.";}
-});
-const requested=new URLSearchParams(location.search).get("floor");
-select(Object.hasOwn(levels,requested)?requested:"gf");
-})();
-</script>
-</body></html>
+</script></body></html>

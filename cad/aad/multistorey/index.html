@@ -45,6 +45,44 @@ table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:8px 11px;
 thead{position:sticky;top:0;background:#dcebee}tbody tr:hover{background:#eaf6f3;cursor:pointer}
 .foot{font-size:11px;color:#557381;margin:11px 0}
 @media(max-width:950px){.workspace{grid-template-columns:1fr}aside{max-height:none}#viewer3d{height:60vh;min-height:430px}}
+
+/* AAD unified editor: one app, one model state, synchronized plan and building. */
+.unified-toolbar{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin-bottom:12px;background:#fff;border:1px solid #d4e2e7;padding:10px;border-radius:11px}
+.unified-toolbar label{font-size:12px;color:#3c5965;font-weight:700}
+.unified-toolbar select{border:1px solid #b4cfd5;background:#f4fafb;border-radius:8px;padding:8px 10px}
+.unified-toolbar .selected{background:#126d67;color:#fff;border-color:#126d67}
+.unified-toolbar .spacer{flex:1}
+.workspace{grid-template-columns:minmax(0,1fr) 320px!important}
+.linked-views{display:grid;grid-template-columns:1fr 1.05fr;gap:10px;padding:10px}
+.viewport{border:1px solid #d9e6e8;border-radius:11px;overflow:hidden;min-width:0;background:#fff}
+.viewport .viewport-title{font-size:12px;font-weight:750;padding:9px 11px;display:flex;align-items:center;justify-content:space-between;gap:8px;border-bottom:1px solid #d9e6e8}
+.viewport .viewport-title small{font-weight:450;color:#6c8890}
+#viewer2d{display:block;width:100%;height:min(70vh,715px);min-height:470px;background:#f0f8f7;touch-action:none}
+#viewer3d{height:min(70vh,715px);min-height:470px}
+.viewport .view-foot{font-size:10px;color:#678089;padding:7px 11px}
+body[data-view-mode="plan"] .linked-views{grid-template-columns:1fr}
+body[data-view-mode="plan"] #viewport3d{display:none}
+body[data-view-mode="building"] .linked-views{grid-template-columns:1fr}
+body[data-view-mode="building"] #viewport2d{display:none}
+#edit-controls{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:9px 0}
+#edit-controls label{display:flex;flex-direction:column;gap:3px;color:#526d78;font-size:11px}
+#edit-controls input{min-width:0;width:100%;border:1px solid #bcd0d8;border-radius:6px;padding:8px;background:#fff;color:#173d4b}
+#edit-controls label[hidden]{display:none}
+#edit-notice{color:#795522;font-size:11px;min-height:22px}
+#selection{white-space:pre-wrap;line-height:1.55}
+#viewer2d .aad-wall{stroke:#2d7484;stroke-width:.14;stroke-linecap:round;cursor:pointer}
+#viewer2d .aad-wall.active{stroke:#d16b43;stroke-width:.24}
+#viewer2d .aad-window{stroke:#2a9fc2;stroke-width:.27;cursor:pointer}
+#viewer2d .aad-door{stroke:#bf856a;stroke-width:.22;cursor:pointer}
+#viewer2d .aad-node{fill:#d9f8f1;stroke:#116f6b;stroke-width:.07;cursor:grab}
+#viewer2d .aad-node:hover{fill:#ffc886;stroke:#974d18}
+#viewer2d .aad-node.dragging{fill:#feaf6c;cursor:grabbing}
+#viewer2d text{fill:#355a64;font-size:.36px;pointer-events:none}
+#viewer2d .aad-ghost{fill:none;stroke:#a1b5be;stroke-width:.11;stroke-dasharray:.3 .2}
+.dirty-chip{background:#fff2db;color:#825713;border-radius:6px;padding:5px 8px;font-size:11px}
+@media(max-width:1050px){.workspace{grid-template-columns:1fr!important}.linked-views{grid-template-columns:1fr!important}#viewer2d,#viewer3d{height:500px;min-height:320px}aside{max-height:none}}
+@media(max-width:660px){.linked-views{padding:6px}#viewer2d,#viewer3d{height:365px;min-height:300px}.unified-toolbar>*{flex:1}.unified-toolbar .spacer{display:none}}
+
 </style>
 </head>
 <body>
@@ -57,17 +95,45 @@ thead{position:sticky;top:0;background:#dcebee}tbody tr:hover{background:#eaf6f3
 <button id="run-qa" type="button">Run geometry + IFC QA</button>
 <span id="action-status" role="status" style="font-size:11px;color:#466478">Preparing geometry…</span>
 </div>
+<div class="unified-toolbar" aria-label="AAD building editor controls">
+<label for="aad-storey">Storey <select id="aad-storey"><option value="all">All levels</option></select></label>
+<label for="aad-view-mode">View <select id="aad-view-mode"><option value="split">2D left · 3D right</option><option value="plan">2D plan only</option><option value="building">3D building only</option></select></label>
+<button id="aad-show-all" type="button">Show all levels</button>
+<span id="aad-edit-version" class="dirty-chip">Canonical source · no edits</span><span class="spacer"></span>
+<button id="aad-undo" type="button" disabled>Undo</button>
+<button id="aad-reset" type="button">Reset to source</button>
+<button id="aad-save-working" class="btn-primary" type="button">Save editable BIM draft</button>
+<button id="aad-import-working" type="button">Open BIM draft</button><input id="aad-import-file" type="file" accept=".json,application/json" hidden>
+</div>
 <div class="workspace">
  <div class="panel">
-  <div class="panel-title"><strong>Whole building · selectable 3D geometry</strong><small>Orbit / zoom / click any physical element to inspect its native ID</small></div>
-  <div id="viewer3d" aria-label="Editable AAD-derived multistorey building composed into one 3D scene"><div class="viewhud">Building coordinate system: metres · X + Z plan / Y upward</div></div>
+  <div class="panel-title"><strong>One editable building · linked 2D + 3D</strong><small>One authoritative building state updates all viewports, components and IFC</small></div>
+  <div class="linked-views">
+   <div class="viewport" id="viewport2d"><div class="viewport-title">2D floor plan <small id="aad-plan-level">Ground floor</small></div>
+    <svg id="viewer2d" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 27 17" role="img" aria-label="Live AAD editable wall and hosted openings plan"></svg>
+    <div class="view-foot">Select walls/openings to edit metrics · drag a wall node to update 2D and 3D together</div>
+   </div>
+   <div class="viewport" id="viewport3d"><div class="viewport-title">Interactive 3D building <small id="aad-building-level">All storeys</small></div>
+    <div id="viewer3d" aria-label="Assembled multistorey model derived from same editable floor graph"><div class="viewhud">World coordinates in metres · vertical Y</div></div>
+    <div class="view-foot">Orbit / zoom / select an object · identical object IDs in 2D, 3D and IFC</div>
+   </div>
+  </div>
   <div class="legend"><span><i style="background:#507d91"></i>Walls</span><span><i style="background:#4b997e"></i>Columns</span><span><i style="background:#d4a75e"></i>Beams</span><span><i style="background:#a5c9bb"></i>Floor slabs</span><span><i style="background:#51a9d4"></i>Windows</span><span><i style="background:#c38b70"></i>Doors</span><span><i style="background:#9186c3"></i>Stairs</span></div>
  </div>
  <aside class="panel">
  <section><h2>Storeys · whole-building alignment</h2><div id="storeys" class="level-control"></div></section>
  <section><h2>Visible components</h2><div id="component-types" class="type-control"></div></section>
  <section><h2>Building quantities</h2><div id="quantities">—</div></section>
- <section><h2>Element inspection</h2><div id="selection">Select a wall, door, beam, column, slab or stair in the 3D model.</div></section>
+ <section><h2>Shared element inspector / editor</h2>
+<div id="selection">Select a wall, hosted opening or node in either view.</div>
+<div id="edit-controls">
+<label id="aad-field-a-wrap" hidden><span id="aad-field-a-label">Value A</span><input id="aad-field-a" type="number" step=".001"></label>
+<label id="aad-field-b-wrap" hidden><span id="aad-field-b-label">Value B</span><input id="aad-field-b" type="number" step=".001"></label>
+<label id="aad-field-c-wrap" hidden><span id="aad-field-c-label">Value C</span><input id="aad-field-c" type="number" step=".001"></label>
+<label id="aad-field-d-wrap" hidden><span id="aad-field-d-label">Value D</span><input id="aad-field-d" type="number" step=".001"></label>
+</div><button id="aad-apply-edit" type="button" hidden>Apply dimensional change to all views</button>
+<div id="edit-notice" role="status" aria-live="polite"></div>
+</section>
  <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
  <section><details><summary>Source and model assumptions</summary><p style="font-size:11px;color:#607783">Structural sizes, storey-to-storey registration, slab opening and staircase are explicit project assumptions. No structural code verification, foundation design or approval is implied.</p><a id="source-ledger" target="_blank" rel="noopener">Open source/assumption manifest ↗</a></details></section>
  </aside>

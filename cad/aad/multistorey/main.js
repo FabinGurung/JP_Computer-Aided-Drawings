@@ -7,9 +7,12 @@ const $=id=>document.getElementById(id);
 const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
+const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
+let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
+const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
 const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,stair:0x9386bb,landing:0xa48cc9};
 const status=txt=>$("action-status").textContent=txt;
@@ -111,7 +114,11 @@ function htmlText(e){
  return spans.join("\n");
 }
 function selectElement(e){
+ if(e.kind==="wall"||e.kind==="door"||e.kind==="window")activeEdit={level:e.level,kind:e.kind==="wall"?"wall":"opening",id:e.id.split(":").slice(2).join(":")};
+ else activeEdit=null;
  $("selection").textContent=htmlText(e);
+ refreshEditPanel();
+ drawPlan();
  const row=rowsById.get(e.id);if(row)row.scrollIntoView({behavior:"smooth",block:"nearest"});
 }
 function addStoreys(){
@@ -165,6 +172,149 @@ function runQa(){
  $("qa-result").textContent=summary.join("\n");
  return result;
 }
+
+function projectToWorld(p,t){
+ const radians=(t.rotationDeg||0)*Math.PI/180,c=Math.cos(radians),s=Math.sin(radians);
+ return{x:p.x*c-p.z*s+t.x,z:p.x*s+p.z*c+t.z};
+}
+function drawPlan(){
+ const doc=$("viewer2d");doc.replaceChildren();
+ if(!workspace)return;
+ const state=workspace.snapshot(),models=state.models;
+ const levels=activeLevel==="all"?state.manifest.levels:state.manifest.levels.filter(l=>l.id===activeLevel);
+ const outlines=[],pts=[];
+ for(const l of levels){
+  const g=models[l.id].floorGraph,nodeMap=new Map(g.nodes.map(n=>[n.id,projectToWorld(n,l.transform)]));
+  const color=l.id==="gf"?"#2c7886":l.id==="ff"?"#9c8068":"#6782b4";
+  outlines.push({l,g,nodeMap,color});pts.push(...nodeMap.values());
+ }
+ const minX=Math.min(...pts.map(p=>p.x))-1.1,minZ=Math.min(...pts.map(p=>p.z))-1.1,
+       maxX=Math.max(...pts.map(p=>p.x))+1.1,maxZ=Math.max(...pts.map(p=>p.z))+1.1;
+ doc.setAttribute("viewBox",[minX,minZ,maxX-minX,maxZ-minZ].join(" "));
+ const el=(name,attrs={})=>{
+  const node=document.createElementNS(svgNS,name);
+  for(const [k,v] of Object.entries(attrs))node.setAttribute(k,String(v));
+  return node;
+ };
+ for(const {l,g,nodeMap,color} of outlines){
+  const faded=activeLevel==="all"?.64:1;
+  for(const w of g.walls){
+   const a=nodeMap.get(w.a),b=nodeMap.get(w.b);
+   if(!a||!b)continue;
+   const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(activeEdit?.level===l.id&&activeEdit?.id===w.id?" active":"")});
+   item.dataset.part=l.id+":"+w.id;
+   item.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"wall",w.id);});
+   doc.append(item);
+  }
+  for(const o of g.openings){
+   const wall=g.walls.find(w=>w.id===o.wallId),a=nodeMap.get(wall.a),b=nodeMap.get(wall.b);
+   const length=Math.hypot(b.x-a.x,b.z-a.z),from=o.offset/length,to=(o.offset+o.width)/length;
+   const item=el("line",{
+    x1:a.x+(b.x-a.x)*from,y1:a.z+(b.z-a.z)*from,x2:a.x+(b.x-a.x)*to,y2:a.z+(b.z-a.z)*to,
+    class:o.kind==="door"?"aad-door":"aad-window",
+    "stroke-width":o.kind==="door"?.21:.28
+   });
+   item.dataset.part=l.id+":"+o.id;
+   item.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"opening",o.id);});
+   doc.append(item);
+  }
+  if(activeLevel===l.id){
+   for(const n of g.nodes){
+    const p=nodeMap.get(n.id),circle=el("circle",{cx:p.x,cy:p.z,r:.13,class:"aad-node","data-node":n.id,tabindex:"0",role:"button","aria-label":"Move node "+n.id});
+    circle.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"node",n.id);});
+    circle.addEventListener("pointerdown",evt=>{
+     evt.preventDefault();evt.stopPropagation();
+     circle.setPointerCapture(evt.pointerId);circle.classList.add("dragging");
+     const initialX=Number(circle.getAttribute("cx")),initialZ=Number(circle.getAttribute("cy"));
+     const onMove=e=>{
+      const box=doc.getBoundingClientRect(),v=doc.viewBox.baseVal;
+      const x=v.x+(e.clientX-box.left)/box.width*v.width,z=v.y+(e.clientY-box.top)/box.height*v.height;
+      circle.setAttribute("cx",x.toFixed(3));circle.setAttribute("cy",z.toFixed(3));
+     };
+     const onEnd=e=>{
+      circle.removeEventListener("pointermove",onMove);circle.removeEventListener("pointerup",onEnd);
+      circle.classList.remove("dragging");
+      if(Math.hypot(Number(circle.getAttribute("cx"))-initialX,Number(circle.getAttribute("cy"))-initialZ)<.04)return;
+      const v={x:Number(circle.getAttribute("cx")),z:Number(circle.getAttribute("cy"))};
+      const t=l.transform,a=-(t.rotationDeg||0)*Math.PI/180,dx=v.x-t.x,dz=v.z-t.z;
+      applyModelEdit(l.id,"node",n.id,{x:dx*Math.cos(a)-dz*Math.sin(a),z:dx*Math.sin(a)+dz*Math.cos(a)});
+     };
+     circle.addEventListener("pointermove",onMove);circle.addEventListener("pointerup",onEnd,{once:true});
+    });
+    doc.append(circle);
+   }
+  }
+ }
+ const ground=activeLevel==="all"?"All aligned storeys (select a floor to edit)":state.manifest.levels.find(l=>l.id===activeLevel).name+" · elevation "+state.manifest.levels.find(l=>l.id===activeLevel).elevation.toFixed(2)+" m";
+ $("aad-plan-level").textContent=ground;
+ $("aad-building-level").textContent=activeLevel==="all"?"All storeys":"Selected storey "+activeLevel.toUpperCase();
+}
+function focusEditor(level,kind,id){
+ activeLevel=level;$("aad-storey").value=level;setLevel(level);
+ activeEdit={level,kind,id};refreshEditPanel();drawPlan();
+}
+function refreshEditPanel(){
+ const selection=activeEdit,state=workspace?.snapshot();
+ const names=["a","b","c","d"];
+ const fields=names.map(n=>({field:$("aad-field-"+n),wrap:$("aad-field-"+n+"-wrap"),label:$("aad-field-"+n+"-label")}));
+ for(const f of fields)f.wrap.hidden=true;
+ $("aad-apply-edit").hidden=true;
+ if(!selection||!state)return;
+ const g=state.models[selection.level].floorGraph;
+ let values={};
+ if(selection.kind==="wall"){
+  const item=g.walls.find(x=>x.id===selection.id);
+  if(!item)return;values={thickness:item.thickness};
+ }else if(selection.kind==="node"){
+  const item=g.nodes.find(x=>x.id===selection.id);
+  if(!item)return;values={x:item.x,z:item.z};
+ }else if(selection.kind==="opening"){
+  const item=g.openings.find(x=>x.id===selection.id);
+  if(!item)return;values={offset:item.offset,width:item.width,height:item.height,sill:item.sill};
+ }
+ const keys=Object.keys(values);
+ keys.forEach((k,i)=>{fields[i].wrap.hidden=false;fields[i].label.textContent=k+" (m)";fields[i].field.value=Number(values[k]).toFixed(3);fields[i].field.dataset.metric=k;});
+ $("aad-apply-edit").hidden=false;
+ $("selection").textContent=selection.level.toUpperCase()+" / "+selection.id+" · "+selection.kind+" (floor-local coordinates, m)\nEdit parameters or drag node circles. All linked views and BIM exports use the same model.";
+}
+function applyModelEdit(level,kind,id,patch){
+ try{
+  lastUndo=workspace.bundle();
+  workspace.change(level,{kind,id},patch);
+  activeEdit={level,kind,id};persistDraft();
+  refreshAll();
+  $("edit-notice").textContent="Updated "+id+" across plan, 3D, quantities, IFC4 and component table.";
+  status("Live linked model v"+workspace.snapshot().version+" · edited "+id+" · ENGINEERING HOLD");
+ }catch(error){
+  lastUndo=null;
+  $("edit-notice").textContent="Edit rejected: "+error.message;
+  drawPlan();
+ }
+}
+function refreshAll(){
+ building=workspace.snapshot().assembly;
+ renderModel();drawPlan();addStats();addRows();runQa();refreshEditPanel();
+ $("aad-edit-version").textContent="Working BIM draft v"+workspace.snapshot().version+(workspace.snapshot().lastEdit?" · unsent to source":"");
+ $("aad-undo").disabled=!lastUndo;
+}
+function persistDraft(){
+ try{localStorage.setItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId,JSON.stringify(workspace.bundle()));}catch(_){}
+}
+function setLevel(level){
+ activeLevel=level;
+ for(const l of building.levels)floorFlags.set(l.id,level==="all"||l.id===level);
+ for(const [idx,label] of [...$("storeys").querySelectorAll("label")].entries())
+  label.querySelector("input").checked=floorFlags.get(building.levels[idx].id);
+ $("aad-storey").value=level;applyVisible();drawPlan();
+}
+function setViewMode(mode){
+ if(!["split","plan","building"].includes(mode))mode="split";
+ document.body.dataset.viewMode=mode;$("aad-view-mode").value=mode;
+ try{localStorage.setItem("aad:unified:view-mode",mode);}catch(_){}
+ if(renderer){const node=$("viewer3d");renderer.setSize(node.clientWidth,Math.max(200,node.clientHeight));
+  camera.aspect=node.clientWidth/Math.max(200,node.clientHeight);camera.updateProjectionMatrix();}
+}
+
 async function main(){
  if(!chosen)throw Error("Open this shared viewer with a project-owned ?manifest= path. No default client model is baked into the engine.");
  const url=new URL(chosen,location.href),dataBase=new URL("../../../data/projects/",location.href);
@@ -178,11 +328,23 @@ async function main(){
   const fetched=await fetch(modelURL,{cache:"no-store"});if(!fetched.ok)throw Error("Floor model HTTP "+fetched.status);
   models[l.id]=await fetched.json();
  }
- building=assembleBuilding(manifest,models);
+ workspace=createAADWorkspace(manifest,models);
+ const storageKey="aad:unified:draft:"+manifest.projectId;
+ try{
+  const stored=localStorage.getItem(storageKey);
+  if(stored){workspace.restore(JSON.parse(stored));status("Recovered locally saved working draft · canonical sources unchanged");}
+ }catch(err){status("Saved draft ignored: "+err.message);}
+ building=workspace.snapshot().assembly;
+ for(const l of building.levels){
+  const option=document.createElement("option");option.value=l.id;option.textContent=l.name+" · "+l.elevation.toFixed(2)+"m";
+  $("aad-storey").append(option);
+ }
  $("building-name").textContent=building.name;
  $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² Block B floor areas · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
- initRenderer();addStoreys();addStats();addRows();renderModel();centerView();runQa();
+ initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");centerView();runQa();
+ try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
+ $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";
  status("Shared AAD building assembly ready · "+building.diagnostics.length+" QA findings (engineering HOLD)");
 }
 $("fit").addEventListener("click",centerView);
@@ -201,4 +363,40 @@ $("download-ifc").addEventListener("click",()=>{
  }catch(e){status("IFC4 export failed: "+e.message);}
 });
 $("download-json").addEventListener("click",()=>{if(building)download(building.projectId+"_AAD_MULTISTOREY_A01.json",JSON.stringify(building,null,2),"application/json");});
+
+$("aad-storey").addEventListener("change",e=>setLevel(e.target.value));
+$("aad-show-all").addEventListener("click",()=>setLevel("all"));
+$("aad-view-mode").addEventListener("change",e=>setViewMode(e.target.value));
+$("aad-apply-edit").addEventListener("click",()=>{
+ if(!activeEdit||!workspace)return;
+ const patch={};for(const key of ["a","b","c","d"]){
+  const wrap=$("aad-field-"+key+"-wrap");
+  if(!wrap.hidden){const inp=$("aad-field-"+key);patch[inp.dataset.metric]=Number(inp.value);}
+ }
+ applyModelEdit(activeEdit.level,activeEdit.kind,activeEdit.id,patch);
+});
+$("aad-undo").addEventListener("click",()=>{
+ if(!lastUndo)return;
+ try{workspace.restore(lastUndo);lastUndo=null;persistDraft();refreshAll();status("Undid last edit");}
+ catch(err){status("Undo failed: "+err.message);}
+});
+$("aad-reset").addEventListener("click",()=>{
+ if(!workspace)return;lastUndo=workspace.bundle();workspace.reset();activeEdit=null;
+ try{localStorage.removeItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId);}catch(_){}
+ refreshAll();status("Restored canonical source geometry; source data unchanged.");
+});
+$("aad-save-working").addEventListener("click",()=>{
+ if(workspace)download(workspace.snapshot().manifest.projectId+"_AAD_EDITABLE_BUILDING_DRAFT.json",
+  JSON.stringify(workspace.bundle(),null,2),"application/json");
+});
+$("aad-import-working").addEventListener("click",()=>$("aad-import-file").click());
+$("aad-import-file").addEventListener("change",async e=>{
+ try{
+  const file=e.target.files?.[0];if(!file||file.size>200000)throw Error("Select a valid draft JSON under 200KB");
+  const parsed=JSON.parse(await file.text());lastUndo=workspace.bundle();workspace.restore(parsed);
+  persistDraft();refreshAll();status("Restored editable building draft into shared linked viewports.");
+ }catch(err){status("Import failed: "+err.message);}
+ e.target.value="";
+});
+
 main().catch(e=>{status("Unable to assemble this project: "+e.message);$("qa-result").textContent="ERROR: "+e.message;});
