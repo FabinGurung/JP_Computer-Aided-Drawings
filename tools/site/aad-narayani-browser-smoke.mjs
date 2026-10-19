@@ -9,7 +9,7 @@ try{
  if(!await page.locator('[data-floor="gf"]').count())throw Error("Narayani project route missing floor controls: "+await page.title()+" URL="+page.url()+" body="+(await page.locator("body").innerText()).slice(0,230));
  for(const [key,area,count] of [["gf","205.16 m²","73 measured dimension objects"],["ff","200.67 m²","75 measured dimension objects"],["sf","175.62 m²","71 measured dimension objects"],["footing","Not tabulated","14 measured dimension objects"],["beam_gf","Not tabulated","11 measured dimension objects"]]){
   await page.locator('[data-floor="'+key+'"]').click();
-  await page.waitForFunction(expected=>document.querySelector("#aad-area")?.textContent===expected,area,{timeout:15000});
+  await page.waitForFunction(([expectedArea,expectedCount])=>document.querySelector("#aad-area")?.textContent===expectedArea && document.querySelector("#aad-dim-count")?.textContent===expectedCount,[area,count],{timeout:15000});
   assert.equal(await page.locator("#aad-dim-count").innerText(),count);
   assert.ok((await page.locator("#aad-source-svg path").count())>=1,key+" missing plotted DXF layer vectors");
  }
