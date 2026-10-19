@@ -42,7 +42,7 @@
    out+='<text x="'+x+'" y="'+y+'" fill="#ffda7f" font-size="'+Math.max(9,textScale*.8)+'" text-anchor="middle" paint-order="stroke" stroke="#0d1724" stroke-width="4">'+escapeText(label)+'</text>';
   }
   svg.innerHTML=out;
-  byId("aad-area").textContent=v.area.toFixed(2)+" m²";
+  byId("aad-area").textContent=Number.isFinite(v.area)?v.area.toFixed(2)+" m²":"Not tabulated";
   byId("aad-dim-count").textContent=v.dimensions.length+" measured dimension objects";
   byId("aad-entity-count").textContent=v.lines.length+" drawn vectors";
   table.innerHTML=v.dimensions.map(([x,y,d],i)=>'<tr><td>'+String(i+1).padStart(2,"0")+'</td><td>'+escapeText(d)+'</td><td>'+escapeText(Math.round((b[0]+x*10)/1000)+" m, "+Math.round((b[3]-y*10)/1000)+" m")+'</td></tr>').join("");
