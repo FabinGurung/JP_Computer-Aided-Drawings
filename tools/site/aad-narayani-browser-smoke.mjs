@@ -30,7 +30,7 @@ try {
  assert.ok(projectMode.sameOrigin&&projectMode.native2d&&projectMode.native3d,"Narayani must run real native AAD linked engine, not plotted SVG only");
  assert.ok(projectMode.introHidden,"Remove synthetic generic-engine intro from project experience");
  assert.ok(projectMode.viewerY<180,"Put native live 2D/3D workspace at the beginning of the project experience: "+projectMode.viewerY);
- const hub=await page.context().newPage();
+ const hub=await browser.newPage({viewport:{width:1180,height:800}});
  await hub.goto(new URL("../",url).href,{waitUntil:"domcontentloaded"});
  const label=await hub.locator(".aad-project-entry").innerText();
  assert.match(label,/Live AAD/);
