@@ -1,0 +1,130 @@
+{
+  "schema": "jp-cad://project-aad-qa-manifest/2.0",
+  "project_id": "PRJ-000007",
+  "slug": "narayani-parajuli",
+  "phase": "SOURCE_ALIGNED_THREE_LEVEL_DRAFT",
+  "engine": "UNMODIFIED_SHARED_AAD_0.5",
+  "project_authorization": "OWNER_AUTHORIZED_METRIC_AND_SEMANTIC_INFERENCE",
+  "revision_date": "2026-10-19",
+  "canonical_source": {
+    "architectural_dxf_drive_id": "1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv",
+    "architectural_dxf_sha256": "077e7b4ffd5ce3c5c9789f9d040ef32ee661175aedd5f2d1059dbbe18176e124",
+    "architectural_pdf_drive_id": "19AyrQbMaZ4ze59ixqKMlMlR0UZ-1jDcB",
+    "source_pdf_sheets": {
+      "gf": "ARCH-03",
+      "ff": "ARCH-04",
+      "sf": "ARCH-05"
+    },
+    "structural_dxf_drive_id": "13k901-pejMY7lE_0VepomzxUZFiZyzox",
+    "source_originals_drive_folder_id": "1WqL7n93Zc_UnsMPNaO9yCMetrreFXC1A"
+  },
+  "area_definition": "Architectural scheduled floor area is the reporting reference. AAD semantic floorPlate is an explicitly inferred design outline fitted within ±0.01 m²; matching floor area DOES NOT verify every perimeter segment.",
+  "levels": [
+    {
+      "id": "gf",
+      "name": "Ground Floor",
+      "file": "aad-ground-floor-model.json",
+      "datum_bottom_m": 0,
+      "datum_top_m": 3,
+      "planned_area_m2": 205.16,
+      "model_area_m2": 205.161844,
+      "delta_m2": 0.001844,
+      "source_measurements": [
+        "15.000 m main rear wall",
+        "11.100 m main core depth",
+        "4.900 m west annex",
+        "3.180 m east projection"
+      ],
+      "model_decisions": [
+        "Retire previous PDF-derived 233.62 m² boundary",
+        "DXF W-wall region outer polygon union approx 202.811 m²",
+        "Remove sub-0.16m detail kinks (polygon about 203.048 m²)",
+        "Uniform ~0.0273m orthogonal face adjustment and millimetre rounding yields 205.162m²"
+      ],
+      "source_mapping": "SOURCED_PLAN_WITH_27MM_FACE_OFFSET"
+    },
+    {
+      "id": "ff",
+      "name": "First Floor",
+      "file": "aad-first-floor-model.json",
+      "datum_bottom_m": 3,
+      "datum_top_m": 6,
+      "planned_area_m2": 200.67,
+      "model_area_m2": 200.67001,
+      "delta_m2": 0.00001,
+      "source_measurements": [
+        "15.000 × 11.100 m main core",
+        "4.900 × 4.000 m west annex",
+        "1.770 × 3.710 m east bay",
+        "4.830 m north frontage"
+      ],
+      "model_decisions": [
+        "Complete a north office band as 4.830 × 1.657 m to match stated GFA"
+      ],
+      "source_mapping": "SOURCE_DIMENSIONS_PLUS_NORTH_BAND_ASSUMPTION"
+    },
+    {
+      "id": "sf",
+      "name": "Second Floor",
+      "file": "aad-second-floor-model.json",
+      "datum_bottom_m": 6,
+      "datum_top_m": 9,
+      "planned_area_m2": 175.62,
+      "model_area_m2": 175.61842,
+      "delta_m2": -0.00158,
+      "source_measurements": [
+        "15.000 × 11.100 m core",
+        "4.900 × 4.000 m west annex",
+        "1.770 m east bay",
+        "4.830 m north terrace frontage"
+      ],
+      "model_decisions": [
+        "Exclude NW open terrace recess 4.830 × 3.526 m from the floor-plate area"
+      ],
+      "source_mapping": "SOURCE_DIMENSIONS_PLUS_TERRACE_RECESS_ASSUMPTION"
+    }
+  ],
+  "combined": {
+    "scheduled_block_b_m2": 581.45,
+    "computed_block_b_m2": 581.450274,
+    "total_deviation_m2": 0.000274,
+    "existing_block_a_m2": 304.83,
+    "combined_architectural_m2": 886.28,
+    "notice": "The 3D AAD project data models represent Block B only; Block A is not modeled and is not counted as geometry."
+  },
+  "modeling_assumptions": {
+    "storey_height_m": 3,
+    "level_elevations_m": [
+      0,
+      3,
+      6,
+      9
+    ],
+    "wall_height_m": 2.82,
+    "external_wall_thickness_m": 0.23,
+    "internal_wall_thickness_m": 0.15,
+    "typical_door_m": [
+      0.85,
+      2.1
+    ],
+    "typical_window_m": [
+      1.45,
+      1.25
+    ],
+    "typical_window_sill_m": 0.9,
+    "stair_geometry": "Schematic 3D room/partition indication only; treads/risers and load path not source verified",
+    "room_identity": "DXF/TEXT names allocated to derived graph faces plus named AI-designed corridors, suites and adaptable rooms",
+    "openings": "Host wall coordinates chosen by designer AI where DXF symbols could not be identified as verified BIM openings",
+    "vertical_datum": "Relative; no surveyed level, structural plinth or RL asserted"
+  },
+  "boundary": "Architectural 2D plots retain direct DXF dimensional evidence. The revised AAD project model has metric and semantic assumptions clearly recorded. This is not analysis, detailing, IFC/BIM equivalence, engineer certification, IFC/issued-for-construction clearance, or structural approval.",
+  "unchanged": [
+    "cad/aad/editable_model.ts",
+    "cad/aad/floor_graph.ts",
+    "cad/aad/angled_graph.ts",
+    "cad/aad/main.ts",
+    "public/assets/js/aad-project-viewer.js",
+    "structural V02–M80 stage modules"
+  ],
+  "integration": "Project page selects hosted project data via existing AAD Studio projectModel parameter; other projects reuse same engine."
+}
