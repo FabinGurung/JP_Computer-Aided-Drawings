@@ -102,6 +102,15 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
 @media(max-width:1200px){.component-counts{grid-template-columns:repeat(5,minmax(90px,1fr))}}
 @media(max-width:680px){.component-counts{grid-template-columns:repeat(3,minmax(90px,1fr))}.view-settings{border-left:0;padding-left:0}.component-toolbar input{min-width:135px;max-width:100%}}
 
+
+.bim-primary{background:white;border:1px solid var(--line);border-radius:14px;margin-bottom:16px;overflow:hidden}
+.bim-primary-title{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;background:#123e4f;color:#fff;padding:14px 16px}
+.bim-primary-title h2{font-size:18px;letter-spacing:-.02em;margin:0}.bim-primary-title p{font-size:11px;color:#c1dce3;margin:4px 0 0}
+.bim-primary-title a{background:#d5faf2;color:#075e58;border-radius:7px;padding:10px 12px;font-size:12px;font-weight:750}
+.bim-primary iframe{display:block;width:100%;height:1110px;border:0;background:#edf3f5}
+.bim-primary .bim-qa-strip{padding:10px 15px;background:#f5faf9;color:#486677;font-size:11px}
+.floor-studio-title{margin:15px 0 9px;font-size:18px}
+@media(max-width:870px){.bim-primary iframe{height:1450px}}
 </style>
 </head>
 <body data-aad-project>
@@ -112,8 +121,15 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
   </nav>
 </header>
 <main>
-  <div class="headline"><div><h1>Editable architecture · one model, linked 2D + 3D</h1><p>Drag walls and inspect connected rooms, edit hosted doors/windows and dimensions, orbit the 3D model, save a project draft.</p></div><span class="status">Architectural design draft · structural M80 HOLD</span></div>
-  <section aria-label="Narayani AAD workspace">
+  <div class="headline"><div><h1>Narayani AAD · assembled building + linked floor editing</h1><p>Drag walls and inspect connected rooms, edit hosted doors/windows and dimensions, orbit the 3D model, save a project draft.</p></div><span class="status">Architectural design draft · structural M80 HOLD</span></div>
+  <section class="bim-primary" aria-label="Unified multistorey building model" id="aad-assembled-building">
+<div class="bim-primary-title"><div><h2>One assembled building · 3D BIM / IFC4</h2><p>Shared AAD multistorey engine · three aligned storeys · source/assumption provenance · inspection, QA and IFC4 export</p></div>
+<a id="aad-open-multistorey" href="../../../cad/aad/multistorey/" target="_blank" rel="noopener">Open full multistorey editor ↗</a></div>
+<iframe id="aad-multistorey-engine" loading="eager" title="Reusable AAD assembled 3-storey 3D BIM viewer, component inspection and IFC4 export"></iframe>
+<div class="bim-qa-strip"><b>Engineering design status: HOLD.</b> The building includes source-aligned architectural wall and opening graphs plus explicitly inferred storey transforms, columns, beams, 180 mm slabs and stair geometry. IFC4 spatial/element relationships may be exported, but capacity checks, global surveyed alignment and foundation design remain unverified.</div>
+</section>
+<h2 class="floor-studio-title">Edit one floor in the canonical AAD 2D/3D engine</h2>
+<section aria-label="Narayani AAD workspace">
     <div class="bar">
       <div class="floor-tabs" role="group" aria-label="Live AAD floor models">
         <button type="button" data-model="gf" aria-pressed="true">Ground floor <small>205.16 m²</small></button>
@@ -135,7 +151,7 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
     </div>
   </section>
   <section class="component-section" data-aad-component-register data-project-data-root="../../../data/projects/narayani-parajuli/" id="aad-components">
-  <div class="component-header"><div><h2>Project components · actual modeled locations</h2><p>All three floor-model files · authored walls, hosted doors/windows and semantic room labels · prospective IFC classifications</p></div><a class="action" href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json" target="_blank" rel="noopener">Open source / assumption ledger ↗</a></div>
+  <div class="component-header"><div><h2>Project components · actual modeled locations</h2><p>Original per-floor model files · authored walls, hosted doors/windows and semantic labels; assembled structural/vertical elements appear above · prospective IFC classifications</p></div><a class="action" href="../../../data/projects/narayani-parajuli/MODEL_QA_MANIFEST_v2.json" target="_blank" rel="noopener">Open source / assumption ledger ↗</a></div>
   <div class="component-counts" data-register-counts><span>Loading the versioned project component register…</span></div>
   <div class="component-note"><b>Map axes:</b> coordinates below are in metres: (X,Z) is the floor plan, Y is height. Ground/first/second are assigned Y bases of 0.000/3.000/6.000 m. Each floor currently has its own architectural local origin: identical X,Z coordinates across floors do <b>not</b> prove alignment. Door/window centers are calculated from their stored host-wall offset. Room labels are semantic names, not independently stored IFC space solids; their centroid is obtained from the native AAD viewer only after opening that floor. IFC entity names are <b>classification candidates, not exported IFC records</b>.</div>
   <div class="component-toolbar">
@@ -196,6 +212,15 @@ footer{max-width:1920px;margin:0 auto;padding:0 18px 25px;color:#637c88;font-siz
   </section>
 </main>
 <footer>CAD/AAD · Narayani source-linked working model · V02–M80 historical structural modules are preserved · not issued for construction</footer>
+<script>
+(function(){
+const viewer=new URL("../../../cad/aad/multistorey/",location.href);
+const manifest=new URL("../../../data/projects/narayani-parajuli/aad-building-v1.json",location.href);
+viewer.searchParams.set("manifest",manifest.pathname);
+document.getElementById("aad-multistorey-engine").src=viewer.href;
+document.getElementById("aad-open-multistorey").href=viewer.href;
+})();
+</script>
 <script src="../../../data/projects/narayani-parajuli/aad-source-v1.js"></script>
 <script src="../../../data/projects/narayani-parajuli/aad-structure-v1.js"></script>
 <script src="../../../assets/js/aad-project-viewer.js"></script>

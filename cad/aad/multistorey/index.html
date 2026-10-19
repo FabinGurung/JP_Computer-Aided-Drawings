@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>AAD Building Studio | Shared Multistorey BIM Template</title>
+<meta name="description" content="Shared AAD multistorey parametric building engine, IFC4 exporter and spatial/structural QA for sourced project instances.">
+<style>
+:root{font:14px/1.5 Inter,ui-sans-serif,system-ui,Arial,sans-serif;color-scheme:light;background:#eaf2f4;color:#173140}
+*{box-sizing:border-box}body{margin:0}button,input,select{font:inherit}button{cursor:pointer}a{color:#087772;text-decoration:none}
+button{padding:9px 12px;border:1px solid #c4d8de;background:#f8fcfd;color:#264556;border-radius:7px}
+button:hover{background:#e5f4f1}button:focus-visible{outline:3px solid #28a394;outline-offset:2px}
+header{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:13px;background:#fff;border-bottom:1px solid #cfdee3;padding:13px 19px}
+header strong{font-size:17px}header small{display:block;color:#5b7381}
+header nav{display:flex;gap:15px;font-size:12px}
+main{max-width:1850px;margin:auto;padding:14px}
+.head{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:12px;margin-bottom:10px}
+.head h1{font-size:clamp(21px,2.2vw,30px);margin:0;letter-spacing:-.035em}
+.head p{margin:4px 0;font-size:12px;color:#647882}
+.alert{padding:8px 12px;border:1px solid #e3cfad;background:#fff5e7;color:#855617;border-radius:6px;font-size:11px;font-weight:650}
+.actions{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.btn-primary{background:#156e69;border-color:#156e69;color:white}.btn-primary:hover{background:#0c5b55}
+.workspace{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:12px}
+.panel{border:1px solid #cfdee3;border-radius:12px;background:#fff;overflow:hidden}
+.panel-title{padding:10px 13px;border-bottom:1px solid #dce8eb;display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap}
+.panel-title strong{font-size:13px}.panel-title small{font-size:11px;color:#64808c}
+#viewer3d{height:min(76vh,760px);min-height:480px;position:relative;background:linear-gradient(150deg,#e7f1f5,#f7f9fa);touch-action:none}
+#viewer3d canvas{display:block;width:100%;height:100%}
+.viewhud{position:absolute;top:10px;left:12px;background:#fffdf1e9;border:1px solid #e8e8d4;border-radius:8px;padding:6px 10px;font-size:11px;pointer-events:none}
+.legend{display:flex;gap:8px;flex-wrap:wrap;padding:9px 11px;border-top:1px solid #dbe5e7;font-size:10px;color:#536977}
+.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
+aside{max-height:840px;overflow:auto}
+aside section{padding:13px;border-bottom:1px solid #dee9ec}
+aside h2{margin:0 0 10px;font-size:14px}
+.level-control{display:grid;gap:5px}
+.level-control label,.type-control label{display:flex;align-items:center;justify-content:space-between;gap:10px;font-size:12px}
+.level-control label small{color:#738895}
+.type-control{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.stat{font-size:12px;display:flex;justify-content:space-between;gap:10px;margin:6px 0}.stat strong{font-variant-numeric:tabular-nums}
+#selection{font-size:12px;min-height:50px;color:#445d6d;overflow-wrap:anywhere}
+#qa-result{font-size:11px;white-space:pre-wrap;max-height:175px;overflow:auto;color:#405866}
+summary{cursor:pointer;font-weight:750;font-size:13px}
+.audit{margin-top:12px;background:#fff;border:1px solid #d3e0e5;border-radius:11px;overflow:hidden}
+.audit h2{font-size:16px;margin:0;padding:13px}
+.table-wrap{max-height:420px;overflow:auto}
+table{width:100%;border-collapse:collapse;font-size:11px}th,td{padding:8px 11px;border-bottom:1px solid #e1eaec;text-align:left;white-space:nowrap;font-variant-numeric:tabular-nums}
+thead{position:sticky;top:0;background:#dcebee}tbody tr:hover{background:#eaf6f3;cursor:pointer}
+.foot{font-size:11px;color:#557381;margin:11px 0}
+@media(max-width:950px){.workspace{grid-template-columns:1fr}aside{max-height:none}#viewer3d{height:60vh;min-height:430px}}
+</style>
+</head>
+<body>
+<header><div><strong>CAD · Shared AAD Building Studio</strong><small>One reusable multistorey engine · verified project adapter, not a site-specific code fork</small></div><nav><a href="../../">← AAD floor template</a><a href="../../../projects/">Projects</a><a href="../../../guide/">Engine principles</a></nav></header>
+<main>
+<div class="head"><div><h1 id="building-name">Multistorey 3D BIM assembly</h1><p id="building-subtitle">Loading one unified building coordinate system and element hierarchy…</p></div><span class="alert">BIM design draft · engineering approval HOLD</span></div>
+<div class="actions" style="margin-bottom:12px">
+<button id="fit" class="btn-primary" type="button">Fit building</button><button id="isolate" type="button">Show all storeys</button>
+<button id="download-ifc" type="button">Download IFC4 model</button><button id="download-json" type="button">Download assembled model (.json)</button>
+<button id="run-qa" type="button">Run geometry + IFC QA</button>
+<span id="action-status" role="status" style="font-size:11px;color:#466478">Preparing geometry…</span>
+</div>
+<div class="workspace">
+ <div class="panel">
+  <div class="panel-title"><strong>Whole building · selectable 3D geometry</strong><small>Orbit / zoom / click any physical element to inspect its native ID</small></div>
+  <div id="viewer3d" aria-label="Editable AAD-derived multistorey building composed into one 3D scene"><div class="viewhud">Building coordinate system: metres · X + Z plan / Y upward</div></div>
+  <div class="legend"><span><i style="background:#507d91"></i>Walls</span><span><i style="background:#4b997e"></i>Columns</span><span><i style="background:#d4a75e"></i>Beams</span><span><i style="background:#a5c9bb"></i>Floor slabs</span><span><i style="background:#51a9d4"></i>Windows</span><span><i style="background:#c38b70"></i>Doors</span><span><i style="background:#9186c3"></i>Stairs</span></div>
+ </div>
+ <aside class="panel">
+ <section><h2>Storeys · whole-building alignment</h2><div id="storeys" class="level-control"></div></section>
+ <section><h2>Visible components</h2><div id="component-types" class="type-control"></div></section>
+ <section><h2>Building quantities</h2><div id="quantities">—</div></section>
+ <section><h2>Element inspection</h2><div id="selection">Select a wall, door, beam, column, slab or stair in the 3D model.</div></section>
+ <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
+ <section><details><summary>Source and model assumptions</summary><p style="font-size:11px;color:#607783">Structural sizes, storey-to-storey registration, slab opening and staircase are explicit project assumptions. No structural code verification, foundation design or approval is implied.</p><a id="source-ledger" target="_blank" rel="noopener">Open source/assumption manifest ↗</a></details></section>
+ </aside>
+</div>
+<div class="audit"><h2>Building components · one coordinate system</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Storey</th><th>IFC class</th><th>Type</th><th>Global X</th><th>Global Y</th><th>Global Z</th><th>Dimension / size</th><th>Evidence</th></tr></thead><tbody id="elements"></tbody></table></div></div>
+<div class="foot">IFC4 download uses the common AAD IFC writer and requires external parse validation. IFC hierarchy/classification does not certify assumed structural elements. Archived V02–M80 engineering packages remain untouched.</div>
+</main>
+<script type="module" src="./main.js"></script>
+</body>
+</html>
