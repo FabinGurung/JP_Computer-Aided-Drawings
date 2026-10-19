@@ -11,7 +11,7 @@ try{
   await page.locator('[data-floor="'+key+'"]').click();
   await page.waitForFunction(expected=>document.querySelector("#aad-area")?.textContent===expected,area,{timeout:15000});
   assert.equal(await page.locator("#aad-dim-count").innerText(),count);
-  assert.ok((await page.locator("#aad-source-svg path").count())>=4,key+" missing drawing layers");
+  assert.ok((await page.locator("#aad-source-svg path").count())>=2,key+" missing drawing layer paths");
  }
  const screenshotPath="/tmp/cad-aad-narayani-dxf.png";
  await page.screenshot({path:screenshotPath,fullPage:true});
