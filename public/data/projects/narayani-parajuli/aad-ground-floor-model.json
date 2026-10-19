@@ -1,7 +1,7 @@
 {
   "schema": "jp-cad://linked-one-bay-demo/0.5",
-  "length": 23,
-  "width": 14,
+  "length": 26,
+  "width": 16,
   "height": 3,
   "door": 0.95,
   "window": 1.4,
@@ -35,319 +35,409 @@
   "floorGraph": {
     "nodes": [
       {
-        "id": "P01",
-        "x": 3.037,
-        "z": 0.15
+        "id": "N01",
+        "x": 20.147,
+        "z": 1.983
       },
       {
-        "id": "P02",
-        "x": 10.172,
-        "z": 0.15
+        "id": "N02",
+        "x": 9.377,
+        "z": 1.983
       },
       {
-        "id": "P03",
-        "x": 10.172,
-        "z": 2.094
+        "id": "N03",
+        "x": 9.377,
+        "z": 0.153
       },
       {
-        "id": "P04",
-        "x": 22.024,
-        "z": 2.094
+        "id": "N04",
+        "x": 5.713,
+        "z": 0.153
       },
       {
-        "id": "P05",
-        "x": 22.024,
-        "z": 13.463
+        "id": "N05",
+        "x": 5.713,
+        "z": 1.983
       },
       {
-        "id": "P06",
-        "x": 0.088,
-        "z": 13.463
+        "id": "N06",
+        "x": 5.093,
+        "z": 1.983
       },
       {
-        "id": "P07",
-        "x": 0.088,
-        "z": 9.454
+        "id": "N07",
+        "x": 5.093,
+        "z": 2.623
       },
       {
-        "id": "P08",
-        "x": 5.248,
-        "z": 9.454
+        "id": "N08",
+        "x": 3.203,
+        "z": 2.623
       },
       {
-        "id": "P09",
-        "x": 5.248,
-        "z": 5.864
+        "id": "N09",
+        "x": 3.203,
+        "z": 6.097
       },
       {
-        "id": "P10",
-        "x": 3.037,
-        "z": 5.864
+        "id": "N10",
+        "x": 5.095,
+        "z": 6.097
       },
       {
-        "id": "N-TOILET-E",
-        "x": 10.172,
-        "z": 5.864
+        "id": "N11",
+        "x": 5.301,
+        "z": 9.063
       },
       {
-        "id": "N-TOILET-SE",
-        "x": 10.172,
-        "z": 7.18
+        "id": "N12",
+        "x": 0.193,
+        "z": 9.063
       },
       {
-        "id": "N-TOILET-SW",
-        "x": 5.248,
-        "z": 7.18
+        "id": "N13",
+        "x": 0.193,
+        "z": 13.114
       },
       {
-        "id": "N-TOILET-MID-N",
-        "x": 7.813,
-        "z": 5.864
+        "id": "N14",
+        "x": 20.147,
+        "z": 13.114
       },
       {
-        "id": "N-TOILET-MID-S",
-        "x": 7.813,
-        "z": 7.18
+        "id": "N15",
+        "x": 20.147,
+        "z": 9.517
       },
       {
-        "id": "N-STAIR-NE",
-        "x": 13.916,
-        "z": 2.094
+        "id": "N16",
+        "x": 21.627,
+        "z": 9.517
       },
       {
-        "id": "N-STAIR-SE",
-        "x": 13.916,
-        "z": 6.702
+        "id": "N17",
+        "x": 21.627,
+        "z": 6.283
       },
       {
-        "id": "N-STAIR-SW",
-        "x": 10.172,
-        "z": 6.702
+        "id": "N18",
+        "x": 20.147,
+        "z": 6.283
       },
       {
-        "id": "N-WEST-SE",
-        "x": 5.248,
-        "z": 13.463
+        "id": "N19",
+        "x": 9.93,
+        "z": 1.983
+      },
+      {
+        "id": "N20",
+        "x": 9.93,
+        "z": 6.66
+      },
+      {
+        "id": "N21",
+        "x": 13.83,
+        "z": 1.983
+      },
+      {
+        "id": "N22",
+        "x": 13.83,
+        "z": 6.66
+      },
+      {
+        "id": "N23",
+        "x": 5.134,
+        "z": 6.66
+      },
+      {
+        "id": "N24",
+        "x": 3.203,
+        "z": 4.95
+      },
+      {
+        "id": "N25",
+        "x": 9.93,
+        "z": 4.95
+      },
+      {
+        "id": "N26",
+        "x": 7.64,
+        "z": 4.95
+      },
+      {
+        "id": "N27",
+        "x": 7.64,
+        "z": 6.66
+      },
+      {
+        "id": "N28",
+        "x": 5.301,
+        "z": 13.114
       }
     ],
     "walls": [
       {
         "id": "EXT-01",
-        "a": "P01",
-        "b": "P02",
-        "thickness": 0.2
+        "a": "N01",
+        "b": "N02",
+        "thickness": 0.23
       },
       {
         "id": "EXT-02",
-        "a": "P02",
-        "b": "P03",
-        "thickness": 0.2
+        "a": "N02",
+        "b": "N03",
+        "thickness": 0.23
       },
       {
         "id": "EXT-03",
-        "a": "P03",
-        "b": "P04",
-        "thickness": 0.25
+        "a": "N03",
+        "b": "N04",
+        "thickness": 0.23
       },
       {
         "id": "EXT-04",
-        "a": "P04",
-        "b": "P05",
-        "thickness": 0.25
+        "a": "N04",
+        "b": "N05",
+        "thickness": 0.23
       },
       {
         "id": "EXT-05",
-        "a": "P05",
-        "b": "P06",
-        "thickness": 0.25
+        "a": "N05",
+        "b": "N06",
+        "thickness": 0.23
       },
       {
         "id": "EXT-06",
-        "a": "P06",
-        "b": "P07",
-        "thickness": 0.25
+        "a": "N06",
+        "b": "N07",
+        "thickness": 0.23
       },
       {
         "id": "EXT-07",
-        "a": "P07",
-        "b": "P08",
-        "thickness": 0.2
+        "a": "N07",
+        "b": "N08",
+        "thickness": 0.23
       },
       {
         "id": "EXT-08",
-        "a": "P08",
-        "b": "P09",
-        "thickness": 0.2
+        "a": "N08",
+        "b": "N09",
+        "thickness": 0.23
       },
       {
         "id": "EXT-09",
-        "a": "P09",
-        "b": "P10",
-        "thickness": 0.2
+        "a": "N09",
+        "b": "N10",
+        "thickness": 0.23
       },
       {
         "id": "EXT-10",
-        "a": "P10",
-        "b": "P01",
-        "thickness": 0.2
+        "a": "N10",
+        "b": "N11",
+        "thickness": 0.23
       },
       {
-        "id": "PART-PORCH",
-        "a": "P03",
-        "b": "N-TOILET-E",
-        "thickness": 0.2
+        "id": "EXT-11",
+        "a": "N11",
+        "b": "N12",
+        "thickness": 0.23
       },
       {
-        "id": "PART-TOILET-E",
-        "a": "N-TOILET-E",
-        "b": "N-TOILET-SE",
-        "thickness": 0.16
+        "id": "EXT-12",
+        "a": "N12",
+        "b": "N13",
+        "thickness": 0.23
       },
       {
-        "id": "PART-TOILET-N",
-        "a": "P09",
-        "b": "N-TOILET-E",
-        "thickness": 0.16
+        "id": "EXT-13",
+        "a": "N13",
+        "b": "N14",
+        "thickness": 0.23
       },
       {
-        "id": "PART-TOILET-S",
-        "a": "N-TOILET-SW",
-        "b": "N-TOILET-SE",
-        "thickness": 0.16
+        "id": "EXT-14",
+        "a": "N14",
+        "b": "N15",
+        "thickness": 0.23
       },
       {
-        "id": "PART-TOILET-C",
-        "a": "N-TOILET-MID-N",
-        "b": "N-TOILET-MID-S",
-        "thickness": 0.12
+        "id": "EXT-15",
+        "a": "N15",
+        "b": "N16",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-16",
+        "a": "N16",
+        "b": "N17",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-17",
+        "a": "N17",
+        "b": "N18",
+        "thickness": 0.23
+      },
+      {
+        "id": "EXT-18",
+        "a": "N18",
+        "b": "N01",
+        "thickness": 0.23
+      },
+      {
+        "id": "PART-PORCH-W",
+        "a": "N19",
+        "b": "N20",
+        "thickness": 0.15
       },
       {
         "id": "PART-STAIR-E",
-        "a": "N-STAIR-NE",
-        "b": "N-STAIR-SE",
-        "thickness": 0.2
+        "a": "N21",
+        "b": "N22",
+        "thickness": 0.15
       },
       {
-        "id": "PART-STAIR-S",
-        "a": "N-STAIR-SW",
-        "b": "N-STAIR-SE",
-        "thickness": 0.2
+        "id": "PART-COMM-BAND",
+        "a": "N23",
+        "b": "N22",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-WC-BAND",
+        "a": "N24",
+        "b": "N25",
+        "thickness": 0.15
+      },
+      {
+        "id": "PART-WC-SPLIT",
+        "a": "N26",
+        "b": "N27",
+        "thickness": 0.15
       },
       {
         "id": "PART-WEST-BAY",
-        "a": "P08",
-        "b": "N-WEST-SE",
-        "thickness": 0.2
+        "a": "N11",
+        "b": "N28",
+        "thickness": 0.15
       }
     ],
     "openings": [
       {
-        "id": "DOOR-MAIN",
-        "wallId": "PART-PORCH",
-        "kind": "door",
-        "offset": 1.45,
-        "width": 1.05,
-        "sill": 0,
-        "height": 2.1
-      },
-      {
-        "id": "DOOR-T1",
-        "wallId": "PART-TOILET-S",
-        "kind": "door",
-        "offset": 0.7,
-        "width": 0.8,
-        "sill": 0,
-        "height": 2.1
-      },
-      {
-        "id": "DOOR-T2",
-        "wallId": "PART-TOILET-S",
-        "kind": "door",
-        "offset": 3.25,
-        "width": 0.8,
-        "sill": 0,
-        "height": 2.1
-      },
-      {
-        "id": "WINDOW-S1",
-        "wallId": "EXT-05",
+        "id": "WIN01",
+        "wallId": "EXT-01",
         "kind": "window",
-        "offset": 2.3,
-        "width": 1.5,
+        "offset": 4.66,
+        "width": 1.45,
         "sill": 0.9,
-        "height": 1.2
+        "height": 1.25
       },
       {
-        "id": "WINDOW-S2",
-        "wallId": "EXT-05",
-        "kind": "window",
-        "offset": 6.5,
-        "width": 1.5,
-        "sill": 0.9,
-        "height": 1.2
-      },
-      {
-        "id": "WINDOW-S3",
-        "wallId": "EXT-05",
-        "kind": "window",
-        "offset": 11.2,
-        "width": 1.5,
-        "sill": 0.9,
-        "height": 1.2
-      },
-      {
-        "id": "WINDOW-S4",
-        "wallId": "EXT-05",
-        "kind": "window",
-        "offset": 15.8,
-        "width": 1.5,
-        "sill": 0.9,
-        "height": 1.2
-      },
-      {
-        "id": "WINDOW-N1",
+        "id": "WIN02",
         "wallId": "EXT-03",
         "kind": "window",
-        "offset": 2,
-        "width": 1.65,
+        "offset": 1.107,
+        "width": 1.45,
         "sill": 0.9,
-        "height": 1.2
+        "height": 1.25
       },
       {
-        "id": "WINDOW-N2",
-        "wallId": "EXT-03",
+        "id": "WIN03",
+        "wallId": "EXT-11",
         "kind": "window",
-        "offset": 7.2,
-        "width": 1.65,
+        "offset": 1.829,
+        "width": 1.45,
         "sill": 0.9,
-        "height": 1.2
+        "height": 1.25
       },
       {
-        "id": "WINDOW-W2",
+        "id": "WIN04",
+        "wallId": "EXT-12",
+        "kind": "window",
+        "offset": 1.301,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN05",
+        "wallId": "EXT-13",
+        "kind": "window",
+        "offset": 9.252,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN06",
+        "wallId": "EXT-14",
+        "kind": "window",
+        "offset": 1.074,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "WIN07",
+        "wallId": "EXT-18",
+        "kind": "window",
+        "offset": 1.425,
+        "width": 1.45,
+        "sill": 0.9,
+        "height": 1.25
+      },
+      {
+        "id": "D08",
+        "wallId": "PART-PORCH-W",
+        "kind": "door",
+        "offset": 1.913,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D09",
+        "wallId": "PART-STAIR-E",
+        "kind": "door",
+        "offset": 1.913,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D10",
+        "wallId": "PART-COMM-BAND",
+        "kind": "door",
+        "offset": 3.923,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D11",
+        "wallId": "PART-WC-BAND",
+        "kind": "door",
+        "offset": 2.939,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "D12",
         "wallId": "PART-WEST-BAY",
-        "kind": "window",
-        "offset": 1.9,
-        "width": 1.2,
-        "sill": 0.9,
-        "height": 1.2
-      },
-      {
-        "id": "WINDOW-W7",
-        "wallId": "EXT-08",
-        "kind": "window",
-        "offset": 1.3,
-        "width": 1.2,
-        "sill": 0.9,
-        "height": 1.2
+        "kind": "door",
+        "offset": 1.601,
+        "width": 0.85,
+        "sill": 0,
+        "height": 2.1
       }
     ],
     "labels": {
-      "ROOM-01": "West bay (QA)",
-      "ROOM-02": "Porch / access (QA)",
-      "ROOM-03": "Commercial (QA)",
-      "ROOM-04": "Toilet (QA)",
-      "ROOM-05": "Toilet (QA)",
-      "ROOM-06": "Stair / landing (QA)"
+      "ROOM-01": "West bay · source outline",
+      "ROOM-02": "Porch / side entry",
+      "ROOM-03": "Toilet 01",
+      "ROOM-04": "Commercial space",
+      "ROOM-05": "Toilet 02",
+      "ROOM-06": "Stair / circulation"
     },
     "perimeter": [
       "EXT-01",
@@ -359,8 +449,16 @@
       "EXT-07",
       "EXT-08",
       "EXT-09",
-      "EXT-10"
+      "EXT-10",
+      "EXT-11",
+      "EXT-12",
+      "EXT-13",
+      "EXT-14",
+      "EXT-15",
+      "EXT-16",
+      "EXT-17",
+      "EXT-18"
     ]
   },
-  "projectNote": "PRJ-000007 Narayani, Block B GF. PROVISIONAL 3D model from prior PDF trace; plotted outer footprint 233.62 m² conflicts with measured/source 205.16 m². The new July-2026 architectural DXF floor-vectors and dimension ledger are displayed in the dedicated Narayani AAD source viewer, not silently substituted as these 3D coordinates. 3D walls/opening locations and 3 m height provisional. NO STRUCTURAL APPROVAL."
+  "projectNote": "ARCH-03 Jul-2026. Exterior geometry from wall DXF union 202.811 m²; source-related 27.3mm plan face/perimeter adjustment and millimetre rounding reconcile 205.16 m² scheduled GF area (modeled 205.162 m²). Prior 233.62 m² PDF approximation superseded. Floor height 3.00m is an assumption. Interior partitions, hosted doors/windows and room zoning are USER-AUTHORIZED AI METRICAL/SEMANTIC DECISIONS, not issued architectural or structural plans."
 }
