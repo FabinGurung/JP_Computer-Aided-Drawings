@@ -36,7 +36,7 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <header><nav><a href="../">← Narayani project</a><a href="../../../projects/">All projects</a><a href="../../../cad/aad/">Shared AAD Studio</a><a href="../../../guide/">How It Works</a></nav>
 <small>PRJ-000007 · CAD/AAD reusable project template · source revision July 2026</small>
 <h1>Narayani Parajuli · AAD Project Viewer</h1>
-<div class="sub">A dedicated project instance of the shared AI-Aided Design and Drawing engine. The 2D source views are extracted from the architectural DXF; the linked 3D editor is a provisional semantic reconstruction. The source drawings—not the initial demo defaults—are the dimensional reference.</div>
+<div class="sub">A dedicated project instance of the shared AI-Aided Design and Drawing engine. The 2D source views are extracted from the architectural DXF; the linked 3D editor is a provisional semantic reconstruction. The source architectural and structural drawings—not demo defaults—are the dimensional reference.</div>
 </header>
 <main>
 <div class="summary">
@@ -49,6 +49,7 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <section id="aad-dxf-pane">
 <div class="toolbar" role="group" aria-label="Source floor">
 <button data-floor="gf" aria-pressed="true">Ground floor</button><button data-floor="ff" aria-pressed="false">First floor</button><button data-floor="sf" aria-pressed="false">Second floor</button>
+<button data-floor="footing" aria-pressed="false">Footing layout · Structural</button><button data-floor="beam_gf" aria-pressed="false">Ground beams · Structural</button>
 <span style="flex:1"></span><button data-zoom="in" aria-label="Zoom in">＋</button><button data-zoom="out" aria-label="Zoom out">－</button><button data-reset-view>Fit</button>
 </div>
 <div class="view-layout">
@@ -72,12 +73,13 @@ footer{padding:23px;text-align:center;color:#809eb1;font-size:12px}
 <iframe id="aad-engine" loading="lazy" title="Reusable AAD 3D semantic model"></iframe>
 </section>
 <div class="view-layout" style="margin-top:16px"><section class="panel padded"><h2>Project source authority</h2>
-<p class="details">The DXF source was found in the established Narayani project and processed using ezdxf. It includes older historical floor schemes; this view selects the amended July 2026 floor trio (205.16, 200.67, 175.62 m²). Visual plotting coordinates have been rounded to 10 mm; the numeric dimension ledger retains source-derived millimetre measurements. The source is authoritative for drawing dimensions; the interactive browser is for review, not a substitute for the CAD original.</p>
+<p class="details">The architectural and structural DXF sources were found in the established Narayani project and processed using ezdxf. The architectural source includes older historical floor schemes; this view selects the amended July 2026 floor trio (205.16, 200.67, 175.62 m²). Visual plotting coordinates have been rounded to 10 mm; the numeric dimension ledger retains source-derived millimetre measurements. The source is authoritative for drawing dimensions; the interactive browser is for review, not a substitute for the CAD original.</p>
 <div class="stack"><a href="https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view" target="_blank" rel="noopener">Architectural DXF · Drive original ↗</a><a href="https://drive.google.com/file/d/1Avndg013odsx5wX-RdaK3VGl4cIbP2Nq/view" target="_blank" rel="noopener">Structural DXF · Drive original ↗</a><a href="https://drive.google.com/drive/folders/1mosr2gahKr4j7xj6BmrIjz4vdCxBYetF" target="_blank" rel="noopener">Canonical Narayani project root ↗</a></div></section>
 <section class="panel padded"><h2>How new AAD projects work</h2><p class="details">AAD is the reusable CAD-owned viewer, validator and 2D/3D geometry engine. Each project supplies its own versioned source-backed data package; the engine remains shared. An AI assistant can read the project's CAD/DXF/PDF sources, generate a validated project adapter through the CAD repository, and publish the view through GitHub Actions. Developer prompts here are an authorized authoring workflow; other users may use their own AI interpreters against the same template and validators.</p><a href="https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/governance/aad/aad-domain-template.v0.1.json" target="_blank" rel="noopener">Shared AAD template contract ↗</a></section></div>
 </main>
 <footer>Narayani · AAD project instance · no changes to preserved structural V02–M80 modules</footer>
 <script src="../../../data/projects/narayani-parajuli/aad-source-v1.js"></script>
+<script src="../../../data/projects/narayani-parajuli/aad-structure-v1.js"></script>
 <script src="../../../assets/js/aad-project-viewer.js"></script>
 <script>
 (() => {const d=document.getElementById("aad-dxf-pane"),s=document.getElementById("aad-studio-pane"),b1=document.getElementById("aad-tab-dxf"),b2=document.getElementById("aad-tab-3d");
