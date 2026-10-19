@@ -7,6 +7,10 @@ on:
       - "index.html"
       - "vite.config.ts"
       - "tools/site/cad-aad-linked-smoke.mjs"
+      - "tools/site/aad-narayani-source-smoke.mjs"
+      - "tools/site/aad-narayani-browser-smoke.mjs"
+      - "public/data/projects/narayani-parajuli/**"
+      - "public/projects/narayani-parajuli/aad/**"
       - "tools/site/check_public_routes.py"
       - ".github/workflows/cad-aad-linked-room.yml"
   workflow_dispatch:
