@@ -11,6 +11,7 @@ on:
       - "tools/site/aad-building-build.mjs"
       - "tools/site/aad-ifc-independent-check.py"
       - "tools/site/aad-building-browser-smoke.mjs"
+      - "tools/site/aad-unified-workspace-smoke.mjs"
       - "tools/site/aad-narayani-source-smoke.mjs"
       - "tools/site/cad-unified-shell-smoke.mjs"
       - "backend/cad_bridge/design_*.py"
@@ -46,6 +47,8 @@ jobs:
         run: node tools/site/aad-building-build.mjs
       - name: Validate source-authored Narayani AAD project adapter
         run: node tools/site/aad-narayani-source-smoke.mjs
+      - name: Verify unified editable building state and IFC synchronization
+        run: node tools/site/aad-unified-workspace-smoke.mjs
       - name: Pre-publish visual acceptance on built Pages bundle
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
