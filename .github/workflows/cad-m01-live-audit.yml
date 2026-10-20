@@ -103,3 +103,34 @@ jobs:
           assert 'createAADWorkspace' in engine and 'function snapshot()' in engine
           print('CAD_AAD_TEMPLATE_PROJECT_IFC_LIVE_READBACK_PASS',ifc.stat().st_size)
           PY
+
+      - name: Verify generated AI-to-AAD project on live GitHub Pages
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 14); do
+            if curl -fsSL --max-time 20 "https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/" -o /tmp/aad-ai-live-page.html &&
+               grep -q 'id="aad-unified-engine"' /tmp/aad-ai-live-page.html; then break; fi
+            sleep 10
+          done
+          grep -q 'id="aad-unified-engine"' /tmp/aad-ai-live-page.html
+          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/aad-building-v1.json" -o /tmp/aad-ai-live-manifest.json
+          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/aad-ai-qa.json" -o /tmp/aad-ai-live-qa.json
+          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/AAD-DEMO-001_AAD_CONCEPTUAL_2STOREY_IFC4.ifc" -o /tmp/aad-ai-live-ifc.ifc
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('/tmp/aad-ai-live-manifest.json').read_text())
+          q=json.loads(Path('/tmp/aad-ai-live-qa.json').read_text())
+          text=Path('/tmp/aad-ai-live-ifc.ifc').read_text()
+          assert m['projectId']=='AAD-DEMO-001'
+          assert len(m['levels'])==2
+          assert [x['sourceArea'] for x in m['levels']]==[80,80]
+          assert q['stage']=='AI_CONCEPTUAL_ENGINEERING_HOLD'
+          assert q['explicitPublicApproval'] and not q['issueForConstruction']
+          assert text.count('=IFCBUILDINGSTOREY(')==2
+          assert text.count('=IFCRELVOIDSELEMENT(')==7
+          assert text.count('=IFCRELFILLSELEMENT(')==7
+          assert Path('/tmp/aad-ai-live-ifc.ifc').stat().st_size>15000
+          print('AAD_AI_GENERATED_PROJECT_LIVE_READBACK_PASS')
+          PY
