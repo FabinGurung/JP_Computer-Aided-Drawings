@@ -1,0 +1,73 @@
+name: AAD v0.6.0 Milestone Tag and Release
+# Seal exactly one immutable AAD software milestone, and only after the same
+# main commit has successfully deployed to Pages and passed live readback.
+on:
+  workflow_run:
+    workflows: ["CAD M01 Live Pages Readback"]
+    types: [completed]
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: aad-template-v0.6.0-release
+  cancel-in-progress: false
+jobs:
+  tag-and-release:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout exact deployed/read-back commit, including tags
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - name: Assert release marker, live verification, commit freshness and scope
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: aad-template-v0.6.0
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          main_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          test "$VERIFIED_SHA" = "$main_sha" || { echo "main moved since successful live QA; refuse stale release"; exit 1; }
+          test -s cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md
+          test -s cad/aad/TEMPLATE_AI_CONTRACT.md
+          test -s public/assets/js/aad-unified-workspace.mjs
+          grep -q 'ENGINEERING HOLD' cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md
+          grep -q 'defensive' cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md
+          python - <<'PY'
+          from pathlib import Path
+          note=Path("cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md").read_text()
+          assert "# AAD Template v0.6.0" in note
+          assert "Not construction approval" not in note or "ENGINEERING HOLD" in note
+          assert "Verified" in note or "QA" in note
+          print("AAD_MILESTONE_NOTES_SCOPE_SEALED")
+          PY
+          # A successful live readback is necessary but not sufficient. Confirm
+          # a successful main Pages workflow exists for the EXACT same commit.
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_SHA&per_page=100" \
+            --jq '.workflow_runs[] | select(.name=="CAD Main GitHub Pages (validated CAD publishing)" and .conclusion=="success") | .head_sha' \
+            | grep -Fx "$VERIFIED_SHA"
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            existing_sha="$(git rev-list -n 1 "$TAG" 2>/dev/null || true)"
+            test "$existing_sha" = "$VERIFIED_SHA" || { echo "Tag already released at another SHA"; exit 1; }
+            echo "AAD_MILESTONE_RELEASE_ALREADY_SEALED tag=$TAG commit=$VERIFIED_SHA"
+            exit 0
+          fi
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "refs/tags/$TAG"; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
+            test "$(git rev-list -n 1 "$TAG")" = "$VERIFIED_SHA" || { echo "Remote tag points elsewhere"; exit 1; }
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "AAD v0.6.0 · Canonical AI-Aided Drawing multistorey milestone · ENGINEERING HOLD" "$VERIFIED_SHA"
+            git push origin "refs/tags/$TAG"
+          fi
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "AAD Template v0.6.0 — Unified 2D/3D BIM Studio" \
+            --notes-file cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md --latest
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,targetCommitish,publishedAt
+          echo "AAD_TEMPLATE_V0_6_0_TAG_AND_GITHUB_RELEASE_PASS SHA=$VERIFIED_SHA"

@@ -10,6 +10,13 @@ const state=createAADWorkspace(manifest,models),original=state.snapshot();
 assert.equal(original.assembly.counts.wall,68);
 assert.equal(original.assembly.counts.window,23);
 assert.equal(original.assembly.levels.length,3);
+const readOnly=state.snapshot();readOnly.models.gf.floorGraph.walls[0].thickness=99;
+readOnly.assembly.elements.find(e=>e.kind==="wall").dz=99;
+readOnly.manifest.levels[0].sourceArea=999;
+assert.equal(state.snapshot().models.gf.floorGraph.walls[0].thickness,.23,"Snapshots must not mutate validated models");
+assert.equal(state.snapshot().assembly.elements.find(e=>e.kind==="wall").dz,.23,"Snapshots must not mutate IFC geometry");
+assert.equal(state.snapshot().manifest.levels[0].sourceArea,205.16,"Snapshots cannot overwrite source area authority");
+
 const wallId=manifest.projectId+":gf:EXT-01";
 const w0=original.assembly.elements.find(e=>e.id===wallId);
 assert.equal(w0.dz,.23);

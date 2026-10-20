@@ -76,7 +76,7 @@ export function createAADWorkspace(manifest,initialModels){
   models=candidateModels;assembly=candidate;version++;lastEdit={kind:"restore",version};
   return snapshot();
  }
- function snapshot(){return{assembly,models,manifest:baseManifest,version,lastEdit};}
+ function snapshot(){return{assembly:clone(assembly),models:clone(models),manifest:clone(baseManifest),version,lastEdit:clone(lastEdit)};}
  function bundle(){return{
   schema:"jp-cad://aad-working-draft/1",projectId:baseManifest.projectId,
   baseline:baseManifest.revision,reviewStatus:"DRAFT_ENGINEERING_HOLD",revision:version,
