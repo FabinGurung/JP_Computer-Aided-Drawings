@@ -11,6 +11,9 @@ on:
       - "tools/site/aad-building-build.mjs"
       - "tools/site/aad-ifc-independent-check.py"
       - "tools/site/aad-building-browser-smoke.mjs"
+      - "tools/site/aad-selection-sync-smoke.mjs"
+      - "tools/site/aad-validate-project.mjs"
+      - "cad/aad/TEMPLATE_AI_CONTRACT.md"
       - "tools/site/aad-unified-workspace-smoke.mjs"
       - "tools/site/aad-narayani-source-smoke.mjs"
       - "tools/site/cad-unified-shell-smoke.mjs"
@@ -45,6 +48,8 @@ jobs:
       - run: python tools/site/check_public_routes.py dist
       - name: Build deterministic Narayani IFC4 and unified AAD multistorey model
         run: node tools/site/aad-building-build.mjs
+      - name: Verify generic AI-authored project contract on published AAD data
+        run: node tools/site/aad-validate-project.mjs public/data/projects/narayani-parajuli/aad-building-v1.json
       - name: Validate source-authored Narayani AAD project adapter
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify unified editable building state and IFC synchronization
@@ -55,9 +60,10 @@ jobs:
           npx playwright install --with-deps chromium
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/cad-release-preview.log 2>&1 &)
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
-          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
+          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
+          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
       - name: Save render verification screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -67,6 +73,7 @@ jobs:
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
             /tmp/cad-aad-building-*.png
+            /tmp/cad-aad-shared-highlight-selection.png
           if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}

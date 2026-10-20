@@ -788,7 +788,7 @@ async function openHostedProject(){
   const url=new URL(requested,location.href);
   // Resolve the project-data subtree relative to the actual served studio route.
   // Works at localhost, prefixed GitHub Pages, and custom-domain deployments.
-  const safeBase=new URL("../../data/projects/",location.href).pathname;
+  const safeBase=new URL(location.pathname.includes("/legacy/")?"../../../data/projects/":"../../data/projects/",location.href).pathname;
   if(url.origin!==location.origin||!url.pathname.startsWith(safeBase)||
      !/^[-a-zA-Z0-9_./]+\.json$/.test(url.pathname)||url.pathname.includes(".."))
    throw Error("Hosted model must be a same-origin project JSON under "+safeBase+" (got "+url.pathname+")");
