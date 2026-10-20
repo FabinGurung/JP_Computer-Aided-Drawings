@@ -18,6 +18,11 @@ on:
       - "tools/site/aad-unified-workspace-smoke.mjs"
       - "tools/site/aad-topology-smoke.mjs"
       - "tools/site/aad-topology-browser-smoke.mjs"
+      - "tools/site/aad-ai-generate.mjs"
+      - "tools/site/aad-ai-pipeline-smoke.mjs"
+      - "tools/site/aad-ai-demo-browser-smoke.mjs"
+      - "public/assets/js/aad-ai-design-compiler.mjs"
+      - "design_jobs/synthetic/aad-ai-two-storey.json"
       - "public/data/projects/narayani-parajuli/**"
       - "public/projects/narayani-parajuli/aad/**"
       - "tools/site/check_public_routes.py"
@@ -39,6 +44,12 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci
+      - name: Compile and package synthetic AI project with shared AAD engine
+        run: |
+          node tools/site/aad-ai-pipeline-smoke.mjs
+          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --check
+          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --publish
+          node tools/site/aad-validate-project.mjs public/data/projects/aad-ai-demo/aad-building-v1.json
       - name: Strict TypeScript build and production static route QA
         run: |
           npm run build -- --base=/JP_Computer-Aided-Drawings/
@@ -70,11 +81,13 @@ jobs:
           AAD_BUILDING_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
+          AAD_AI_DEMO_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           echo CAD_AAD_PAGES_BASE_RENDER_VERIFIED
       - name: Independent IFC4 parsing and spatial graph round-trip (IfcOpenShell)
         run: |
           python -m pip install ifcopenshell==0.8.4.post1
           python tools/site/aad-ifc-independent-check.py
+          python tools/site/aad-ai-independent-ifc.py public/data/projects/aad-ai-demo/AAD-DEMO-001_AAD_CONCEPTUAL_2STOREY_IFC4.ifc 2
       - name: Save real render screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -86,4 +99,5 @@ jobs:
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
+            /tmp/cad-aad-ai-new-project.png
           if-no-files-found: ignore
