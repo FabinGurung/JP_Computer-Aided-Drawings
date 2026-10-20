@@ -17,6 +17,11 @@ on:
       - "tools/site/aad-unified-workspace-smoke.mjs"
       - "tools/site/aad-topology-smoke.mjs"
       - "tools/site/aad-topology-browser-smoke.mjs"
+      - "tools/site/aad-ai-generate.mjs"
+      - "tools/site/aad-ai-pipeline-smoke.mjs"
+      - "tools/site/aad-ai-demo-browser-smoke.mjs"
+      - "public/assets/js/aad-ai-design-compiler.mjs"
+      - "design_jobs/synthetic/aad-ai-two-storey.json"
       - "tools/site/aad-narayani-source-smoke.mjs"
       - "tools/site/cad-unified-shell-smoke.mjs"
       - "backend/cad_bridge/design_*.py"
@@ -46,6 +51,12 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: "22", cache: "npm"}
       - run: npm ci
+      - name: Generate verified public synthetic AI-to-AAD package from versioned specification
+        run: |
+          node tools/site/aad-ai-pipeline-smoke.mjs
+          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --check
+          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --publish
+          node tools/site/aad-validate-project.mjs public/data/projects/aad-ai-demo/aad-building-v1.json
       - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
       - run: python tools/site/check_public_routes.py dist
       - name: Build deterministic Narayani IFC4 and unified AAD multistorey model
@@ -69,6 +80,7 @@ jobs:
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
+          AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
       - name: Save render verification screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -80,6 +92,7 @@ jobs:
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
+            /tmp/cad-aad-ai-new-project.png
           if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
@@ -87,6 +100,8 @@ jobs:
         run: python -m pip install -r backend/requirements.txt
       - name: Independently validate IFC4 round-trip before publication
         run: python tools/site/aad-ifc-independent-check.py
+      - name: Independently parse generated synthetic IFC4 package
+        run: python tools/site/aad-ai-independent-ifc.py public/data/projects/aad-ai-demo/AAD-DEMO-001_AAD_CONCEPTUAL_2STOREY_IFC4.ifc 2
       - name: GitHub-hosted machine generates synthetic demo plan and IFC/STEP/DXF
         run: |
           python -m unittest backend.tests.test_design_machine -v
