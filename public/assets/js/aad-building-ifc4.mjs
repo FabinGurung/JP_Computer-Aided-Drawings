@@ -158,7 +158,7 @@ export function writeIFC4(building){
  const names={IfcDoor:s.typeCounts.IFCDOOR||0,IfcWindow:s.typeCounts.IFCWINDOW||0,IfcWall:s.typeCounts.IFCWALL||0,
   IfcColumn:s.typeCounts.IFCCOLUMN||0,IfcBeam:s.typeCounts.IFCBEAM||0,IfcSlab:s.typeCounts.IFCSLAB||0,
   IfcStairFlight:s.typeCounts.IFCSTAIRFLIGHT||0};
- const filename=building.projectId.replaceAll(/[^A-Za-z0-9_-]/g,"_")+"_AAD_CONCEPTUAL_3STOREY_IFC4.ifc";
+ const filename=building.projectId.replaceAll(/[^A-Za-z0-9_-]/g,"_")+"_AAD_CONCEPTUAL_"+building.levels.length+"STOREY_IFC4.ifc";
  const header=["ISO-10303-21;","HEADER;",
   "FILE_DESCRIPTION(('ViewDefinition [CoordinationView]'),'2;1');",
   "FILE_NAME("+quote(filename)+","+quote("2026-10-19T00:00:00")+","+list([quote("CAD AAD")])+","+list([quote("Project owner")])+",'Shared AAD engine','Conceptual project, ENGINEERING HOLD','');",
