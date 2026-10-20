@@ -359,7 +359,7 @@ function applyModelEdit(level,kind,id,patch){
   lastUndo=workspace.bundle();
   workspace.change(level,{kind,id},patch);
   activeEdit={level,kind,id};selectedId=workspace.snapshot().manifest.projectId+":"+level+":"+(kind==="node"?"NODE:":"")+id;persistDraft();
-  refreshAll();
+  refreshAll();setLevel(level);
   $("edit-notice").textContent="Updated "+id+" across plan, 3D, quantities, IFC4 and component table.";
   status("Live linked model v"+workspace.snapshot().version+" · edited "+id+" · ENGINEERING HOLD");
  }catch(error){
