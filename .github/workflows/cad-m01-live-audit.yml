@@ -11,6 +11,7 @@ on:
 permissions: {contents: read}
 jobs:
   live-readback:
+    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-latest
     steps:
       - name: Validate deployed CAD routes and real assets without writing
@@ -62,3 +63,43 @@ jobs:
               print("LIVE_CAD_SCRIPT_PASS",url)
           PY
           echo "CAD_M01_PUBLIC_LIVE_READBACK_PASS"
+
+      - name: Independently read back canonical AAD, project adapter, shared model, and exported IFC4
+        run: |
+          set -euo pipefail
+          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          for attempt in $(seq 1 15); do
+            if curl -fsSL --max-time 20 "${BASE}cad/aad/" -o /tmp/aad-template-live.html &&
+               grep -q "Canonical AI-Aided Building Design Studio" /tmp/aad-template-live.html; then break; fi
+            echo "AAD propagation: ${attempt}"; sleep 10
+          done
+          grep -q 'location.replace(target.href)' /tmp/aad-template-live.html
+          curl -fsSL --max-time 25 "${BASE}cad/aad/multistorey/" -o /tmp/aad-live-studio.html
+          grep -q 'id="viewer2d"' /tmp/aad-live-studio.html
+          grep -q 'id="viewer3d"' /tmp/aad-live-studio.html
+          grep -q 'id="elements"' /tmp/aad-live-studio.html
+          grep -q 'id="aad-selected-summary"' /tmp/aad-live-studio.html
+          curl -fsSL --max-time 25 "${BASE}projects/narayani-parajuli/aad/" -o /tmp/aad-live-narayani.html
+          grep -q 'id="aad-unified-engine"' /tmp/aad-live-narayani.html
+          test "$(grep -o '<iframe' /tmp/aad-live-narayani.html | wc -l | tr -d ' ')" -eq 1
+          curl -fsSL --max-time 25 "${BASE}data/projects/narayani-parajuli/aad-building-v1.json" -o /tmp/aad-live-manifest.json
+          curl -fsSL --max-time 25 "${BASE}data/projects/narayani-parajuli/PRJ-000007_AAD_CONCEPTUAL_3STOREY_IFC4.ifc" -o /tmp/aad-live-building.ifc
+          curl -fsSL --max-time 25 "${BASE}assets/js/aad-unified-workspace.mjs" -o /tmp/aad-live-engine.mjs
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          manifest=json.loads(Path('/tmp/aad-live-manifest.json').read_text())
+          assert manifest['schema']=='jp-cad://aad-building/1'
+          assert manifest['projectId']=='PRJ-000007'
+          assert [r['id'] for r in manifest['levels']]==['gf','ff','sf']
+          ifc=Path('/tmp/aad-live-building.ifc')
+          assert ifc.stat().st_size>50000
+          text=ifc.read_text()
+          assert "FILE_SCHEMA(('IFC4'))" in text
+          assert text.count('=IFCBUILDINGSTOREY(')==3
+          assert text.count('=IFCRELVOIDSELEMENT(')==43
+          assert text.count('=IFCRELFILLSELEMENT(')==43
+          engine=Path('/tmp/aad-live-engine.mjs').read_text()
+          assert 'createAADWorkspace' in engine and 'function snapshot()' in engine
+          print('CAD_AAD_TEMPLATE_PROJECT_IFC_LIVE_READBACK_PASS',ifc.stat().st_size)
+          PY
