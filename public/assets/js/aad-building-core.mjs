@@ -86,7 +86,7 @@ export function assembleBuilding(manifest,models,options={}){
    const length=dist(a,b),angle=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
    const p=midpoint(a,b),h=level.height-(manifest.structural.slabs.thickness||.18);
    const e=addBox(elements,projectId+":"+level.id+":"+w.id,"wall","IfcWall",level.id,p.x,level.elevation+h/2,p.z,length,h,w.thickness,{
-    source:source,status:"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null
+    source:w.source||source,status:w.status||"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null
    });put(e);
   }
   for(const o of g.openings){
@@ -97,7 +97,7 @@ export function assembleBuilding(manifest,models,options={}){
    const p={x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t};
    const ang=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
    const e=addBox(elements,projectId+":"+level.id+":"+o.id,o.kind,o.kind==="door"?"IfcDoor":"IfcWindow",level.id,p.x,level.elevation+o.sill+o.height/2,p.z,o.width,o.height,Math.max(.06,w.thickness-.02),{
-    source:"SOURCE_FLOORGRAPH_HOSTED_OPENING",status:"ASSUMED_DIMENSIONS",host:projectId+":"+level.id+":"+w.id,rotationDeg:ang
+    source:o.source||"SOURCE_FLOORGRAPH_HOSTED_OPENING",status:o.status||"ASSUMED_DIMENSIONS",host:projectId+":"+level.id+":"+w.id,rotationDeg:ang
    });put(e);
   }
   for(const [id,name] of Object.entries(g.labels||{})){
