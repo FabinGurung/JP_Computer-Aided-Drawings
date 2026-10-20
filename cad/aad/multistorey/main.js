@@ -12,7 +12,8 @@ const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
-let selectedId=null,selectionOverlay=null; // one selection shared by plan, 3D and component schedule
+let selectedId=null,selectionOverlay=null;
+let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
 const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,stair:0x9386bb,landing:0xa48cc9};
@@ -257,12 +258,23 @@ function drawPlan(){
  };
  for(const {l,g,nodeMap,color} of outlines){
   const faded=activeLevel==="all"?.64:1;
+  if(activeLevel===l.id){
+   try{for(const room of workspace.rooms(l.id)){
+    if(room.area<.5)continue;
+    const positions=room.nodes.map(id=>nodeMap.get(id)).filter(Boolean);
+    if(positions.length!==room.nodes.length)continue;
+    const path=el("polygon",{points:positions.map(p=>p.x+","+p.z).join(" "),class:"aad-room-polygon","data-room-id":room.id});
+    doc.append(path);
+    const title=el("text",{x:room.centroid.x+l.transform.x,y:room.centroid.z+l.transform.z,class:"aad-room-text"});
+    title.textContent=room.area.toFixed(2)+" m²";doc.append(title);
+   }}catch(e){$("aad-room-summary").textContent="Room calculation: "+e.message;}
+  }
   for(const w of g.walls){
    const a=nodeMap.get(w.a),b=nodeMap.get(w.b);
    if(!a||!b)continue;
    const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(selectedId===building.projectId+":"+l.id+":"+w.id?" is-selected":"")});
    item.dataset.part=l.id+":"+w.id;
-   item.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"wall",w.id);});
+   item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"wall",w.id);});
    doc.append(item);
   }
   for(const o of g.openings){
@@ -274,14 +286,15 @@ function drawPlan(){
     "stroke-width":o.kind==="door"?.21:.28
    });
    item.dataset.part=l.id+":"+o.id;
-   item.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"opening",o.id);});
+   item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
     const p=nodeMap.get(n.id),circle=el("circle",{cx:p.x,cy:p.z,r:selectedId===building.projectId+":"+l.id+":NODE:"+n.id?.23:.13,class:"aad-node"+(selectedId===building.projectId+":"+l.id+":NODE:"+n.id?" is-selected":""),"data-node":n.id,tabindex:"0",role:"button","aria-label":"Move node "+n.id});
-    circle.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"node",n.id);});
+    circle.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"node",n.id);});
     circle.addEventListener("pointerdown",evt=>{
+     if(drawMode)return;
      evt.preventDefault();evt.stopPropagation();
      circle.setPointerCapture(evt.pointerId);circle.classList.add("dragging");
      const initialX=Number(circle.getAttribute("cx")),initialZ=Number(circle.getAttribute("cy"));
@@ -303,6 +316,11 @@ function drawPlan(){
     doc.append(circle);
    }
   }
+ }
+ if(drawMode&&drawFirst&&activeLevel!=="all"){
+  const l=state.manifest.levels.find(x=>x.id===activeLevel);
+  const p=projectToWorld(drawFirst,l.transform);
+  doc.append(el("circle",{cx:p.x,cy:p.z,r:.22,class:"aad-draw-first"}));
  }
  const ground=activeLevel==="all"?"All aligned storeys (select a floor to edit)":state.manifest.levels.find(l=>l.id===activeLevel).name+" · elevation "+state.manifest.levels.find(l=>l.id===activeLevel).elevation.toFixed(2)+" m";
  // Structural objects are 3D IFC components without authored 2D floor-graph
@@ -368,9 +386,110 @@ function applyModelEdit(level,kind,id,patch){
   drawPlan();
  }
 }
+
+function refreshRooms(){
+ if(!workspace)return;
+ const body=$("aad-rooms");body.replaceChildren();let total=0,sum=0;
+ for(const l of workspace.snapshot().manifest.levels){
+  let rooms=[];try{rooms=workspace.rooms(l.id);}catch(e){$("aad-room-summary").textContent="Room face detection failed on "+l.id+": "+e.message;}
+  for(const room of rooms){
+   const tr=document.createElement("tr");
+   for(const field of [l.name,room.id,room.area.toFixed(3),room.centroid.x.toFixed(3)+" / "+room.centroid.z.toFixed(3),room.boundaryStatus]){
+    const td=document.createElement("td");td.textContent=field;tr.append(td);
+   }
+   tr.addEventListener("click",()=>{setLevel(l.id);status("Derived "+room.id+" is a room candidate, not approved IFC space");});
+   body.append(tr);total++;sum+=room.area;
+  }
+ }
+ $("aad-room-summary").textContent=total+" bounded room-face candidates on "+workspace.snapshot().manifest.levels.length+
+ " storeys · total area "+sum.toFixed(3)+" m² (topological, not certified architectural net room areas)";
+}
+function setDrawMode(next){
+ drawMode=Boolean(next);drawFirst=null;
+ $("aad-draw-wall").classList.toggle("is-active",drawMode);
+ $("aad-draw-wall").setAttribute("aria-pressed",String(drawMode));
+ $("viewer2d").style.cursor=drawMode?"crosshair":"default";
+ $("aad-topology-help").textContent=drawMode?
+ "Draw mode: choose GF/FF/SF and click two points inside the plan. Existing walls and junctions snap/split automatically. Escape cancels.":
+ "Use Draw connected wall, Split, Join or Host opening. Every operation validates one shared 2D/3D/IFC draft.";
+ drawPlan();
+}
+function planLocalPoint(evt){
+ const svg=$("viewer2d"),mat=svg.getScreenCTM();
+ if(!mat)throw Error("Plan coordinate transform unavailable");
+ const p=new DOMPoint(evt.clientX,evt.clientY).matrixTransform(mat.inverse());
+ const level=workspace.snapshot().manifest.levels.find(l=>l.id===activeLevel);
+ const dx=p.x-level.transform.x,dz=p.y-level.transform.z;
+ const a=-level.transform.rotationDeg*Math.PI/180;
+ return{x:Math.round((dx*Math.cos(a)-dz*Math.sin(a))*1000)/1000,
+  z:Math.round((dx*Math.sin(a)+dz*Math.cos(a))*1000)/1000};
+}
+function recordDrawPoint(evt){
+ if(!workspace||!drawMode||activeLevel==="all"){status("Choose a single storey before drawing a wall");return;}
+ try{
+  const point=planLocalPoint(evt);
+  if(!drawFirst){drawFirst=point;drawPlan();
+   $("aad-topology-help").textContent="Wall start ("+point.x+", "+point.z+")m. Click the connected end point.";
+  }else{
+   const first=drawFirst;setDrawMode(false);
+   applyTopology(activeLevel,"addWall",{start:first,end:point,thickness:.15});
+  }
+ }catch(e){status("Wall drawing rejected: "+e.message);drawFirst=null;drawPlan();}
+}
+function applyTopology(level,action,args){
+ if(!workspace||!level||level==="all")throw Error("Select GF, FF or SF before topology editing");
+ const before=workspace.bundle();
+ try{
+  const out=workspace.topology(level,action,args);
+  lastUndo=before;activeEdit=null;selectedId=null;
+  persistDraft();refreshAll();setLevel(level);
+  const created=out.result?.ids?.[0]||out.result?.id||out.result?.wallId||out.result?.nodeId||"";
+  if(created){
+   const element=building.elements.find(e=>e.id===building.projectId+":"+level+":"+created);
+   if(element)selectElement(element);
+  }
+  const txt=action+" accepted on "+level.toUpperCase()+": "+JSON.stringify(out.result);
+  $("edit-notice").textContent=txt;
+  status("Live 2D, 3D, rooms and IFC synchronized · "+action+" · engineering HOLD");
+  return{version:workspace.snapshot().version,result:out.result};
+ }catch(e){
+  $("edit-notice").textContent="Topology edit rejected: "+e.message;
+  status("Topology rejected: "+e.message);
+  throw e;
+ }
+}
+function selectedGraphObject(){
+ if(!workspace||!activeEdit)return null;
+ const l=activeEdit.level,g=workspace.snapshot().models[l]?.floorGraph;
+ if(!g)return null;
+ return{level:l,kind:activeEdit.kind,
+  wall:g.walls.find(w=>w.id===activeEdit.id),
+  opening:g.openings.find(o=>o.id===activeEdit.id),graph:g};
+}
+function topologyButton(action){
+ try{
+  const picked=selectedGraphObject();
+  if(!picked)throw Error("Select an editable wall or opening first");
+  if(action==="splitWall"||action==="removeWall"||action==="addOpening"){
+   if(!picked.wall)throw Error("Select a wall in the 2D plan first");
+   const n=new Map(picked.graph.nodes.map(x=>[x.id,x])),a=n.get(picked.wall.a),b=n.get(picked.wall.b),
+    length=Math.hypot(a.x-b.x,a.z-b.z);
+   const args=action==="splitWall"?{wallId:picked.wall.id,offset:Math.round(length/2*1000)/1000}:
+    action==="removeWall"?{wallId:picked.wall.id}:
+    {wallId:picked.wall.id,kind:$("aad-add-window").dataset.activeKind||"door",width:1,
+     offset:Math.max(0,Math.round((length-1)/2*1000)/1000)};
+   return applyTopology(picked.level,action,args);
+  }
+  if(action==="removeOpening"){
+   if(!picked.opening)throw Error("Select a door/window in the 2D plan first");
+   return applyTopology(picked.level,action,{id:picked.opening.id});
+  }
+ }catch(e){$("aad-topology-help").textContent=e.message;return null;}
+}
+
 function refreshAll(){
  building=workspace.snapshot().assembly;
- renderModel();drawPlan();addStats();addRows();runQa();refreshEditPanel();paintSelection();
+ renderModel();drawPlan();addStats();addRows();refreshRooms();runQa();refreshEditPanel();paintSelection();
  $("aad-edit-version").textContent="Working BIM draft v"+workspace.snapshot().version+(workspace.snapshot().lastEdit?" · unsent to source":"");
  $("aad-undo").disabled=!lastUndo;
 }
@@ -378,7 +497,7 @@ function persistDraft(){
  try{localStorage.setItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId,JSON.stringify(workspace.bundle()));}catch(_){}
 }
 function setLevel(level){
- activeLevel=level;
+ activeLevel=level;drawFirst=null;
  for(const l of building.levels)floorFlags.set(l.id,level==="all"||l.id===level);
  for(const [idx,label] of [...$("storeys").querySelectorAll("label")].entries())
   label.querySelector("input").checked=floorFlags.get(building.levels[idx].id);
@@ -419,7 +538,7 @@ async function main(){
  $("building-name").textContent=building.name;
  $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² Block B floor areas · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
- initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");centerView();runQa();
+ initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
  $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";
  status("Shared AAD building assembly ready · "+building.diagnostics.length+" QA findings (engineering HOLD)");
@@ -441,6 +560,23 @@ $("download-ifc").addEventListener("click",()=>{
 });
 $("download-json").addEventListener("click",()=>{if(building)download(building.projectId+"_AAD_MULTISTOREY_A01.json",JSON.stringify(building,null,2),"application/json");});
 
+
+$("viewer2d").addEventListener("click",e=>{if(drawMode&&e.target===$("viewer2d"))recordDrawPoint(e);});
+$("aad-draw-wall").addEventListener("click",()=>setDrawMode(!drawMode));
+$("aad-split-wall").addEventListener("click",()=>topologyButton("splitWall"));
+$("aad-delete-wall").addEventListener("click",()=>topologyButton("removeWall"));
+$("aad-add-door").addEventListener("click",()=>{
+ $("aad-add-window").dataset.activeKind="door";topologyButton("addOpening");
+});
+$("aad-add-window").addEventListener("click",()=>{
+ $("aad-add-window").dataset.activeKind="window";topologyButton("addOpening");
+});
+$("aad-delete-opening").addEventListener("click",()=>topologyButton("removeOpening"));
+$("aad-join-walls").addEventListener("click",()=>{
+ try{applyTopology(activeLevel,"joinWalls",{firstId:$("aad-join-first").value.trim(),secondId:$("aad-join-second").value.trim()});}
+ catch(e){$("aad-topology-help").textContent=e.message;}
+});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&drawMode)setDrawMode(false);});
 $("aad-storey").addEventListener("change",e=>setLevel(e.target.value));
 $("aad-show-all").addEventListener("click",()=>setLevel("all"));
 $("aad-view-mode").addEventListener("change",e=>setViewMode(e.target.value));
@@ -481,7 +617,7 @@ $("aad-import-file").addEventListener("change",async e=>{
 // it to the local working model. No raw-language interpreter is claimed here.
 window.AADStudio=Object.freeze({
  getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
-   actions:["selectElementById","change","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4"}),
+   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4",topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
  selectElementById:(id)=>{
   if(!building)return false;
   const e=building.elements.find(x=>x.id===id);
@@ -494,6 +630,15 @@ window.AADStudio=Object.freeze({
   applyModelEdit(args.level,args.kind,args.id,args.patch);
   if(workspace.snapshot().version===before)throw Error($("edit-notice").textContent);
   return{version:workspace.snapshot().version,selectedElementId:selectedId};
+ },
+ topology:(args)=>{
+  if(!args||!args.level||!args.action)throw Error("AAD topology requires storey, action and args");
+  return applyTopology(args.level,args.action,args.args||{});
+ },
+ getRooms:(level)=>{
+  if(!workspace)throw Error("AAD not loaded");
+  if(level)return workspace.rooms(level);
+  return Object.fromEntries(workspace.snapshot().manifest.levels.map(l=>[l.id,workspace.rooms(l.id)]));
  },
  setLevel:(level)=>{if(!building||!(level==="all"||building.levels.some(l=>l.id===level)))throw Error("Unknown AAD level");setLevel(level);},
  getSnapshot:()=>workspace?workspace.snapshot():null,
