@@ -109,7 +109,7 @@ body[data-view-mode="building"] #viewport2d{display:none}
 </style>
 </head>
 <body>
-<header><div><strong>CAD · Shared AAD Building Studio</strong><small>One reusable multistorey engine · verified project adapter, not a site-specific code fork</small></div><nav><a href="../../">← AAD floor template</a><a href="../../../projects/">Projects</a><a href="../../../guide/">Engine principles</a></nav></header>
+<header><div><strong>CAD · Canonical AAD Building Studio</strong><small>One reusable multistorey engine · verified project adapter, not a site-specific code fork</small></div><nav><a href="../../">← AAD floor template</a><a href="../../../projects/">Projects</a><a href="../../../guide/">Engine principles</a></nav></header>
 <main>
 <div class="head"><div><h1 id="building-name">Multistorey 3D BIM assembly</h1><p id="building-subtitle">Loading one unified building coordinate system and element hierarchy…</p></div><span class="alert">BIM design draft · engineering approval HOLD</span></div>
 <div class="actions" style="margin-bottom:12px">
@@ -160,7 +160,11 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <div id="edit-notice" role="status" aria-live="polite"></div>
 </section>
  <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
- <section><details><summary>Source and model assumptions</summary><p style="font-size:11px;color:#607783">Structural sizes, storey-to-storey registration, slab opening and staircase are explicit project assumptions. No structural code verification, foundation design or approval is implied.</p><a id="source-ledger" target="_blank" rel="noopener">Open source/assumption manifest ↗</a></details></section>
+ <section><details><summary>AI-controlled authoring · machine-readable inputs</summary>
+<p style="font-size:11px;color:#52707d">This canonical template is controlled by structured project manifests, editable floor-graph JSON and the validated <code>window.AADStudio</code> command API. Ask ChatGPT or your own connected AI to generate or update these inputs. No natural-language command entry is required here, and this static website does not claim to run an embedded LLM.</p>
+<a href="https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/cad/aad/TEMPLATE_AI_CONTRACT.md" target="_blank" rel="noopener">AI integration contract and reusable project schema ↗</a>
+</details></section>
+<section><details><summary>Source and model assumptions</summary><p style="font-size:11px;color:#607783">Structural sizes, storey-to-storey registration, slab opening and staircase are explicit project assumptions. No structural code verification, foundation design or approval is implied.</p><a id="source-ledger" target="_blank" rel="noopener">Open source/assumption manifest ↗</a></details></section>
  </aside>
 </div>
 <div class="audit"><h2>Building components · one coordinate system</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Storey</th><th>IFC class</th><th>Type</th><th>Global X</th><th>Global Y</th><th>Global Z</th><th>Dimension / size</th><th>Evidence</th></tr></thead><tbody id="elements"></tbody></table></div></div>
