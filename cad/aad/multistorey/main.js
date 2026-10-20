@@ -116,6 +116,10 @@ function paintSelection(){
   row.classList.toggle("aad-selected-row",isOn);
   row.setAttribute("aria-selected",String(isOn));
  }
+ const canvas=$("viewer3d").querySelector("canvas");
+ if(canvas)canvas.dataset.selectedElementId=selectedId||"";
+ $("viewer2d").dataset.selectedElementId=selectedId||"";
+ $("elements").dataset.selectedElementId=selectedId||"";
  const label=$("aad-selected-summary");
  if(label)label.textContent=selectedId?"Selected: "+selectedId:"Select an element in 2D, 3D or the component schedule";
 }
@@ -472,4 +476,27 @@ $("aad-import-file").addEventListener("change",async e=>{
  e.target.value="";
 });
 
+// Stable command adapter for browser automation and external AI agents.
+// An AI decides/constructs the action; the shared engine validates and commits
+// it to the local working model. No raw-language interpreter is claimed here.
+window.AADStudio=Object.freeze({
+ getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
+   actions:["selectElementById","change","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4"}),
+ selectElementById:(id)=>{
+  if(!building)return false;
+  const e=building.elements.find(x=>x.id===id);
+  if(!e)return false;
+  selectElement(e);return true;
+ },
+ change:(args)=>{
+  if(!workspace||!args||!args.level||!args.kind||!args.id||!args.patch)throw Error("AAD change requires level, kind, id, patch");
+  const before=workspace.snapshot().version;
+  applyModelEdit(args.level,args.kind,args.id,args.patch);
+  if(workspace.snapshot().version===before)throw Error($("edit-notice").textContent);
+  return{version:workspace.snapshot().version,selectedElementId:selectedId};
+ },
+ setLevel:(level)=>{if(!building||!(level==="all"||building.levels.some(l=>l.id===level)))throw Error("Unknown AAD level");setLevel(level);},
+ getSnapshot:()=>workspace?workspace.snapshot():null,
+ getDraft:()=>workspace?workspace.bundle():null
+});
 main().catch(e=>{status("Unable to assemble this project: "+e.message);$("qa-result").textContent="ERROR: "+e.message;});
