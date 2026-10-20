@@ -161,6 +161,8 @@ export function joinConnectedWalls(g,arg){
  if(Math.abs(w1.thickness-w2.thickness)>.002)throw Error("Wall thickness mismatch");
  const shared=[w1.a,w1.b].find(x=>x===w2.a||x===w2.b);
  if(!shared)throw Error("Walls do not share a junction node");
+ if(g.walls.some(w=>w.id!==w1.id&&w.id!==w2.id&&(w.a===shared||w.b===shared)))
+  throw Error("Join would disconnect another wall at a multi-way junction");
  const out1=w1.a===shared?w1.b:w1.a,out2=w2.a===shared?w2.b:w2.a,n=nodeMap(g),
   pa=n.get(out1),pj=n.get(shared),pb=n.get(out2);
  const d1=vector(pa,pj),d2=vector(pj,pb);
