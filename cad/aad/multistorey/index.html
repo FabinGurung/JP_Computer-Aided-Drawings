@@ -95,6 +95,20 @@ body[data-view-mode="building"] #viewport2d{display:none}
 .table-wrap tbody tr[role=button]{cursor:pointer}
 .table-wrap tbody tr[role=button]:focus-visible{outline:3px solid #137f77;outline-offset:-3px}
 
+
+/* M15 template topology authoring / derived room analysis */
+#aad-author-tools{display:flex;flex-wrap:wrap;gap:7px;margin:9px 0}
+#aad-author-tools button{font-size:11px}
+#aad-author-tools button.is-active{background:#0f7971;border-color:#0f7971;color:white}
+#aad-room-summary{color:#527180;font-size:12px;margin:3px 12px 10px}
+#aad-rooms tbody tr:hover{background:#eaf8f6}
+#aad-topology-help{font-size:11px;color:#607f89;margin-top:8px}
+#aad-join-wrap{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}
+#aad-join-wrap input{min-width:0;border:1px solid #b6ced4;padding:7px;font:inherit;border-radius:6px;width:100%;font-size:11px}
+#viewer2d .aad-room-polygon{fill:#66bea0;fill-opacity:.09;stroke:#22967d;stroke-width:.035;stroke-dasharray:.14 .10;pointer-events:none}
+#viewer2d .aad-room-text{font-size:.32px;fill:#116b60;font-weight:600}
+#viewer2d .aad-draw-first{fill:#ffb13c;stroke:#a95906;stroke-width:.1}
+
 </style>
 </head>
 <body>
@@ -147,7 +161,21 @@ body[data-view-mode="building"] #viewport2d{display:none}
 </div><button id="aad-apply-edit" type="button" hidden>Apply dimensional change to all views</button>
 <div id="edit-notice" role="status" aria-live="polite"></div>
 </section>
- <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
+ <section id="aad-plan-authoring"><h2>Connected wall + opening authoring</h2>
+<div id="aad-author-tools" aria-label="Graph editing tools">
+<button id="aad-draw-wall" type="button" aria-pressed="false">Draw connected wall</button>
+<button id="aad-split-wall" type="button">Split selected wall</button>
+<button id="aad-delete-wall" type="button">Delete interior wall</button>
+<button id="aad-add-door" type="button">Host door</button>
+<button id="aad-add-window" type="button">Host window</button>
+<button id="aad-delete-opening" type="button">Remove opening</button>
+</div>
+<details><summary>Join two collinear walls by ID</summary>
+<div id="aad-join-wrap"><input id="aad-join-first" aria-label="First wall ID" placeholder="First wall ID"><input id="aad-join-second" aria-label="Second wall ID" placeholder="Second wall ID"></div>
+<button id="aad-join-walls" type="button">Join walls</button></details>
+<div id="aad-topology-help" aria-live="polite">Choose a storey, then click Draw connected wall and two plan locations. Junctions snap/split automatically. Exteriors stay source-protected.</div>
+</section>
+<section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
  <section><details><summary>AI-controlled authoring · machine-readable inputs</summary>
 <p style="font-size:11px;color:#52707d">This canonical template is controlled by structured project manifests, editable floor-graph JSON and the validated <code>window.AADStudio</code> command API. Ask ChatGPT or your own connected AI to generate or update these inputs. No natural-language command entry is required here, and this static website does not claim to run an embedded LLM.</p>
 <a href="https://github.com/FabinGurung/JP_Computer-Aided-Drawings/blob/main/cad/aad/TEMPLATE_AI_CONTRACT.md" target="_blank" rel="noopener">AI integration contract and reusable project schema ↗</a>
@@ -155,6 +183,10 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <section><details><summary>Source and model assumptions</summary><p style="font-size:11px;color:#607783">Structural sizes, storey-to-storey registration, slab opening and staircase are explicit project assumptions. No structural code verification, foundation design or approval is implied.</p><a id="source-ledger" target="_blank" rel="noopener">Open source/assumption manifest ↗</a></details></section>
  </aside>
 </div>
+<div class="audit" id="aad-derived-room-panel"><h2>Derived room loops · connected floor topology</h2>
+<p id="aad-room-summary">Calculating connected closed regions from the current editable floor graph…</p>
+<div class="table-wrap"><table><thead><tr><th>Storey</th><th>Room ID</th><th>Computed area (m²)</th><th>Local centroid (X, Z)</th><th>Boundary status</th></tr></thead><tbody id="aad-rooms"></tbody></table></div>
+<div class="foot" style="padding:0 12px 10px">These are topological room-face candidates derived from walls, not surveyed room areas or certified IFC spaces. Open/disconnected graph regions may not produce a room.</div></div>
 <div class="audit"><h2>Building components · one coordinate system</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Storey</th><th>IFC class</th><th>Type</th><th>Global X</th><th>Global Y</th><th>Global Z</th><th>Dimension / size</th><th>Evidence</th></tr></thead><tbody id="elements"></tbody></table></div></div>
 <div class="foot">IFC4 download uses the common AAD IFC writer and requires external parse validation. IFC hierarchy/classification does not certify assumed structural elements. Archived V02–M80 engineering packages remain untouched.</div>
 </main>
