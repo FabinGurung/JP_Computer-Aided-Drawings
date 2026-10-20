@@ -94,6 +94,17 @@ body[data-view-mode="building"] #viewport2d{display:none}
 .table-wrap tbody tr[role=button]{cursor:pointer}
 .table-wrap tbody tr[role=button]:focus-visible{outline:3px solid #137f77;outline-offset:-3px}
 
+
+/* Canonical AAD shared selection: one object ID across synchronized regions. */
+#aad-selected-summary{font-size:12px;font-weight:750;color:#794710;background:#ffefcf;border:1px solid #f6ce88;border-radius:6px;padding:6px 10px;display:inline-flex;max-width:100%;overflow-wrap:anywhere}
+#viewer2d .is-selected{stroke:#f48112!important;opacity:1!important;stroke-width:.35!important;filter:drop-shadow(0 0 4px #ef9a23);outline:none}
+#viewer2d .aad-node.is-selected{stroke:#a85105!important;fill:#ffad47!important}
+#viewer2d [data-plan-selection-marker] circle{filter:drop-shadow(0 0 5px #f3ab32)}
+#viewer2d [data-plan-selection-marker] text{font-size:.27px;fill:#8d5416;font-weight:750}
+.table-wrap tbody tr.aad-selected-row{background:#fff0c8!important;outline:2px solid #e98a1c;outline-offset:-2px;color:#693c0a;font-weight:750}
+.table-wrap tbody tr[role=button]{cursor:pointer}
+.table-wrap tbody tr[role=button]:focus-visible{outline:3px solid #137f77;outline-offset:-3px}
+
 </style>
 </head>
 <body>
@@ -106,6 +117,7 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <button id="run-qa" type="button">Run geometry + IFC QA</button>
 <span id="action-status" role="status" style="font-size:11px;color:#466478">Preparing geometry…</span>
 </div>
+<div id="aad-selected-summary" role="status" aria-live="polite" aria-label="Currently selected building component">Select an element in 2D, 3D or the component schedule</div>
 <div id="aad-selected-summary" role="status" aria-live="polite" aria-label="Currently selected building component">Select an element in 2D, 3D or the component schedule</div>
 <div class="unified-toolbar" aria-label="AAD building editor controls">
 <label for="aad-storey">Storey <select id="aad-storey"><option value="all">All levels</option></select></label>
