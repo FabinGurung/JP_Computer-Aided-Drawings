@@ -4,14 +4,23 @@
  * Changes are local working drafts; canonical GitHub/Drive evidence is read-only.
  */
 import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs";
+import {addConnectedWall,splitConnectedWall,joinConnectedWalls,removeConnectedWall,
+ addHostedOpening,removeHostedOpening,derivePlanRooms} from "./aad-topology.mjs";
 const clone=v=>JSON.parse(JSON.stringify(v));
 const finite=(v,name)=>{if(typeof v!=="number"||!Number.isFinite(v))throw Error(name+" must be a finite number");return v;};
 const bounded=(v,min,max,name)=>{finite(v,name);if(v<min||v>max)throw Error(name+" must be "+min+"–"+max+" m");return Math.round(v*1000)/1000;};
 const getFloor=(models,id)=>{const floor=models[id];if(!floor?.floorGraph)throw Error("Unknown AAD storey "+id);return floor.floorGraph;};
 const findBy=(items,id,type)=>{const item=items.find(x=>x.id===id);if(!item)throw Error("Unknown "+type+" "+id);return item;};
 function geometricalIntegrity(models){
+ const uniqueIDs=(items,label)=>{
+  const set=new Set();
+  for(const item of items){if(!item.id||set.has(item.id))throw Error("Duplicate "+label+" ID "+item.id);set.add(item.id);}
+ };
  for(const [floorId,model] of Object.entries(models)){
   const g=model.floorGraph,nodes=new Map(g.nodes.map(x=>[x.id,x]));
+  uniqueIDs(g.nodes,"node");uniqueIDs(g.walls,"wall");uniqueIDs(g.openings,"opening");
+  for(const n of g.nodes){bounded(n.x,-40,80,"node X");bounded(n.z,-40,80,"node Z");}
+  if(g.nodes.length>900||g.walls.length>1200||g.openings.length>750)throw Error("AAD editable graph size exceeded");
   for(const w of g.walls){
    const a=nodes.get(w.a),b=nodes.get(w.b);
    if(!a||!b||Math.hypot(a.x-b.x,a.z-b.z)<.25)throw Error("Invalid wall segment "+floorId+"/"+w.id);
@@ -44,13 +53,34 @@ export function createAADWorkspace(manifest,initialModels){
    for(const name of ["offset","width","height","sill"])
     if(name in change)opening[name]=bounded(change[name],name==="width"||name==="height"?.3:0,30,name);
   }else throw Error("Unsupported semantic edit "+entity.kind);
+  return admit(next,{level,entity,patch:clone(change)});
+ }
+ function admit(next,record){
   geometricalIntegrity(next);
   const candidate=assembleBuilding(baseManifest,next,{allowAreaDrift:true});
   const qa=verifyAssembly(candidate);
   if(!qa.valid)throw Error("Editing blocked by building-wide QA: "+qa.errors.map(x=>x.code).join(", "));
-  models=next;assembly=candidate;version++;lastEdit={level,entity,patch:clone(change),version};
+  models=next;assembly=candidate;version++;lastEdit={...record,version};
   return snapshot();
  }
+ function topology(level,action,args={}){
+  const next=clone(models),graph=getFloor(next,level);
+  const actions={
+   addWall:()=>addConnectedWall(graph,args),
+   splitWall:()=>splitConnectedWall(graph,args),
+   joinWalls:()=>joinConnectedWalls(graph,args),
+   removeWall:()=>removeConnectedWall(graph,args),
+   addOpening:()=>addHostedOpening(graph,args,next[level].height),
+   removeOpening:()=>removeHostedOpening(graph,args)
+  };
+  if(!Object.hasOwn(actions,action))throw Error("Unsupported AAD topology action "+action);
+  const result=actions[action]();
+  const checked=admit(next,{kind:"topology",level,action,args:clone(args),result:clone(result)});
+  return{...checked,result};
+ }
+ function rooms(level){return derivePlanRooms(getFloor(models,level)).map(r=>clone(r));}
+
+ 
  function reset(){
   models=clone(sourceModels);
   assembly=assembleBuilding(baseManifest,models);version++;lastEdit={kind:"reset",version};
@@ -63,12 +93,19 @@ export function createAADWorkspace(manifest,initialModels){
    throw Error("Working draft floor IDs mismatch");
   const candidateModels=clone(bundle.models);
   for(const [level,floor] of Object.entries(candidateModels)){
-   const reference=sourceModels[level].floorGraph,g=floor.floorGraph;
-   if(g.nodes.length!==reference.nodes.length||g.walls.length!==reference.walls.length||g.openings.length!==reference.openings.length)
-    throw Error("Draft changes semantic topology on "+level+"; use a versioned engine migration first");
-   if(g.nodes.some((x,i)=>x.id!==reference.nodes[i].id)||g.walls.some((x,i)=>x.id!==reference.walls[i].id)||
-      g.openings.some((x,i)=>x.id!==reference.openings[i].id||x.wallId!==reference.openings[i].wallId))
-    throw Error("Draft IDs and hosted relationships changed on "+level);
+   const source=sourceModels[level].floorGraph,g=floor.floorGraph;
+   const originalExterior=new Set(source.perimeter);
+   // Floor ID and original exterior wall IDs cannot be silently dropped.
+   // Splitting source exterior walls is allowed: the anchored wall ID remains
+   // and the newly generated perimeter segment carries draft provenance.
+   for(const id of originalExterior)if(!g.walls.some(w=>w.id===id)||!g.perimeter.includes(id))
+    throw Error("Imported draft removed original exterior wall "+level+"/"+id);
+   if(g.perimeter.some(id=>!g.walls.some(w=>w.id===id)))
+    throw Error("Imported draft has dangling perimeter wall "+level);
+   for(const wall of g.walls)if(!source.walls.some(w=>w.id===wall.id)&&wall.source!=="AI_AUTHORED_PLAN_TOPOLOGY"&&wall.source!=="AI_EDITED_HOST_SPLIT")
+    throw Error("Untrusted new wall provenance "+level+"/"+wall.id);
+   for(const o of g.openings)if(!source.openings.some(k=>k.id===o.id)&&o.source!=="AI_AUTHORED_HOSTED_OPENING")
+    throw Error("Untrusted new opening provenance "+level+"/"+o.id);
   }
   geometricalIntegrity(candidateModels);
   const candidate=assembleBuilding(baseManifest,candidateModels,{allowAreaDrift:true});
@@ -82,5 +119,5 @@ export function createAADWorkspace(manifest,initialModels){
   baseline:baseManifest.revision,reviewStatus:"DRAFT_ENGINEERING_HOLD",revision:version,
   manifest:clone(baseManifest),models:clone(models),lastEdit:clone(lastEdit),
   note:"Browser-authored changes, not committed canonical source. IFC export is an analytical snapshot of the same working state."};}
- return{change,reset,restore,snapshot,bundle};
+ return{change,topology,rooms,reset,restore,snapshot,bundle};
 }
