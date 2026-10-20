@@ -55,7 +55,7 @@ jobs:
           npx playwright install --with-deps chromium
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/cad-release-preview.log 2>&1 &)
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
-          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/cad-aad-linked-smoke.mjs
+          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
       - name: Save render verification screenshots
