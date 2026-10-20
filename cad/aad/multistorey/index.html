@@ -83,6 +83,17 @@ body[data-view-mode="building"] #viewport2d{display:none}
 @media(max-width:1050px){.workspace{grid-template-columns:1fr!important}.linked-views{grid-template-columns:1fr!important}#viewer2d,#viewer3d{height:500px;min-height:320px}aside{max-height:none}}
 @media(max-width:660px){.linked-views{padding:6px}#viewer2d,#viewer3d{height:365px;min-height:300px}.unified-toolbar>*{flex:1}.unified-toolbar .spacer{display:none}}
 
+
+/* Canonical AAD shared selection: one object ID across three synchronized regions */
+#aad-selected-summary{font-size:12px;font-weight:750;color:#794710;background:#ffefcf;border:1px solid #f6ce88;border-radius:6px;padding:6px 10px;display:inline-flex;max-width:100%;overflow-wrap:anywhere}
+#viewer2d .is-selected{stroke:#f48112!important;opacity:1!important;stroke-width:.35!important;filter:drop-shadow(0 0 4px #ef9a23);outline:none}
+#viewer2d .aad-node.is-selected{stroke:#a85105!important;fill:#ffad47!important}
+#viewer2d [data-plan-selection-marker] circle{filter:drop-shadow(0 0 5px #f3ab32)}
+#viewer2d [data-plan-selection-marker] text{font-size:.27px;fill:#8d5416;font-weight:750}
+.component-table tbody tr.aad-selected-row,.table-wrap tbody tr.aad-selected-row{background:#fff0c8!important;outline:2px solid #e98a1c;outline-offset:-2px;color:#693c0a;font-weight:750}
+.table-wrap tbody tr[role=button]{cursor:pointer}
+.table-wrap tbody tr[role=button]:focus-visible{outline:3px solid #137f77;outline-offset:-3px}
+
 </style>
 </head>
 <body>
@@ -95,6 +106,7 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <button id="run-qa" type="button">Run geometry + IFC QA</button>
 <span id="action-status" role="status" style="font-size:11px;color:#466478">Preparing geometry…</span>
 </div>
+<div id="aad-selected-summary" role="status" aria-live="polite" aria-label="Currently selected building component">Select an element in 2D, 3D or the component schedule</div>
 <div class="unified-toolbar" aria-label="AAD building editor controls">
 <label for="aad-storey">Storey <select id="aad-storey"><option value="all">All levels</option></select></label>
 <label for="aad-view-mode">View <select id="aad-view-mode"><option value="split">2D left · 3D right</option><option value="plan">2D plan only</option><option value="building">3D building only</option></select></label>
@@ -111,11 +123,11 @@ body[data-view-mode="building"] #viewport2d{display:none}
   <div class="linked-views">
    <div class="viewport" id="viewport2d"><div class="viewport-title">2D floor plan <small id="aad-plan-level">Ground floor</small></div>
     <svg id="viewer2d" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 27 17" role="img" aria-label="Live AAD editable wall and hosted openings plan"></svg>
-    <div class="view-foot">Select walls/openings to edit metrics · drag a wall node to update 2D and 3D together</div>
+    <div class="view-foot">Click a wall, door or window to highlight it in 2D, 3D and the schedule. Drag nodes to edit the shared model.</div>
    </div>
    <div class="viewport" id="viewport3d"><div class="viewport-title">Interactive 3D building <small id="aad-building-level">All storeys</small></div>
     <div id="viewer3d" aria-label="Assembled multistorey model derived from same editable floor graph"><div class="viewhud">World coordinates in metres · vertical Y</div></div>
-    <div class="view-foot">Orbit / zoom / select an object · identical object IDs in 2D, 3D and IFC</div>
+    <div class="view-foot">Click any IFC object to highlight it in 3D and the schedule; an authored 2D object highlights, otherwise its plan locator appears.</div>
    </div>
   </div>
   <div class="legend"><span><i style="background:#507d91"></i>Walls</span><span><i style="background:#4b997e"></i>Columns</span><span><i style="background:#d4a75e"></i>Beams</span><span><i style="background:#a5c9bb"></i>Floor slabs</span><span><i style="background:#51a9d4"></i>Windows</span><span><i style="background:#c38b70"></i>Doors</span><span><i style="background:#9186c3"></i>Stairs</span></div>
