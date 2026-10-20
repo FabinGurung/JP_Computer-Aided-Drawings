@@ -12,6 +12,9 @@ on:
       - "tools/site/aad-building-build.mjs"
       - "tools/site/aad-ifc-independent-check.py"
       - "tools/site/aad-building-browser-smoke.mjs"
+      - "tools/site/aad-selection-sync-smoke.mjs"
+      - "tools/site/aad-validate-project.mjs"
+      - "cad/aad/TEMPLATE_AI_CONTRACT.md"
       - "tools/site/aad-unified-workspace-smoke.mjs"
       - "public/data/projects/narayani-parajuli/**"
       - "public/projects/narayani-parajuli/aad/**"
@@ -39,6 +42,7 @@ jobs:
           npm run build -- --base=/JP_Computer-Aided-Drawings/
           python tools/site/check_public_routes.py dist
           node tools/site/aad-building-build.mjs
+          node tools/site/aad-validate-project.mjs public/data/projects/narayani-parajuli/aad-building-v1.json
           test -s dist/cad/aad/multistorey/index.html
           test -s dist/data/projects/narayani-parajuli/PRJ-000007_AAD_CONCEPTUAL_3STOREY_IFC4.ifc
           test -s dist/cad/aad/index.html
@@ -61,6 +65,7 @@ jobs:
           CAD_AAD_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
+          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           echo CAD_AAD_PAGES_BASE_RENDER_VERIFIED
       - name: Independent IFC4 parsing and spatial graph round-trip (IfcOpenShell)
         run: |
@@ -75,4 +80,5 @@ jobs:
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
             /tmp/cad-aad-building-*.png
+            /tmp/cad-aad-shared-highlight-selection.png
           if-no-files-found: ignore
