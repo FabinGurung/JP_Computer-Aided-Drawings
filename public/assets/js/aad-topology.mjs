@@ -150,8 +150,8 @@ export function splitConnectedWall(g,arg){
  if("offset" in arg){const d=metric(arg.offset,"split offset");position=along(a,b,d/length);}
  else if(arg.point)position={x:metric(arg.point.x,"split X"),z:metric(arg.point.z,"split Z")};
  else throw Error("Split requires wall offset or plan point");
- const id=splitByPoint(g,w.id,position);
- if(id===w.a||id===w.b)throw Error("Split must stay 0.25 m clear of endpoints");
+ const oldA=w.a,oldB=w.b,id=splitByPoint(g,w.id,position);
+ if(id===oldA||id===oldB)throw Error("Split must stay 0.25 m clear of endpoints");
  return{nodeId:id,wallIds:g.walls.filter(v=>v.id===w.id||v.a===id||v.b===id).map(v=>v.id)};
 }
 export function joinConnectedWalls(g,arg){
