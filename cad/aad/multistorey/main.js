@@ -12,6 +12,7 @@ const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
+let selectedId=null,selectionOverlay=null; // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
 const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,stair:0x9386bb,landing:0xa48cc9};
@@ -69,6 +70,54 @@ function applyVisible(){
   const e=m.userData.element;
   m.visible=(floorFlags.get(e.level)!==false)&&(kindFlags.get(e.kind)!==false);
  }
+ paintSelection();
+}
+function selectedPosition(e){
+ if(e&&Number.isFinite(e.x)&&Number.isFinite(e.z))return{x:e.x,y:Number.isFinite(e.y)?e.y:0,z:e.z};
+ if(e?.profile?.length){
+  return{x:e.profile.reduce((s,p)=>s+p.x,0)/e.profile.length,
+   y:Number.isFinite(e.y)?e.y:0,
+   z:e.profile.reduce((s,p)=>s+p.z,0)/e.profile.length};
+ }
+ if(e?.steps?.length)return{x:e.steps[0].x,y:e.steps[0].y,z:e.steps[0].z};
+ if(activeEdit?.kind==="node"&&workspace){
+  const state=workspace.snapshot(),l=state.manifest.levels.find(t=>t.id===activeEdit.level);
+  const p=state.models[l.id].floorGraph.nodes.find(n=>n.id===activeEdit.id);
+  if(p){const w=projectToWorld(p,l.transform);return{x:w.x,y:l.elevation+1.2,z:w.z};}
+ }
+ return null;
+}
+function paintSelection(){
+ const picked=building?.elements.find(e=>e.id===selectedId);
+ for(const m of hitMeshes){
+  const on=Boolean(selectedId&&m.userData.element.id===selectedId);
+  if(m.material?.emissive){
+   m.material.emissive.setHex(on?0xff9300:0x000000);
+   m.material.emissiveIntensity=on?.8:0;
+   if(m.material.opacity<.98)m.material.opacity=on?1:(m.userData.element.kind==="roof"?.52:.75);
+  }
+  m.userData.isSelected=on;
+ }
+ if(selectionOverlay){scene.remove(selectionOverlay);selectionOverlay.traverse?.(n=>{n.geometry?.dispose?.();n.material?.dispose?.();});selectionOverlay=null;}
+ if(scene&&selectedId){
+  selectionOverlay=new THREE.Group();
+  for(const m of hitMeshes.filter(m=>m.visible&&m.userData.isSelected)){
+   const line=new THREE.BoxHelper(m,0xff9c28);selectionOverlay.add(line);
+  }
+  const p=selectedPosition(picked);
+  if(p&&(!picked||!hitMeshes.some(m=>m.visible&&m.userData.isSelected))){
+   const dot=new THREE.Mesh(new THREE.SphereGeometry(.19,12,10),new THREE.MeshBasicMaterial({color:0xffa020,depthTest:false}));
+   dot.position.set(p.x,p.y,p.z);dot.renderOrder=999;selectionOverlay.add(dot);
+  }
+  scene.add(selectionOverlay);
+ }
+ for(const [id,row] of rowsById){
+  const isOn=id===selectedId;
+  row.classList.toggle("aad-selected-row",isOn);
+  row.setAttribute("aria-selected",String(isOn));
+ }
+ const label=$("aad-selected-summary");
+ if(label)label.textContent=selectedId?"Selected: "+selectedId:"Select an element in 2D, 3D or the component schedule";
 }
 function centerView(){
  if(!geometryGroup)return;
@@ -114,12 +163,18 @@ function htmlText(e){
  return spans.join("\n");
 }
 function selectElement(e){
+ selectedId=e.id;
+ if(e.level&&building.levels.some(l=>l.id===e.level))setLevel(e.level);
  if(e.kind==="wall"||e.kind==="door"||e.kind==="window")activeEdit={level:e.level,kind:e.kind==="wall"?"wall":"opening",id:e.id.split(":").slice(2).join(":")};
  else activeEdit=null;
- $("selection").textContent=htmlText(e);
  refreshEditPanel();
- drawPlan();
- const row=rowsById.get(e.id);if(row)row.scrollIntoView({behavior:"smooth",block:"nearest"});
+ if(!activeEdit)$("selection").textContent=htmlText(e);
+ drawPlan();paintSelection();
+ const row=rowsById.get(e.id);
+ if(row){
+  const holder=row.closest(".table-wrap");
+  if(holder){const top=row.offsetTop-holder.offsetTop;holder.scrollTop=Math.max(0,top-holder.clientHeight/2);}
+ }
 }
 function addStoreys(){
  const node=$("storeys");node.replaceChildren();
@@ -149,11 +204,11 @@ function addStats(){
 function addRows(){
  const tbody=$("elements");tbody.replaceChildren();rowsById.clear();
  for(const e of building.elements.filter(e=>e.ifcType)){
-  const tr=document.createElement("tr");const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):e.profile?"Polygon / "+e.dy+"m":"Steps "+e.steps?.length;
+  const tr=document.createElement("tr");tr.dataset.elementId=e.id;tr.tabIndex=0;tr.setAttribute("role","button");tr.setAttribute("aria-selected","false");const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):e.profile?"Polygon / "+e.dy+"m":"Steps "+e.steps?.length;
   for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,e.status]){
    const td=document.createElement("td");td.textContent=s;tr.append(td);
   }
-  tr.addEventListener("click",()=>selectElement(e));tbody.append(tr);rowsById.set(e.id,tr);
+  tr.addEventListener("click",()=>selectElement(e));tr.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(e);}});tbody.append(tr);rowsById.set(e.id,tr);
  }
 }
 function runQa(){
@@ -201,7 +256,7 @@ function drawPlan(){
   for(const w of g.walls){
    const a=nodeMap.get(w.a),b=nodeMap.get(w.b);
    if(!a||!b)continue;
-   const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(activeEdit?.level===l.id&&activeEdit?.id===w.id?" active":"")});
+   const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(selectedId===building.projectId+":"+l.id+":"+w.id?" is-selected":"")});
    item.dataset.part=l.id+":"+w.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"wall",w.id);});
    doc.append(item);
@@ -211,7 +266,7 @@ function drawPlan(){
    const length=Math.hypot(b.x-a.x,b.z-a.z),from=o.offset/length,to=(o.offset+o.width)/length;
    const item=el("line",{
     x1:a.x+(b.x-a.x)*from,y1:a.z+(b.z-a.z)*from,x2:a.x+(b.x-a.x)*to,y2:a.z+(b.z-a.z)*to,
-    class:o.kind==="door"?"aad-door":"aad-window",
+    class:(o.kind==="door"?"aad-door":"aad-window")+(selectedId===building.projectId+":"+l.id+":"+o.id?" is-selected":""),
     "stroke-width":o.kind==="door"?.21:.28
    });
    item.dataset.part=l.id+":"+o.id;
@@ -220,7 +275,7 @@ function drawPlan(){
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
-    const p=nodeMap.get(n.id),circle=el("circle",{cx:p.x,cy:p.z,r:.13,class:"aad-node","data-node":n.id,tabindex:"0",role:"button","aria-label":"Move node "+n.id});
+    const p=nodeMap.get(n.id),circle=el("circle",{cx:p.x,cy:p.z,r:selectedId===building.projectId+":"+l.id+":NODE:"+n.id?.23:.13,class:"aad-node"+(selectedId===building.projectId+":"+l.id+":NODE:"+n.id?" is-selected":""),"data-node":n.id,tabindex:"0",role:"button","aria-label":"Move node "+n.id});
     circle.addEventListener("click",evt=>{evt.stopPropagation();focusEditor(l.id,"node",n.id);});
     circle.addEventListener("pointerdown",evt=>{
      evt.preventDefault();evt.stopPropagation();
@@ -246,12 +301,30 @@ function drawPlan(){
   }
  }
  const ground=activeLevel==="all"?"All aligned storeys (select a floor to edit)":state.manifest.levels.find(l=>l.id===activeLevel).name+" · elevation "+state.manifest.levels.find(l=>l.id===activeLevel).elevation.toFixed(2)+" m";
+ // Structural objects are 3D IFC components without authored 2D floor-graph
+ // geometry. Display their world-coordinate locator instead of inventing one.
+ const selected=building.elements.find(e=>e.id===selectedId);
+ const hasPlan=selected&&["wall","door","window"].includes(selected.kind);
+ const position=selectedPosition(selected);
+ if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
+  const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
+  marker.append(el("circle",{cx:position.x,cy:position.z,r:.55,fill:"#ffe9bc","fill-opacity":".32",stroke:"#ef831b","stroke-width":".15"}));
+  marker.append(el("circle",{cx:position.x,cy:position.z,r:.15,fill:"#ed7820"}));
+  const tag=el("text",{x:position.x+.62,y:position.z-.45});
+  tag.textContent=selected.ifcType+" · plan locator (not a drawn footprint)";
+  marker.append(tag);doc.append(marker);
+ }
  $("aad-plan-level").textContent=ground;
  $("aad-building-level").textContent=activeLevel==="all"?"All storeys":"Selected storey "+activeLevel.toUpperCase();
 }
 function focusEditor(level,kind,id){
- activeLevel=level;$("aad-storey").value=level;setLevel(level);
- activeEdit={level,kind,id};refreshEditPanel();drawPlan();
+ const nativeId=building.projectId+":"+level+":"+id;
+ if(kind!=="node"){
+  const entity=building.elements.find(e=>e.id===nativeId);
+  if(entity){selectElement(entity);return;}
+ }
+ setLevel(level);activeEdit={level,kind,id};selectedId=building.projectId+":"+level+":NODE:"+id;
+ refreshEditPanel();drawPlan();paintSelection();
 }
 function refreshEditPanel(){
  const selection=activeEdit,state=workspace?.snapshot();
@@ -281,7 +354,7 @@ function applyModelEdit(level,kind,id,patch){
  try{
   lastUndo=workspace.bundle();
   workspace.change(level,{kind,id},patch);
-  activeEdit={level,kind,id};persistDraft();
+  activeEdit={level,kind,id};selectedId=workspace.snapshot().manifest.projectId+":"+level+":"+(kind==="node"?"NODE:":"")+id;persistDraft();
   refreshAll();
   $("edit-notice").textContent="Updated "+id+" across plan, 3D, quantities, IFC4 and component table.";
   status("Live linked model v"+workspace.snapshot().version+" · edited "+id+" · ENGINEERING HOLD");
@@ -293,7 +366,7 @@ function applyModelEdit(level,kind,id,patch){
 }
 function refreshAll(){
  building=workspace.snapshot().assembly;
- renderModel();drawPlan();addStats();addRows();runQa();refreshEditPanel();
+ renderModel();drawPlan();addStats();addRows();runQa();refreshEditPanel();paintSelection();
  $("aad-edit-version").textContent="Working BIM draft v"+workspace.snapshot().version+(workspace.snapshot().lastEdit?" · unsent to source":"");
  $("aad-undo").disabled=!lastUndo;
 }
@@ -381,7 +454,7 @@ $("aad-undo").addEventListener("click",()=>{
  catch(err){status("Undo failed: "+err.message);}
 });
 $("aad-reset").addEventListener("click",()=>{
- if(!workspace)return;lastUndo=workspace.bundle();workspace.reset();activeEdit=null;
+ if(!workspace)return;lastUndo=workspace.bundle();workspace.reset();activeEdit=null;selectedId=null;
  try{localStorage.removeItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId);}catch(_){}
  refreshAll();status("Restored canonical source geometry; source data unchanged.");
 });
