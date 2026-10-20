@@ -31,6 +31,16 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          # Milestone v0.6.0 is an immutable software release. A later successful
+          # Pages/readback event must not try to retag that same version.
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG" --force
+            existing_sha="$(git rev-list -n 1 "$TAG")"
+            frozen_sha="7bbe9f0ff46b913826277ce0bdb9475532d3491a"
+            test "$existing_sha" = "$frozen_sha" || { echo "Frozen v0.6.0 tag was changed unexpectedly"; exit 1; }
+            echo "AAD_MILESTONE_RELEASE_ALREADY_SEALED tag=$TAG frozen_commit=$frozen_sha; later readbacks need a new version"
+            exit 0
+          fi
           main_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
           test "$VERIFIED_SHA" = "$main_sha" || { echo "main moved since successful live QA; refuse stale release"; exit 1; }
           test -s cad/aad/RELEASE_AAD_TEMPLATE_V0.6.0.md
@@ -51,12 +61,7 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_SHA&per_page=100" \
             --jq '.workflow_runs[] | select(.name=="CAD Main GitHub Pages (validated CAD publishing)" and .conclusion=="success") | .head_sha' \
             | grep -Fx "$VERIFIED_SHA"
-          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            existing_sha="$(git rev-list -n 1 "$TAG" 2>/dev/null || true)"
-            test "$existing_sha" = "$VERIFIED_SHA" || { echo "Tag already released at another SHA"; exit 1; }
-            echo "AAD_MILESTONE_RELEASE_ALREADY_SEALED tag=$TAG commit=$VERIFIED_SHA"
-            exit 0
-          fi
+
           if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "refs/tags/$TAG"; then
             git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
             test "$(git rev-list -n 1 "$TAG")" = "$VERIFIED_SHA" || { echo "Remote tag points elsewhere"; exit 1; }
