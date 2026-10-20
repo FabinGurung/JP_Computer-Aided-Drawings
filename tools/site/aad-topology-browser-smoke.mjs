@@ -19,14 +19,22 @@ try{
  // on project-specific IDs in the canonical browser UI.
  const wall=await page.evaluate(()=>{
   const g=window.AADStudio.getSnapshot().models.gf.floorGraph,n=new Map(g.nodes.map(p=>[p.id,p]));
-  return g.walls.filter(w=>!g.perimeter.includes(w.id)&&!g.openings.some(o=>o.wallId===w.id))
-    .map(w=>({id:w.id,len:Math.hypot(n.get(w.a).x-n.get(w.b).x,n.get(w.a).z-n.get(w.b).z)}))
-    .filter(w=>w.len>2.5).sort((a,b)=>b.len-a.len)[0];
+  const choices=[];
+  for(const w of g.walls){
+   const len=Math.hypot(n.get(w.a).x-n.get(w.b).x,n.get(w.a).z-n.get(w.b).z);
+   const filled=g.openings.filter(o=>o.wallId===w.id).map(o=>[o.offset,o.offset+o.width]).sort((a,b)=>a[0]-b[0]);
+   let cursor=.15;
+   for(const [a,b] of [...filled,[len,Number.POSITIVE_INFINITY]]){
+    if(a-cursor>=1.3)choices.push({id:w.id,len,offset:Math.round((cursor+.15)*1000)/1000,interior:!g.perimeter.includes(w.id)});
+    cursor=Math.max(cursor,b+.15);
+   }
+  }
+  return choices.sort((a,b)=>Number(b.interior)-Number(a.interior)||b.len-a.len)[0];
  });
- assert.ok(wall,"Need at least one usable interior wall in Narayani source model");
+ assert.ok(wall,"Need a nonoverlapping 1m host-wall segment in the source plan");
  const result=await page.evaluate(({wall})=>window.AADStudio.topology({
   level:"gf",action:"addOpening",
-  args:{wallId:wall.id,kind:"door",offset:Math.round((wall.len-1)/2*1000)/1000,width:1,height:2.1,sill:0}
+  args:{wallId:wall.id,kind:"door",offset:wall.offset,width:1,height:2.1,sill:0}
  }),{wall});
  assert.ok(result.result.id.startsWith("AID-"));
  const part="gf:"+result.result.id,elementId="PRJ-000007:"+part;
