@@ -25,7 +25,7 @@ try{
   const errors=[],consoleErrors=[];
   page.on("pageerror",e=>errors.push(e.message));
   page.on("console",m=>{if(m.type()==="error")consoleErrors.push(m.text())});
-  const address=process.env.CAD_AAD_URL||"http://127.0.0.1:5175/cad/aad/";
+  const address=process.env.CAD_AAD_URL||"http://127.0.0.1:5175/cad/aad/legacy/";
   await page.goto(address,{waitUntil:"networkidle",timeout:60000});
   // Private drafts must be discoverable at the top of the existing editor.
   const opener=page.locator('.aad-local-project label[for="upload"]');
