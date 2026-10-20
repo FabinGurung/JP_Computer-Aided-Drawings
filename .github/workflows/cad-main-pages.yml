@@ -18,6 +18,8 @@ on:
       - "tools/site/aad-topology-smoke.mjs"
       - "tools/site/aad-topology-browser-smoke.mjs"
       - "tools/site/aad-ai-generate.mjs"
+      - "tools/site/aad-ai-build-all.mjs"
+      - "design_jobs/ai-projects/**"
       - "tools/site/aad-ai-pipeline-smoke.mjs"
       - "tools/site/aad-ai-demo-browser-smoke.mjs"
       - "public/assets/js/aad-ai-design-compiler.mjs"
@@ -54,9 +56,13 @@ jobs:
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs
-          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --check
-          node tools/site/aad-ai-generate.mjs design_jobs/synthetic/aad-ai-two-storey.json --publish
-          node tools/site/aad-validate-project.mjs public/data/projects/aad-ai-demo/aad-building-v1.json
+          node tools/site/aad-ai-build-all.mjs --check
+          node tools/site/aad-ai-build-all.mjs --publish
+          for spec in design_jobs/synthetic/aad-ai-two-storey.json design_jobs/ai-projects/*.json; do
+            test -f "$spec" || continue
+            slug=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).project.slug)' "$spec")
+            node tools/site/aad-validate-project.mjs "public/data/projects/$slug/aad-building-v1.json"
+          done
       - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
       - run: python tools/site/check_public_routes.py dist
       - name: Build deterministic Narayani IFC4 and unified AAD multistorey model
