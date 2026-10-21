@@ -62,6 +62,59 @@ x=structuredClone(original);x.structural.columns.gridX=[8,2];
 expectReject(()=>compile(x),/Unsorted column grid/);
 x=structuredClone(original);x.project.slug="../escape";
 expectReject(()=>compile(x),/URL-safe/);
+// M16 acceptance: source-referenced vs inferred geometry stays explicit and never
+// turns polygon-derived area into surveyed or engineering-approved measurement.
+// This fixture is NOT a real client's project and is never added to publish queue.
+const approved=structuredClone(original);
+approved.publication={mode:"owner-approved-public",publicApproved:true,approvalReference:"TEST_FIXTURE_ONLY_DO_NOT_PUBLISH"};
+approved.evidence={kind:"test-fixture",status:"UNVERIFIED_NOT_REAL_CLIENT"};
+approved.sources=[{id:"PLAN-A1",kind:"dxf",reference:"Synthetic test drawing A1 (not an actual customer DXF)"}];
+approved.levels[0].geometryProvenance={basis:"source-referenced",sourceId:"PLAN-A1",locator:"Test drawing A1 / GF outline"};
+approved.levels[1].geometryProvenance={basis:"ai-inferred",rationale:"Conceptual upstairs layout provided for automated testing"};
+approved.constraints={
+ maxFloorPlateAreaM2:80,maxTotalFloorPlateAreaM2:160,
+ buildableEnvelope:[[-1,-1],[11,-1],[11,9],[-1,9]]
+};
+const checked=compile(approved);
+assert.equal(checked.manifest.sourceAuthority.sources[0].id,"PLAN-A1");
+assert.equal(checked.manifest.levels[0].geometryProvenance.status,"SOURCE_REFERENCED_NOT_INDEPENDENTLY_VERIFIED");
+assert.equal(checked.manifest.levels[1].geometryProvenance.status,"AI_INFERRED_NOT_SOURCE_VERIFIED");
+assert.equal(checked.manifest.levels[0].sourceAreaBasis,"AI_POLYGON_SHOELACE_CALCULATED_NOT_SURVEYED");
+assert.equal(checked.qa.geometryProvenance.length,2);
+assert.equal(checked.qa.authoringConstraints.length,3);
+assert.equal(checked.qa.issueForConstruction,false);
+assert.deepEqual(checked.ifc,compile(approved).ifc,"Provenance inputs must keep IFC generation deterministic");
+x=structuredClone(approved);delete x.levels[0].geometryProvenance;
+expectReject(()=>compile(x),/needs explicit geometryProvenance/);
+x=structuredClone(approved);x.levels[0].geometryProvenance.sourceId="MISSING";
+expectReject(()=>compile(x),/Unknown source ID/);
+x=structuredClone(approved);delete x.levels[0].geometryProvenance.locator;
+expectReject(()=>compile(x),/Invalid source locator/);
+x=structuredClone(approved);delete x.levels[1].geometryProvenance.rationale;
+expectReject(()=>compile(x),/Invalid AI inference rationale/);
+x=structuredClone(approved);x.levels[0].geometryProvenance={basis:"synthetic"};
+expectReject(()=>compile(x),/cannot be labeled synthetic/);
+x=structuredClone(approved);x.sources.push({...x.sources[0]});
+expectReject(()=>compile(x),/Duplicate or invalid AAD source ID/);
+x=structuredClone(approved);x.constraints.maxFloorPlateAreaM2=79.9;
+expectReject(()=>compile(x),/maximum floor plate area/);
+x=structuredClone(approved);x.constraints.maxTotalFloorPlateAreaM2=159.9;
+expectReject(()=>compile(x),/maximum total floor plate area/);
+x=structuredClone(approved);x.constraints.buildableEnvelope=[[1,-1],[11,-1],[11,9],[1,9]];
+expectReject(()=>compile(x),/exceeds owner-specified buildable envelope/);
+x=structuredClone(approved);x.levels[1].transform={x:3,z:0,rotationDeg:0};
+expectReject(()=>compile(x),/exceeds owner-specified buildable envelope/);
+x=structuredClone(approved);
+x.constraints.buildableEnvelope=[[-1,-1],[11,-1],[11,9],[7,9],[7,3],[3,3],[3,9],[-1,9]];
+expectReject(()=>compile(x),/crosses (outside owner-specified buildable envelope|owner-specified buildable envelope boundary)/);
+x=structuredClone(approved);x.constraints.unknownZoningRatio=0.7;
+expectReject(()=>compile(x),/Unsupported AAD constraint/);
+console.log("AAD_AI_M16_PROVENANCE_AND_CONSTRAINTS_PASS",JSON.stringify({
+ levels:checked.qa.geometryProvenance.map(v=>[v.level,v.basis,v.status]),
+ checks:checked.qa.authoringConstraints.map(v=>v.code),
+ engineering:checked.qa.stage
+}));
+
 console.log("AAD_AI_DESIGN_COMPILER_SYNTHETIC_PASS",JSON.stringify({
  project:built.projectId,areas:built.manifest.levels.map(l=>l.sourceArea),
  rooms:2,ifcElements:ifc.lines,sourceType:built.manifest.sourceAuthority.type,
