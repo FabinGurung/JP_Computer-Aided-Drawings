@@ -547,7 +547,7 @@ async function main(){
   $("aad-storey").append(option);
  }
  $("building-name").textContent=building.name;
- $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² Block B floor areas · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
+ $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
@@ -652,6 +652,21 @@ window.AADStudio=Object.freeze({
   return Object.fromEntries(workspace.snapshot().manifest.levels.map(l=>[l.id,workspace.rooms(l.id)]));
  },
  setLevel:(level)=>{if(!building||!(level==="all"||building.levels.some(l=>l.id===level)))throw Error("Unknown AAD level");setLevel(level);},
+ // Read-only coordinate proof for the model, actual THREE mesh, 2D and table.
+ getViewCoordinateProof:(id)=>{
+  const e=building?.elements.find(x=>x.id===id);
+  if(!e)throw Error("Unknown AAD component "+id);
+  const mesh=hitMeshes.find(m=>m.userData.element.id===id);
+  const plan=[...document.querySelectorAll("#viewer2d .aad-column")].find(n=>n.dataset.elementId===id);
+  const row=rowsById.get(id);
+  return{elementId:id,kind:e.kind,model:{x:e.x,y:e.y,z:e.z,dx:e.dx,dz:e.dz},
+   mesh:mesh?{x:mesh.position.x,y:mesh.position.y,z:mesh.position.z}:null,
+   plan:plan?{x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
+    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
+    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null,
+   table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
+    z:Number(row.cells[6].textContent)}:null};
+ },
  getSnapshot:()=>workspace?workspace.snapshot():null,
  getDraft:()=>workspace?workspace.bundle():null
 });
