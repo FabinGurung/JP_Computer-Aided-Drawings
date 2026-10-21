@@ -149,7 +149,7 @@ export function compileAADDesign(spec){
   const exterior=input.exteriorWallProvenance||{};
   if(typeof exterior!=="object"||Array.isArray(exterior))throw Error("Invalid exteriorWallProvenance");
   for(const [alias,source] of Object.entries(exterior)){
-   if(!/^EXT-\\d{2}$/.test(alias)||!made.aliases[alias])throw Error("Unknown exterior wall provenance alias "+alias);
+   if(!/^EXT-[0-9]{2}$/.test(alias)||!made.aliases[alias])throw Error("Unknown exterior wall provenance alias "+alias);
    for(const id of made.aliases[alias])graph.walls.find(w=>w.id===id).provenance=evidence(source,alias);
   }
   for(const [i,item] of (input.partitions||[]).entries()){
