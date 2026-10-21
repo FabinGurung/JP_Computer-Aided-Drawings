@@ -204,7 +204,7 @@ function addStats(){
   const val=document.createElement("strong");val.textContent=n;row.append(label,val);stat.append(row);
  }
  const row=document.createElement("div");row.className="stat";
- row.innerHTML="<span>Block B plate area</span><strong>"+building.area.model.toFixed(2)+" m²</strong>";stat.append(row);
+ row.innerHTML="<span>Total modeled floor-plate area</span><strong>"+building.area.model.toFixed(2)+" m²</strong>";stat.append(row);
 }
 function addRows(){
  const tbody=$("elements");tbody.replaceChildren();rowsById.clear();
@@ -265,7 +265,8 @@ function drawPlan(){
     if(positions.length!==room.nodes.length)continue;
     const path=el("polygon",{points:positions.map(p=>p.x+","+p.z).join(" "),class:"aad-room-polygon","data-room-id":room.id});
     doc.append(path);
-    const title=el("text",{x:room.centroid.x+l.transform.x,y:room.centroid.z+l.transform.z,class:"aad-room-text"});
+    const worldCentroid=projectToWorld(room.centroid,l.transform);
+    const title=el("text",{x:worldCentroid.x,y:worldCentroid.z,class:"aad-room-text"});
     title.textContent=room.area.toFixed(2)+" m²";doc.append(title);
    }}catch(e){$("aad-room-summary").textContent="Room calculation: "+e.message;}
   }
@@ -288,6 +289,16 @@ function drawPlan(){
    item.dataset.part=l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
+  }
+  // WORLD_XZ column solids, the same exact assembly instances as 3D and table.
+  for(const col of building.elements.filter(e=>e.kind==="column"&&e.level===l.id)){
+   const rect=el("rect",{x:col.x-col.dx/2,y:col.z-col.dz/2,
+    width:col.dx,height:col.dz,class:"aad-column"+(selectedId===col.id?" is-selected":""),
+    "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
+    "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
+   rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
+   rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(col);}});
+   doc.append(rect);
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
@@ -326,7 +337,7 @@ function drawPlan(){
  // Structural objects are 3D IFC components without authored 2D floor-graph
  // geometry. Display their world-coordinate locator instead of inventing one.
  const selected=building.elements.find(e=>e.id===selectedId);
- const hasPlan=selected&&["wall","door","window"].includes(selected.kind);
+ const hasPlan=selected&&["wall","door","window","column"].includes(selected.kind);
  const position=selectedPosition(selected);
  if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
   const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
