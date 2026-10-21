@@ -77,6 +77,8 @@ A real project uses \`publication.mode = "owner-approved-public"\` **plus** \`pu
 
 **Precision:** X and plan-depth Z are in metres; storey elevation is Y. Footprints must be counterclockwise and non-self-intersecting. The compiler computes outline area with shoelace geometry; that **is not a source-measured floor area**. A partition creates connected wall segments, auto-splitting along existing walls. The same-host opening offset is measured from the chosen wall start. A partition may split into multiple segments; the AI must specify \`segment\` when hosting against such a partition alias.
 
+**Publication wording:** Generated project launchers distinguish `synthetic-demo` (clearly a software test, not a real property) from `owner-approved-public` (explicitly approved for public publication, but still source-geometry-unverified and on engineering HOLD). The generator never labels real owner-approved projects as synthetic. This guard is exercised by the AI compiler smoke tests.
+
 **Engineering:** The supplied column grid, slab thickness, beams and stairs are **illustrative engineering assumptions**, not code-checked structural solutions. The generator hardcodes engineering HOLD and issueForConstruction=false. Existing Narayani structural authority and frozen CAD stages are unaffected.
 
 ## CLI

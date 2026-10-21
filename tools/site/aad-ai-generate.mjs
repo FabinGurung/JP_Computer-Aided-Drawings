@@ -8,6 +8,7 @@ import path from "node:path";
 import crypto from "node:crypto";
 import {fileURLToPath} from "node:url";
 import {compileAADDesign} from "../../public/assets/js/aad-ai-design-compiler.mjs";
+import {getAADPublicationCopy} from "./aad-ai-publication-copy.mjs";
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),"../..");
 const args=process.argv.slice(2);
@@ -26,6 +27,7 @@ const dataDir=path.join(root,"public/data/projects",built.slug);
 const siteDir=path.join(root,"public/projects",built.slug);
 const esc=s=>String(s).replaceAll("&","&amp;").replaceAll("<","&lt;").replaceAll(">","&gt;").replaceAll('"',"&quot;").replaceAll("'","&#39;");
 const projectName=esc(built.projectName),slug=built.slug;
+const publicationCopy=getAADPublicationCopy(spec.publication.mode);
 
 function pageStart(title,depth){
  const up="../".repeat(depth);
@@ -46,8 +48,8 @@ function pageStart(title,depth){
 }
 const projectIndex=[
  pageStart(projectName,2),'<h1>'+projectName+'</h1>',
- '<p>AI-authored synthetic design, rendered by the canonical shared AAD engine. Independent reusable geometry/IFC code, project-only model files.</p>',
- '<div class="hold">DESIGN DRAFT · NOT SURVEYED · ENGINEERING HOLD · NOT FOR CONSTRUCTION</div>',
+ '<p>'+esc(publicationCopy.overview)+'</p>',
+ '<div class="hold">'+esc(publicationCopy.overviewHold)+'</div>',
  '<p><a class="button" href="./aad/">Open linked AAD design studio →</a></p>',
  '<div class="links"><a href="../../data/projects/'+slug+'/aad-building-v1.json">Building manifest</a>',
  '<a href="../../data/projects/'+slug+'/aad-ai-qa.json">Assumptions / QA</a>',
@@ -59,7 +61,7 @@ const projectStudio=[
  pageStart(projectName+" — Design Studio",3),
  '<h1>'+projectName+' · Unified AAD</h1>',
  '<p>Linked 2D plan, multi-storey 3D, room and element schedules, editable dimensions, IFC4 from one shared model.</p>',
- '<div class="hold">AI-authored project specification; engineering verification remains HOLD.</div>',
+ '<div class="hold">'+esc(publicationCopy.studioHold)+'</div>',
  '<iframe id="aad-unified-engine" title="Shared AAD linked 2D and 3D design studio" loading="eager"></iframe>',
  '<div class="links"><a id="aad-open-full" target="_blank" rel="noopener">Open full-screen shared editor ↗</a>',
  '<a href="../../../data/projects/'+slug+'/aad-ai-qa.json">QA / assumption ledger</a></div>',
