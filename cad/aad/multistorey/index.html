@@ -75,6 +75,8 @@ body[data-view-mode="building"] #viewport2d{display:none}
 #viewer2d .aad-wall.active{stroke:#d16b43;stroke-width:.24}
 #viewer2d .aad-window{stroke:#2a9fc2;stroke-width:.27;cursor:pointer}
 #viewer2d .aad-door{stroke:#bf856a;stroke-width:.22;cursor:pointer}
+#viewer2d .aad-column{fill:#42987e;fill-opacity:.73;stroke:#195f4d;stroke-width:.045;cursor:pointer;vector-effect:non-scaling-stroke}
+#viewer2d .aad-column:hover{fill:#eca559;fill-opacity:.92}
 #viewer2d .aad-node{fill:#d9f8f1;stroke:#116f6b;stroke-width:.07;cursor:grab}
 #viewer2d .aad-node:hover{fill:#ffc886;stroke:#974d18}
 #viewer2d .aad-node.dragging{fill:#feaf6c;cursor:grabbing}
@@ -138,11 +140,11 @@ body[data-view-mode="building"] #viewport2d{display:none}
   <div class="linked-views">
    <div class="viewport" id="viewport2d"><div class="viewport-title">2D floor plan <small id="aad-plan-level">Ground floor</small></div>
     <svg id="viewer2d" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 27 17" role="img" aria-label="Live AAD editable wall and hosted openings plan"></svg>
-    <div class="view-foot">Click a wall, door or window to highlight it in 2D, 3D and the schedule. Drag nodes to edit the shared model.</div>
+    <div class="view-foot">Click a wall, door, window or column to highlight the identical BIM component in 2D, 3D and the schedule. Drag nodes to edit the shared model.</div>
    </div>
    <div class="viewport" id="viewport3d"><div class="viewport-title">Interactive 3D building <small id="aad-building-level">All storeys</small></div>
     <div id="viewer3d" aria-label="Assembled multistorey model derived from same editable floor graph"><div class="viewhud">World coordinates in metres · vertical Y</div></div>
-    <div class="view-foot">Click any IFC object to highlight it in 3D and the schedule; an authored 2D object highlights, otherwise its plan locator appears.</div>
+    <div class="view-foot">Columns, walls and hosted openings highlight actual plan geometry. Other components show a world-coordinate locator until their footprints are supported.</div>
    </div>
   </div>
   <div class="legend"><span><i style="background:#507d91"></i>Walls</span><span><i style="background:#4b997e"></i>Columns</span><span><i style="background:#d4a75e"></i>Beams</span><span><i style="background:#a5c9bb"></i>Floor slabs</span><span><i style="background:#51a9d4"></i>Windows</span><span><i style="background:#c38b70"></i>Doors</span><span><i style="background:#9186c3"></i>Stairs</span></div>
