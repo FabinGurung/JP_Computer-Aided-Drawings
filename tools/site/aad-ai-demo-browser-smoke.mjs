@@ -24,6 +24,33 @@ try{
  assert.ok(await viewer.locator("#elements tr").count()>20);
  await viewer.locator("#aad-storey").selectOption("gf");
  assert.match(await viewer.locator("#aad-plan-level").innerText(),/Ground floor/);
+ // M17: prove 2D footprint, actual Three.js mesh and table use the SAME
+ // assembly element ID and world XYZ. Do not accept a fake locator dot.
+ const parity=await viewer.locator("#viewer2d").evaluate(()=>{
+  const state=window.AADStudio.getSnapshot(),ids=state.assembly.elements
+   .filter(e=>e.kind==="column"&&e.level==="gf").map(e=>e.id);
+  return ids.map(id=>window.AADStudio.getViewCoordinateProof(id));
+ });
+ assert.equal(parity.length,4,"Four actual ground-floor column footprints expected");
+ for(const p of parity){
+  assert.ok(p.mesh&&p.plan&&p.table,"Column must exist in all three views: "+p.elementId);
+  assert.equal(p.kind,"column");
+  for(const axis of ["x","z"]){
+   assert.ok(Math.abs(p.model[axis]-p.mesh[axis])<.000001,"3D world mismatch "+p.elementId);
+   assert.ok(Math.abs(p.model[axis]-p.plan[axis])<.000001,"2D world mismatch "+p.elementId);
+   assert.ok(Math.abs(p.model[axis]-p.table[axis])<.001,"Table world mismatch "+p.elementId);
+  }
+  assert.ok(Math.abs(p.model.y-p.mesh.y)<.000001);
+  assert.ok(Math.abs(p.model.y-p.table.y)<.001);
+  assert.equal(p.model.dx,p.plan.dx);
+  assert.equal(p.model.dz,p.plan.dz);
+ }
+ const chosenColumn=parity[0].elementId;
+ await viewer.locator("#viewer2d .aad-column").first().click();
+ assert.equal(await viewer.locator("#viewer3d canvas").getAttribute("data-selected-element-id"),chosenColumn);
+ assert.equal(await viewer.locator("#elements").getAttribute("data-selected-element-id"),chosenColumn);
+ assert.equal(await viewer.locator("#viewer2d .aad-column.is-selected").count(),1);
+
  const wall=viewer.locator('[data-element-id="AAD-DEMO-001:gf:EXT-01"]');
  await wall.click();
  assert.equal(await wall.getAttribute("aria-selected"),"true");
