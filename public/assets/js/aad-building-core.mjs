@@ -60,7 +60,7 @@ function addBox(elements,id,kind,ifcType,level,x,y,z,dx,dy,dz,opts={}){
  positive(dx,"box width");positive(dy,"box height");positive(dz,"box depth");
  const e={id,kind,ifcType,level,x:round(x),y:round(y),z:round(z),dx:round(dx),dy:round(dy),dz:round(dz),
   rotationDeg:round(opts.rotationDeg||0),source:opts.source||"ASSUMED",status:opts.status||"INFERRED",
-  host:opts.host||null,name:opts.name||id,profile:null,steps:null};
+  host:opts.host||null,name:opts.name||id,provenance:opts.provenance||null,profile:null,steps:null};
  elements.push(e);return e;
 }
 export function assembleBuilding(manifest,models,options={}){
@@ -86,7 +86,7 @@ export function assembleBuilding(manifest,models,options={}){
    const length=dist(a,b),angle=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
    const p=midpoint(a,b),h=level.height-(manifest.structural.slabs.thickness||.18);
    const e=addBox(elements,projectId+":"+level.id+":"+w.id,"wall","IfcWall",level.id,p.x,level.elevation+h/2,p.z,length,h,w.thickness,{
-    source:w.source||source,status:w.status||"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null
+    source:w.source||source,status:w.status||"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null,provenance:w.provenance||null
    });put(e);
   }
   for(const o of g.openings){
@@ -97,7 +97,7 @@ export function assembleBuilding(manifest,models,options={}){
    const p={x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t};
    const ang=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
    const e=addBox(elements,projectId+":"+level.id+":"+o.id,o.kind,o.kind==="door"?"IfcDoor":"IfcWindow",level.id,p.x,level.elevation+o.sill+o.height/2,p.z,o.width,o.height,Math.max(.06,w.thickness-.02),{
-    source:o.source||"SOURCE_FLOORGRAPH_HOSTED_OPENING",status:o.status||"ASSUMED_DIMENSIONS",host:projectId+":"+level.id+":"+w.id,rotationDeg:ang
+    source:o.source||"SOURCE_FLOORGRAPH_HOSTED_OPENING",status:o.status||"ASSUMED_DIMENSIONS",host:projectId+":"+level.id+":"+w.id,rotationDeg:ang,provenance:o.provenance||null
    });put(e);
   }
   for(const [id,name] of Object.entries(g.labels||{})){
@@ -110,7 +110,8 @@ export function assembleBuilding(manifest,models,options={}){
   const isGround=level===levels[0];
   const slab={id:projectId+":"+level.id+":SLAB",kind:"slab",ifcType:"IfcSlab",level:level.id,
    y:round(level.elevation-slabT/2),profile:world,holes:[],dy:slabT,x:null,z:null,
-   source:"AREA_CALIBRATED_FLOOR_PLATE",status:"SCHEMATIC_THICKNESS",name:"Floor plate "+level.id};
+   source:"AREA_CALIBRATED_FLOOR_PLATE",status:"SCHEMATIC_THICKNESS",name:"Floor plate "+level.id,
+    provenance:manifest.structural.slabs.provenance||null};
   if(!isGround&&manifest.stairs?.opening){
    const op=manifest.stairs.opening;
    const hole=[{x:op.x,z:op.z},{x:op.x+op.width,z:op.z},{x:op.x+op.width,z:op.z+op.depth},{x:op.x,z:op.z+op.depth}];
@@ -136,20 +137,20 @@ export function assembleBuilding(manifest,models,options={}){
     continue;
    }
    const e=addBox(elements,projectId+":"+l.id+":COL:"+grid,"column","IfcColumn",l.id,x,l.elevation+(l.height-slab.thickness)/2,z,
-    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Column "+grid});put(e);
+    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Column "+grid,provenance:col.provenance||null});put(e);
   }
   for(let zi=0;zi<bz.length;zi++)for(let xi=0;xi<bx.length-1;xi++){
    const x=(bx[xi]+bx[xi+1])/2,z=bz[zi],delta=bx[xi+1]-bx[xi];
    if(!pointInLevel(bx[xi],z,l.id)||!pointInLevel(bx[xi+1],z,l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-X:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,delta,beam.depth,beam.widthX,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi
+    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
   for(let xi=0;xi<bx.length;xi++)for(let zi=0;zi<bz.length-1;zi++){
    const x=bx[xi],z=(bz[zi]+bz[zi+1])/2,delta=bz[zi+1]-bz[zi];
    if(!pointInLevel(x,bz[zi],l.id)||!pointInLevel(x,bz[zi+1],l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-Z:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,beam.widthZ,beam.depth,delta,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi
+    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
  }
@@ -172,12 +173,12 @@ export function assembleBuilding(manifest,models,options={}){
     const stair={id:projectId+":"+l.id+":STAIR:FLIGHT-"+(flight+1),kind:"stair",ifcType:"IfcStairFlight",
      level:l.id,x:op.x+(flight===0?flightWidth/2:half+flightWidth/2),y:l.elevation+rise/2,z:op.z+op.depth/2,
      steps:stepsGeom,source:"USER_AUTHORIZED_METRIC_STAIR_SCHEME",status:"ENGINEERING_HOLD",name:"U-stair flight "+(flight+1),
-     numberOfRisers:perFlight,riserHeight:stepRise,treadLength:tread};
+     numberOfRisers:perFlight,riserHeight:stepRise,treadLength:tread,provenance:manifest.stairs.provenance||null};
     elements.push(stair);put(stair);flights.push(stair);
    }
    const landing=addBox(elements,projectId+":"+l.id+":STAIR:LANDING","landing","IfcSlab",l.id,
     op.x+op.width/2,l.elevation+rise/2-.075,op.z+op.depth-.27,
-    op.width,.15,.54,{source:"USER_AUTHORIZED_METRIC_STAIR_SCHEME",status:"ENGINEERING_HOLD",name:"Mid-flight landing"});
+    op.width,.15,.54,{source:"USER_AUTHORIZED_METRIC_STAIR_SCHEME",status:"ENGINEERING_HOLD",name:"Mid-flight landing",provenance:manifest.stairs.landingProvenance||null});
    put(landing);
    diagnostics.push({severity:"WARNING",code:"STAIR_DESIGN_ASSUMED",level:l.id,message:steps+" risers at "+round(stepRise)+"m each; stair shape and structural support unverified"});
   }
@@ -186,7 +187,7 @@ export function assembleBuilding(manifest,models,options={}){
  const roof={id:projectId+":ROOF",kind:"roof",ifcType:"IfcSlab",level:top.id,
   y:round(top.elevation+top.height+roofT/2),profile:byLevel.get(top.id).perimeter,
   holes:[],dy:roofT,x:null,z:null,name:"Conceptual roof plate",
-  status:"ENGINEERING_HOLD",source:"MODEL_SF_OUTLINE_ASSUMED_ROOF"};
+  status:"ENGINEERING_HOLD",source:"MODEL_SF_OUTLINE_ASSUMED_ROOF",provenance:slab.roofProvenance||null};
  elements.push(roof);put(roof);
  // Inter-storey support must be visible as an audit, not asserted via floor area alone.
  const key=e=>round(e.x)+":"+round(e.z),colByLevel=new Map();
