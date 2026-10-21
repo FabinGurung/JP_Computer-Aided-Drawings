@@ -77,6 +77,33 @@ A real project uses \`publication.mode = "owner-approved-public"\` **plus** \`pu
 
 **Precision:** X and plan-depth Z are in metres; storey elevation is Y. Footprints must be counterclockwise and non-self-intersecting. The compiler computes outline area with shoelace geometry; that **is not a source-measured floor area**. A partition creates connected wall segments, auto-splitting along existing walls. The same-host opening offset is measured from the chosen wall start. A partition may split into multiple segments; the AI must specify \`segment\` when hosting against such a partition alias.
 
+## M16 — Per-storey source provenance and authoring constraints
+
+The shared AI-to-AAD compiler now supports an optional `sources` catalogue and per-level `geometryProvenance` markers. For `owner-approved-public` projects the marker is **required for every storey**. Unchanged synthetic demo fixtures default to `synthetic` provenance.
+
+Illustrative fragment (no actual client, no authorization to publish):
+
+```json
+{
+  "sources": [{"id":"A1","kind":"dxf","reference":"Owner-authorized drawing reference (approved for public publication)"}],
+  "levels": [
+    {"id":"gf","geometryProvenance":{"basis":"source-referenced","sourceId":"A1","locator":"Ground floor, drawing A1"}},
+    {"id":"ff","geometryProvenance":{"basis":"ai-inferred","rationale":"Conceptual first floor based on the requested layout"}}
+  ],
+  "constraints": {
+    "maxFloorPlateAreaM2": 80,
+    "maxTotalFloorPlateAreaM2": 160,
+    "buildableEnvelope": [[-1,-1],[11,-1],[11,9],[-1,9]]
+  }
+}
+```
+
+The fragment shows the additional properties; the complete project must still satisfy the full design schema and approval gate. `sources[].kind` supports `dxf`, `pdf`, `drawing`, `document`, `other`; source IDs must be unique. Use `source-referenced` only with a matching source ID and a specific page/sheet/layer locator. Use `ai-inferred` with an explicit rationale when the AI derived the geometry. `synthetic` is available only for public software demonstrations. **References are supplied by the author and are not independently authenticated**. Include only publicly authorized source references in the published specification, not private Drive links or secret tokens.
+
+Optional constraints are **user-supplied design assumptions, not automatically determined local code requirements**. They check each generated polygon area, the sum of generated floor-plate areas and containment of each transformed storey footprint in a counterclockwise world-XZ buildable envelope. Proper edge crossings and concave boundary excursions are rejected. A failed constraint stops compilation, rather than letting the website publish an apparently valid model. Existing projects with no new constraints continue to compile. The allowed v1 fields are `maxFloorPlateAreaM2`, `maxTotalFloorPlateAreaM2` and `buildableEnvelope`; unknown fields are rejected rather than silently ignored.
+
+The manifest retains `sourceAreaBasis: AI_POLYGON_SHOELACE_CALCULATED_NOT_SURVEYED` regardless of a drawing reference, and records `geometryProvenance` on each level and `sourceAuthority.sources`. The QA output includes `geometryProvenance` and `authoringConstraints`. **No survey validation, setbacks/zoning certification, code compliance, independently verified room areas, or structural approval is implied.** The published client geometry gate still requires direct owner approval; never invent it to satisfy the compiler.
+
 **Publication wording:** Generated project launchers distinguish `synthetic-demo` (clearly a software test, not a real property) from `owner-approved-public` (explicitly approved for public publication, but still source-geometry-unverified and on engineering HOLD). The generator never labels real owner-approved projects as synthetic. This guard is exercised by the AI compiler smoke tests.
 
 **Engineering:** The supplied column grid, slab thickness, beams and stairs are **illustrative engineering assumptions**, not code-checked structural solutions. The generator hardcodes engineering HOLD and issueForConstruction=false. Existing Narayani structural authority and frozen CAD stages are unaffected.
