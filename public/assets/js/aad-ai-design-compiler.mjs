@@ -7,6 +7,7 @@
 import {addConnectedWall,addHostedOpening} from "./aad-topology.mjs";
 import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs";
 import {writeIFC4,checkIfcReferences} from "./aad-building-ifc4.mjs";
+import {checkAADAuthoring} from "./aad-ai-authoring-qa.mjs";
 const round=n=>Math.round(n*1000)/1000;
 const finite=(n,k)=>{if(typeof n!=="number"||!Number.isFinite(n))throw Error(k+" must be a finite number");return n;};
 const positive=(n,k)=>{finite(n,k);if(n<=0)throw Error(k+" must be positive");return n;};
@@ -134,12 +135,15 @@ export function compileAADDesign(spec){
     rotationDeg:finite(shift.rotationDeg,"floor rotation")},status:"AI_CONCEPTUAL_GEOMETRY_NOT_VERIFIED"});
   qa.push({code:"AI_SHOELACE_AREA",level:level.id,m2:area,status:"CALCULATED_NOT_SOURCE_VERIFIED"});
  }
+ const authoring=checkAADAuthoring(spec,levelItems);
+ for(const level of levelItems)level.geometryProvenance=authoring.levels.find(p=>p.level===level.id);
  const manifest={
   schema:"jp-cad://aad-building/1",projectId,name:projectName,revision:"AI-DESIGN-01",
   coordinateSystem:{axes:"CAD_X_PLAN__CAD_Z_PLAN__Y_ELEVATION",units:"m",
    worldOrigin:"AI design local datum; NOT SURVEYED",ifcAxisConversion:"AAD X,Z,Y -> IFC X,Y,Z"},
   levels:levelItems,structural:struct,sourceAuthority:{type:"AI_STRUCTURED_DESIGN_INPUT",
    evidence:spec.evidence||{kind:"AI_AUTHORED",status:"NOT_VERIFIED"},
+   sources:authoring.sources,
    sourceAreaBasis:"AI_POLYGON_SHOELACE_CALCULATED_NOT_SURVEYED"},
   assumptions:[
    {code:"GEOMETRY",decision:"Coordinates and room arrangement provided in AI-authored design specification",status:"CONCEPTUAL_OWNER_REVIEW"},
@@ -168,5 +172,6 @@ export function compileAADDesign(spec){
   qa:{schema:"jp-cad://aad-ai-design-qa/1",stage:"AI_CONCEPTUAL_ENGINEERING_HOLD",
    designSpecSha256:null,areas:qa,sourceAreaTotal:assembly.area.source,modeledAreaTotal:assembly.area.model,
    topology:assembly.counts,ifcParsedEntities:parsed.lines,ifcTypeCounts:parsed.counts,warnings,
+   geometryProvenance:authoring.levels,authoringConstraints:authoring.checks,
    explicitPublicApproval:true,publicationMode:p.mode,issueForConstruction:false}};
 }
