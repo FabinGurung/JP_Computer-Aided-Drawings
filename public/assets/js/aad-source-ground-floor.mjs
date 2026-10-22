@@ -50,11 +50,40 @@ export function createSourceGroundFloorReview(input){
    source:{file:"ARCHITECTURAL_DXF",entityHandle:handle,nativeLineMM:[ax,ay,bx,by]},
    status:"DIRECT_DXF_WALL_EDGE_PARTIAL_SOURCE_PASS_NOT_FULL_CLOSED_GRAPH"});
  }
+ for(const [handle,points] of input.architecturePolylines||[]){
+  if(!Array.isArray(points)||points.length<2||points.length>100)throw Error("Invalid architectural polyline "+handle);
+  for(let i=0;i<points.length-1;i++){
+   const [ax,ay]=points[i],[bx,by]=points[i+1];
+   const a=arch(ax,ay),b=arch(bx,by);
+   add(elements,{id:"AWP-"+handle+"-"+String(i).padStart(2,"0"),kind:"architectural-line",
+    ax:a.x,az:a.z,bx:b.x,bz:b.z,x:round((a.x+b.x)/2),z:round((a.z+b.z)/2),
+    label:"Architectural wall polyline "+handle+" · segment "+(i+1),
+    source:{file:"ARCHITECTURAL_DXF",entityHandle:handle,subentitySegmentIndex:i,nativeLineMM:[ax,ay,bx,by]},
+    status:"DIRECT_DXF_WALL_POLYLINE_SEGMENT_PENDING_CLOSED_GRAPH"});
+  }
+ }
  const counts=Object.fromEntries(["column","footing","beam","architectural-line"].map(kind=>[kind,elements.filter(e=>e.kind===kind).length]));
- if(counts.column!==23||counts.footing!==21||counts.beam!==32)throw Error("Source extraction count contract failed");
- if(elements.filter(e=>e.kind==="footing"&&e.type==="CF1").length!==2)throw Error("CF1 combined footing count mismatch");
+ const expected=input.countsExpected||{};
+ if(expected.columns!==undefined&&counts.column!==expected.columns)throw Error("Source column count contract failed");
+ if(expected.isolatedFootings!==undefined&&expected.combinedFootings!==undefined&&
+  counts.footing!==expected.isolatedFootings+expected.combinedFootings)
+  throw Error("Source footing count contract failed");
+ if(expected.groundFloorBeamCandidateSegments!==undefined&&counts.beam!==expected.groundFloorBeamCandidateSegments)
+  throw Error("Source beam count contract failed");
+ if(expected.directSourceArchitecturalLines!==undefined&&expected.directSourceArchitecturalPolylineSegments!==undefined&&
+   counts["architectural-line"]!==expected.directSourceArchitecturalLines+expected.directSourceArchitecturalPolylineSegments)
+  throw Error("Source architectural edge count contract failed");
+ if(expected.combinedFootings!==undefined&&
+   elements.filter(e=>e.kind==="footing"&&e.type==="CF1").length!==expected.combinedFootings)
+  throw Error("Combined footing count mismatch");
  const conflicts=elements.filter(e=>e.conflict);
- if(conflicts.length!==1||!conflicts[0].columnIds.includes("SC-G1"))throw Error("G1 conflict must remain explicit");
+ const expectedConflicts=(input.issues||[]).filter(i=>i.footingHandle&&i.scheduledM);
+ if(expectedConflicts.length!==conflicts.length)throw Error("Footing source-conflict count mismatch");
+ for(const issue of expectedConflicts){
+  const f=conflicts.find(e=>e.source.entityHandle===issue.footingHandle);
+  if(!f||!issue.drawnM.every((v,i)=>Math.abs(v-[f.dx,f.dz][i])<1e-6))
+   throw Error("Footing conflict native footprint/handle does not match source record");
+ }
  const all=elements.flatMap(e=>Number.isFinite(e.ax)?[[e.ax,e.az],[e.bx,e.bz]]:[[e.x,e.z]]);
  const bounds={minX:Math.min(...all.map(p=>p[0])),maxX:Math.max(...all.map(p=>p[0])),
   minZ:Math.min(...all.map(p=>p[1])),maxZ:Math.max(...all.map(p=>p[1]))};
