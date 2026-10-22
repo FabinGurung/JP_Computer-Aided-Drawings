@@ -20,7 +20,7 @@ The data/geometry remain on this branch pending human visual review. This stage 
 - 19 individual native footing footprints and 2 CF1 combined footings, including linked `columnIds` and structural DXF entity handles.
 - G1: preserve exactly the native **1.8 × 1.8 m** drawn footing rectangle, with conspicuous HOLD because the IF3 callout/schedule is **2.1 × 2.1 m**. Do not resolve discrepancy automatically.
 - G3: preserve original structural centre, do not snap it to architectural walls.
-- 32 paired-edge GF beams as **DXF source candidates**, with width 230 mm deduced from paired edge spacing; beam depths and verified connectivity are **not** attached member-by-member. Their vertical 3D position is only a display aid.
+- 32 paired-edge GF beams as **DXF source candidates**, with width 230 mm deduced from paired edge spacing; beam depths and verified connectivity are **not** attached member-by-member. The new reproducible endpoint proximity report measures 64 source-edge candidate endpoints against nearest DXF column centres (54 within 0.5 m, 10 farther). This is **not** a structural support graph or approval. Source edge endpoints may terminate at joins or represent partial linework. Their vertical 3D position is only a display aid.
 - 32 original `LINE` entities and 12 original `LWPOLYLINE` records from the architectural DXF `wall 2` layer in the GF source area: **74 direct wall-edge segments** in total, retaining native CAD entity handles and polyline segment indices. These remain raw wall-edge source coverage, **not** a connected/closed room topology. Architectural block references, openings, and any remaining source wall components must be extracted and registered before claiming a complete ground-floor architectural rebuild.
 - Original AAD upper floors and old AI rectangular columns/beams are **not imported** into this source review.
 
@@ -28,8 +28,12 @@ The data/geometry remain on this branch pending human visual review. This stage 
 
 The shared view's 2D plan uses native registered metre positions; footing rectangles have true source plan width and depth. 3D column rod thickness/height, footing extrusion thickness, wall display elevations and beam display elevation are schematic so no unverified structural sizes are asserted. This first preview intentionally generates **linked 2D + 3D + source schedule only (Q12=A)**, not IFC.
 
+## Browser-test debt and release rule
+
+The previous failed PR #60 Actions run `39804374831` expected **32** architectural rendered edges even though the canonical ledger was extended to **74** (32 LINE + 42 LWPOLYLINE segments). The stale assertion is repaired; both unit and actual built-browser tests must pass on the **same latest commit** before any review-only public release. Publication does not mean the architectural topology or member connectivity is accepted. The new `aad-source-beam-support-review.mjs` adds a deterministic source-endpoint discrepancy ledger, flags unresolved candidate endpoints, and never snaps geometry.
+
 ## CI and review gates
 
 `tools/site/aad-source-gf-review-smoke.mjs` checks counts, source identities, coordinate transforms, deterministic reconstruction, CF1 support associations and G1 conflict preservation. `tools/site/aad-source-gf-review-browser-smoke.mjs` checks Vite built Pages-base path, rendered source ID selection, 2D/3D/table column coordinate parity, filtering, native G1 dimensions and warning labels; screenshot artifact is retained. GitHub Actions workflow `aad-source-gf-review.yml` runs on the PR **without publishing GitHub Pages**.
 
-**Do not merge to public production before visual review and completion of source architecture edges / room graph and structural member validation.** This preview is reviewable development material only, not engineering acceptance.
+**Publication scope:** The user requested an updated GitHub Pages review link after branch QA. A successful merge may expose this explicitly labeled **source-fidelity review-only** page on Pages for feedback. This is not approval of the live Narayani unified architectural BIM, source wall topology, member connectivity, IFC, or construction use. Do not replace `aad-building-v1.json` or treat this preview as an authoritative engineering member schedule. Keep all identified HOLDs and original DXF source hashes.
