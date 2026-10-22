@@ -89,6 +89,29 @@ body[data-view-mode="building"] #viewport2d{display:none}
 
 /* Canonical AAD shared selection: one object ID across synchronized regions. */
 #aad-selected-summary{font-size:12px;font-weight:750;color:#794710;background:#ffefcf;border:1px solid #f6ce88;border-radius:6px;padding:6px 10px;display:inline-flex;max-width:100%;overflow-wrap:anywhere}
+#aad-selected-details{display:grid;gap:5px;background:#fffaf0;border:1px solid #f0d5a3;border-radius:8px;padding:11px;margin:8px 0 11px;font-size:12px;overflow-wrap:anywhere}
+#aad-selected-details strong{font-size:14px;color:#794910}
+#aad-selected-details .aad-sel-meaning{font-size:12px;color:#3e5865}
+#aad-selected-details .aad-sel-hint{font-size:11px;color:#845420}
+#aad-selected-details .aad-sel-meta{font-size:11px;color:#536b76}
+#aad-audit-filters{display:flex;flex-wrap:wrap;gap:10px;align-items:end;padding:11px 14px;border-top:1px solid #e0ebee;border-bottom:1px solid #dae5e9;background:#f7fafb}
+#aad-audit-filters label{display:grid;gap:3px;font-size:11px;font-weight:650;color:#506675;min-width:120px}
+#aad-audit-filters input,#aad-audit-filters select{border:1px solid #b7cfd5;border-radius:7px;padding:8px;background:white;color:#193b48;max-width:100%}
+#aad-audit-filters input{min-width:190px;width:225px}
+#aad-audit-clear{white-space:nowrap}
+#aad-audit-count{padding:9px 14px;font-size:12px;color:#4c6875;background:#f8fbfb}
+#aad-audit-tree{padding:10px 13px 14px;display:grid;gap:9px}
+.aad-audit-level{border:1px solid #cfdee3;border-radius:10px;overflow:hidden;background:white}
+.aad-audit-level>summary{padding:12px 14px;background:#e5f1f2;font-size:14px;cursor:pointer}
+.aad-audit-discipline{margin:8px 9px;border:1px solid #dbe6e7;border-radius:9px;overflow:hidden}
+.aad-audit-discipline>summary{padding:9px 12px;background:#f0f6f7;font-size:12px}
+.aad-audit-type{margin:7px;border:1px solid #e2e9ec;border-radius:7px;overflow:hidden}
+.aad-audit-type>summary{padding:8px 11px;font-size:12px;background:#fbfdfd}
+.aad-audit-type .table-wrap{max-height:430px;overflow:auto}
+.aad-audit-type table{min-width:850px}
+.aad-audit-level summary:focus-visible,.aad-audit-discipline summary:focus-visible,.aad-audit-type summary:focus-visible{outline:2px solid #138579;outline-offset:-2px}
+#aad-audit-empty{padding:18px;font-size:12px;color:#637780}
+@media(max-width:650px){#aad-audit-filters label{flex:1 1 42%}#aad-audit-filters input{min-width:0;width:100%}}
 #viewer2d .is-selected{stroke:#f48112!important;opacity:1!important;stroke-width:.35!important;filter:drop-shadow(0 0 4px #ef9a23);outline:none}
 #viewer2d .aad-node.is-selected{stroke:#a85105!important;fill:#ffad47!important}
 #viewer2d [data-plan-selection-marker] circle{filter:drop-shadow(0 0 5px #f3ab32)}
@@ -124,6 +147,7 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <span id="action-status" role="status" style="font-size:11px;color:#466478">Preparing geometry…</span>
 </div>
 <div id="aad-selected-summary" role="status" aria-live="polite" aria-label="Currently selected building component">Select an element in 2D, 3D or the component schedule</div>
+<div id="aad-selected-details" aria-label="Selected item explained" aria-live="polite"><strong>Nothing selected</strong><span class="aad-sel-meaning">Choose an object or geometry node in either viewport or the component register to see what it means.</span></div>
 <div class="unified-toolbar" aria-label="AAD building editor controls">
 <label for="aad-storey">Storey <select id="aad-storey"><option value="all">All levels</option></select></label>
 <label for="aad-view-mode">View <select id="aad-view-mode"><option value="split">2D left · 3D right</option><option value="plan">2D plan only</option><option value="building">3D building only</option></select></label>
@@ -189,7 +213,20 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <p id="aad-room-summary">Calculating connected closed regions from the current editable floor graph…</p>
 <div class="table-wrap"><table><thead><tr><th>Storey</th><th>Room ID</th><th>Computed area (m²)</th><th>Local centroid (X, Z)</th><th>Boundary status</th></tr></thead><tbody id="aad-rooms"></tbody></table></div>
 <div class="foot" style="padding:0 12px 10px">These are topological room-face candidates derived from walls, not surveyed room areas or certified IFC spaces. Open/disconnected graph regions may not produce a room.</div></div>
-<div class="audit"><h2>Building components · one coordinate system</h2><div class="table-wrap"><table><thead><tr><th>ID</th><th>Storey</th><th>IFC class</th><th>Type</th><th>Global X</th><th>Global Y</th><th>Global Z</th><th>Dimension / size</th><th>Evidence</th></tr></thead><tbody id="elements"></tbody></table></div></div>
+<div class="audit" id="aad-audit-register">
+<h2>Building components · grouped BIM register</h2>
+<div id="aad-audit-filters" aria-label="BIM component table filters">
+<label for="aad-audit-storey">Storey<select id="aad-audit-storey"><option value="all">All storeys</option></select></label>
+<label for="aad-audit-discipline">Discipline<select id="aad-audit-discipline"><option value="all">All disciplines</option><option value="Architecture">Architecture</option><option value="Structure">Structure</option><option value="Other">Other</option></select></label>
+<label for="aad-audit-kind">Element type<select id="aad-audit-kind"><option value="all">All types</option><option value="wall">Walls</option><option value="door">Doors</option><option value="window">Windows</option><option value="stair">Stairs</option><option value="column">Columns</option><option value="beam">Beams</option><option value="slab">Floor slabs</option><option value="landing">Landings</option><option value="roof">Roofs</option></select></label>
+<label for="aad-audit-sort">Within type, sort by<select id="aad-audit-sort"><option value="id">Element ID</option><option value="name">Name</option><option value="x">World X ↑</option><option value="z">World Z ↑</option><option value="kind">Type</option></select></label>
+<label for="aad-audit-search">Find component<input id="aad-audit-search" type="search" placeholder="ID, label, source, IFC class…" autocomplete="off"></label>
+<button type="button" id="aad-audit-clear">Clear filters</button>
+</div>
+<div id="aad-audit-count" role="status" aria-live="polite">Loading elements…</div>
+<div id="elements" aria-label="BIM components grouped by storey, discipline and type"><div id="aad-audit-empty">Preparing categorized register…</div></div>
+<div class="foot" style="padding:0 14px 10px">Open a storey → discipline → element type to inspect matching components. Select any row to highlight the identical BIM ID in both viewports. Architecture/Structure here are register groupings, not verified structural classifications.</div>
+</div>
 <div class="foot">IFC4 download uses the common AAD IFC writer and requires external parse validation. IFC hierarchy/classification does not certify assumed structural elements. Archived V02–M80 engineering packages remain untouched.</div>
 </main>
 <script type="module" src="./main.js"></script>
