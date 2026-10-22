@@ -16,7 +16,7 @@ const segmentDistance=(p,a,b)=>{
 };
 export function auditAADStructuralRegistration(elements,levels,manifest,{reviewToleranceM=.2}={}){
  if(!(reviewToleranceM>0&&reviewToleranceM<=1))throw Error("AAD review tolerance must be positive and no greater than 1m");
- const byLevel=[],details=[],diagnostics=[];
+ const byLevel=[],details=[],beams=[],diagnostics=[];
  const origin=manifest.structural?.columns?.source||"STRUCTURAL_GRID_SOURCE_UNSPECIFIED";
  for(const level of levels){
   const cols=elements.filter(e=>e.kind==="column"&&e.level===level.id);
@@ -31,9 +31,18 @@ export function auditAADStructuralRegistration(elements,levels,manifest,{reviewT
     reviewStatus:"NOT_STRUCTURALLY_VERIFIED"};
   });
   details.push(...reviewed);
+  const beamRows=elements.filter(e=>e.kind==="beam"&&e.level===level.id).map(e=>{
+   const near=walls.map(w=>{
+    const [a,b]=wallEndpoints(w);return{id:w.id,metres:segmentDistance({x:e.x,z:e.z},a,b)};
+   }).sort((a,b)=>a.metres-b.metres)[0]||null;
+   return{elementId:e.id,level:level.id,nearestWallId:near?.id||null,
+    centreDistanceToWallM:near?round(near.metres):null,
+    note:"Beam midpoint proximity is NOT proof of support, continuous alignment or code compliance"};
+  });
+  beams.push(...beamRows);
   const distant=reviewed.filter(c=>c.distanceToWallCenterlineM===null||c.distanceToWallCenterlineM>reviewToleranceM);
   byLevel.push({level:level.id,columns:cols.length,withinReviewTolerance:cols.length-distant.length,
-   beyondReviewTolerance:distant.length});
+   beyondReviewTolerance:distant.length,beams:beamRows.length,beamMidpointsBeyondTolerance:beamRows.filter(b=>b.centreDistanceToWallM===null||b.centreDistanceToWallM>reviewToleranceM).length});
   // This is a review need, not an ERROR: detached columns can be legitimate.
   if(distant.length)diagnostics.push({severity:"WARNING",code:"COLUMN_WALL_REGISTRATION_REVIEW",level:level.id,
    message:distant.length+"/"+cols.length+" column centres are farther than "+reviewToleranceM+
@@ -46,7 +55,7 @@ export function auditAADStructuralRegistration(elements,levels,manifest,{reviewT
  return{schema:"jp-cad://aad-structural-registration-review/1",
   kind:"geometric-proximity-audit-not-code-check",
   gridOrigin:origin,sourceStructuralDrawingId:manifest.sourceAuthority?.structuralDxfDriveId||null,
-  axes:"BUILDING_WORLD_XZ_METRES",reviewToleranceM,levels:byLevel,columns:details,
+  axes:"BUILDING_WORLD_XZ_METRES",reviewToleranceM,levels:byLevel,columns:details,beams,
   approval:"ENGINEERING_HOLD",recommendedAction:"RECONCILE_CITED_STRUCTURAL_DXF_TO_ARCHITECTURAL_DATUM_BEFORE_MOVING_GRID",
   diagnostics};
 }
