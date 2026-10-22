@@ -8,6 +8,7 @@ import {addConnectedWall,addHostedOpening} from "./aad-topology.mjs";
 import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs";
 import {writeIFC4,checkIfcReferences} from "./aad-building-ifc4.mjs";
 import {checkAADAuthoring,normalizeAADComponentEvidence} from "./aad-ai-authoring-qa.mjs";
+import {checkAADArchitecturalConstraints} from "./aad-ai-spatial-qa.mjs";
 const round=n=>Math.round(n*1000)/1000;
 const finite=(n,k)=>{if(typeof n!=="number"||!Number.isFinite(n))throw Error(k+" must be a finite number");return n;};
 const positive=(n,k)=>{finite(n,k);if(n<=0)throw Error(k+" must be positive");return n;};
@@ -200,6 +201,7 @@ export function compileAADDesign(spec){
    provenance:componentEvidence.stairs,landingProvenance:componentEvidence.landing};
   qa.push({code:"STAIR_DIMENSIONS_ASSUMED",status:"ENGINEERING_HOLD"});
  }
+ const architecturalChecks=checkAADArchitecturalConstraints(spec,levelItems,sourceModels,authoring.sources);
  const assembly=assembleBuilding(manifest,sourceModels);
  const trace=assembly.elements.filter(e=>e.ifcType).map(e=>({id:e.id,kind:e.kind,level:e.level,provenance:e.provenance||null}));
  if(trace.some(e=>!e.provenance))throw Error("AAD component provenance missing from BIM assembly");
@@ -213,7 +215,7 @@ export function compileAADDesign(spec){
   qa:{schema:"jp-cad://aad-ai-design-qa/1",stage:"AI_CONCEPTUAL_ENGINEERING_HOLD",
    designSpecSha256:null,areas:qa,sourceAreaTotal:assembly.area.source,modeledAreaTotal:assembly.area.model,
    topology:assembly.counts,ifcParsedEntities:parsed.lines,ifcTypeCounts:parsed.counts,warnings,
-   geometryProvenance:authoring.levels,authoringConstraints:authoring.checks,
+   geometryProvenance:authoring.levels,authoringConstraints:[...authoring.checks,...architecturalChecks],
    componentProvenance:trace,
    explicitPublicApproval:true,publicationMode:p.mode,issueForConstruction:false}};
 }
