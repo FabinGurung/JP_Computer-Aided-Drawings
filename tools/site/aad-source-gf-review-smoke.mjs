@@ -44,7 +44,7 @@ assert.deepEqual(m,canonicalAgain,"Source geometry assembly must be deterministi
 const tampered=structuredClone(input);tampered.footings[0][7]="SC-INVALID";
 assert.throws(()=>createSourceGroundFloorReview(tampered),/references unknown/);
 const tamperedConflict=structuredClone(input);tamperedConflict.footings.find(x=>x[0]==="SF-ACE9E")[8]=0;
-assert.throws(()=>createSourceGroundFloorReview(tamperedConflict),/G1 conflict must remain explicit/);
+assert.throws(()=>createSourceGroundFloorReview(tamperedConflict),/Footing source-conflict count mismatch/);
 for(const path of ["cad/aad/source-review/index.html","cad/aad/source-review/main.js",
   "public/projects/narayani-parajuli/aad-source-review/index.html"]){
  assert.ok(fs.statSync(path).size>100);
