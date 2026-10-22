@@ -1,0 +1,52 @@
+name: AAD Source Ground Floor Review QA
+on:
+  pull_request:
+    paths:
+      - "public/assets/js/aad-source-ground-floor.mjs"
+      - "public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json"
+      - "cad/aad/source-review/**"
+      - "public/projects/narayani-parajuli/aad-source-review/**"
+      - "tools/site/aad-source-gf-review-*.mjs"
+      - "vite.config.ts"
+      - ".github/workflows/aad-source-gf-review.yml"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  source-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: "npm"
+      - run: npm ci
+      - name: Original DXF candidate provenance and geometry contract
+        run: node tools/site/aad-source-gf-review-smoke.mjs
+      - name: Build the common AAD source-preview engine under the real Pages base
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          test -s dist/cad/aad/source-review/index.html
+          test -s dist/data/projects/narayani-parajuli/aad-source-gf-review-v1.json
+          test -s dist/projects/narayani-parajuli/aad-source-review/index.html
+      - name: Install Chromium browser QA
+        run: |
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+      - name: Preview, 2D/3D coordinate proof and exception inspection
+        run: |
+          (npm run preview -- --host 127.0.0.1 --port 5202 --base=/JP_Computer-Aided-Drawings/ >/tmp/aad-source-preview-vite.log 2>&1 &)
+          for i in $(seq 1 35); do
+            curl -fsS http://127.0.0.1:5202/JP_Computer-Aided-Drawings/cad/aad/source-review/ >/dev/null && break
+            sleep 2
+          done
+          AAD_SOURCE_REVIEW_URL=http://127.0.0.1:5202/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad-source-review/ node tools/site/aad-source-gf-review-browser-smoke.mjs
+      - name: Preserve visual source-review proof
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: narayani-source-gf-branch-review
+          path: /tmp/aad-narayani-source-gf-review.png
+          if-no-files-found: ignore
