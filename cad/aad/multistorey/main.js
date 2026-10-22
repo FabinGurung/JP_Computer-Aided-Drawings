@@ -164,6 +164,11 @@ function htmlText(e){
  if(Number.isFinite(e.x))spans.push("World (X, Y, Z): ("+[e.x,e.y,e.z].map(v=>Number(v).toFixed(3)).join(", ")+") m");
  if(Number.isFinite(e.dx))spans.push("Metric size (L/H/T): "+[e.dx,e.dy,e.dz].map(v=>Number(v).toFixed(3)).join(" × ")+" m");
  if(e.profile)spans.push("Polygon vertices: "+e.profile.length+", stair voids: "+(e.holes?.length||0));
+ if(e.provenance){
+  spans.push("Evidence basis: "+e.provenance.basis+" ("+e.provenance.scope+")");
+  if(e.provenance.sourceId)spans.push("Source ID: "+e.provenance.sourceId+" · locator: "+e.provenance.locator);
+  if(e.provenance.rationale)spans.push("AI assumption: "+e.provenance.rationale);
+ }
  if(e.host)spans.push("Hosted on: "+e.host);
  return spans.join("\n");
 }
@@ -210,7 +215,9 @@ function addRows(){
  const tbody=$("elements");tbody.replaceChildren();rowsById.clear();
  for(const e of building.elements.filter(e=>e.ifcType)){
   const tr=document.createElement("tr");tr.dataset.elementId=e.id;tr.tabIndex=0;tr.setAttribute("role","button");tr.setAttribute("aria-selected","false");const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):e.profile?"Polygon / "+e.dy+"m":"Steps "+e.steps?.length;
-  for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,e.status]){
+  const trace=e.provenance?e.provenance.basis+(e.provenance.sourceId?" · "+e.provenance.sourceId:"")+
+   (e.provenance.scope?" · "+e.provenance.scope:""):e.status;
+  for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,trace]){
    const td=document.createElement("td");td.textContent=s;tr.append(td);
   }
   tr.addEventListener("click",()=>selectElement(e));tr.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(e);}});tbody.append(tr);rowsById.set(e.id,tr);
