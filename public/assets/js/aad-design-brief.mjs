@@ -34,10 +34,10 @@ export function prepareAADDesignBrief(input){
     status:usedUnit?sourceStatus:"NEEDS_UNIT_CONFIRMATION"};
   }
  }
- const people=text.match(/(?:family\\s+of|for|household\\s+of)\\s*(\\d+|one|two|three|four|five|six|seven|eight|nine|ten)\\s*(?:people|persons|members)?/i);
+ const people=text.match(/(?:family\s+of|for|household\s+of)\s*(\d+|one|two|three|four|five|six|seven|eight|nine|ten)\s*(?:people|persons|members)?/i);
  const occupants=people?readable(people[1]):null;
- const city=/\\bpokhara\\b/i.test(text)?"Pokhara, Nepal":null;
- const explicitBedrooms=text.match(/(\\d+)\\s*(?:bedrooms?|beds?)\\b/i);
+ const city=/\bpokhara\b/i.test(text)?"Pokhara, Nepal":null;
+ const explicitBedrooms=text.match(/(\d+)\s*(?:bedrooms?|beds?)\b/i);
  const bedrooms=explicitBedrooms?Number(explicitBedrooms[1]):null;
  const wantsStoreys=/(?:two|2)[ -]?(?:storeys|stories|floors)/i.test(text)?2:
   /(?:single|one|1)[ -]?(?:storey|story|floor)/i.test(text)?1:null;
