@@ -31,6 +31,34 @@ const beamDesc=describeAADSelection(original.assembly.elements.find(e=>e.kind===
 assert.equal(wallDesc.representation,"ACTUAL_2D_GEOMETRY_AND_3D");
 assert.equal(beamDesc.representation,"2D_LOCATION_ONLY__3D_GEOMETRY");
 assert.match(beamDesc.representationHint,/not a physical dot/);
+// M19: matching identical XYZ across displays is not proof that structural
+// grid axes align with architectural wall centre-lines or source structural DXF.
+const registration=original.assembly.structuralAlignment;
+assert.equal(registration.approval,"ENGINEERING_HOLD");
+assert.equal(registration.axes,"BUILDING_WORLD_XZ_METRES");
+assert.match(registration.gridOrigin,/AI_INFERRED_4x3_AXIS_GRID_NOT_DXF_CERTIFIED/);
+assert.equal(registration.sourceStructuralDrawingId,manifest.sourceAuthority.structuralDxfDriveId);
+assert.equal(registration.levels.length,3);
+assert.ok(registration.levels[0].beyondReviewTolerance>=8,
+ "Narayani ground-floor conceptual grid requires wall-alignment review");
+assert.ok(registration.columns.some(c=>c.level==="gf"&&c.distanceToWallCenterlineM>1));
+assert.ok(original.assembly.diagnostics.some(d=>d.code==="COLUMN_WALL_REGISTRATION_REVIEW"));
+assert.ok(original.assembly.diagnostics.some(d=>d.code==="STRUCTURAL_GRID_PROVENANCE_REVIEW"));
+// Altering the MANIFEST grid changes every derived column/beam in one shared
+// assembly. Original protected architectural wall-graph coordinates stay intact.
+const trial=structuredClone(manifest);
+trial.structural.columns.gridX[0]+=0.4;
+const alternate=createAADWorkspace(trial,models).snapshot();
+const baselineColumn=original.assembly.elements.find(e=>e.id===manifest.projectId+":gf:COL:G1-1");
+const movedColumn=alternate.assembly.elements.find(e=>e.id===baselineColumn.id);
+assert.ok(baselineColumn&&movedColumn);
+assert.equal(Number((movedColumn.x-baselineColumn.x).toFixed(3)),0.4);
+const baseBeam=original.assembly.elements.find(e=>e.id===manifest.projectId+":gf:BEAM-X:0-0");
+const newBeam=alternate.assembly.elements.find(e=>e.id===baseBeam.id);
+assert.notEqual(newBeam.x,baseBeam.x,"Beams must rederive from changed column grid axes");
+assert.equal(alternate.models.gf.floorGraph.nodes.find(n=>n.id==="N01").x,
+ original.models.gf.floorGraph.nodes.find(n=>n.id==="N01").x);
+assert.equal(alternate.assembly.reviewStatus,"DRAFT_ENGINEERING_HOLD");
 const readOnly=state.snapshot();readOnly.models.gf.floorGraph.walls[0].thickness=99;
 readOnly.assembly.elements.find(e=>e.kind==="wall").dz=99;
 readOnly.manifest.levels[0].sourceArea=999;
