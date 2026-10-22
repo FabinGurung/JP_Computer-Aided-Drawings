@@ -44,6 +44,53 @@ try{
  assert.equal(await page.locator('#elements tr[data-element-id="'+selected+'"]').getAttribute("aria-selected"),"true");
  const planSelection=await page.locator("#viewer2d .is-selected").count(),marker=await page.locator("#viewer2d [data-plan-selection-marker]").count();
  assert.ok(planSelection+marker>=1,"3D selection needs a visible authored 2D highlight or explicit plan locator");
+ // M18: the shared template explains the selected BIM object in plain terms.
+ assert.match(await page.locator("#aad-selected-details").innerText(),/Element ID:|Editable junction node/);
+ assert.equal(await page.locator("#aad-audit-register").count(),1);
+ assert.equal(await page.locator("#elements > details.aad-audit-level").count(),3);
+ const gf=page.locator('#elements > details[data-level="gf"]');
+ assert.ok((await gf.locator("summary").first().innerText()).includes("components"));
+ assert.ok(await gf.locator('details[data-discipline="Architecture"]').count()>0);
+ assert.ok(await gf.locator('details[data-discipline="Structure"]').count()>0);
+ assert.ok(await gf.locator('details[data-kind="column"]').count()>0);
+ await page.locator("#aad-audit-storey").selectOption("ff");
+ assert.equal(await page.locator("#elements > details.aad-audit-level").count(),1);
+ assert.equal(await page.locator("#elements > details.aad-audit-level").first().getAttribute("data-level"),"ff");
+ await page.locator("#aad-audit-discipline").selectOption("Structure");
+ assert.ok((await page.locator("#elements tr").count())>0);
+ assert.equal(await page.locator('#elements details[data-discipline="Architecture"]').count(),0);
+ await page.locator("#aad-audit-kind").selectOption("column");
+ assert.ok((await page.locator("#elements tr").count())>0);
+ assert.equal(await page.locator('#elements details[data-kind="beam"]').count(),0);
+ await page.locator("#aad-audit-sort").selectOption("x");
+ const coords=await page.locator("#elements tr td:nth-child(5)").allInnerTexts();
+ const valid=coords.map(Number).filter(Number.isFinite);
+ assert.ok(valid.every((x,i)=>i===0||x>=valid[i-1]-1e-6),"World-X sort must be ascending");
+ await page.locator("#aad-audit-search").fill("NO_MATCH_999");
+ assert.equal(await page.locator("#elements tr").count(),0);
+ assert.match(await page.locator("#aad-audit-count").innerText(),/Showing 0/);
+ await page.locator("#aad-audit-clear").click();
+ assert.equal(await page.locator("#elements > details.aad-audit-level").count(),3);
+ // A selection originating outside the register must reveal the correct
+ // filtered-out row and open all its ancestor groups.
+ await page.locator("#aad-audit-kind").selectOption("beam");
+ assert.equal(await page.locator('#elements tr[data-element-id="PRJ-000007:gf:EXT-01"]').count(),0);
+ assert.equal(await page.evaluate(()=>window.AADStudio.selectElementById("PRJ-000007:gf:EXT-01")),true);
+ assert.equal(await page.locator("#aad-audit-kind").inputValue(),"all");
+ assert.equal(await page.locator('#elements tr[data-element-id="PRJ-000007:gf:EXT-01"]').getAttribute("aria-selected"),"true");
+ const wallGroups=await page.locator('#elements tr[data-element-id="PRJ-000007:gf:EXT-01"]').evaluate(n=>{
+  const groups=[];for(let p=n.parentElement;p;p=p.parentElement)if(p.tagName==="DETAILS")groups.push(p.open);
+  return groups;
+ });
+ assert.ok(wallGroups.length===3&&wallGroups.every(Boolean));
+ // The orange dot is a topology control handle when a wall-graph node is
+ // selected, not a column or an additional physical IFC element.
+ await page.locator("#aad-storey").selectOption("gf");
+ await page.locator("#viewer2d .aad-node").first().dispatchEvent("click");
+ assert.match(await page.locator("#aad-selected-details").innerText(),/wall-graph geometry control point/);
+ assert.match(await page.locator("#aad-selected-details").innerText(),/NOT a concrete column/);
+ assert.match(await page.locator("#aad-selected-details").innerText(),/orange 3D dot/);
+ assert.ok((await page.locator("#viewer2d .aad-node.is-selected").count())===1);
  // Programmatic AI action interface shares exact same validation and render path.
  const result=await page.evaluate(()=>window.AADStudio.change({level:"gf",kind:"wall",id:"EXT-01",patch:{thickness:.31}}));
  assert.ok(result.version>0);
