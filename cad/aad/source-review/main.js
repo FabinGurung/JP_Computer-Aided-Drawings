@@ -23,6 +23,13 @@ $("counts").replaceChildren(...Object.entries(model.counts).map(([kind,n])=>{
 $("registration").textContent="Structural → architectural DXF registration: +"+
  model.registration.structuralToArchitecturalMM.dx.toFixed(6)+" mm X, "+
  model.registration.structuralToArchitecturalMM.dy.toFixed(6)+" mm Y; rotation 0°, scale 1; coordinates source-native (mm) → shared preview world X/Z (m).";
+const beamReview=model.beamEndpointReview;
+const supportNotice=document.createElement("li");supportNotice.className="warning";
+supportNotice.textContent="GF BEAM ENDPOINTS · SOURCE REVIEW: "+beamReview.beyondTolerance+
+ " / "+beamReview.endpoints+" paired-edge candidate endpoints are more than "+
+ beamReview.toleranceM+" m from their nearest sourced column centre. "+
+ "This is not a beam support or load-path validation; do not automatically snap, trim or connect.";
+$("issues").append(supportNotice);
 for(const issue of model.issues){const li=document.createElement("li");li.className="warning";
  li.textContent=issue.code+": "+(issue.note||issue.decision||"Source review HOLD");$("issues").append(li);}
 const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"architectural-line":0x376b7f};
@@ -148,6 +155,10 @@ function choose(id){
   JSON.stringify(e.source.sourceMM||e.source.nativeLineMM||e.source.nativeLineMM),
   e.kind==="footing"?"Native drawn footprint: "+e.dx+" × "+e.dz+" m · columns: "+e.columnIds.join(", "):"",
   e.kind==="beam"?"DXF paired-edge width: "+e.width+" m; height and support graph unverified":"",
+  ...(e.kind==="beam"?model.beamEndpointReview.details.filter(v=>v.beamId===e.id).map(v=>
+   "Endpoint "+v.end+": nearest column candidate "+v.nearestColumnId+
+   " at "+v.distanceM+" m; proximity within "+beamReview.toleranceM+" m: "+
+   (v.withinDisplayTolerance?"YES":"NO — REVIEW")+"; not confirmed as support"):[]),
   e.conflict?"G1 CRITICAL: native drawn 1.8 × 1.8 m while IF3 callout/schedule requires 2.1 × 2.1 m":"",
   "Status: "+e.status,"This is source geometry for review, NOT structural approval."
  ].filter(Boolean).join("\n");
