@@ -2,6 +2,7 @@
  * Independent of the legacy AI rectangular structural grid.
  * REVIEW geometry only: no assumptions of verified structural dimensions.
  */
+import {reviewSourceBeamEndpoints} from "./aad-source-beam-support-review.mjs";
 const requireText=(v,l)=>{if(typeof v!=="string"||!v.trim())throw Error("Missing "+l);return v;};
 const finite=(v,l)=>{const n=Number(v);if(!Number.isFinite(n))throw Error("Invalid "+l);return n;};
 const round=x=>Math.round(x*1e6)/1e6;
@@ -62,6 +63,7 @@ export function createSourceGroundFloorReview(input){
     status:"DIRECT_DXF_WALL_POLYLINE_SEGMENT_PENDING_CLOSED_GRAPH"});
   }
  }
+ const beamEndpointReview=reviewSourceBeamEndpoints(elements);
  const counts=Object.fromEntries(["column","footing","beam","architectural-line"].map(kind=>[kind,elements.filter(e=>e.kind===kind).length]));
  const expected=input.countsExpected||{};
  if(expected.columns!==undefined&&counts.column!==expected.columns)throw Error("Source column count contract failed");
@@ -91,6 +93,6 @@ export function createSourceGroundFloorReview(input){
  return{schema:"jp-cad://aad-source-gf-assembly/1",projectId:input.projectId,
   name:input.name,phase:"GROUND_FLOOR_SOURCE_REVIEW_ONLY",stage:"ENGINEERING_HOLD",
   productionApproved:false,sourceAuthority:input.sourceAuthority,
-  registration,counts,bounds,elements,issues:input.issues||[],disclaimer:
+  registration,counts,bounds,elements,beamEndpointReview,issues:input.issues||[],disclaimer:
    "Original DXF-derived source candidates, not a certified structural model. CAD element fidelity and floor/beam connectivity require further QA. No IFC, construction approval, or live BIM replacement."};
 }
