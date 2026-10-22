@@ -99,7 +99,7 @@ function validateStructure(s){
  const gridX=grids(columns.gridX,"gridX"),gridZ=grids(columns.gridZ,"gridZ");
  for(const v of [gridX,gridZ])for(let i=1;i<v.length;i++)if(v[i]<=v[i-1]+.2)throw Error("Unsorted column grid axes");
  return{
- columns:{gridX,gridZ,sizeX:positive(columns.sizeX,"column sizeX"),sizeZ:positive(columns.sizeZ,"column sizeZ"),
+ columns:{gridX,gridZ,coordinateFrame:"WORLD_XZ_METRES",sizeX:positive(columns.sizeX,"column sizeX"),sizeZ:positive(columns.sizeZ,"column sizeZ"),
  source:"AI_CONCEPTUAL_NOT_STRUCTURALLY_DESIGNED"},
  beams:{widthX:positive(beams.widthX,"beam widthX"),widthZ:positive(beams.widthZ,"beam widthZ"),
  depth:positive(beams.depth,"beam depth"),source:"AI_CONCEPTUAL_NOT_STRUCTURALLY_DESIGNED"},
