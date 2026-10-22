@@ -26,7 +26,9 @@ assert.deepEqual(g1.columnIds,["SC-G1"]);
 assert.ok(m.issues.some(i=>i.code==="G1_FOOTING_DIMENSION_CONFLICT"&&i.scheduledM[0]===2.1));
 assert.ok(m.issues.some(i=>i.code==="G3_OFFSET_REVIEW"&&i.decision.includes("NO_SNAPPING")));
 assert.equal(g1col.source.entityHandle,"AEB80");
-assert.ok(Math.abs(g1col.x-g1.x)<.000001&&Math.abs(g1col.z-g1.z)<.000001);
+// Source points are independently rounded to the nearest 0.001 mm when transformed.
+assert.ok(Math.abs(g1col.x-g1.x)<=.000002&&Math.abs(g1col.z-g1.z)<=.000002,
+ "G1 native column and footing centres differ by more than 0.002 mm");
 assert.equal(get("SF-AD0BC").columnIds.length,2);
 assert.equal(get("SF-AD0BE").columnIds.length,2);
 assert.equal(m.elements.filter(e=>e.kind==="footing"&&e.type==="CF1").length,2);
