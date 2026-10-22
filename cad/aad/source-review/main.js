@@ -44,7 +44,7 @@ function drawPlan(){
  for(let x=Math.floor(b.x);x<=b.x+b.w;x++)ggrid.append(node("line",{x1:x,y1:b.y,x2:x,y2:b.y+b.h}));
  for(let z=Math.floor(b.y);z<=b.y+b.h;z++)ggrid.append(node("line",{x1:b.x,y1:z,x2:b.x+b.w,y2:z}));
  svg.append(ggrid);
- for(const e of model.elements){
+ for(const e of [...model.elements].sort((a,b)=>({"architectural-line":0,footing:1,beam:2,column:3}[a.kind])-({"architectural-line":0,footing:1,beam:2,column:3}[b.kind]))){
   if(!shown.has(e.kind))continue;
   const active=e.id===selectedId;
   let g;
