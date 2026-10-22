@@ -143,6 +143,13 @@ function showAADSelectionDetails(picked){
    line("meta","World X/Y/Z: "+[picked.x,picked.y,picked.z].map(x=>Number(x).toFixed(3)).join(" / ")+" m");
   else if(picked.profile)line("meta","Plan polygon: "+picked.profile.length+" vertices (world X/Z)");
   line("meta","Evidence: "+d.evidence+(d.sourceId?" · source "+d.sourceId:"")+" · "+picked.status);
+  if(picked.kind==="column"){
+   const review=building.structuralAlignment?.columns.find(x=>x.elementId===picked.id);
+   if(review)line("hint","Structural position NOT VERIFIED. Nearest drawn wall centreline: "+
+    (review.distanceToWallCenterlineM??"unknown")+" m"+(review.nearestWallId?" ("+review.nearestWallId+")":"")+
+    ". This column was assembled from the project structural grid, not traced to a verified DXF centre.");
+  }
+  if(picked.kind==="beam")line("hint","Beam position is generated between manifest grid axes. Its relationship to structural source coordinates needs registration.");
   return;
  }
  if(activeEdit?.kind==="node"&&selectedId){
@@ -153,7 +160,7 @@ function showAADSelectionDetails(picked){
    const world=projectToWorld(n,l.transform);
    const joined=g.walls.filter(w=>w.a===n.id||w.b===n.id).map(w=>w.id);
    line("head","Editable junction node "+n.id+" · "+l.name);
-   line("meaning","This is a wall-graph geometry control point, NOT a concrete column, beam or IFC building component.");
+   line("meaning","This is a wall-graph geometry control point, NOT automatically a concrete column, beam or IFC building component. It may be an intended column location but has no verified structural-grid assignment.");
    line("hint","The orange circle in 2D is the selected edit handle. The orange 3D dot is only a visual locator raised for visibility, not physical building material.");
    line("meta","Floor-local X/Z: "+n.x.toFixed(3)+" / "+n.z.toFixed(3)+" m · World X/Z: "+world.x.toFixed(3)+" / "+world.z.toFixed(3)+" m");
    line("meta","Connected wall IDs: "+(joined.join(", ")||"none")+" · Storey elevation "+l.elevation.toFixed(3)+" m");
@@ -357,6 +364,14 @@ function runQa(){
   summary.push("IFC walls: "+file.counts.IfcWall+" / columns: "+file.counts.IfcColumn+" / doors: "+file.counts.IfcDoor);
   summary.push("IFC external parser check: validated by release CI; see GitHub Actions");
  }catch(e){summary.push("IFC EXPORT FAILED: "+e.message);}
+ const registration=building.structuralAlignment;
+ if(registration){
+  summary.push("Structural grid positioning: HOLD — "+registration.gridOrigin);
+  for(const level of registration.levels)summary.push(level.level.toUpperCase()+": "+
+   level.beyondReviewTolerance+"/"+level.columns+" column centres farther than "+
+   registration.reviewToleranceM+" m from nearest architectural wall centreline.");
+  summary.push("Wall proximity is only a review signal. The original structural DXF must be registered to the architectural datum; DO NOT auto-snap columns to walls.");
+ }
  summary.push("Structural capacity/code QA: HOLD (assumptions, not design)");
  $("qa-result").textContent=summary.join("\n");
  return result;

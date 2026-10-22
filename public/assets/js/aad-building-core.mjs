@@ -4,6 +4,7 @@
  * Map coordinate convention: X east of local origin; Z plan-depth; Y elevation.
  * IFC export maps these to IFC X,Y,Z respectively.
  */
+import {auditAADStructuralRegistration} from "./aad-structural-registration-audit.mjs";
 const finite=(v,label)=>{if(typeof v!=="number"||!Number.isFinite(v))throw Error(label+" must be finite");return v;};
 const positive=(v,label)=>{finite(v,label);if(v<=0)throw Error(label+" must be positive");return v;};
 const round=n=>Math.round(n*1e6)/1e6;
@@ -137,20 +138,20 @@ export function assembleBuilding(manifest,models,options={}){
     continue;
    }
    const e=addBox(elements,projectId+":"+l.id+":COL:"+grid,"column","IfcColumn",l.id,x,l.elevation+(l.height-slab.thickness)/2,z,
-    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Column "+grid,provenance:col.provenance||null});put(e);
+    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Column "+grid,provenance:col.provenance||null});put(e);
   }
   for(let zi=0;zi<bz.length;zi++)for(let xi=0;xi<bx.length-1;xi++){
    const x=(bx[xi]+bx[xi+1])/2,z=bz[zi],delta=bx[xi+1]-bx[xi];
    if(!pointInLevel(bx[xi],z,l.id)||!pointInLevel(bx[xi+1],z,l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-X:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,delta,beam.depth,beam.widthX,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi,provenance:beam.provenance||null
+    source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
   for(let xi=0;xi<bx.length;xi++)for(let zi=0;zi<bz.length-1;zi++){
    const x=bx[xi],z=(bz[zi]+bz[zi+1])/2,delta=bz[zi+1]-bz[zi];
    if(!pointInLevel(x,bz[zi],l.id)||!pointInLevel(x,bz[zi+1],l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-Z:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,beam.widthZ,beam.depth,delta,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
+    source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
  }
@@ -197,11 +198,13 @@ export function assembleBuilding(manifest,models,options={}){
    if(!colByLevel.get(levels[i-1].id).has(key(e)))diagnostics.push({severity:"ERROR",code:"UNSUPPORTED_COLUMN",level:levels[i].id,message:e.id+" has no same-grid column below"});
   }
  }
+ const structuralAlignment=auditAADStructuralRegistration(elements,levels,manifest);
+ diagnostics.push(...structuralAlignment.diagnostics);
  diagnostics.push({severity:"WARNING",code:"ENGINEERING_UNVERIFIED",level:null,message:"Column/beam sections, spans, foundations and stair load path are assumed; source structural DXF not reconciled with member detail"});
  diagnostics.push({severity:"WARNING",code:"STOREY_ORIGINS_NOT_SURVEY_VERIFIED",level:null,message:"Floor transforms use an owner-approved metric hypothesis, not surveyed global coordinates"});
  const count={};for(const e of elements)count[e.kind]=(count[e.kind]||0)+1;
  return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,
-  levels:placements,elements,diagnostics,counts:count,area:{source:round(areaSum.source),model:round(areaSum.model)},
+  levels:placements,elements,diagnostics,structuralAlignment,counts:count,area:{source:round(areaSum.source),model:round(areaSum.model)},
   reviewStatus:"DRAFT_ENGINEERING_HOLD",manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
 }
 export function verifyAssembly(assembly){
