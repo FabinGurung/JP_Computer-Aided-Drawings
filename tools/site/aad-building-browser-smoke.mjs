@@ -15,6 +15,22 @@ try{
  assert.equal(await page.locator("#storeys input[type=checkbox]").count(),3);
  assert.ok((await page.locator("#elements tr").count())>160,"Assembled IFC-classified component register not rendered");
  assert.match(await page.locator("#quantities").innerText(),/column/);
+ await page.locator("#aad-storey").selectOption("gf");
+ const parity=await page.evaluate(()=>{
+  const columns=window.AADStudio.getSnapshot().assembly.elements
+   .filter(e=>e.kind==="column"&&e.level==="gf").slice(0,12);
+  return columns.map(e=>window.AADStudio.getViewCoordinateProof(e.id));
+ });
+ assert.ok(parity.length>=2,"Narayani must have modeled columns");
+ for(const p of parity){
+  assert.ok(p.plan&&p.mesh&&p.table,"3-way column missing "+p.elementId);
+  for(const axis of ["x","z"]){
+   assert.ok(Math.abs(p.model[axis]-p.plan[axis])<.000001,"Narayani plan mismatch "+p.elementId);
+   assert.ok(Math.abs(p.model[axis]-p.mesh[axis])<.000001,"Narayani mesh mismatch "+p.elementId);
+   assert.ok(Math.abs(p.model[axis]-p.table[axis])<.001,"Narayani table mismatch "+p.elementId);
+  }
+ }
+ await page.locator("#aad-storey").selectOption("all");
  assert.match(await page.locator("#qa-result").innerText(),/IFC4 STEP internal references: PASS/);
  assert.match(await page.locator("#qa-result").innerText(),/Structural capacity\/code QA: HOLD/);
  const metrics=await page.locator("#viewer3d canvas").evaluate(canvas=>{
