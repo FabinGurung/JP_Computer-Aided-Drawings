@@ -109,7 +109,7 @@ export function checkAADAuthoring(spec,levelItems){
  const constraints=spec.constraints??{};
  if(!constraints||typeof constraints!=="object"||Array.isArray(constraints))
   throw Error("constraints must be an object");
- const allowed=new Set(["maxFloorPlateAreaM2","maxTotalFloorPlateAreaM2","buildableEnvelope"]);
+ const allowed=new Set(["maxFloorPlateAreaM2","maxTotalFloorPlateAreaM2","buildableEnvelope","site","maxSiteCoverageRatio","minRoomFaceAreaM2","minRoomFaceBBoxSpanM","minDoorsPerBoundedRoom"]);
  for(const k of Object.keys(constraints))if(!allowed.has(k))throw Error("Unsupported AAD constraint "+k);
  const checks=[];
  if(constraints.maxFloorPlateAreaM2!==undefined){
