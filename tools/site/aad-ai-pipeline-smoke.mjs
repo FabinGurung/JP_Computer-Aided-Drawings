@@ -141,7 +141,7 @@ assert.equal(firstWall.provenance.locator,"synthetic A1 wall EXT-01");
 assert.equal(traceBuilt.assembly.elements.find(e=>e.id==="AAD-DEMO-001:gf:AID-0001")?.kind,"door");
 assert.ok(traceBuilt.assembly.elements.filter(e=>e.kind==="column").every(e=>e.provenance?.basis==="ai-inferred"));
 assert.equal(traceBuilt.qa.componentProvenance.length,traceBuilt.assembly.elements.filter(e=>e.ifcType).length);
-assert.equal(traceBuilt.qa.authoringConstraints.length,5);
+assert.equal(traceBuilt.qa.authoringConstraints.length,6);
 assert.equal(traceBuilt.qa.issueForConstruction,false);
 assert.equal(traceBuilt.ifc,compile(detailed).ifc);
 x=structuredClone(detailed);x.levels[0].openings[0].provenance.sourceId="NOT_FOUND";
