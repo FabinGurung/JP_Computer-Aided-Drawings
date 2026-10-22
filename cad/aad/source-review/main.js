@@ -158,4 +158,19 @@ for(const box of document.querySelectorAll('.toolbar input[type="checkbox"]'))
  box.addEventListener("change",()=>{box.checked?shown.add(box.value):shown.delete(box.value);drawPlan();renderThree();});
 for(const id of ["filter","search"])$(id).addEventListener(id==="filter"?"change":"input",drawTable);
 initThree();drawPlan();renderThree();drawTable();
-window.AADSourceReview={getSnapshot:()=>model,getSelected:()=>elementMap.get(selectedId)||null,selectById:choose};
+window.AADSourceReview={
+ getSnapshot:()=>model,getSelected:()=>elementMap.get(selectedId)||null,selectById:choose,
+ getViewCoordinateProof:(id)=>{
+  const e=elementMap.get(id);
+  if(!e)throw Error("Unknown source element "+id);
+  const dom=[...svg.querySelectorAll("[data-id]")].find(x=>x.getAttribute("data-id")===id);
+  const visual=clickables.find(x=>x.userData.id===id);
+  const row=[...$("rows").querySelectorAll("tr")].find(x=>x.dataset.id===id);
+  const plan=dom&&e.kind==="column"?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
+   dom&&e.kind==="footing"?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
+    z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:null;
+  const mesh=visual&&["column","footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
+  return{elementId:id,source:{x:e.x,z:e.z},plan,mesh,
+   table:row?{x:Number(row.cells[3].textContent.split("/")[0]),z:Number(row.cells[3].textContent.split("/")[1])}:null};
+ }
+};
