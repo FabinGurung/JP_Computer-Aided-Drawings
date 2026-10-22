@@ -199,7 +199,7 @@ function initRenderer(){
  const run=()=>{requestAnimationFrame(run);orbit.update();renderer.render(scene,camera);};run();
 }
 function htmlText(e){
- const spans=["<b>"+e.id+"</b>","IFC: "+(e.ifcType||"NONE"),"Level: "+e.level,"Source: "+e.source,"Status: "+e.status];
+ const spans=[(e.name||e.kind)+" · "+e.id,"IFC: "+(e.ifcType||"NONE"),"Level: "+e.level,"Source: "+e.source,"Status: "+e.status];
  if(Number.isFinite(e.x))spans.push("World (X, Y, Z): ("+[e.x,e.y,e.z].map(v=>Number(v).toFixed(3)).join(", ")+") m");
  if(Number.isFinite(e.dx))spans.push("Metric size (L/H/T): "+[e.dx,e.dy,e.dz].map(v=>Number(v).toFixed(3)).join(" × ")+" m");
  if(e.profile)spans.push("Polygon vertices: "+e.profile.length+", stair voids: "+(e.holes?.length||0));
