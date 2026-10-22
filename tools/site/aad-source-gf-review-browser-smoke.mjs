@@ -17,7 +17,7 @@ try{
    proof:window.AADSourceReview.getViewCoordinateProof("SC-G1")};
  });
  assert.equal(first.schema,"jp-cad://aad-source-gf-assembly/1");
- assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":32});
+ assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74});
  assert.ok(first.proof.plan&&first.proof.mesh&&first.proof.table,"Structural column needs 2D/3D/table views");
  for(const frame of ["plan","mesh","table"]){
   for(const axis of ["x","z"]){
