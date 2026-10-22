@@ -36,6 +36,10 @@ try{
  assert.equal(await page.locator("#rows tr").count(),21);
  await page.locator("#filter").selectOption("beam");
  assert.equal(await page.locator("#rows tr").count(),32);
+ await page.locator('#rows tr[data-id="SB-GF-003"]').click();
+ assert.match(await page.locator("#selected").innerText(),/Endpoint A: nearest column candidate/);
+ assert.match(await page.locator("#selected").innerText(),/NO — REVIEW/);
+ assert.match(await page.locator("#issues").innerText(),/10 \/ 64/);
  await page.locator("#filter").selectOption("architectural-line");
  assert.equal(await page.locator("#rows tr").count(),74);
  await page.locator("#filter").selectOption("all");
