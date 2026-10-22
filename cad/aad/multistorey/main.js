@@ -8,11 +8,12 @@ const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
+const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
-let selectedId=null,selectionOverlay=null;
+let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
@@ -122,7 +123,45 @@ function paintSelection(){
  $("viewer2d").dataset.selectedElementId=selectedId||"";
  $("elements").dataset.selectedElementId=selectedId||"";
  const label=$("aad-selected-summary");
- if(label)label.textContent=selectedId?"Selected: "+selectedId:"Select an element in 2D, 3D or the component schedule";
+ if(label)label.textContent=picked?("Selected: "+(picked.name||picked.kind)+" · "+picked.id):
+  activeEdit?.kind==="node"&&selectedId?("Selected: floor-plan edit node · "+activeEdit.level+"/"+activeEdit.id):
+  selectedId?("Selected: "+selectedId):"Select an element in 2D, 3D or the component schedule";
+ showAADSelectionDetails(picked);
+}
+function showAADSelectionDetails(picked){
+ const root=$("aad-selected-details");if(!root)return;
+ root.replaceChildren();
+ const line=(css,value)=>{const node=document.createElement(css==="head"?"strong":"span");
+  node.className="aad-sel-"+css;node.textContent=value;root.append(node);};
+ if(picked){
+  const d=describeAADSelection(picked),floor=building.levels.find(l=>l.id===picked.level);
+  line("head",d.name+" · "+d.discipline+" / "+picked.kind);
+  line("meaning",d.meaning);
+  line("hint",d.representationHint);
+  line("meta","Element ID: "+picked.id+" · Storey: "+(floor?.name||picked.level)+" · IFC: "+(picked.ifcType||"not classified"));
+  if(Number.isFinite(picked.x)&&Number.isFinite(picked.z))
+   line("meta","World X/Y/Z: "+[picked.x,picked.y,picked.z].map(x=>Number(x).toFixed(3)).join(" / ")+" m");
+  else if(picked.profile)line("meta","Plan polygon: "+picked.profile.length+" vertices (world X/Z)");
+  line("meta","Evidence: "+d.evidence+(d.sourceId?" · source "+d.sourceId:"")+" · "+picked.status);
+  return;
+ }
+ if(activeEdit?.kind==="node"&&selectedId){
+  const state=workspace?.snapshot(),l=state?.manifest.levels.find(x=>x.id===activeEdit.level);
+  const g=state?.models[activeEdit.level]?.floorGraph;
+  const n=g?.nodes.find(n=>n.id===activeEdit.id);
+  if(n&&l){
+   const world=projectToWorld(n,l.transform);
+   const joined=g.walls.filter(w=>w.a===n.id||w.b===n.id).map(w=>w.id);
+   line("head","Editable junction node "+n.id+" · "+l.name);
+   line("meaning","This is a wall-graph geometry control point, NOT a concrete column, beam or IFC building component.");
+   line("hint","The orange circle in 2D is the selected edit handle. The orange 3D dot is only a visual locator raised for visibility, not physical building material.");
+   line("meta","Floor-local X/Z: "+n.x.toFixed(3)+" / "+n.z.toFixed(3)+" m · World X/Z: "+world.x.toFixed(3)+" / "+world.z.toFixed(3)+" m");
+   line("meta","Connected wall IDs: "+(joined.join(", ")||"none")+" · Storey elevation "+l.elevation.toFixed(3)+" m");
+   return;
+  }
+ }
+ line("head","Nothing selected");
+ line("meaning","Choose an object, editable node or schedule row to see what it means, where it is and whether the highlight represents actual geometry or a locator.");
 }
 function centerView(){
  if(!geometryGroup)return;
@@ -180,11 +219,8 @@ function selectElement(e){
  refreshEditPanel();
  if(!activeEdit)$("selection").textContent=htmlText(e);
  drawPlan();paintSelection();
- const row=rowsById.get(e.id);
- if(row){
-  const holder=row.closest(".table-wrap");
-  if(holder){const top=row.offsetTop-holder.offsetTop;holder.scrollTop=Math.max(0,top-holder.clientHeight/2);}
- }
+ revealSelectedAuditRow(e.id);
+ paintSelection();
 }
 function addStoreys(){
  const node=$("storeys");node.replaceChildren();
@@ -211,17 +247,103 @@ function addStats(){
  const row=document.createElement("div");row.className="stat";
  row.innerHTML="<span>Total modeled floor-plate area</span><strong>"+building.area.model.toFixed(2)+" m²</strong>";stat.append(row);
 }
-function addRows(){
- const tbody=$("elements");tbody.replaceChildren();rowsById.clear();
- for(const e of building.elements.filter(e=>e.ifcType)){
-  const tr=document.createElement("tr");tr.dataset.elementId=e.id;tr.tabIndex=0;tr.setAttribute("role","button");tr.setAttribute("aria-selected","false");const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):e.profile?"Polygon / "+e.dy+"m":"Steps "+e.steps?.length;
-  const trace=e.provenance?e.provenance.basis+(e.provenance.sourceId?" · "+e.provenance.sourceId:"")+
-   (e.provenance.scope?" · "+e.provenance.scope:""):e.status;
-  for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,trace]){
-   const td=document.createElement("td");td.textContent=s;tr.append(td);
-  }
-  tr.addEventListener("click",()=>selectElement(e));tr.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(e);}});tbody.append(tr);rowsById.set(e.id,tr);
+function initAADRegister(){
+ if(auditInitialized)return;
+ auditInitialized=true;
+ const levels=$("aad-audit-storey");
+ for(const l of building.levels){
+  const opt=document.createElement("option");
+  opt.value=l.id;opt.textContent=l.name+" ("+l.id.toUpperCase()+")";
+  levels.append(opt);
  }
+ for(const name of ["storey","discipline","kind","sort"]){
+  $("aad-audit-"+name).addEventListener("change",addRows);
+ }
+ $("aad-audit-search").addEventListener("input",addRows);
+ $("aad-audit-clear").addEventListener("click",()=>{
+  for(const key of ["storey","discipline","kind"])$("aad-audit-"+key).value="all";
+  $("aad-audit-sort").value="id";$("aad-audit-search").value="";addRows();
+ });
+}
+function auditFilters(){
+ return{level:$("aad-audit-storey").value,discipline:$("aad-audit-discipline").value,
+  kind:$("aad-audit-kind").value,sort:$("aad-audit-sort").value,search:$("aad-audit-search").value};
+}
+function addRows(){
+ const root=$("elements"),openBefore=new Set([...root.querySelectorAll("details[open][data-group-key]")]
+   .map(node=>node.dataset.groupKey));
+ const hadOldGroups=Boolean(root.querySelector("details[data-group-key]"));
+ root.replaceChildren();rowsById.clear();
+ const grouped=buildAADComponentGroups(building,auditFilters());
+ $("aad-audit-count").textContent="Showing "+grouped.matching+" / "+grouped.total+" BIM components · "+
+  grouped.groups.length+" storey groups. Storeys always follow building elevation; rows sort inside their element type.";
+ if(!grouped.groups.length){
+  const empty=document.createElement("p");empty.id="aad-audit-empty";empty.textContent="No components match these filters. Clear filters to restore the full register.";root.append(empty);return;
+ }
+ const captioned=(parent,tag,value)=>{const el=document.createElement(tag);el.textContent=value;parent.append(el);return el;};
+ const openRule=(key,defaultOpen)=>hadOldGroups?openBefore.has(key):defaultOpen;
+ for(const [li,l] of grouped.groups.entries()){
+  const levelEl=document.createElement("details");levelEl.className="aad-audit-level";levelEl.dataset.groupKey="L:"+l.level;
+  levelEl.dataset.level=l.level;levelEl.open=openRule(levelEl.dataset.groupKey,li===0);
+  captioned(levelEl,"summary",l.name+" · "+l.count+" components · Elevation "+Number(l.elevation).toFixed(3)+" m");
+  for(const d of l.disciplines){
+   const discEl=document.createElement("details");discEl.className="aad-audit-discipline";
+   discEl.dataset.groupKey="D:"+l.level+":"+d.name;discEl.dataset.discipline=d.name;
+   discEl.open=openRule(discEl.dataset.groupKey,true);
+   captioned(discEl,"summary",d.name+" · "+d.count+" components");
+   for(const t of d.types){
+    const kindEl=document.createElement("details");kindEl.className="aad-audit-type";
+    kindEl.dataset.groupKey="T:"+l.level+":"+d.name+":"+t.kind;kindEl.dataset.kind=t.kind;
+    kindEl.open=openRule(kindEl.dataset.groupKey,t.kind==="wall"||t.kind==="column");
+    captioned(kindEl,"summary",t.name+" · "+t.items.length+" items");
+    const wrap=document.createElement("div");wrap.className="table-wrap";
+    const table=document.createElement("table");
+    const head=document.createElement("thead");
+    const heads=document.createElement("tr");
+    for(const label of ["ID","Storey","IFC class","Type","Global X","Global Y","Global Z","Dimensions (m)","Evidence","Description"]){
+     const th=document.createElement("th");th.textContent=label;th.scope="col";heads.append(th);
+    }
+    head.append(heads);table.append(head);
+    const tbody=document.createElement("tbody");
+    for(const e of t.items){
+     const tr=document.createElement("tr");tr.dataset.elementId=e.id;tr.tabIndex=0;tr.setAttribute("role","button");
+     tr.setAttribute("aria-selected",String(e.id===selectedId));
+     tr.classList.toggle("aad-selected-row",e.id===selectedId);
+     const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):
+      e.profile?"Polygon / "+Number(e.dy).toFixed(2):"Steps "+(e.steps?.length||0);
+     const trace=e.provenance?e.provenance.basis+(e.provenance.sourceId?" · "+e.provenance.sourceId:"")+
+      (e.provenance.scope?" · "+e.provenance.scope:""):e.status;
+     const desc=classifyAADComponent(e);
+     for(const value of [e.id,e.level,e.ifcType,e.kind,Number.isFinite(e.x)?e.x.toFixed(3):"—",
+       e.y.toFixed(3),Number.isFinite(e.z)?e.z.toFixed(3):"—",dims,trace,e.name||desc.meaning]){
+      const td=document.createElement("td");td.textContent=value;tr.append(td);
+     }
+     tr.title=e.name+" · "+desc.meaning;
+     tr.addEventListener("click",()=>selectElement(e));
+     tr.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(e);}});
+     tbody.append(tr);rowsById.set(e.id,tr);
+    }
+    table.append(tbody);wrap.append(table);kindEl.append(wrap);discEl.append(kindEl);
+   }
+   levelEl.append(discEl);
+  }
+  root.append(levelEl);
+ }
+}
+function revealSelectedAuditRow(id){
+ let row=rowsById.get(id);
+ if(!row){
+  // The 2D/3D selection is authoritative: reset a hiding search/filter so the
+  // matching schedule record is reachable, then open its nested groups.
+  for(const k of ["storey","discipline","kind"])$("aad-audit-"+k).value="all";
+  $("aad-audit-search").value="";addRows();row=rowsById.get(id);
+ }
+ if(!row)return;
+ for(const details of [...row.closest("#elements").querySelectorAll("details")]){
+  if(details.contains(row))details.open=true;
+ }
+ const holder=row.closest(".table-wrap");
+ if(holder){const y=row.offsetTop-holder.offsetTop;holder.scrollTop=Math.max(0,y-holder.clientHeight/2);}
 }
 function runQa(){
  const result=verifyAssembly(building),summary=[];
@@ -352,7 +474,7 @@ function drawPlan(){
   marker.append(el("circle",{cx:position.x,cy:position.z,r:.15,fill:"#ed7820"}));
   const tag=el("text",{x:position.x+.62,y:position.z-.45});
   tag.textContent=selected.ifcType+" · plan locator (not a drawn footprint)";
-  marker.append(tag);doc.append(marker);
+  marker.append(tag);const tooltip=el("title");tooltip.textContent=selected.name+" ("+selected.id+") · world location only; not physical orange geometry";marker.append(tooltip);doc.append(marker);
  }
  $("aad-plan-level").textContent=ground;
  $("aad-building-level").textContent=activeLevel==="all"?"All storeys":"Selected storey "+activeLevel.toUpperCase();
@@ -554,6 +676,7 @@ async function main(){
   $("aad-storey").append(option);
  }
  $("building-name").textContent=building.name;
+ initAADRegister();
  $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
