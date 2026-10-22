@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><title>Narayani Parajuli · source DXF GF branch review</title></head>
+<body><p>Opening the shared AAD source-review engine with the Narayani Parajuli original-DXF ground-floor ledger.</p><p><a id="review">Open ground-floor source review</a></p>
+<script>
+const root=new URL("../../../",location.href);
+const preview=new URL("cad/aad/source-review/",root);
+const data=new URL("data/projects/narayani-parajuli/aad-source-gf-review-v1.json",root);
+preview.searchParams.set("data",data.pathname);
+document.getElementById("review").href=preview.href;
+location.replace(preview.href);
+</script></body></html>
