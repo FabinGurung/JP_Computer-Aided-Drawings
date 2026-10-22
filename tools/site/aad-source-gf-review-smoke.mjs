@@ -12,6 +12,17 @@ assert.equal(m.schema,"jp-cad://aad-source-gf-assembly/1");
 assert.equal(m.projectId,"PRJ-000007");
 assert.deepEqual(m.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74});
 assert.equal(m.stage,"ENGINEERING_HOLD");
+assert.equal(m.beamEndpointReview.beamCount,32);
+assert.equal(m.beamEndpointReview.endpoints,64);
+assert.equal(m.beamEndpointReview.toleranceM,.5);
+assert.equal(m.beamEndpointReview.withinTolerance,54);
+assert.equal(m.beamEndpointReview.beyondTolerance,10);
+assert.equal(m.beamEndpointReview.reviewStatus,"ENGINEERING_HOLD_NOT_A_BEAM_SUPPORT_GRAPH");
+assert.ok(m.beamEndpointReview.details.every(e=>e.status==="POTENTIAL_PROXIMITY_ONLY_SUPPORT_NOT_VERIFIED"));
+const beamAuditById=m.beamEndpointReview.details.filter(x=>x.beamId==="SB-GF-001");
+assert.equal(beamAuditById.length,2);
+assert.ok(beamAuditById.every(v=>v.withinDisplayTolerance));
+
 assert.equal(m.productionApproved,false);
 assert.equal(m.registration.rotationDeg,0);
 assert.equal(m.registration.scale,1);
@@ -43,6 +54,9 @@ const canonicalAgain=createSourceGroundFloorReview(JSON.parse(raw));
 assert.deepEqual(m,canonicalAgain,"Source geometry assembly must be deterministic");
 const tampered=structuredClone(input);tampered.footings[0][7]="SC-INVALID";
 assert.throws(()=>createSourceGroundFloorReview(tampered),/references unknown/);
+const swapped=structuredClone(input);
+swapped.beams[0][2]=NaN;
+assert.throws(()=>createSourceGroundFloorReview(swapped),/Invalid structX/);
 const tamperedConflict=structuredClone(input);tamperedConflict.footings.find(x=>x[0]==="SF-ACE9E")[8]=0;
 assert.throws(()=>createSourceGroundFloorReview(tamperedConflict),/Footing source-conflict count mismatch/);
 for(const path of ["cad/aad/source-review/index.html","cad/aad/source-review/main.js",
