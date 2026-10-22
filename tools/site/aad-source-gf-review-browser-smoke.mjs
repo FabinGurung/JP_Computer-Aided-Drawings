@@ -25,7 +25,7 @@ try{
     (frame==="table"?.0006:1e-6),frame+" "+axis+" diverges from registered source");
   }
  }
- await page.locator('#plan [data-id="SF-ACE9E"]').click();
+ await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
  assert.match(await page.locator("#selected").innerText(),/G1 CRITICAL/);
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
  assert.match(await page.locator("#selected").innerText(),/2.1 × 2.1/);
@@ -39,7 +39,7 @@ try{
  await page.locator("#filter").selectOption("architectural-line");
  assert.equal(await page.locator("#rows tr").count(),32);
  await page.locator("#filter").selectOption("all");
- await page.evaluate(()=>window.AADSourceReview.selectById("SC-G3"));
+ await page.locator('#plan [data-id="SC-G3"]').click();
  assert.match(await page.locator("#selected").innerText(),/SC-G3/);
  assert.equal(await page.locator('#plan [data-id="SC-G3"]').count(),1);
  assert.equal(await page.locator('#rows tr[data-id="SC-G3"].selected').count(),1);
