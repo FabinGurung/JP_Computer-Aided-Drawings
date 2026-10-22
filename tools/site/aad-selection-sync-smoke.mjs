@@ -88,7 +88,7 @@ try{
  await page.locator("#aad-storey").selectOption("gf");
  await page.locator("#viewer2d .aad-node").first().dispatchEvent("click");
  assert.match(await page.locator("#aad-selected-details").innerText(),/wall-graph geometry control point/);
- assert.match(await page.locator("#aad-selected-details").innerText(),/NOT a concrete column/);
+ assert.match(await page.locator("#aad-selected-details").innerText(),/NOT automatically a concrete column/);
  assert.match(await page.locator("#aad-selected-details").innerText(),/orange 3D dot/);
  assert.ok((await page.locator("#viewer2d .aad-node.is-selected").count())===1);
  // Programmatic AI action interface shares exact same validation and render path.
