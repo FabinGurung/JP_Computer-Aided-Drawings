@@ -37,7 +37,7 @@ try{
  await page.locator("#filter").selectOption("beam");
  assert.equal(await page.locator("#rows tr").count(),32);
  await page.locator("#filter").selectOption("architectural-line");
- assert.equal(await page.locator("#rows tr").count(),32);
+ assert.equal(await page.locator("#rows tr").count(),74);
  await page.locator("#filter").selectOption("all");
  await page.locator('#plan [data-id="SC-G3"]').click();
  assert.match(await page.locator("#selected").innerText(),/SC-G3/);
