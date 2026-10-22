@@ -138,20 +138,20 @@ export function assembleBuilding(manifest,models,options={}){
     continue;
    }
    const e=addBox(elements,projectId+":"+l.id+":COL:"+grid,"column","IfcColumn",l.id,x,l.elevation+(l.height-slab.thickness)/2,z,
-    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Column "+grid,provenance:col.provenance||null});put(e);
+    col.sizeX,l.height-slab.thickness,col.sizeZ,{source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Column "+grid,provenance:col.provenance||null});put(e);
   }
   for(let zi=0;zi<bz.length;zi++)for(let xi=0;xi<bx.length-1;xi++){
    const x=(bx[xi]+bx[xi+1])/2,z=bz[zi],delta=bx[xi+1]-bx[xi];
    if(!pointInLevel(bx[xi],z,l.id)||!pointInLevel(bx[xi+1],z,l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-X:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,delta,beam.depth,beam.widthX,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi,provenance:beam.provenance||null
+    source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Beam X "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
   for(let xi=0;xi<bx.length;xi++)for(let zi=0;zi<bz.length-1;zi++){
    const x=bx[xi],z=(bz[zi]+bz[zi+1])/2,delta=bz[zi+1]-bz[zi];
    if(!pointInLevel(x,bz[zi],l.id)||!pointInLevel(x,bz[zi+1],l.id)||!pointInLevel(x,z,l.id))continue;
    const e=addBox(elements,projectId+":"+l.id+":BEAM-Z:"+xi+"-"+zi,"beam","IfcBeam",l.id,x,ceiling-beam.depth/2,z,beam.widthZ,beam.depth,delta,{
-    source:"AUTHORIZED_CONCEPTUAL_GRID",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
+    source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
  }
