@@ -82,7 +82,7 @@ export function checkAADAuthoring(spec,levelItems){
   const id=required(s?.id,"source id "+i,64);
   if(!/^[A-Za-z0-9][A-Za-z0-9_-]*$/.test(id)||ids.has(id))throw Error("Duplicate or invalid AAD source ID "+id);
   ids.add(id);
-  if(!["dxf","pdf","drawing","document","other"].includes(s.kind))throw Error("Invalid AAD source kind "+id);
+  if(!["dxf","dwg","skp","pdf","drawing","document","sketch","image","voice-transcript","natural-language","other"].includes(s.kind))throw Error("Invalid AAD source kind "+id);
   return{id,kind:s.kind,reference:required(s.reference,"source reference "+id,400)};
  });
  if(mode==="owner-approved-public"&&spec.evidence?.kind==="synthetic")
@@ -109,7 +109,7 @@ export function checkAADAuthoring(spec,levelItems){
  const constraints=spec.constraints??{};
  if(!constraints||typeof constraints!=="object"||Array.isArray(constraints))
   throw Error("constraints must be an object");
- const allowed=new Set(["maxFloorPlateAreaM2","maxTotalFloorPlateAreaM2","buildableEnvelope"]);
+ const allowed=new Set(["maxFloorPlateAreaM2","maxTotalFloorPlateAreaM2","buildableEnvelope","site","maxSiteCoverageRatio","minRoomFaceAreaM2","minRoomFaceBBoxSpanM","minDoorsPerBoundedRoom"]);
  for(const k of Object.keys(constraints))if(!allowed.has(k))throw Error("Unsupported AAD constraint "+k);
  const checks=[];
  if(constraints.maxFloorPlateAreaM2!==undefined){
@@ -138,4 +138,26 @@ export function checkAADAuthoring(spec,levelItems){
   checks.push({code:"OWNER_BUILDABLE_ENVELOPE",coordinateSystem:"WORLD_XZ_METRES",status:"PASSED_USER_CONSTRAINT_NOT_SURVEY_OR_ZONING_APPROVAL"});
  }
  return{sources:normalizedSources,levels:levelEvidence,checks};
+}
+
+// Element-level provenance inherits a floor's evidence when no specific trace
+// is supplied. This is traceability, NOT independent source authentication.
+export function normalizeAADComponentEvidence(value,inherited,sources,label,mode){
+ const explicit=value!==undefined&&value!==null;
+ const e=explicit?value:inherited;
+ if(!e||!["synthetic","source-referenced","ai-inferred"].includes(e.basis))
+  throw Error("Invalid component provenance for "+label);
+ if(e.basis==="synthetic"){
+  if(mode!=="synthetic-demo")throw Error("Real AAD component cannot claim synthetic provenance "+label);
+  return{basis:"synthetic",scope:explicit?"component":"inherited-storey",
+   status:"SYNTHETIC_NOT_SITE_MEASURED"};
+ }
+ if(e.basis==="source-referenced"){
+  const id=required(e.sourceId,"component source ID "+label,64);
+  if(!sources.some(x=>x.id===id))throw Error("Unknown component source ID "+id+" for "+label);
+  return{basis:e.basis,sourceId:id,locator:required(e.locator,"component source locator "+label,240),
+   scope:explicit?"component":"inherited-storey",status:"SOURCE_REFERENCED_NOT_INDEPENDENTLY_VERIFIED"};
+ }
+ return{basis:"ai-inferred",rationale:required(e.rationale,"component inference rationale "+label,500),
+  scope:explicit?"component":"inherited-storey",status:"AI_INFERRED_NOT_SOURCE_VERIFIED"};
 }

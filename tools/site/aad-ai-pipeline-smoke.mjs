@@ -7,6 +7,7 @@ import {compileAADDesign} from "../../public/assets/js/aad-ai-design-compiler.mj
 import {checkIfcReferences} from "../../public/assets/js/aad-building-ifc4.mjs";
 import {derivePlanRooms} from "../../public/assets/js/aad-topology.mjs";
 import {getAADPublicationCopy} from "./aad-ai-publication-copy.mjs";
+import {prepareAADDesignBrief} from "../../public/assets/js/aad-design-brief.mjs";
 const original=JSON.parse(fs.readFileSync("design_jobs/synthetic/aad-ai-two-storey.json","utf8"));
 const syntheticCopy=getAADPublicationCopy("synthetic-demo");
 const realCopy=getAADPublicationCopy("owner-approved-public");
@@ -113,6 +114,74 @@ console.log("AAD_AI_M16_PROVENANCE_AND_CONSTRAINTS_PASS",JSON.stringify({
  levels:checked.qa.geometryProvenance.map(v=>[v.level,v.basis,v.status]),
  checks:checked.qa.authoringConstraints.map(v=>v.code),
  engineering:checked.qa.stage
+}));
+
+// M17: source -> actual model element provenance; no real client input.
+assert.ok(built.qa.componentProvenance.length>20);
+assert.ok(built.qa.componentProvenance.every(e=>e.provenance?.basis==="synthetic"||
+ e.provenance?.basis==="ai-inferred"));
+const detailed=structuredClone(approved);
+detailed.levels[0].exteriorWallProvenance={"EXT-01":{basis:"source-referenced",sourceId:"PLAN-A1",locator:"synthetic A1 wall EXT-01"}};
+detailed.levels[0].partitions[0].provenance={basis:"source-referenced",sourceId:"PLAN-A1",locator:"synthetic A1 centre wall"};
+detailed.levels[0].openings[0].provenance={basis:"source-referenced",sourceId:"PLAN-A1",locator:"synthetic A1 window W01"};
+detailed.structural.componentProvenance={columns:{basis:"ai-inferred",rationale:"Synthetic grid illustration, not designed"}};
+detailed.constraints.site={
+ bounds:{minX:-1,maxX:11,minZ:-1,maxZ:9},
+ setbacks:{minX:1,maxX:1,minZ:1,maxZ:1},
+ provenance:{basis:"source-referenced",sourceId:"PLAN-A1",locator:"Illustrative A1 site perimeter and margin"}
+};
+detailed.constraints.maxSiteCoverageRatio=.7;
+detailed.constraints.minRoomFaceAreaM2=39;
+detailed.constraints.minRoomFaceBBoxSpanM=4;
+detailed.constraints.minDoorsPerBoundedRoom=1;
+const traceBuilt=compile(detailed);
+const firstWall=traceBuilt.assembly.elements.find(e=>e.id==="AAD-DEMO-001:gf:EXT-01");
+assert.equal(firstWall.provenance.sourceId,"PLAN-A1");
+assert.equal(firstWall.provenance.locator,"synthetic A1 wall EXT-01");
+assert.equal(traceBuilt.assembly.elements.find(e=>e.id==="AAD-DEMO-001:gf:AID-0001")?.kind,"door");
+assert.ok(traceBuilt.assembly.elements.filter(e=>e.kind==="column").every(e=>e.provenance?.basis==="ai-inferred"));
+assert.equal(traceBuilt.qa.componentProvenance.length,traceBuilt.assembly.elements.filter(e=>e.ifcType).length);
+assert.equal(traceBuilt.qa.authoringConstraints.length,6);
+assert.equal(traceBuilt.qa.issueForConstruction,false);
+assert.equal(traceBuilt.ifc,compile(detailed).ifc);
+x=structuredClone(detailed);x.levels[0].openings[0].provenance.sourceId="NOT_FOUND";
+expectReject(()=>compile(x),/Unknown component source ID/);
+x=structuredClone(detailed);x.levels[0].exteriorWallProvenance={"EXT-99":{basis:"ai-inferred",rationale:"dummy"}};
+expectReject(()=>compile(x),/Unknown exterior wall provenance alias/);
+x=structuredClone(detailed);x.constraints.site.setbacks.minX=1.01;
+expectReject(()=>compile(x),/breaches user-specified setback envelope/);
+x=structuredClone(detailed);x.constraints.maxSiteCoverageRatio=.6;
+expectReject(()=>compile(x),/exceeds user-specified site coverage/);
+x=structuredClone(detailed);x.constraints.minRoomFaceAreaM2=41;
+expectReject(()=>compile(x),/below user-specified room-face area/);
+x=structuredClone(detailed);x.constraints.minRoomFaceBBoxSpanM=5.01;
+expectReject(()=>compile(x),/below user-specified room-face bounding span/);
+x=structuredClone(detailed);x.constraints.minDoorsPerBoundedRoom=2;
+expectReject(()=>compile(x),/insufficient modeled boundary doors/);
+// Natural-language / voice / sketch descriptions are unverified inputs, not
+// promises of compliant geometry. This intake never publishes or authorizes.
+const brief=prepareAADDesignBrief({channel:"natural-language",
+ text:"I want a residential layout for a family of 5 on a 20' by 40' site in Pokhara, Nepal."});
+assert.deepEqual(brief.extracted.plot.original,{width:20,length:40,unit:"ft"});
+assert.equal(brief.extracted.plot.widthM,6.096);
+assert.equal(brief.extracted.plot.lengthM,12.192);
+assert.equal(brief.extracted.plot.areaM2,74.322);
+assert.equal(brief.extracted.occupants,5);
+assert.equal(brief.extracted.location,"Pokhara, Nepal");
+assert.equal(brief.suggestedProgramme[0].targetCount,3);
+assert.equal(brief.publicationApproved,false);
+const spoken=prepareAADDesignBrief({channel:"voice-transcript",text:"Family of five on a twenty by forty feet site in Pokhara"});
+assert.equal(spoken.extracted.plot.widthM,6.096);
+assert.equal(spoken.extracted.plot.lengthM,12.192);
+const drawn=prepareAADDesignBrief({channel:"hand-sketch",text:"hand-labelled plot 6 m by 12 m; rooms and road side unverified"});
+assert.equal(drawn.extracted.plot.widthM,6);
+assert.ok(drawn.unresolved.includes("SITE_BOUNDARIES_AND_SETBACKS_NOT_VERIFIED"));
+console.log("AAD_M17_COMPONENT_TRACE_SPATIAL_AND_INFORMAL_BRIEF_PASS",JSON.stringify({
+ traced:traceBuilt.qa.componentProvenance.length,
+ sourceWall:firstWall.id,
+ spatialChecks:traceBuilt.qa.authoringConstraints.map(x=>x.code),
+ briefPlot:brief.extracted.plot,
+ readbackSafety:traceBuilt.qa.stage
 }));
 
 console.log("AAD_AI_DESIGN_COMPILER_SYNTHETIC_PASS",JSON.stringify({

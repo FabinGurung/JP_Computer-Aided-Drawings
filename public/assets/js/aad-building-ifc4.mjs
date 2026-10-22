@@ -54,7 +54,7 @@ export function writeIFC4(building){
  const model=s.add("IFCPROJECT",quote(guid(building.projectId+":PROJECT")),"$",quote(building.name),quote("AAD v1 conceptual geometry, engineering HOLD"),
   "$","$","$",list([shapeContext]),units);
  const globalPlacement=s.add("IFCLOCALPLACEMENT","$",baseAxis);
- const site=s.add("IFCSITE",quote(guid(building.projectId+":SITE")),"$",quote("Narayani site — local coordinates"),"$","$",
+ const site=s.add("IFCSITE",quote(guid(building.projectId+":SITE")),"$",quote(building.name+" — local coordinates"),"$","$",
   globalPlacement,"$","$",".ELEMENT.","$","$","$","$","$");
  const shell=s.add("IFCBUILDING",quote(guid(building.projectId+":BUILDING")),"$",quote(building.name),"$","$",globalPlacement,
   "$","$",".ELEMENT.","$","$","$");

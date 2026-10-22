@@ -164,6 +164,11 @@ function htmlText(e){
  if(Number.isFinite(e.x))spans.push("World (X, Y, Z): ("+[e.x,e.y,e.z].map(v=>Number(v).toFixed(3)).join(", ")+") m");
  if(Number.isFinite(e.dx))spans.push("Metric size (L/H/T): "+[e.dx,e.dy,e.dz].map(v=>Number(v).toFixed(3)).join(" × ")+" m");
  if(e.profile)spans.push("Polygon vertices: "+e.profile.length+", stair voids: "+(e.holes?.length||0));
+ if(e.provenance){
+  spans.push("Evidence basis: "+e.provenance.basis+" ("+e.provenance.scope+")");
+  if(e.provenance.sourceId)spans.push("Source ID: "+e.provenance.sourceId+" · locator: "+e.provenance.locator);
+  if(e.provenance.rationale)spans.push("AI assumption: "+e.provenance.rationale);
+ }
  if(e.host)spans.push("Hosted on: "+e.host);
  return spans.join("\n");
 }
@@ -204,13 +209,15 @@ function addStats(){
   const val=document.createElement("strong");val.textContent=n;row.append(label,val);stat.append(row);
  }
  const row=document.createElement("div");row.className="stat";
- row.innerHTML="<span>Block B plate area</span><strong>"+building.area.model.toFixed(2)+" m²</strong>";stat.append(row);
+ row.innerHTML="<span>Total modeled floor-plate area</span><strong>"+building.area.model.toFixed(2)+" m²</strong>";stat.append(row);
 }
 function addRows(){
  const tbody=$("elements");tbody.replaceChildren();rowsById.clear();
  for(const e of building.elements.filter(e=>e.ifcType)){
   const tr=document.createElement("tr");tr.dataset.elementId=e.id;tr.tabIndex=0;tr.setAttribute("role","button");tr.setAttribute("aria-selected","false");const dims=Number.isFinite(e.dx)?[e.dx,e.dy,e.dz].map(n=>n.toFixed(2)).join(" × "):e.profile?"Polygon / "+e.dy+"m":"Steps "+e.steps?.length;
-  for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,e.status]){
+  const trace=e.provenance?e.provenance.basis+(e.provenance.sourceId?" · "+e.provenance.sourceId:"")+
+   (e.provenance.scope?" · "+e.provenance.scope:""):e.status;
+  for(const s of [e.id,e.level,e.ifcType,e.kind,e.x?.toFixed(3)||"—",e.y.toFixed(3),e.z?.toFixed(3)||"—",dims,trace]){
    const td=document.createElement("td");td.textContent=s;tr.append(td);
   }
   tr.addEventListener("click",()=>selectElement(e));tr.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(e);}});tbody.append(tr);rowsById.set(e.id,tr);
@@ -265,7 +272,8 @@ function drawPlan(){
     if(positions.length!==room.nodes.length)continue;
     const path=el("polygon",{points:positions.map(p=>p.x+","+p.z).join(" "),class:"aad-room-polygon","data-room-id":room.id});
     doc.append(path);
-    const title=el("text",{x:room.centroid.x+l.transform.x,y:room.centroid.z+l.transform.z,class:"aad-room-text"});
+    const worldCentroid=projectToWorld(room.centroid,l.transform);
+    const title=el("text",{x:worldCentroid.x,y:worldCentroid.z,class:"aad-room-text"});
     title.textContent=room.area.toFixed(2)+" m²";doc.append(title);
    }}catch(e){$("aad-room-summary").textContent="Room calculation: "+e.message;}
   }
@@ -288,6 +296,16 @@ function drawPlan(){
    item.dataset.part=l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
+  }
+  // WORLD_XZ column solids, the same exact assembly instances as 3D and table.
+  for(const col of building.elements.filter(e=>e.kind==="column"&&e.level===l.id)){
+   const rect=el("rect",{x:col.x-col.dx/2,y:col.z-col.dz/2,
+    width:col.dx,height:col.dz,class:"aad-column"+(selectedId===col.id?" is-selected":""),
+    "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
+    "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
+   rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
+   rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(col);}});
+   doc.append(rect);
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
@@ -326,7 +344,7 @@ function drawPlan(){
  // Structural objects are 3D IFC components without authored 2D floor-graph
  // geometry. Display their world-coordinate locator instead of inventing one.
  const selected=building.elements.find(e=>e.id===selectedId);
- const hasPlan=selected&&["wall","door","window"].includes(selected.kind);
+ const hasPlan=selected&&["wall","door","window","column"].includes(selected.kind);
  const position=selectedPosition(selected);
  if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
   const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
@@ -536,7 +554,7 @@ async function main(){
   $("aad-storey").append(option);
  }
  $("building-name").textContent=building.name;
- $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² Block B floor areas · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
+ $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
@@ -641,6 +659,21 @@ window.AADStudio=Object.freeze({
   return Object.fromEntries(workspace.snapshot().manifest.levels.map(l=>[l.id,workspace.rooms(l.id)]));
  },
  setLevel:(level)=>{if(!building||!(level==="all"||building.levels.some(l=>l.id===level)))throw Error("Unknown AAD level");setLevel(level);},
+ // Read-only coordinate proof for the model, actual THREE mesh, 2D and table.
+ getViewCoordinateProof:(id)=>{
+  const e=building?.elements.find(x=>x.id===id);
+  if(!e)throw Error("Unknown AAD component "+id);
+  const mesh=hitMeshes.find(m=>m.userData.element.id===id);
+  const plan=[...document.querySelectorAll("#viewer2d .aad-column")].find(n=>n.dataset.elementId===id);
+  const row=rowsById.get(id);
+  return{elementId:id,kind:e.kind,model:{x:e.x,y:e.y,z:e.z,dx:e.dx,dz:e.dz},
+   mesh:mesh?{x:mesh.position.x,y:mesh.position.y,z:mesh.position.z}:null,
+   plan:plan?{x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
+    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
+    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null,
+   table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
+    z:Number(row.cells[6].textContent)}:null};
+ },
  getSnapshot:()=>workspace?workspace.snapshot():null,
  getDraft:()=>workspace?workspace.bundle():null
 });

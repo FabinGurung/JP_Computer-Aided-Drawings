@@ -25,12 +25,13 @@ try{
  assert.equal(await page.locator('[data-element-id="'+wid+'"]').getAttribute("aria-selected"),"true");
  assert.equal(await page.locator("#viewer3d canvas").getAttribute("data-selected-element-id"),wid);
  assert.equal(await page.locator('#viewer2d [data-part="gf:WIN01"].is-selected').count(),1);
- // Selecting a 3D structural object via schedule creates a precise locator, not fake 2D framing geometry.
- const col=page.locator('[data-element-id*=":gf:COL:"]').first();const cid=await col.getAttribute("data-element-id");
+ // M17: the column is a real world-coordinate 2D footprint, not a temporary locator.
+ const col=page.locator('#elements tr[data-element-id*=":gf:COL:"]').first();const cid=await col.getAttribute("data-element-id");
  await col.click();
  assert.equal(await col.getAttribute("aria-selected"),"true");
  assert.equal(await page.locator("#viewer3d canvas").getAttribute("data-selected-element-id"),cid);
- assert.equal(await page.locator("#viewer2d [data-plan-selection-marker]").count(),1);
+ assert.equal(await page.locator("#viewer2d .aad-column.is-selected").count(),1);
+ assert.equal(await page.locator("#viewer2d [data-plan-selection-marker]").count(),0);
  // Check actual mouse raycasting selects another rendered object and updates all surfaces.
  const canvas=page.locator("#viewer3d canvas"),box=await canvas.boundingBox();
  let selected=cid;
@@ -40,7 +41,7 @@ try{
   if(selected&&selected!==cid)break;
  }
  assert.ok(selected&&selected!==cid,"3D mesh raycast should select a building object");
- assert.equal(await page.locator('[data-element-id="'+selected+'"]').getAttribute("aria-selected"),"true");
+ assert.equal(await page.locator('#elements tr[data-element-id="'+selected+'"]').getAttribute("aria-selected"),"true");
  const planSelection=await page.locator("#viewer2d .is-selected").count(),marker=await page.locator("#viewer2d [data-plan-selection-marker]").count();
  assert.ok(planSelection+marker>=1,"3D selection needs a visible authored 2D highlight or explicit plan locator");
  // Programmatic AI action interface shares exact same validation and render path.
