@@ -1,5 +1,5 @@
 /* Browser regression: actual 2D SVG + real THREE mesh + source register.
- * No live production Pages publish for this branch.
+ * Browser test applies to preview and publicly marked SOURCE REVIEW builds.
  */
 import assert from "node:assert/strict";
 import {chromium} from "playwright";
