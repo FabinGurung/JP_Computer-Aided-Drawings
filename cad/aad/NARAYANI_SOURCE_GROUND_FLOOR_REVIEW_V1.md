@@ -21,7 +21,7 @@ The data/geometry remain on this branch pending human visual review. This stage 
 - G1: preserve exactly the native **1.8 × 1.8 m** drawn footing rectangle, with conspicuous HOLD because the IF3 callout/schedule is **2.1 × 2.1 m**. Do not resolve discrepancy automatically.
 - G3: preserve original structural centre, do not snap it to architectural walls.
 - 32 paired-edge GF beams as **DXF source candidates**, with width 230 mm deduced from paired edge spacing; beam depths and verified connectivity are **not** attached member-by-member. Their vertical 3D position is only a display aid.
-- 32 direct `LINE` entities from architectural DXF `wall 2` layer in the selected GF grid vicinity, including **original CAD entity handles**. These are **partial wall-edge source coverage**, not a reconstructed closed/perimeter-complete room plan. Architectural block references, openings and any remaining source wall components must be extracted and registered before claiming a full ground-floor architectural rebuild.
+- 32 original `LINE` entities and 12 original `LWPOLYLINE` records from the architectural DXF `wall 2` layer in the GF source area: **74 direct wall-edge segments** in total, retaining native CAD entity handles and polyline segment indices. These remain raw wall-edge source coverage, **not** a connected/closed room topology. Architectural block references, openings, and any remaining source wall components must be extracted and registered before claiming a complete ground-floor architectural rebuild.
 - Original AAD upper floors and old AI rectangular columns/beams are **not imported** into this source review.
 
 ## Representation caveats
