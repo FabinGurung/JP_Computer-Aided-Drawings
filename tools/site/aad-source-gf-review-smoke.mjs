@@ -5,6 +5,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
 import {createSourceGroundFloorReview} from "../../public/assets/js/aad-source-ground-floor.mjs";
+import {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}
+ from "../../public/assets/js/aad-source-coordinate-picking.mjs";
 const file="public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json";
 const raw=fs.readFileSync(file,"utf8"),input=JSON.parse(raw);
 const m=createSourceGroundFloorReview(input);
