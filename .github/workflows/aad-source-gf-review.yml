@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "public/assets/js/aad-source-ground-floor.mjs"
+      - "public/assets/js/aad-source-coordinate-picking.mjs"
       - "public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json"
       - "cad/aad/source-review/**"
       - "public/projects/narayani-parajuli/aad-source-review/**"
