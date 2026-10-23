@@ -163,7 +163,8 @@ svg.addEventListener("click",event=>{
  const p=planarCursor(event);if(p)pinWorldPoint(p,"2D_TAP");
 },true);
 prepareCrossing();
-\nfunction extents(){
+
+function extents(){
  const b=model.bounds;return{x:b.minX-.9,y:b.minZ-.9,w:b.maxX-b.minX+1.8,h:b.maxZ-b.minZ+1.8};
 }
 function drawPlan(){
