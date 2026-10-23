@@ -5,6 +5,7 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
 import {createSourceGroundFloorReview} from "../../public/assets/js/aad-source-ground-floor.mjs";
+import {bridgeM70Plinth} from "../../public/assets/js/aad-m70-plinth-bridge.mjs";
 import {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}
  from "../../public/assets/js/aad-source-coordinate-picking.mjs";
 const file="public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json";
@@ -14,6 +15,35 @@ assert.equal(m.schema,"jp-cad://aad-source-gf-assembly/1");
 assert.equal(m.projectId,"PRJ-000007");
 assert.deepEqual(m.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74});
 assert.equal(m.stage,"ENGINEERING_HOLD");
+// The frozen M70 plinth network exists as its own source stage.
+// Prove all 23 M70/structural-DXF grid controls before displaying any PB.
+const m70Stage=JSON.parse(fs.readFileSync("public/stages/m70/stage-data.json","utf8"));
+const m70Meta=JSON.parse(fs.readFileSync("public/stages/m70/meta.json","utf8"));
+const stageAdapter=JSON.parse(fs.readFileSync("public/data/projects/narayani-parajuli/aad-source-stage-links-v1.json","utf8"));
+assert.equal(stageAdapter.projectId,m.projectId);
+assert.equal(stageAdapter.additionalLayers.length,1);
+assert.equal(stageAdapter.additionalLayers[0].stage,"M70");
+const m70=bridgeM70Plinth(m,m70Stage,m70Meta);
+assert.equal(m70.runCount,16);
+assert.equal(m70.registrationControlCount,23);
+assert.ok(m70.maxColumnResidualM<.001);
+assert.equal(m70.declaredSectionMM.width,230);
+assert.equal(m70.declaredSectionMM.depth,300);
+assert.ok(Math.abs(m70.centerlineLengthM-134.184228)<.000002);
+assert.equal(m70.records[0].id,"PB-H1");
+assert.equal(m70.records.at(-1).id,"PB-V9");
+assert.ok(m70.records.every(e=>e.kind==="plinth-beam"&&e.width===.23&&e.depth===.30));
+assert.ok(m70.records.every(e=>e.source.file==="M70_FROZEN_STAGE"&&e.source.stageSnapshotId==="NARAYANI-M70-EMBEDDED-SNAPSHOT-002"));
+const h3=m70.records.find(e=>e.id==="PB-H3"),v9=m70.records.find(e=>e.id==="PB-V9");
+assert.ok(Math.hypot(h3.bx-v9.bx,h3.bz-v9.bz)<.00001,"M70 PB-H3 and PB-V9 must meet at I3");
+assert.ok(Math.abs(h3.bz-6.12504)<.001,"M70 I3 must register to same world Z as the projected GF beam candidates");
+assert.ok(m.elements.some(e=>e.id==="SC-I4"),"DXF I4 column must remain present");
+assert.ok(!m.elements.some(e=>e.id==="SC-I3"),"Do not invent an I3 column");
+assert.throws(()=>bridgeM70Plinth({...m,projectId:"WRONG"},m70Stage,m70Meta),/project ID mismatch/);
+const tamperedStage=structuredClone(m70Stage);tamperedStage.spatial_db.grid.x_mm.I+=50;
+assert.throws(()=>bridgeM70Plinth(m,tamperedStage,m70Meta),/registration >1mm/);
+assert.deepEqual(m.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74},
+ "Original DXF geometry must remain unmodified by separate plinth-stage bridge");
 assert.equal(m.beamEndpointReview.beamCount,32);
 assert.equal(m.beamEndpointReview.endpoints,64);
 assert.equal(m.beamEndpointReview.toleranceM,.5);
