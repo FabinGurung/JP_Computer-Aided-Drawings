@@ -25,6 +25,52 @@ try{
     (frame==="table"?.0006:1e-6),frame+" "+axis+" diverges from registered source");
   }
  }
+ // World-coordinate HUDs must be derived from the actual on-screen transforms,
+ // not hard-coded fixed CSS pixel positions or synthetic screen-to-world mapping.
+ const projected=await page.evaluate(()=>window.AADSourceReview.getProjectedCrossing());
+ assert.equal(projected.onBothOriginalSegments,false);
+ assert.ok(Math.abs(projected.extensionA_m-.131909)<.000002);
+ assert.ok(Math.abs(projected.extensionB_m-.131909)<.000002);
+ await page.locator("#pin-crossing").click();
+ const projectedPin=await page.evaluate(()=>window.AADSourceReview.getPinnedPoint());
+ assert.equal(projectedPin.method,"PROJECTED_BEAM_CROSSLINES");
+ assert.ok(Math.abs(projectedPin.x-projected.x)<.000001);
+ assert.ok(Math.abs(projectedPin.z-projected.z)<.000001);
+ assert.match(await page.locator("#pin-proposal").innerText(),/SC-I4 source centre is 0.655 m away/);
+ assert.match(await page.locator("#pin-proposal").innerText(),/do NOT physically intersect/);
+ assert.match(await page.locator("#pin-details").innerText(),/Structural DXF native/);
+ assert.equal(await page.locator('#plan [data-pinned-coordinate="true"]').count(),1);
+ assert.ok((await page.locator("#pin-copy-text").inputValue()).includes("SC-I4"));
+ // Point-to-pixel via SVG CTM must still agree after CSS responsive scaling.
+ const viewPoint=await page.evaluate(()=>{
+  const svg=document.querySelector("#plan"),p=svg.createSVGPoint();
+  const crossing=window.AADSourceReview.getProjectedCrossing();
+  p.x=crossing.x;p.y=crossing.z;
+  const screen=p.matrixTransform(svg.getScreenCTM());
+  return{x:screen.x,y:screen.y};
+ });
+ await page.mouse.move(viewPoint.x,viewPoint.y);
+ assert.match(await page.locator("#cursor2d").innerText(),/X 21.000 · Z 6.125 m/);
+ await page.mouse.click(viewPoint.x,viewPoint.y);
+ const tapPin=await page.evaluate(()=>window.AADSourceReview.getPinnedPoint());
+ assert.equal(tapPin.method,"2D_TAP");
+ assert.ok(Math.hypot(tapPin.x-projected.x,tapPin.z-projected.z)<.003);
+ await page.locator("#model3d canvas").scrollIntoViewIfNeeded();
+ const bounds=await page.locator("#model3d canvas").boundingBox();
+ assert.ok(bounds?.width>100&&bounds?.height>100);
+ await page.mouse.move(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+ assert.match(await page.locator("#cursor3d").innerText(),/3D X -?\\d+\\.\\d{3} · Z -?\\d+\\.\\d{3} m/);
+ await page.mouse.click(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
+ assert.equal((await page.evaluate(()=>window.AADSourceReview.getPinnedPoint())).method,"3D_GROUND_TAP");
+ await page.locator("#pin-clear").click();
+ assert.equal(await page.evaluate(()=>window.AADSourceReview.getPinnedPoint()),null);
+ await page.locator("#pin-crossing").click();
+ assert.equal(await page.locator("#pin-copy").isDisabled(),false);
+ assert.match(await page.locator("#pin-copy-text").inputValue(),/PROJECTED_BEAM_CROSSLINES/);
+ // Original source position is immutable even after interactive proposed pins.
+ const sourceI4=await page.evaluate(()=>window.AADSourceReview.getSnapshot().elements.find(e=>e.id==="SC-I4"));
+ assert.ok(Math.abs(sourceI4.x-projected.x)<.001);
+ assert.ok(Math.abs(sourceI4.z-projected.z)>.6);
  await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
  assert.match(await page.locator("#selected").innerText(),/G1 CRITICAL/);
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
@@ -49,6 +95,27 @@ try{
  assert.equal(await page.locator('#rows tr[data-id="SC-G3"].selected').count(),1);
  await page.evaluate(()=>window.AADSourceReview.selectById("SF-ACE9E"));
  await page.screenshot({path:"/tmp/aad-narayani-source-gf-review.png",fullPage:true});
+ const mobile=await browser.newPage({viewport:{width:390,height:844},deviceScaleFactor:2,
+  hasTouch:true,isMobile:true});
+ try{
+  await mobile.goto(url,{waitUntil:"networkidle",timeout:60000});
+  await mobile.waitForFunction(()=>Boolean(window.AADSourceReview?.getPinnedPoint),{timeout:60000});
+  await mobile.locator("#pin-crossing").click();
+  assert.equal((await mobile.evaluate(()=>window.AADSourceReview.getPinnedPoint())).method,"PROJECTED_BEAM_CROSSLINES");
+  const p=await mobile.evaluate(()=>{
+   const svg=document.getElementById("plan"),crossing=window.AADSourceReview.getProjectedCrossing();
+   const point=svg.createSVGPoint();point.x=crossing.x;point.y=crossing.z;
+   const q=point.matrixTransform(svg.getScreenCTM());return{x:q.x,y:q.y};
+  });
+  await mobile.touchscreen.tap(p.x,p.y);
+  const pinnedTouch=await mobile.evaluate(()=>window.AADSourceReview.getPinnedPoint());
+  assert.equal(pinnedTouch.method,"2D_TAP");
+  assert.ok(Math.hypot(pinnedTouch.x-projected.x,pinnedTouch.z-projected.z)<.01);
+  await mobile.locator("#model3d canvas").scrollIntoViewIfNeeded();
+  const mr=await mobile.locator("#model3d canvas").boundingBox();
+  await mobile.touchscreen.tap(mr.x+mr.width/2,mr.y+mr.height/2);
+  assert.equal((await mobile.evaluate(()=>window.AADSourceReview.getPinnedPoint())).method,"3D_GROUND_TAP");
+ }finally{await mobile.close();}
  console.log("AAD_SOURCE_GROUND_FLOOR_BROWSER_PASS",JSON.stringify({counts:first.counts,
   g1ConflictVisible:true,columnParityVerified:true,sourceMode:"BRANCH_QA_ONLY"}));
 }finally{await browser.close();}
