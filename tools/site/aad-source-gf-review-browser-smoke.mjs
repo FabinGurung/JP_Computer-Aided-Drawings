@@ -42,6 +42,7 @@ try{
  assert.equal(await page.locator('#plan [data-pinned-coordinate="true"]').count(),1);
  assert.ok((await page.locator("#pin-copy-text").inputValue()).includes("SC-I4"));
  // Point-to-pixel via SVG CTM must still agree after CSS responsive scaling.
+ await page.locator("#plan").scrollIntoViewIfNeeded();
  const viewPoint=await page.evaluate(()=>{
   const svg=document.querySelector("#plan"),p=svg.createSVGPoint();
   const crossing=window.AADSourceReview.getProjectedCrossing();
@@ -102,6 +103,7 @@ try{
   await mobile.waitForFunction(()=>Boolean(window.AADSourceReview?.getPinnedPoint),{timeout:60000});
   await mobile.locator("#pin-crossing").click();
   assert.equal((await mobile.evaluate(()=>window.AADSourceReview.getPinnedPoint())).method,"PROJECTED_BEAM_CROSSLINES");
+  await mobile.locator("#plan").scrollIntoViewIfNeeded();
   const p=await mobile.evaluate(()=>{
    const svg=document.getElementById("plan"),crossing=window.AADSourceReview.getProjectedCrossing();
    const point=svg.createSVGPoint();point.x=crossing.x;point.y=crossing.z;
