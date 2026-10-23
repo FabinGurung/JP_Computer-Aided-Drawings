@@ -11,8 +11,9 @@ function pointDistanceToSegment(p,a,b){
  return Math.hypot(p.x-a.x-t*dx,p.z-a.z-t*dz);
 }
 export function findProjectedBeamCrossing(elements,beamAId,beamBId,{maxExtensionM=.5}={}){
- const a=elements.find(e=>e.id===beamAId&&e.kind==="beam");
- const b=elements.find(e=>e.id===beamBId&&e.kind==="beam");
+ const supported=new Set(["beam","plinth-beam"]);
+ const a=elements.find(e=>e.id===beamAId&&supported.has(e.kind));
+ const b=elements.find(e=>e.id===beamBId&&supported.has(e.kind));
  if(!a||!b||a.id===b.id)throw Error("Two distinct source beam candidates required");
  const ax=a.ax,az=a.az,bx=b.ax,bz=b.az,rx=a.bx-a.ax,rz=a.bz-a.az,
   sx=b.bx-b.ax,sz=b.bz-b.az,det=rx*sz-rz*sx;
@@ -33,7 +34,7 @@ export function findProjectedBeamCrossing(elements,beamAId,beamBId,{maxExtension
 }
 export function nearestSourceElements(elements,position,limit=4){
  if(!Number.isFinite(position?.x)||!Number.isFinite(position?.z))throw Error("Finite world X/Z required");
- const arr=elements.filter(e=>e.kind==="beam"||e.kind==="column").map(e=>{
+ const arr=elements.filter(e=>e.kind==="beam"||e.kind==="plinth-beam"||e.kind==="column").map(e=>{
   const d=e.kind==="column"?Math.hypot(position.x-e.x,position.z-e.z):
    pointDistanceToSegment(position,{x:e.ax,z:e.az},{x:e.bx,z:e.bz});
   return{elementId:e.id,kind:e.kind,distanceM:round6(d)};
