@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - "public/assets/js/aad-source-ground-floor.mjs"
+      - "public/assets/js/aad-source-coordinate-picking.mjs"
       - "public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json"
       - "cad/aad/source-review/**"
       - "public/projects/narayani-parajuli/aad-source-review/**"
@@ -34,7 +35,7 @@ jobs:
       - name: Install Chromium browser QA
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
-          npx playwright install --with-deps chromium
+          npx playwright install chromium
       - name: Preview, 2D/3D coordinate proof and exception inspection
         run: |
           (npm run preview -- --host 127.0.0.1 --port 5202 --base=/JP_Computer-Aided-Drawings/ >/tmp/aad-source-preview-vite.log 2>&1 &)

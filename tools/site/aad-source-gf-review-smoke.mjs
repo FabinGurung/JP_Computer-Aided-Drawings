@@ -5,6 +5,8 @@ import assert from "node:assert/strict";
 import fs from "node:fs";
 import crypto from "node:crypto";
 import {createSourceGroundFloorReview} from "../../public/assets/js/aad-source-ground-floor.mjs";
+import {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}
+ from "../../public/assets/js/aad-source-coordinate-picking.mjs";
 const file="public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json";
 const raw=fs.readFileSync(file,"utf8"),input=JSON.parse(raw);
 const m=createSourceGroundFloorReview(input);
@@ -24,6 +26,26 @@ assert.equal(beamAuditById.length,2);
 assert.ok(beamAuditById.every(v=>v.withinDisplayTolerance));
 
 assert.equal(m.productionApproved,false);
+// Cursor reference points come from the original member candidates, not an AI grid.
+const proposed=findProjectedBeamCrossing(m.elements,"SB-GF-018","SB-GF-020");
+const columnI4=m.elements.find(e=>e.id==="SC-I4");
+assert.ok(columnI4);
+assert.ok(Math.abs(proposed.x-21.000162)<.000002);
+assert.ok(Math.abs(proposed.z-6.12504)<.000002);
+assert.equal(proposed.onBothOriginalSegments,false);
+assert.equal(proposed.withinReviewExtensionLimit,true);
+assert.ok(Math.abs(proposed.extensionA_m-.131909)<.000002);
+assert.ok(Math.abs(proposed.extensionB_m-.131909)<.000002);
+assert.ok(Math.abs(Math.hypot(columnI4.x-proposed.x,columnI4.z-proposed.z)-.655)<.000002);
+assert.match(proposed.status,/NOT_VERIFIED/);
+const originalI4={x:columnI4.x,z:columnI4.z};
+const nativeProposal=worldXZToNativeStructuralMM(m.registration,proposed);
+assert.ok(Math.abs(nativeProposal.x-777005.039)<.002);
+assert.ok(Math.abs(nativeProposal.y+123108.74)<.002);
+assert.deepEqual({x:columnI4.x,z:columnI4.z},originalI4,"Marker logic must not move source columns");
+assert.ok(nearestSourceElements(m.elements,proposed,8).some(x=>x.elementId==="SC-I4"));
+assert.throws(()=>findProjectedBeamCrossing(m.elements,"SB-GF-018","INVALID"),/Two distinct/);
+assert.throws(()=>worldXZToNativeStructuralMM(m.registration,{x:NaN,z:0}),/Finite world/);
 assert.equal(m.registration.rotationDeg,0);
 assert.equal(m.registration.scale,1);
 assert.equal(m.sourceAuthority.structural.sha256,"55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf");
