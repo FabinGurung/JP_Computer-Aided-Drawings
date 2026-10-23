@@ -88,6 +88,8 @@ let selectedId=null,pinned=null,hovered=null,threePinMarker=null,proposedCrossin
 const fmt=n=>Number.isFinite(n)?n.toFixed(3):"—";
 const sourceHandles=e=>e.source.entityHandles?.join(", ")||e.source.entityHandle||"none";
 const ns="http://www.w3.org/2000/svg";
+// Attach drag suppression before registering the click-to-pin listener.
+const planNav=createAADSvgNavigator(svg,extents);
 function node(tag,props={},text=null){const p=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(props))p.setAttribute(k,v);
  if(text!==null)p.textContent=text;return p;}
 
@@ -212,7 +214,6 @@ svg.addEventListener("click",event=>{
 },true);
 prepareCrossing();
 
-const planNav=createAADSvgNavigator(svg,extents);
 $("zoom-in").addEventListener("click",()=>planNav.zoomIn());
 $("zoom-out").addEventListener("click",()=>planNav.zoomOut());
 $("zoom-reset").addEventListener("click",()=>planNav.reset());
@@ -375,8 +376,11 @@ window.AADSourceReview={
   const row=[...$("rows").querySelectorAll("tr")].find(x=>x.dataset.id===id);
   const plan=dom&&e.kind==="column"?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
    dom&&e.kind==="footing"?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
-    z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:null;
-  const mesh=visual&&["column","footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
+    z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:
+   dom&&["beam","plinth-beam","architectural-line"].includes(e.kind)?
+    {x:(Number(dom.getAttribute("x1"))+Number(dom.getAttribute("x2")))/2,
+     z:(Number(dom.getAttribute("y1"))+Number(dom.getAttribute("y2")))/2}:null;
+  const mesh=visual&&["column","footing","plinth-beam"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
   return{elementId:id,source:{x:e.x,z:e.z},plan,mesh,
    table:row?{x:Number(row.cells[3].textContent.split("/")[0]),z:Number(row.cells[3].textContent.split("/")[1])}:null};
  }
