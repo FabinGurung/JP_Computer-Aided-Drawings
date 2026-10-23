@@ -1,0 +1,16 @@
+{
+  "schema": "jp-cad://aad-project-stage-links/1",
+  "projectId": "PRJ-000007",
+  "reviewMode": "ENGINEERING_HOLD",
+  "additionalLayers": [
+    {
+      "kind": "plinth-beam",
+      "stage": "M70",
+      "dataPath": "/JP_Computer-Aided-Drawings/stages/m70/stage-data.json",
+      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m70/meta.json",
+      "sourceStageName": "Narayani M70 Plinth Beam Network v0.5",
+      "policy": "FROZEN_PUBLIC_STAGE_PLINTH_EVIDENCE_ONLY",
+      "changePolicy": "COMPARE_DISPLAY_ONLY_NO_SOURCE_OVERWRITE"
+    }
+  ]
+}

@@ -3,6 +3,10 @@ on:
   pull_request:
     paths:
       - "public/assets/js/aad-source-ground-floor.mjs"
+      - "public/assets/js/aad-m70-plinth-bridge.mjs"
+      - "public/assets/js/aad-source-svg-navigation.mjs"
+      - "public/stages/m70/**"
+      - "public/data/projects/narayani-parajuli/aad-source-stage-links-v1.json"
       - "public/assets/js/aad-source-coordinate-picking.mjs"
       - "public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json"
       - "cad/aad/source-review/**"
@@ -31,6 +35,9 @@ jobs:
           npm run build -- --base=/JP_Computer-Aided-Drawings/
           test -s dist/cad/aad/source-review/index.html
           test -s dist/data/projects/narayani-parajuli/aad-source-gf-review-v1.json
+          test -s dist/data/projects/narayani-parajuli/aad-source-stage-links-v1.json
+          test -s dist/stages/m70/stage-data.json
+          test -s dist/stages/m70/meta.json
           test -s dist/projects/narayani-parajuli/aad-source-review/index.html
       - name: Install Chromium browser QA
         run: |

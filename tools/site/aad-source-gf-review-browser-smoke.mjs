@@ -17,7 +17,7 @@ try{
    proof:window.AADSourceReview.getViewCoordinateProof("SC-G1")};
  });
  assert.equal(first.schema,"jp-cad://aad-source-gf-assembly/1");
- assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74});
+ assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74,"plinth-beam":16});
  assert.ok(first.proof.plan&&first.proof.mesh&&first.proof.table,"Structural column needs 2D/3D/table views");
  for(const frame of ["plan","mesh","table"]){
   for(const axis of ["x","z"]){
@@ -75,6 +75,54 @@ try{
  const sourceI4=await page.evaluate(()=>window.AADSourceReview.getSnapshot().elements.find(e=>e.id==="SC-I4"));
  assert.ok(Math.abs(sourceI4.x-projected.x)<.001);
  assert.ok(Math.abs(sourceI4.z-projected.z)>.6);
+ // M22: frozen M70 is an independent plinth-level source stage, not renamed GF edges.
+ const m70=await page.evaluate(()=>window.AADSourceReview.getM70Plinth());
+ assert.ok(m70?.maxColumnResidualM<.001&&m70.runCount===16);
+ assert.equal(m70.declaredSectionMM.width,230);
+ assert.equal(m70.declaredSectionMM.depth,300);
+ assert.ok(m70.warnings.some(s=>s.includes("no SC-I3 column")));
+ assert.equal(await page.locator('#plinth-layer-label').isVisible(),true);
+ assert.equal(await page.locator('.toolbar input[value="beam"]').isChecked(),false);
+ assert.equal(await page.locator('.toolbar input[value="plinth-beam"]').isChecked(),true);
+ assert.equal(await page.locator('#plan [data-id="PB-H3"]').count(),1);
+ assert.equal(await page.locator('#plan [data-id="SB-GF-018"]').count(),0);
+ const pbProof=await page.evaluate(()=>window.AADSourceReview.getViewCoordinateProof("PB-H3"));
+ assert.ok(pbProof.plan&&pbProof.mesh&&pbProof.table);
+ for(const frame of ["plan","mesh","table"])for(const axis of ["x","z"])
+  assert.ok(Math.abs(pbProof.source[axis]-pbProof[frame][axis])<(frame==="table"?.0006:1e-6),
+   "M70 plinth "+frame+" "+axis+" did not match the registered source");
+ await page.locator("#filter").selectOption("plinth-beam");
+ assert.equal(await page.locator("#rows tr").count(),16);
+ await page.locator('#rows tr[data-id="PB-H3"]').click();
+ assert.match(await page.locator("#selected").innerText(),/230 × 300 mm/);
+ await page.locator("#filter").selectOption("all");
+ // Zoom state must survive a component selection and exact world coordinates
+ // must remain stable; toolbar, wheel, pan and fit act on SVG viewBox only.
+ const fit=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ await page.locator("#zoom-in").click();
+ const zoomed=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ assert.ok(zoomed.w<fit.w&&zoomed.h<fit.h);
+ await page.evaluate(()=>window.AADSourceReview.selectById("PB-H3"));
+ const persistent=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ assert.ok(Math.abs(persistent.w-zoomed.w)<1e-9);
+ await page.locator("#zoom-out").click();
+ await page.locator("#zoom-reset").click();
+ const reset=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ assert.ok(Math.abs(reset.w-fit.w)<1e-9);
+ await page.locator("#plan").scrollIntoViewIfNeeded();
+ const box=await page.locator("#plan").boundingBox();
+ await page.mouse.move(box.x+box.width*.52,box.y+box.height*.52);
+ await page.mouse.wheel(0,-140);
+ const wheeled=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ assert.ok(wheeled.w<fit.w,"Wheel zoom was lost");
+ await page.mouse.move(box.x+box.width*.35,box.y+box.height*.37);
+ await page.mouse.down();
+ await page.mouse.move(box.x+box.width*.46,box.y+box.height*.42,{steps:9});
+ await page.mouse.up();
+ const panned=await page.evaluate(()=>window.AADSourceReview.getPlanView());
+ assert.ok(Math.abs(panned.x-wheeled.x)>.01||Math.abs(panned.y-wheeled.y)>.01,
+  "Drag should pan plan world viewport");
+ await page.locator("#zoom-reset").click();
  await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
  assert.match(await page.locator("#selected").innerText(),/G1 CRITICAL/);
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
@@ -82,6 +130,8 @@ try{
  assert.equal(await page.locator('#rows tr[data-id="SF-ACE9E"].selected').count(),1);
  await page.locator("#filter").selectOption("column");
  assert.equal(await page.locator("#rows tr").count(),23);
+ await page.locator("#filter").selectOption("plinth-beam");
+ assert.equal(await page.locator("#rows tr").count(),16);
  await page.locator("#filter").selectOption("footing");
  assert.equal(await page.locator("#rows tr").count(),21);
  await page.locator("#filter").selectOption("beam");

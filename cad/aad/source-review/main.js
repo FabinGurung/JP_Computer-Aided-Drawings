@@ -7,6 +7,8 @@ import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 const $=id=>document.getElementById(id);
 const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {createSourceGroundFloorReview}=await import(/* @vite-ignore */moduleURL("aad-source-ground-floor.mjs"));
+const {bridgeM70Plinth}=await import(/* @vite-ignore */moduleURL("aad-m70-plinth-bridge.mjs"));
+const {createAADSvgNavigator}=await import(/* @vite-ignore */moduleURL("aad-source-svg-navigation.mjs"));
 const {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}=
  await import(/* @vite-ignore */moduleURL("aad-source-coordinate-picking.mjs"));
 const params=new URLSearchParams(location.search);
@@ -17,8 +19,51 @@ if(dataURL.origin!==location.origin||!dataURL.pathname.endsWith(".json"))throw E
 const response=await fetch(dataURL.href,{cache:"no-store"});
 if(!response.ok)throw Error("Cannot fetch reviewed source ledger ("+response.status+")");
 const input=await response.json(),model=createSourceGroundFloorReview(input),svg=$("plan");
+// Opt-in project adapter lives beside the project ledger; the shared viewer
+// never hardcodes a Narayani stage, and frozen stage bytes remain untouched.
+let plinth=null;
+const adapterURL=new URL(dataURL.pathname.replace(/[^/]+$/,"aad-source-stage-links-v1.json"),location.origin);
+const adapterResponse=await fetch(adapterURL.href,{cache:"no-store"});
+if(adapterResponse.ok){
+ const adapter=await adapterResponse.json();
+ if(adapter.schema!=="jp-cad://aad-project-stage-links/1"||adapter.projectId!==model.projectId)
+  throw Error("Invalid source-project stage adapter");
+ for(const item of adapter.additionalLayers||[]){
+  if(item.kind!=="plinth-beam"||item.stage!=="M70")throw Error("Unsupported source stage adapter");
+  const stageURL=new URL(item.dataPath,location.origin),metaURL=new URL(item.metadataPath,location.origin);
+  if(stageURL.origin!==location.origin||metaURL.origin!==location.origin||
+   !stageURL.pathname.endsWith("/stages/m70/stage-data.json")||
+   !metaURL.pathname.endsWith("/stages/m70/meta.json"))
+   throw Error("Frozen M70 adapter must resolve to the known same-origin stage snapshots");
+  const [dataResponse,metaResponse]=await Promise.all([
+   fetch(stageURL.href,{cache:"no-store"}),fetch(metaURL.href,{cache:"no-store"})]);
+  if(!dataResponse.ok||!metaResponse.ok)throw Error("Missing required M70 frozen source stage");
+  const stage=await dataResponse.json(),meta=await metaResponse.json();
+  plinth=bridgeM70Plinth(model,stage,meta);
+  model.elements.push(...plinth.records);
+  model.counts["plinth-beam"]=plinth.runCount;
+  model.m70PlinthReview=plinth;
+ }
+}else if(adapterResponse.status!==404)throw Error("Cannot load project stage adapter ("+adapterResponse.status+")");
 $("name").textContent=model.name;
-const labels={"column":"Columns","footing":"Footings","beam":"Beam candidates","architectural-line":"Architectural edges"};
+const labels={"column":"Columns","footing":"Footings","beam":"GF DXF beam candidates",
+ "plinth-beam":"M70 plinth beams","architectural-line":"Architectural edges"};
+if(plinth){
+ const control=$("plinth-layer-label");control.hidden=false;
+ const m70Info=document.createElement("li");m70Info.className="warning";
+ m70Info.textContent="M70 FROZEN PLINTH NETWORK: "+plinth.runCount+
+  " source-backed runs · "+plinth.centerlineLengthM.toFixed(3)+" m total · "+
+  "230 × 300 mm · grid linked to 23 DXF columns (maximum registration residual "+
+  (plinth.maxColumnResidualM*1000).toFixed(2)+" mm). "+
+  "Distinct from the 32 GF DXF beam-edge candidates; original DXFs govern columns/footings.";
+ $("issues").append(m70Info);
+ for(const issue of plinth.warnings){const item=document.createElement("li");
+  item.className="warning";item.textContent=issue;$("issues").append(item);}
+ // Initially show the plinth-beam design network rather than the incomplete
+ // GF paired-edge source candidates. Both remain manually switchable.
+ const oldBeamBox=document.querySelector('.toolbar input[value="beam"]');
+ if(oldBeamBox)oldBeamBox.checked=false;
+}
 $("counts").replaceChildren(...Object.entries(model.counts).map(([kind,n])=>{
  const el=document.createElement("span");el.className="stat";el.textContent=n+" "+labels[kind];return el;
 }));
@@ -34,16 +79,21 @@ supportNotice.textContent="GF BEAM ENDPOINTS · SOURCE REVIEW: "+beamReview.beyo
 $("issues").append(supportNotice);
 for(const issue of model.issues){const li=document.createElement("li");li.className="warning";
  li.textContent=issue.code+": "+(issue.note||issue.decision||"Source review HOLD");$("issues").append(li);}
-const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"architectural-line":0x376b7f};
-const shown=new Set(Object.keys(labels)),elementMap=new Map(model.elements.map(e=>[e.id,e]));
+const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"plinth-beam":0x984914,"architectural-line":0x376b7f};
+const shown=new Set(Object.keys(labels));
+if(plinth)shown.delete("beam");
+else shown.delete("plinth-beam");
+const elementMap=new Map(model.elements.map(e=>[e.id,e]));
 let selectedId=null,pinned=null,hovered=null,threePinMarker=null,proposedCrossing=null;
 const fmt=n=>Number.isFinite(n)?n.toFixed(3):"—";
 const sourceHandles=e=>e.source.entityHandles?.join(", ")||e.source.entityHandle||"none";
 const ns="http://www.w3.org/2000/svg";
+// Attach drag suppression before registering the click-to-pin listener.
+const planNav=createAADSvgNavigator(svg,extents);
 function node(tag,props={},text=null){const p=document.createElementNS(ns,tag);for(const [k,v] of Object.entries(props))p.setAttribute(k,v);
  if(text!==null)p.textContent=text;return p;}
 
-const beamChoices=model.elements.filter(e=>e.kind==="beam");
+const beamChoices=model.elements.filter(e=>e.kind==="beam"||e.kind==="plinth-beam");
 for(const select of [$("pin-beam-a"),$("pin-beam-b")]){
  for(const e of beamChoices){
   const option=document.createElement("option");option.value=e.id;option.textContent=e.id;select.append(option);
@@ -164,18 +214,21 @@ svg.addEventListener("click",event=>{
 },true);
 prepareCrossing();
 
+$("zoom-in").addEventListener("click",()=>planNav.zoomIn());
+$("zoom-out").addEventListener("click",()=>planNav.zoomOut());
+$("zoom-reset").addEventListener("click",()=>planNav.reset());
 function extents(){
  const b=model.bounds;return{x:b.minX-.9,y:b.minZ-.9,w:b.maxX-b.minX+1.8,h:b.maxZ-b.minZ+1.8};
 }
 function drawPlan(){
- const b=extents();svg.setAttribute("viewBox",[b.x,b.y,b.w,b.h].join(" "));
+ const b=extents();planNav.apply();
  svg.setAttribute("preserveAspectRatio","xMidYMid meet");svg.replaceChildren();
  const background=node("rect",{x:b.x,y:b.y,width:b.w,height:b.h,fill:"#edf7f7"});svg.append(background);
  const ggrid=node("g",{stroke:"#bed6d8","stroke-width":".013"});
  for(let x=Math.floor(b.x);x<=b.x+b.w;x++)ggrid.append(node("line",{x1:x,y1:b.y,x2:x,y2:b.y+b.h}));
  for(let z=Math.floor(b.y);z<=b.y+b.h;z++)ggrid.append(node("line",{x1:b.x,y1:z,x2:b.x+b.w,y2:z}));
  svg.append(ggrid);
- for(const e of [...model.elements].sort((a,b)=>({"architectural-line":0,footing:1,beam:2,column:3}[a.kind])-({"architectural-line":0,footing:1,beam:2,column:3}[b.kind]))){
+ for(const e of [...model.elements].sort((a,b)=>({"architectural-line":0,footing:1,beam:2,"plinth-beam":3,column:4}[a.kind])-({"architectural-line":0,footing:1,beam:2,"plinth-beam":3,column:4}[b.kind]))){
   if(!shown.has(e.kind))continue;
   const active=e.id===selectedId;
   let g;
@@ -188,9 +241,9 @@ function drawPlan(){
     "stroke-dasharray":e.conflict?".23 .12":undefined,"stroke-width":active?".095":".048"});
    if(e.conflict){const alert=node("text",{x:e.x+e.dx/2+.12,y:e.z,"font-size":".27",fill:"#bb3920"},"G1 !");svg.append(alert);}
   } else{
-   const colors=e.kind==="beam"?"#bd884b":"#356c79";
+   const colors=e.kind==="plinth-beam"?"#984914":e.kind==="beam"?"#bd884b":"#356c79";
    g=node("line",{x1:e.ax,y1:e.az,x2:e.bx,y2:e.bz,
-    stroke:active?"#ed681d":colors,"stroke-width":active?".15":e.kind==="beam"?".115":".065",
+    stroke:active?"#ed681d":colors,"stroke-width":active?".15":e.kind==="plinth-beam"?".23":e.kind==="beam"?".115":".065",
     "stroke-dasharray":e.kind==="beam"?".27 .12":undefined,"stroke-linecap":"round"});
   }
   g.classList.add("draw");g.setAttribute("data-id",e.id);
@@ -215,7 +268,8 @@ function initThree(){
  const grid=new THREE.GridHelper(Math.ceil(range+4),Math.ceil(range+4),0x8bb0b8,0xc9dce0);
  grid.position.set(cx,-.26,cz);scene.add(grid);
  orbit=new OrbitControls(camera,renderer.domElement);orbit.target.set(cx,0,cz);
- orbit.enableDamping=true;orbit.update();
+ orbit.enableDamping=true;orbit.update();orbit.saveState();
+ $("reset-3d").addEventListener("click",()=>{orbit.reset();orbit.update();});
  const raycaster=new THREE.Raycaster();raycaster.params.Line.threshold=.30;
  renderer.domElement.addEventListener("pointermove",event=>showHover("3D",threeGroundCursor(event)));
  renderer.domElement.addEventListener("click",event=>{
@@ -246,6 +300,14 @@ function renderThree(){
    const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,.07,e.dz),new THREE.MeshStandardMaterial({
     color:e.conflict?0xd35030:color,transparent:true,opacity:.58}));
    mesh.position.set(e.x,-.17,e.z);add(e,mesh);
+  }else if(e.kind==="plinth-beam"){
+   // M70 has a source-supported 230x300mm rectangular section; height/location
+   // along Y remains a SCHEMATIC visual aid only, not construction set-out.
+   const length=Math.hypot(e.bx-e.ax,e.bz-e.az);
+   const mesh=new THREE.Mesh(new THREE.BoxGeometry(length,.30,.23),
+    new THREE.MeshStandardMaterial({color}));
+   mesh.rotation.y=-Math.atan2(e.bz-e.az,e.bx-e.ax);
+   mesh.position.set(e.x,.60,e.z);add(e,mesh);
   }else{
    // Only the horizontal native CAD line is supported: Y is display-only.
    const points=[new THREE.Vector3(e.ax,e.kind==="beam"?2.75:.04,e.az),
@@ -278,10 +340,13 @@ function choose(id){
  selectedId=id;
  $("selected").textContent=[
   (e.label||e.id)+" — "+labels[e.kind], "Stable ID: "+e.id, "World X/Z: "+fmt(e.x)+" / "+fmt(e.z)+" m",
-  "Source: "+e.source.file,"CAD handle(s): "+sourceHandles(e),"Source-native coordinates: "+
+  "Source: "+e.source.file,"Source handle / run: "+sourceHandles(e),"Source-native coordinates: "+
   JSON.stringify(e.source.sourceMM||e.source.nativeLineMM||e.source.nativeLineMM),
   e.kind==="footing"?"Native drawn footprint: "+e.dx+" × "+e.dz+" m · columns: "+e.columnIds.join(", "):"",
-  e.kind==="beam"?"DXF paired-edge width: "+e.width+" m; height and support graph unverified":"",
+  e.kind==="beam"?"GF DXF paired-edge width: "+e.width+" m; height and support graph unverified":"",
+  e.kind==="plinth-beam"?"M70 plinth run "+e.fromGrid+" → "+e.toGrid+
+   " · frozen centerline "+e.lengthM+" m · source section 230 × 300 mm. "+
+   "Ground-floor level label and vertical location remain schematic in 3D; not engineering-certified.":"",
   ...(e.kind==="beam"?model.beamEndpointReview.details.filter(v=>v.beamId===e.id).map(v=>
    "Endpoint "+v.end+": nearest column candidate "+v.nearestColumnId+
    " at "+v.distanceM+" m; proximity within "+beamReview.toleranceM+" m: "+
@@ -298,6 +363,8 @@ for(const id of ["filter","search"])$(id).addEventListener(id==="filter"?"change
 initThree();drawPlan();renderThree();drawTable();
 window.AADSourceReview={
  getSnapshot:()=>model,getSelected:()=>elementMap.get(selectedId)||null,selectById:choose,
+ getPlanView:()=>planNav.view(),resetPlanView:()=>planNav.reset(),
+ zoomPlan:factor=>planNav.zoom(factor),getM70Plinth:()=>plinth,
  getPinnedPoint:()=>pinned?{...pinned}:null,getHoverPoint:()=>hovered?{...hovered}:null,
  getProjectedCrossing:()=>proposedCrossing?{...proposedCrossing}:null,
  pinWorldPoint:(x,z)=>pinWorldPoint({x,z},"USER_EXPLICIT_COORDINATE"),
@@ -309,8 +376,11 @@ window.AADSourceReview={
   const row=[...$("rows").querySelectorAll("tr")].find(x=>x.dataset.id===id);
   const plan=dom&&e.kind==="column"?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
    dom&&e.kind==="footing"?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
-    z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:null;
-  const mesh=visual&&["column","footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
+    z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:
+   dom&&["beam","plinth-beam","architectural-line"].includes(e.kind)?
+    {x:(Number(dom.getAttribute("x1"))+Number(dom.getAttribute("x2")))/2,
+     z:(Number(dom.getAttribute("y1"))+Number(dom.getAttribute("y2")))/2}:null;
+  const mesh=visual&&["column","footing","plinth-beam"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
   return{elementId:id,source:{x:e.x,z:e.z},plan,mesh,
    table:row?{x:Number(row.cells[3].textContent.split("/")[0]),z:Number(row.cells[3].textContent.split("/")[1])}:null};
  }
