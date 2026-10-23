@@ -58,12 +58,12 @@ try{
  const pickError=Math.hypot(tapPin.x-projected.x,tapPin.z-projected.z);
  console.log("SOURCE_COORDINATE_PICK_DIAGNOSTIC",JSON.stringify({viewPoint,projected,tapPin,pickError,
   readout:await page.locator("#cursor2d").innerText()}));
- assert.ok(pickError<.12,"2D pixel cursor/pinned coordinate error "+pickError+" m for viewport picking");
+ assert.ok(pickError<.05,"2D pixel cursor/pinned coordinate error "+pickError+" m for viewport picking");
  await page.locator("#model3d canvas").scrollIntoViewIfNeeded();
  const bounds=await page.locator("#model3d canvas").boundingBox();
  assert.ok(bounds?.width>100&&bounds?.height>100);
  await page.mouse.move(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
- assert.match(await page.locator("#cursor3d").innerText(),/3D X -?\\d+\\.\\d{3} · Z -?\\d+\\.\\d{3} m/);
+ assert.match(await page.locator("#cursor3d").innerText(),/3D X -?\d+\.\d{3} · Z -?\d+\.\d{3} m/);
  await page.mouse.click(bounds.x+bounds.width/2,bounds.y+bounds.height/2);
  assert.equal((await page.evaluate(()=>window.AADSourceReview.getPinnedPoint())).method,"3D_GROUND_TAP");
  await page.locator("#pin-clear").click();
