@@ -45,7 +45,10 @@ assert.equal(model.diagnostics.some(d=>d.code==="NO_UPPER_FLOOR_STRUCTURAL_SOURC
 assert.ok(model.elements.every(e=>!/:gf:COL:G[0-9]+-[0-9]+$/.test(e.id)&&!e.id.includes(":BEAM-X:")&&!e.id.includes(":BEAM-Z:")));
 assert.ok(verifyAssembly(model).valid);
 const register=buildAADComponentGroups(model,{level:"gf",discipline:"Structure"});
-assert.equal(register.matching,60);
+const sourced=register.groups.flatMap(g=>g.disciplines.flatMap(d=>d.types.flatMap(t=>t.items)))
+ .filter(e=>["column","footing","beam"].includes(e.kind)&&e.previewOnly);
+assert.equal(sourced.length,60,"Exactly 23+21+16 source structural elements in grouped register");
+assert.ok(register.matching>=60,"Sourced structure must coexist with legitimate slab and landing members");
 const ifc=writeIFC4(model);
 checkIfcReferences(ifc.text);
 assert.equal(ifc.counts.IfcColumn,23);
