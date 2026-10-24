@@ -14,10 +14,10 @@ const segmentDistance=(p,a,b)=>{
  const t=Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.z-a.z)*dz)/den));
  return Math.hypot(p.x-a.x-t*dx,p.z-a.z-t*dz);
 };
-export function auditAADStructuralRegistration(elements,levels,manifest,{reviewToleranceM=.2}={}){
+export function auditAADStructuralRegistration(elements,levels,manifest,{reviewToleranceM=.2,sourceReviewed=false,sourceOrigin=null}={}){
  if(!(reviewToleranceM>0&&reviewToleranceM<=1))throw Error("AAD review tolerance must be positive and no greater than 1m");
  const byLevel=[],details=[],beams=[],diagnostics=[];
- const origin=manifest.structural?.columns?.source||"STRUCTURAL_GRID_SOURCE_UNSPECIFIED";
+ const origin=sourceOrigin||manifest.structural?.columns?.source||"STRUCTURAL_GRID_SOURCE_UNSPECIFIED";
  for(const level of levels){
   const cols=elements.filter(e=>e.kind==="column"&&e.level===level.id);
   const walls=elements.filter(e=>e.kind==="wall"&&e.level===level.id);
@@ -49,9 +49,11 @@ export function auditAADStructuralRegistration(elements,levels,manifest,{reviewT
    "m from modelled wall centre-lines. Grid source: "+origin+
    ". Check structural DXF datum, floor registration and intended freestanding columns; DO NOT snap automatically."});
  }
- if(details.length)diagnostics.push({severity:"WARNING",code:"STRUCTURAL_GRID_PROVENANCE_REVIEW",level:null,
-  message:"Columns and beams were assembled from the manifest structural grid, not extracted/verified from the cited DXF. "+
-   "2D/3D/table coordinate parity is not architectural/structural alignment approval."});
+ if(details.length)diagnostics.push(sourceReviewed?
+   {severity:"WARNING",code:"SOURCE_STRUCTURAL_ARCHITECTURAL_REGISTRATION_HOLD",level:null,
+    message:"Columns/beams originate from owner-reviewed DXF/M70 records; the main architectural wall graph remains area-calibrated and lacks exact datum confirmation. Geometry parity is not engineering certification."}:
+   {severity:"WARNING",code:"STRUCTURAL_GRID_PROVENANCE_REVIEW",level:null,
+    message:"Columns and beams were assembled from the manifest structural grid, not extracted/verified from the cited DXF. 2D/3D/table parity is not alignment approval."});
  return{schema:"jp-cad://aad-structural-registration-review/1",
   kind:"geometric-proximity-audit-not-code-check",
   gridOrigin:origin,sourceStructuralDrawingId:manifest.sourceAuthority?.structuralDxfDriveId||null,
