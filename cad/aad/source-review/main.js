@@ -9,6 +9,7 @@ const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {createSourceGroundFloorReview}=await import(/* @vite-ignore */moduleURL("aad-source-ground-floor.mjs"));
 const {bridgeM70Plinth}=await import(/* @vite-ignore */moduleURL("aad-m70-plinth-bridge.mjs"));
 const {reconcileM23Stages}=await import(/* @vite-ignore */moduleURL("aad-m23-governed-stages.mjs"));
+const {deriveUserQAPreview}=await import(/* @vite-ignore */moduleURL("aad-m24-user-reviewed-preview.mjs"));
 const {createAADSvgNavigator}=await import(/* @vite-ignore */moduleURL("aad-source-svg-navigation.mjs"));
 const {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}=
  await import(/* @vite-ignore */moduleURL("aad-source-coordinate-picking.mjs"));
@@ -22,7 +23,7 @@ if(!response.ok)throw Error("Cannot fetch reviewed source ledger ("+response.sta
 const input=await response.json(),model=createSourceGroundFloorReview(input),svg=$("plan");
 // Opt-in project adapter lives beside the project ledger; the shared viewer
 // never hardcodes a Narayani stage, and frozen stage bytes remain untouched.
-let plinth=null,staged=null,adapter=null;
+let plinth=null,staged=null,adapter=null,userQA=null;
 const adapterURL=new URL(dataURL.pathname.replace(/[^/]+$/,"aad-source-stage-links-v1.json"),location.origin);
 const adapterResponse=await fetch(adapterURL.href,{cache:"no-store"});
 if(adapterResponse.ok){
@@ -67,11 +68,28 @@ if(adapterResponse.ok){
   model.counts["stage-footing"]=staged.footings.length;
   model.governedStageReview=staged;
  }
+ if(params.get("qa")==="user-reviewed"){
+  if(!adapter.optionalUserQA||!plinth||!staged)
+   throw Error("User QA mode requires project-owned stage sources");
+  const qaURL=new URL(adapter.optionalUserQA.dataPath,location.origin);
+  if(qaURL.origin!==location.origin||
+     !qaURL.pathname.endsWith("/aad-user-qa-decisions-v1.json"))
+   throw Error("Unsupported user QA review file");
+  const result=await fetch(qaURL.href,{cache:"no-store"});
+  if(!result.ok)throw Error("Missing user-reviewed decisions");
+  userQA=deriveUserQAPreview(model,plinth,staged,await result.json());
+  model.elements.push(...userQA.columns,...userQA.footings);
+  model.counts["qa-column"]=userQA.columns.length;
+  model.counts["qa-footing"]=userQA.footings.length;
+  model.userQAWorkingReview=userQA;
+ }
 }else if(adapterResponse.status!==404)throw Error("Cannot load project stage adapter ("+adapterResponse.status+")");
 $("name").textContent=model.name;
 const labels={"column":"DXF comparison columns","footing":"DXF comparison footings",
  "beam":"DXF archived beam candidates","plinth-beam":"M70 GF/plinth beams",
- "stage-column":"M60 columns","stage-footing":"M40/V03 footings","architectural-line":"Architectural edges"};
+ "stage-column":"M60 columns","stage-footing":"M40/V03 footings",
+ "qa-column":"User QA proposed columns (HOLD)","qa-footing":"User QA DXF footings (HOLD)",
+ "architectural-line":"Architectural edges"};
 if(staged){
  $("m60-layer-label").hidden=false;$("m40-layer-label").hidden=false;
  for(const kind of ["beam","column","footing"]){
@@ -81,6 +99,23 @@ if(staged){
  for(const issue of staged.issues){
   const li=document.createElement("li");li.className="warning";
   li.textContent=issue.code+" · "+issue.note;$("issues").append(li);
+ }
+}
+if(userQA){
+ $("qa-column-label").hidden=false;$("qa-footing-label").hidden=false;
+ for(const kind of ["stage-column","stage-footing","column","footing","beam"]){
+  const ctl=document.querySelector('.toolbar input[value="'+kind+'"]');
+  if(ctl)ctl.checked=false;
+ }
+ const hold=document.createElement("li");hold.className="warning";
+ hold.textContent="M24 USER-REVIEWED WORKING PROPOSAL ONLY: 23 DXF-preferred columns with "+
+  "I4 removed from proposed geometry and Ø350 I3 added at M70 beam junction; "+
+  "21 original DXF footing outlines. NOT engineering-approved or for construction. "+
+  "F3 answer contradiction, G1 footing/excavation allowance and orphan CF1 I4 support remain unresolved.";
+ $("issues").append(hold);
+ for(const item of userQA.discrepancies){
+  const li=document.createElement("li");li.className="warning";
+  li.textContent=item.code+": "+item.note;$("issues").append(li);
  }
 }
 if(plinth){
@@ -114,11 +149,15 @@ supportNotice.textContent="GF BEAM ENDPOINTS · SOURCE REVIEW: "+beamReview.beyo
 $("issues").append(supportNotice);
 for(const issue of model.issues){const li=document.createElement("li");li.className="warning";
  li.textContent=issue.code+": "+(issue.note||issue.decision||"Source review HOLD");$("issues").append(li);}
-const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"plinth-beam":0x984914,"stage-column":0x0a9665,"stage-footing":0x9567b1,"architectural-line":0x376b7f};
+const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,
+ "plinth-beam":0x984914,"stage-column":0x0a9665,"stage-footing":0x9567b1,
+ "qa-column":0x00598c,"qa-footing":0x9a5996,"architectural-line":0x376b7f};
 const shown=new Set(Object.keys(labels));
 if(plinth)shown.delete("beam");else shown.delete("plinth-beam");
 if(staged){shown.delete("column");shown.delete("footing");}
 else {shown.delete("stage-column");shown.delete("stage-footing");}
+if(userQA){shown.delete("stage-column");shown.delete("stage-footing");}
+else {shown.delete("qa-column");shown.delete("qa-footing");}
 const elementMap=new Map(model.elements.map(e=>[e.id,e]));
 let selectedId=null,pinned=null,hovered=null,threePinMarker=null,proposedCrossing=null;
 const fmt=n=>Number.isFinite(n)?n.toFixed(3):"—";
@@ -264,15 +303,17 @@ function drawPlan(){
  for(let x=Math.floor(b.x);x<=b.x+b.w;x++)ggrid.append(node("line",{x1:x,y1:b.y,x2:x,y2:b.y+b.h}));
  for(let z=Math.floor(b.y);z<=b.y+b.h;z++)ggrid.append(node("line",{x1:b.x,y1:z,x2:b.x+b.w,y2:z}));
  svg.append(ggrid);
- for(const e of [...model.elements].sort((a,b)=>({"architectural-line":0,footing:1,beam:2,"plinth-beam":3,"stage-footing":4,"stage-column":5,column:6}[a.kind])-({"architectural-line":0,footing:1,beam:2,"plinth-beam":3,"stage-footing":4,"stage-column":5,column:6}[b.kind]))){
+ for(const e of [...model.elements].sort((a,b)=>({"architectural-line":0,footing:1,beam:2,"plinth-beam":3,"stage-footing":4,"stage-column":5,column:6,
+ "qa-footing":7,"qa-column":8}[a.kind])-({"architectural-line":0,footing:1,beam:2,
+ "plinth-beam":3,"stage-footing":4,"stage-column":5,column:6,"qa-footing":7,"qa-column":8}[b.kind]))){
   if(!shown.has(e.kind))continue;
   const active=e.id===selectedId;
   let g;
-  if(e.kind==="column"||e.kind==="stage-column"){
-   const stageCol=e.kind==="stage-column";
+  if(["column","stage-column","qa-column"].includes(e.kind)){
+   const stageCol=e.kind==="stage-column"||e.kind==="qa-column";
    g=node("circle",{cx:e.x,cy:e.z,r:stageCol?e.width/2:(active?.21:.14),
     fill:active?"#f26923":stageCol?"#0e9665":"#0e8461",stroke:"#fff","stroke-width":".055"});
-  } else if(e.kind==="footing"||e.kind==="stage-footing"){
+  } else if(["footing","stage-footing","qa-footing"].includes(e.kind)){
    g=node("rect",{x:e.x-e.dx/2,y:e.z-e.dz/2,width:e.dx,height:e.dz,
     fill:e.conflict?"#f4bca4":active?"#cfb5e3":"#c6b3da",
     "fill-opacity":".45",stroke:e.conflict?"#d7492b":"#8d64b2",
@@ -329,14 +370,14 @@ function renderThree(){
  for(const e of model.elements){
   if(!shown.has(e.kind))continue;
   const active=e.id===selectedId,color=active?0xf26b21:palette[e.kind];
-  if(e.kind==="column"||e.kind==="stage-column"){
+  if(["column","stage-column","qa-column"].includes(e.kind)){
    // Source identifies the CENTRE only; width/height here are schematic.
-   const stageCol=e.kind==="stage-column";
+   const stageCol=e.kind==="stage-column"||e.kind==="qa-column";
     const shape=stageCol?(e.circular?new THREE.CylinderGeometry(e.width/2,e.width/2,2.8,24):
      new THREE.BoxGeometry(e.width,2.8,e.depth)):new THREE.BoxGeometry(.17,2.8,.17);
     const mesh=new THREE.Mesh(shape,new THREE.MeshStandardMaterial({color}));
    mesh.position.set(e.x,1.4,e.z);add(e,mesh);
-  }else if(e.kind==="footing"||e.kind==="stage-footing"){
+  }else if(["footing","stage-footing","qa-footing"].includes(e.kind)){
    // Preserve the real plan footprint; visible thickness is display-only.
    const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,.07,e.dz),new THREE.MeshStandardMaterial({
     color:e.conflict?0xd35030:color,transparent:true,opacity:.58}));
@@ -383,7 +424,17 @@ function choose(id){
   (e.label||e.id)+" — "+labels[e.kind], "Stable ID: "+e.id, "World X/Z: "+fmt(e.x)+" / "+fmt(e.z)+" m",
   "Source: "+e.source.file,"Source handle / run: "+sourceHandles(e),"Source-native coordinates: "+
   JSON.stringify(e.source.sourceMM||e.source.nativeLineMM||e.source.nativeLineMM),
-  ["footing","stage-footing"].includes(e.kind)?"Plan footing: "+e.dx+" × "+e.dz+" m · columns "+e.columnIds.join(", "):"",
+  ["footing","stage-footing","qa-footing"].includes(e.kind)?
+   "Footing footprint: "+e.dx+" × "+e.dz+" m · linked working columns "+
+    e.columnIds.join(", "):"",
+   e.kind==="qa-column"?"QA proposed column "+e.grid+" · "+e.section+
+    " · source "+(e.source.dxfId||e.source.originalDXFColumnId||"none")+
+    " · construction HOLD.":"",
+   e.kind==="qa-footing"?"DXF source "+e.source.dxfId+
+    " · stage comparison "+JSON.stringify(e.stageComparison)+
+    " · original support IDs "+e.originalDxfColumnIds.join(", ")+
+    " · orphaned "+(e.orphanOriginalColumnIds.join(", ")||"none")+
+    " · extra excavation/formwork working space >100mm is a SEPARATE unmeasured allowance.":"",
    e.kind==="stage-column"?"M60 section "+e.section+"; DXF candidate "+
     (e.otherSource?.dxfColumnId||"none")+"; offset "+(e.otherSource?.distanceToDxfM??"unmatched")+" m":"",
    e.kind==="stage-footing"?"M40 depth "+e.drawingDepthM+" m; V03 "+
@@ -410,7 +461,7 @@ for(const id of ["filter","search"])$(id).addEventListener(id==="filter"?"change
 initThree();drawPlan();renderThree();drawTable();
 window.AADSourceReview={
  getSnapshot:()=>model,getSelected:()=>elementMap.get(selectedId)||null,selectById:choose,
- getPlanView:()=>planNav.view(),resetPlanView:()=>planNav.reset(),getGovernedStages:()=>staged,
+ getPlanView:()=>planNav.view(),resetPlanView:()=>planNav.reset(),getGovernedStages:()=>staged,getUserQAPreview:()=>userQA,
  zoomPlan:factor=>planNav.zoom(factor),getM70Plinth:()=>plinth,
  getPinnedPoint:()=>pinned?{...pinned}:null,getHoverPoint:()=>hovered?{...hovered}:null,
  getProjectedCrossing:()=>proposedCrossing?{...proposedCrossing}:null,
@@ -421,13 +472,13 @@ window.AADSourceReview={
   const dom=[...svg.querySelectorAll("[data-id]")].find(x=>x.getAttribute("data-id")===id);
   const visual=clickables.find(x=>x.userData.id===id);
   const row=[...$("rows").querySelectorAll("tr")].find(x=>x.dataset.id===id);
-  const plan=dom&&["column","stage-column"].includes(e.kind)?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
-   dom&&["footing","stage-footing"].includes(e.kind)?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
+  const plan=dom&&["column","stage-column","qa-column"].includes(e.kind)?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
+   dom&&["footing","stage-footing","qa-footing"].includes(e.kind)?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
     z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:
    dom&&["beam","plinth-beam","architectural-line"].includes(e.kind)?
     {x:(Number(dom.getAttribute("x1"))+Number(dom.getAttribute("x2")))/2,
      z:(Number(dom.getAttribute("y1"))+Number(dom.getAttribute("y2")))/2}:null;
-  const mesh=visual&&["column","footing","plinth-beam","stage-column","stage-footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
+  const mesh=visual&&["column","footing","plinth-beam","stage-column","stage-footing","qa-column","qa-footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
   return{elementId:id,source:{x:e.x,z:e.z},plan,mesh,
    table:row?{x:Number(row.cells[3].textContent.split("/")[0]),z:Number(row.cells[3].textContent.split("/")[1])}:null};
  }

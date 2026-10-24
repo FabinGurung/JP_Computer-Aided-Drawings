@@ -1,0 +1,232 @@
+{
+  "schema": "jp-cad://narayani-user-reviewed-qa/1",
+  "projectId": "PRJ-000007",
+  "recordedAt": "2026-10-24T11:17:26.499Z",
+  "receivedOn": "2026-10-24",
+  "qaSource": "User-submitted exported 13-item QA JSON; user follow-up on field excavation/formwork working-space allowance",
+  "submissionFormat": "narayani-structural-visual-QA/1",
+  "sourceBlobSHAs": {
+    "M60": "3a22551a6312b947bccee29c05a79c119784b547",
+    "M40": "6416abf15f4603c17abda77fddc483d16b82e22b",
+    "V03": "4719a4b8b9b89aa54cee5ca92c27aedaa1e39ce6",
+    "M70": "4db7f87c7c5660cc8b77f5f494ad0e6d8ae1680b",
+    "DXF_LEDGER": "41de00eba1ac164863a9a855258abaef9b0687f6"
+  },
+  "engineeringApproval": false,
+  "notes": "Checkboxes attest to user's claimed review, including engineer contact; no signed drawing or revision identifier has been supplied to independently verify approval. Engineering HOLD remains.",
+  "workingProposal": {
+    "groundFloorBeams": "FROZEN_M70_16_RUNS_UNCHANGED",
+    "columns": {
+      "source": "ORIGINAL_DXF_CANDIDATES",
+      "omittedOriginalDXFGrids": [
+        "I4"
+      ],
+      "addColumnFrom": "SOURCE_DXF_SC_I4_C4_SECTION_REFERENCED_TO_M60",
+      "newGrid": "I3",
+      "targetCoordinateAuthority": "M70_GRID_I3",
+      "newPreviewId": "QA-SC-I3",
+      "retainAllOtherDXFGrids": true,
+      "originalDXFNeverDeleted": true
+    },
+    "footings": {
+      "source": "ORIGINAL_STRUCTURAL_DXF_DRAWN_OUTLINES",
+      "nativeFootingCount": 21,
+      "conflict": "G1 M40/V03 2100mm square versus DXF 1800mm square; preserve both for engineering review",
+      "compositeFooting": "DXF_CF1_H3_I4_SUPPORT_REFERENCES_STALE_IF_I4_COLUMN_MOVES"
+    },
+    "workingSpace": {
+      "appliesTo": "EXCAVATION_OR_WORK_AREA_NOT_CONCRETE_SIZE",
+      "userStatedAdditionalWorkingClearanceMM": ">100",
+      "perSideAssumed": false,
+      "exactExcavationSizeApproved": false,
+      "requiresSeparateQuantityLedger": true
+    }
+  },
+  "issues": [
+    {
+      "id": "COL-C4",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in m60 is wrong.",
+      "workingIntent": "OMIT_M60_ONLY_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-E2",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in m60 is wrong.",
+      "workingIntent": "OMIT_M60_ONLY_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-E4",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in m60 is wrong.",
+      "workingIntent": "OMIT_M60_ONLY_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-G4",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in m60 is wrong.",
+      "workingIntent": "OMIT_M60_ONLY_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-H4",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in m60 is wrong.",
+      "workingIntent": "OMIT_M60_ONLY_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-C3",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "RETAIN_DXF_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-F2",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "RETAIN_DXF_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-F3",
+      "recordedDecision": "propose-stage",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "RETAIN_DXF_COLUMN",
+      "qaDiscrepancy": "FORM_VALUE_CONTRADICTS_WRITTEN_NOTE_REQUIRES_CONFIRMATION",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-G3",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "RETAIN_DXF_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "COL-H3",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "RETAIN_DXF_COLUMN",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "FOOT-G1",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "DISPLAY_DXF_FOOTING_OUTLINE",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "FOOT-CF1",
+      "recordedDecision": "propose-dxf",
+      "note": "recorded in dxf is right.",
+      "workingIntent": "DISPLAY_DXF_COMBINED_FOOTING_WITH_SUPPORT_HOLD",
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    },
+    {
+      "id": "JOINT-I3",
+      "recordedDecision": "propose-dxf",
+      "note": "M70 PB-H3 and PB-V9 meet at grid I3, which is correct. M60 and the original DXF column candidates include an I4 Ø350 mm column, which is wrong, so delete that column an accept  I3 Ø350 mm column. An M70 beam intersection establishes a column at I3.",
+      "workingIntent": "RELOCATE_WORKING_I4_C4_TO_M70_I3",
+      "reassignmentNotStructurallyVerified": true,
+      "recordedEvidence": {
+        "stage": true,
+        "dxf": true,
+        "site": true,
+        "engineer": true
+      }
+    }
+  ],
+  "blockingItems": [
+    {
+      "id": "F3_SELECTION_NOTE_MISMATCH",
+      "status": "NEEDS_CONFIRMATION",
+      "reason": "Dropdown states propose-stage while note states DXF is right; preview adopts written intent but retains discrepancy"
+    },
+    {
+      "id": "I3_COLUMN_VERTICAL_LOAD_PATH",
+      "status": "ENGINEERING_HOLD",
+      "reason": "User requests I4→I3 correction, but beam intersection alone does not prove vertical support or column foundations/vertical continuity"
+    },
+    {
+      "id": "CF1_SUPPORT_ORPHAN",
+      "status": "ENGINEERING_HOLD",
+      "reason": "DXF CF1 H3/I4 support reference to I4 becomes orphaned in user-proposed I3 working-column set"
+    },
+    {
+      "id": "G1_CONCRETE_EXCAVATION_DISAMBIGUATION",
+      "status": "ENGINEERING_HOLD",
+      "reason": "Concrete DXF 1800×1800 versus M40/V03 2100×2100; extra working space >100mm stated but per-side convention, soil clearance, signed dimensions and reinforcement suitability unconfirmed"
+    },
+    {
+      "id": "DOCUMENTARY_ENGINEERING_APPROVAL",
+      "status": "NEEDS_EVIDENCE",
+      "reason": "All evidence boxes checked but no signed approval ID/revision provided; QA decisions are not construction approval"
+    }
+  ]
+}
