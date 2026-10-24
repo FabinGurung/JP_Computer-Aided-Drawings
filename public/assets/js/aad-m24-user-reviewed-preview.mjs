@@ -27,6 +27,7 @@ export function deriveUserQAPreview(dxf,m70,m23,qa){
     m23.columns.length!==23||m23.footings.length!==21)
   throw Error("M24 unexpected source stage counts");
  const byGrid=new Map(sourceCols.map(c=>[c.grid,c]));
+ const byId=new Map(sourceCols.map(c=>[c.id,c]));
  if(!byGrid.has("I4")||byGrid.has("I3"))throw Error("M24 source I4/I3 baseline changed");
  const grid=m70.grid;
  const t=m70.transform;
@@ -63,7 +64,7 @@ export function deriveUserQAPreview(dxf,m70,m23,qa){
   // Same original DXF footprint; its design/excavation meaning is under review.
   // Do not invent a footing at I3 or silently rehome the combined footing.
   const affected=f.columnIds.includes(i4.id);
-  const grid=f.columnIds.length===1?byGrid.get(f.columnIds[0])?.grid:
+  const grid=f.columnIds.length===1?byId.get(f.columnIds[0])?.grid:
    f.columnIds.includes(i4.id)?"H3/I4_DXF":"H2/I2_DXF";
   const stage=stagePadsByGrid.get(grid)||(
     f.type==="CF1"?(affected?stagePadsByGrid.get("H-I/4"):stagePadsByGrid.get("H-I/2")):null);
