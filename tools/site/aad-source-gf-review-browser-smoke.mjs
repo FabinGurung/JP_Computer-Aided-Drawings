@@ -14,10 +14,30 @@ try{
  const first=await page.evaluate(()=>{
   const a=window.AADSourceReview.getSnapshot();
   return{schema:a.schema,counts:a.counts,rendered:a.elements.length,issues:a.issues.map(x=>x.code),
-   proof:window.AADSourceReview.getViewCoordinateProof("SC-G1")};
+   proof:window.AADSourceReview.getViewCoordinateProof("M60-C3-G1")};
  });
  assert.equal(first.schema,"jp-cad://aad-source-gf-assembly/1");
- assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74,"plinth-beam":16});
+ const governed=await page.evaluate(()=>window.AADSourceReview.getGovernedStages());
+ assert.ok(governed);
+ assert.equal(governed.rules.groundFloorBeam,"M70_FROZEN_PLINTH_NETWORK_SUPREME");
+ assert.deepEqual(governed.mismatches.m60Only,["C4","E2","E4","G4","H4"]);
+ assert.deepEqual(governed.mismatches.dxfOnly,["C3","F2","F3","G3","H3"]);
+ assert.ok(governed.footings.some(x=>x.id==="FDN-IF3-G1"&&x.dx===2.1&&x.conflict));
+ assert.ok(governed.columns.some(x=>x.grid==="I4"&&x.section==="Ø350"));
+ assert.ok(!governed.columns.some(x=>x.grid==="I3"));
+ assert.equal(await page.locator('.toolbar input[value="stage-column"]').isChecked(),true);
+ assert.equal(await page.locator('.toolbar input[value="stage-footing"]').isChecked(),true);
+ assert.equal(await page.locator('.toolbar input[value="column"]').isChecked(),false);
+ assert.equal(await page.locator('.toolbar input[value="footing"]').isChecked(),false);
+ assert.equal(await page.locator('#plan [data-id="M60-C4-I4"]').count(),1);
+ assert.equal(await page.locator('#plan [data-id="FDN-IF3-G1"]').count(),1);
+ for(const id of ["M60-C4-I4","FDN-IF3-G1"]){
+  const proof=await page.evaluate(id=>window.AADSourceReview.getViewCoordinateProof(id),id);
+  assert.ok(proof.plan&&proof.mesh&&proof.table);
+  for(const frame of ["plan","mesh","table"])for(const axis of ["x","z"])
+   assert.ok(Math.abs(proof.source[axis]-proof[frame][axis])<(frame==="table"?.0006:1e-6));
+ }
+ assert.deepEqual(first.counts,{"column":23,"footing":21,"beam":32,"architectural-line":74,"plinth-beam":16,"stage-column":23,"stage-footing":21});
  assert.ok(first.proof.plan&&first.proof.mesh&&first.proof.table,"Structural column needs 2D/3D/table views");
  for(const frame of ["plan","mesh","table"]){
   for(const axis of ["x","z"]){
@@ -124,10 +144,17 @@ try{
   "Drag should pan plan world viewport");
  await page.locator("#zoom-reset").click();
  await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
- assert.match(await page.locator("#selected").innerText(),/G1 CRITICAL/);
+ assert.match(await page.locator("#selected").innerText(),/SOURCE CONFLICT HOLD/);
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
  assert.match(await page.locator("#selected").innerText(),/2.1 × 2.1/);
  assert.equal(await page.locator('#rows tr[data-id="SF-ACE9E"].selected').count(),1);
+ await page.locator("#filter").selectOption("stage-column");
+ assert.equal(await page.locator("#rows tr").count(),23);
+ await page.locator("#filter").selectOption("stage-footing");
+ assert.equal(await page.locator("#rows tr").count(),21);
+ await page.locator('#rows tr[data-id="FDN-IF3-G1"]').click();
+ assert.match(await page.locator("#selected").innerText(),/M40 depth/);
+ assert.match(await page.locator("#selected").innerText(),/V03/);
  await page.locator("#filter").selectOption("column");
  assert.equal(await page.locator("#rows tr").count(),23);
  await page.locator("#filter").selectOption("plinth-beam");
@@ -143,6 +170,7 @@ try{
  await page.locator("#filter").selectOption("architectural-line");
  assert.equal(await page.locator("#rows tr").count(),74);
  await page.locator("#filter").selectOption("all");
+ await page.locator('.toolbar input[value="column"]').check();
  await page.locator('#plan [data-id="SC-G3"]').click();
  assert.match(await page.locator("#selected").innerText(),/SC-G3/);
  assert.equal(await page.locator('#plan [data-id="SC-G3"]').count(),1);
