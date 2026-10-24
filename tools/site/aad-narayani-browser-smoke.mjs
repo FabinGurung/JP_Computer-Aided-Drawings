@@ -11,8 +11,17 @@ try{
  const editor=page.frameLocator("#aad-unified-engine");
  await editor.locator("#viewer2d .aad-wall").first().waitFor({state:"attached",timeout:35000}); // SVG horizontal lines have zero-height rectangles despite visible strokes
  await editor.locator("#viewer3d canvas").waitFor({timeout:35000});
- await editor.locator("#action-status").filter({hasText:"Shared AAD building assembly ready"}).waitFor({timeout:35000});
+ await editor.locator("#action-status").filter({hasText:"M26 source-backed structural GF"}).waitFor({timeout:35000});
  assert.equal(await editor.locator("#aad-storey option").count(),4);
+ const source=await page.locator("#aad-unified-engine").evaluate(frame=>{
+  const assembly=frame.contentWindow.AADStudio.getSnapshot().assembly;
+  return {column:assembly.counts.column,beam:assembly.counts.beam,
+   footing:assembly.counts.footing,review:assembly.sourceStructuralReview};
+ });
+ assert.equal(source.column,23);
+ assert.equal(source.beam,16);
+ assert.equal(source.footing,21);
+ assert.equal(source.review.scope,"GF_ONLY_SOURCE_PREVIEW");
  assert.ok(await editor.locator("#elements tr").count()>160);
  const normal=await editor.locator("#viewport2d").boundingBox(),visual=await editor.locator("#viewport3d").boundingBox();
  assert.ok(normal && visual && normal.x<visual.x,"2D plan must be to the left of 3D building");
