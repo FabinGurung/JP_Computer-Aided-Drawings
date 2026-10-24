@@ -5,6 +5,10 @@ on:
       - "public/assets/js/aad-source-ground-floor.mjs"
       - "public/assets/js/aad-m70-plinth-bridge.mjs"
       - "public/assets/js/aad-m23-governed-stages.mjs"
+      - "public/assets/js/aad-m24-user-reviewed-preview.mjs"
+      - "public/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json"
+      - "public/projects/narayani-parajuli/aad-qa-preview/**"
+      - "tools/site/aad-m24-user-qa-*.mjs"
       - "public/stages/m60/**"
       - "public/stages/m40/**"
       - "public/stages/v03/**"
@@ -34,12 +38,16 @@ jobs:
       - run: npm ci
       - name: Original DXF candidate provenance and geometry contract
         run: node tools/site/aad-source-gf-review-smoke.mjs
+      - name: Immutable-source fingerprint and M24 user review regression
+        run: node tools/site/aad-m24-user-qa-smoke.mjs
       - name: Build the common AAD source-preview engine under the real Pages base
         run: |
           npm run build -- --base=/JP_Computer-Aided-Drawings/
           test -s dist/cad/aad/source-review/index.html
           test -s dist/data/projects/narayani-parajuli/aad-source-gf-review-v1.json
           test -s dist/data/projects/narayani-parajuli/aad-source-stage-links-v1.json
+          test -s dist/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json
+          test -s dist/projects/narayani-parajuli/aad-qa-preview/index.html
           test -s dist/stages/m70/stage-data.json
           test -s dist/stages/m70/meta.json
           test -s dist/stages/m60/stage-data.json
@@ -58,10 +66,13 @@ jobs:
             sleep 2
           done
           AAD_SOURCE_REVIEW_URL=http://127.0.0.1:5202/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad-source-review/ node tools/site/aad-source-gf-review-browser-smoke.mjs
+          AAD_M24_QA_URL=http://127.0.0.1:5202/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad-qa-preview/ node tools/site/aad-m24-user-qa-browser-smoke.mjs
       - name: Preserve visual source-review proof
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: narayani-source-gf-branch-review
-          path: /tmp/aad-narayani-source-gf-review.png
+          path: |
+            /tmp/aad-narayani-source-gf-review.png
+            /tmp/aad-narayani-m24-user-qa-browser.png
           if-no-files-found: ignore
