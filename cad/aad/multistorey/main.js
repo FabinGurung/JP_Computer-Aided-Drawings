@@ -29,7 +29,9 @@ function shapeSolid(e){
  const p=e.profile,shape=new THREE.Shape();
  const contour=[...p],signed=contour.reduce((sum,v,i)=>{const q=contour[(i+1)%contour.length];return sum+v.x*q.z-q.x*v.z;},0);
  if(signed<0)contour.reverse();
- contour.forEach((v,i)=>i?shape.lineTo(v.x,-v.z):shape.moveTo(v.x,-v.z));
+ const sourceLocal=Boolean(e.previewOnly&&Number.isFinite(e.x)&&Number.isFinite(e.z));
+ const coordinates=v=>sourceLocal?{x:v.x-e.x,z:v.z-e.z}:v;
+ contour.forEach((v,i)=>{const p=coordinates(v);i?shape.lineTo(p.x,-p.z):shape.moveTo(p.x,-p.z);});
  shape.closePath();
  for(const hole of e.holes||[]){
   const h=new THREE.Path(),pts=[...hole],a=pts.reduce((sum,v,i)=>{const q=pts[(i+1)%pts.length];return sum+v.x*q.z-q.x*v.z;},0);
@@ -40,7 +42,7 @@ function shapeSolid(e){
  const geom=new THREE.ExtrudeGeometry(shape,{depth:e.dy,steps:1,bevelEnabled:false,curveSegments:1});
  geom.rotateX(-Math.PI/2);
  const mat=new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x8195a4,metalness:.03,roughness:.78,side:THREE.DoubleSide,transparent:true,opacity:e.kind==="roof"?.52:e.kind==="slab"?.75:.92});
- const m=new THREE.Mesh(geom,mat);m.position.y=e.y-e.dy/2;return [m];
+ const m=new THREE.Mesh(geom,mat);m.position.set(sourceLocal?e.x:0,e.y-e.dy/2,sourceLocal?e.z:0);return [m];
 }
 function boxes(e){
  const parts=e.steps||[e];
