@@ -4,6 +4,10 @@ on:
     paths:
       - "public/assets/js/aad-source-ground-floor.mjs"
       - "public/assets/js/aad-m70-plinth-bridge.mjs"
+      - "public/assets/js/aad-m23-governed-stages.mjs"
+      - "public/stages/m60/**"
+      - "public/stages/m40/**"
+      - "public/stages/v03/**"
       - "public/assets/js/aad-source-svg-navigation.mjs"
       - "public/stages/m70/**"
       - "public/data/projects/narayani-parajuli/aad-source-stage-links-v1.json"
@@ -38,6 +42,9 @@ jobs:
           test -s dist/data/projects/narayani-parajuli/aad-source-stage-links-v1.json
           test -s dist/stages/m70/stage-data.json
           test -s dist/stages/m70/meta.json
+          test -s dist/stages/m60/stage-data.json
+          test -s dist/stages/m40/stage-data.json
+          test -s dist/stages/v03/stage-data.json
           test -s dist/projects/narayani-parajuli/aad-source-review/index.html
       - name: Install Chromium browser QA
         run: |

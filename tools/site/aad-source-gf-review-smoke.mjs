@@ -6,6 +6,7 @@ import fs from "node:fs";
 import crypto from "node:crypto";
 import {createSourceGroundFloorReview} from "../../public/assets/js/aad-source-ground-floor.mjs";
 import {bridgeM70Plinth} from "../../public/assets/js/aad-m70-plinth-bridge.mjs";
+import {reconcileM23Stages} from "../../public/assets/js/aad-m23-governed-stages.mjs";
 import {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}
  from "../../public/assets/js/aad-source-coordinate-picking.mjs";
 const file="public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json";
@@ -24,6 +25,38 @@ assert.equal(stageAdapter.projectId,m.projectId);
 assert.equal(stageAdapter.additionalLayers.length,1);
 assert.equal(stageAdapter.additionalLayers[0].stage,"M70");
 const m70=bridgeM70Plinth(m,m70Stage,m70Meta);
+m70.grid=m70Stage.spatial_db.grid;
+const stageFiles={};
+for(const key of ["m60","m40","v03"]){
+ const u=stageAdapter.governedStages[key];
+ assert.ok(u?.dataPath.endsWith("/stages/"+key+"/stage-data.json"));
+ stageFiles[key]=JSON.parse(fs.readFileSync("public/stages/"+key+"/stage-data.json","utf8"));
+ stageFiles[key+"Meta"]=JSON.parse(fs.readFileSync("public/stages/"+key+"/meta.json","utf8"));
+}
+const m23=reconcileM23Stages(m,m70,stageFiles.m60,stageFiles.m40,stageFiles.v03,{
+ m60:stageFiles.m60Meta,m40:stageFiles.m40Meta,v03:stageFiles.v03Meta
+});
+assert.equal(m23.status,"ENGINEERING_HOLD_UNRESOLVED_SOURCE_CLASHES");
+assert.deepEqual(m23.counts,{stageColumns:23,stageFootings:21,m70GroundFloorBeams:16,
+ dxfColumns:23,dxfFootings:21,dxfBeamCandidateArchives:32});
+assert.deepEqual(m23.mismatches.m60Only,["C4","E2","E4","G4","H4"]);
+assert.deepEqual(m23.mismatches.dxfOnly,["C3","F2","F3","G3","H3"]);
+const m60i4=m23.columns.find(c=>c.grid==="I4");
+assert.ok(m60i4?.circular&&m60i4.section==="Ø350");
+assert.ok(Math.abs(m60i4.x-21.000162)<.001&&Math.abs(m60i4.z-5.47004)<.001);
+assert.ok(!m23.columns.some(c=>c.grid==="I3"),"No inferred I3 column may be added");
+const m40G1=m23.footings.find(e=>e.grid==="G1");
+assert.ok(m40G1&&m40G1.dx===2.1&&m40G1.dz===2.1&&m40G1.conflict);
+assert.deepEqual(m40G1.otherSource.dxfPlanSizeM,[1.8,1.8]);
+assert.equal(m40G1.rebar.coverMm,50);
+assert.ok(m23.footings.every(x=>x.source.file==="M40_FROZEN_STAGE"&&x.rebar.barSpec));
+assert.equal(m23.footings.filter(f=>f.type==="CF1").length,2);
+assert.ok(m23.mismatches.footingGeometryDisagreements.length>0);
+assert.equal(m23.rules.groundFloorBeam,"M70_FROZEN_PLINTH_NETWORK_SUPREME");
+const brokenV03=structuredClone(stageFiles.v03);
+brokenV03.DB.rows.find(e=>e.grid_ref==="G1").plan_size_m[0]=2.3;
+assert.throws(()=>reconcileM23Stages(m,m70,stageFiles.m60,stageFiles.m40,brokenV03),
+ /Footing dimension\/type disagreement/);
 assert.equal(m70.runCount,16);
 assert.equal(m70.registrationControlCount,23);
 assert.ok(m70.maxColumnResidualM<.001);
