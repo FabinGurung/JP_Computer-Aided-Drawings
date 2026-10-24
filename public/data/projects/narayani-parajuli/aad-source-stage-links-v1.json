@@ -12,5 +12,26 @@
       "policy": "FROZEN_PUBLIC_STAGE_PLINTH_EVIDENCE_ONLY",
       "changePolicy": "COMPARE_DISPLAY_ONLY_NO_SOURCE_OVERWRITE"
     }
-  ]
+  ],
+  "reconciliationPolicy": {
+    "status": "ENGINEERING_HOLD",
+    "beamGroundFloorAuthority": "M70 frozen plinth-beam network",
+    "columnWorkingAuthority": "M60 frozen column first lift with DXF discrepancy ledger",
+    "footingWorkingAuthority": "M40 RCC plus V03 reinforcement corroboration; conflicts with structural DXF remain open",
+    "originalSourcePreservation": "Original DXF ledger and frozen stage snapshots remain immutable"
+  },
+  "governedStages": {
+    "m60": {
+      "dataPath": "/JP_Computer-Aided-Drawings/stages/m60/stage-data.json",
+      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m60/meta.json"
+    },
+    "m40": {
+      "dataPath": "/JP_Computer-Aided-Drawings/stages/m40/stage-data.json",
+      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m40/meta.json"
+    },
+    "v03": {
+      "dataPath": "/JP_Computer-Aided-Drawings/stages/v03/stage-data.json",
+      "metadataPath": "/JP_Computer-Aided-Drawings/stages/v03/meta.json"
+    }
+  }
 }
