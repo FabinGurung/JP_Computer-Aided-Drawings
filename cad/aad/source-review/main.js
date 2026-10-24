@@ -8,6 +8,7 @@ const $=id=>document.getElementById(id);
 const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {createSourceGroundFloorReview}=await import(/* @vite-ignore */moduleURL("aad-source-ground-floor.mjs"));
 const {bridgeM70Plinth}=await import(/* @vite-ignore */moduleURL("aad-m70-plinth-bridge.mjs"));
+const {reconcileM23Stages}=await import(/* @vite-ignore */moduleURL("aad-m23-governed-stages.mjs"));
 const {createAADSvgNavigator}=await import(/* @vite-ignore */moduleURL("aad-source-svg-navigation.mjs"));
 const {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}=
  await import(/* @vite-ignore */moduleURL("aad-source-coordinate-picking.mjs"));
@@ -21,11 +22,11 @@ if(!response.ok)throw Error("Cannot fetch reviewed source ledger ("+response.sta
 const input=await response.json(),model=createSourceGroundFloorReview(input),svg=$("plan");
 // Opt-in project adapter lives beside the project ledger; the shared viewer
 // never hardcodes a Narayani stage, and frozen stage bytes remain untouched.
-let plinth=null;
+let plinth=null,staged=null,adapter=null;
 const adapterURL=new URL(dataURL.pathname.replace(/[^/]+$/,"aad-source-stage-links-v1.json"),location.origin);
 const adapterResponse=await fetch(adapterURL.href,{cache:"no-store"});
 if(adapterResponse.ok){
- const adapter=await adapterResponse.json();
+ adapter=await adapterResponse.json();
  if(adapter.schema!=="jp-cad://aad-project-stage-links/1"||adapter.projectId!==model.projectId)
   throw Error("Invalid source-project stage adapter");
  for(const item of adapter.additionalLayers||[]){
@@ -40,22 +41,56 @@ if(adapterResponse.ok){
   if(!dataResponse.ok||!metaResponse.ok)throw Error("Missing required M70 frozen source stage");
   const stage=await dataResponse.json(),meta=await metaResponse.json();
   plinth=bridgeM70Plinth(model,stage,meta);
+  plinth.grid=stage.spatial_db.grid;
   model.elements.push(...plinth.records);
   model.counts["plinth-beam"]=plinth.runCount;
   model.m70PlinthReview=plinth;
  }
+ if(adapter.governedStages){
+  if(!plinth)throw Error("M60/M40/V03 stages require M70 registered grid");
+  const loaded={};
+  for(const key of ["m60","m40","v03"]){
+   const spec=adapter.governedStages[key];if(!spec)throw Error("Missing "+key+" source");
+   const p=new URL(spec.dataPath,location.origin),q=new URL(spec.metadataPath,location.origin);
+   if(p.origin!==location.origin||q.origin!==location.origin||
+    !p.pathname.endsWith("/stages/"+key+"/stage-data.json")||
+    !q.pathname.endsWith("/stages/"+key+"/meta.json"))
+    throw Error("Untrusted governed source "+key);
+   const [a,b]=await Promise.all([fetch(p.href,{cache:"no-store"}),fetch(q.href,{cache:"no-store"})]);
+   if(!a.ok||!b.ok)throw Error("Missing "+key+" frozen snapshot");
+   loaded[key]=await a.json();loaded[key+"Meta"]=await b.json();
+  }
+  staged=reconcileM23Stages(model,plinth,loaded.m60,loaded.m40,loaded.v03,
+   {m60:loaded.m60Meta,m40:loaded.m40Meta,v03:loaded.v03Meta});
+  model.elements.push(...staged.columns,...staged.footings);
+  model.counts["stage-column"]=staged.columns.length;
+  model.counts["stage-footing"]=staged.footings.length;
+  model.governedStageReview=staged;
+ }
 }else if(adapterResponse.status!==404)throw Error("Cannot load project stage adapter ("+adapterResponse.status+")");
 $("name").textContent=model.name;
-const labels={"column":"Columns","footing":"Footings","beam":"GF DXF beam candidates",
- "plinth-beam":"M70 plinth beams","architectural-line":"Architectural edges"};
+const labels={"column":"DXF comparison columns","footing":"DXF comparison footings",
+ "beam":"DXF archived beam candidates","plinth-beam":"M70 GF/plinth beams",
+ "stage-column":"M60 columns","stage-footing":"M40/V03 footings","architectural-line":"Architectural edges"};
+if(staged){
+ $("m60-layer-label").hidden=false;$("m40-layer-label").hidden=false;
+ for(const kind of ["beam","column","footing"]){
+  const ctl=document.querySelector('.toolbar input[value="'+kind+'"]');
+  if(ctl)ctl.checked=false;
+ }
+ for(const issue of staged.issues){
+  const li=document.createElement("li");li.className="warning";
+  li.textContent=issue.code+" · "+issue.note;$("issues").append(li);
+ }
+}
 if(plinth){
  const control=$("plinth-layer-label");control.hidden=false;
  const m70Info=document.createElement("li");m70Info.className="warning";
  m70Info.textContent="M70 FROZEN PLINTH NETWORK: "+plinth.runCount+
   " source-backed runs · "+plinth.centerlineLengthM.toFixed(3)+" m total · "+
-  "230 × 300 mm · grid linked to 23 DXF columns (maximum registration residual "+
+  "230 × 300 mm · registered against 23 DXF column-grid controls (maximum residual "+
   (plinth.maxColumnResidualM*1000).toFixed(2)+" mm). "+
-  "Distinct from the 32 GF DXF beam-edge candidates; original DXFs govern columns/footings.";
+  "M70 governs GF/plinth beams; DXF candidate lines are archival comparison evidence.";
  $("issues").append(m70Info);
  for(const issue of plinth.warnings){const item=document.createElement("li");
   item.className="warning";item.textContent=issue;$("issues").append(item);}
@@ -79,10 +114,11 @@ supportNotice.textContent="GF BEAM ENDPOINTS · SOURCE REVIEW: "+beamReview.beyo
 $("issues").append(supportNotice);
 for(const issue of model.issues){const li=document.createElement("li");li.className="warning";
  li.textContent=issue.code+": "+(issue.note||issue.decision||"Source review HOLD");$("issues").append(li);}
-const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"plinth-beam":0x984914,"architectural-line":0x376b7f};
+const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"plinth-beam":0x984914,"stage-column":0x0a9665,"stage-footing":0x9567b1,"architectural-line":0x376b7f};
 const shown=new Set(Object.keys(labels));
-if(plinth)shown.delete("beam");
-else shown.delete("plinth-beam");
+if(plinth)shown.delete("beam");else shown.delete("plinth-beam");
+if(staged){shown.delete("column");shown.delete("footing");}
+else {shown.delete("stage-column");shown.delete("stage-footing");}
 const elementMap=new Map(model.elements.map(e=>[e.id,e]));
 let selectedId=null,pinned=null,hovered=null,threePinMarker=null,proposedCrossing=null;
 const fmt=n=>Number.isFinite(n)?n.toFixed(3):"—";
