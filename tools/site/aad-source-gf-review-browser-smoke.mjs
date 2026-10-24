@@ -144,7 +144,7 @@ try{
   "Drag should pan plan world viewport");
  await page.locator("#zoom-reset").click();
  await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
- assert.match(await page.locator("#selected").innerText(),/SOURCE CONFLICT HOLD/);
+ assert.match(await page.locator("#selected").innerText(),/STAGE\\/DXF CONFLICT HOLD/);
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
  assert.match(await page.locator("#selected").innerText(),/2.1 × 2.1/);
  assert.equal(await page.locator('#rows tr[data-id="SF-ACE9E"].selected').count(),1);
