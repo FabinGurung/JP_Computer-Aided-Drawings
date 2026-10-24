@@ -9,6 +9,7 @@ const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {createSourceGroundFloorReview}=await import(/* @vite-ignore */moduleURL("aad-source-ground-floor.mjs"));
 const {bridgeM70Plinth}=await import(/* @vite-ignore */moduleURL("aad-m70-plinth-bridge.mjs"));
 const {reconcileM23Stages}=await import(/* @vite-ignore */moduleURL("aad-m23-governed-stages.mjs"));
+const {deriveUserQAPreview}=await import(/* @vite-ignore */moduleURL("aad-m24-user-reviewed-preview.mjs"));
 const {createAADSvgNavigator}=await import(/* @vite-ignore */moduleURL("aad-source-svg-navigation.mjs"));
 const {findProjectedBeamCrossing,nearestSourceElements,worldXZToNativeStructuralMM}=
  await import(/* @vite-ignore */moduleURL("aad-source-coordinate-picking.mjs"));
@@ -22,7 +23,7 @@ if(!response.ok)throw Error("Cannot fetch reviewed source ledger ("+response.sta
 const input=await response.json(),model=createSourceGroundFloorReview(input),svg=$("plan");
 // Opt-in project adapter lives beside the project ledger; the shared viewer
 // never hardcodes a Narayani stage, and frozen stage bytes remain untouched.
-let plinth=null,staged=null,adapter=null;
+let plinth=null,staged=null,adapter=null,userQA=null;
 const adapterURL=new URL(dataURL.pathname.replace(/[^/]+$/,"aad-source-stage-links-v1.json"),location.origin);
 const adapterResponse=await fetch(adapterURL.href,{cache:"no-store"});
 if(adapterResponse.ok){
@@ -67,11 +68,28 @@ if(adapterResponse.ok){
   model.counts["stage-footing"]=staged.footings.length;
   model.governedStageReview=staged;
  }
+ if(params.get("qa")==="user-reviewed"){
+  if(!adapter.optionalUserQA||!plinth||!staged)
+   throw Error("User QA mode requires project-owned stage sources");
+  const qaURL=new URL(adapter.optionalUserQA.dataPath,location.origin);
+  if(qaURL.origin!==location.origin||
+     !qaURL.pathname.endsWith("/aad-user-qa-decisions-v1.json"))
+   throw Error("Unsupported user QA review file");
+  const result=await fetch(qaURL.href,{cache:"no-store"});
+  if(!result.ok)throw Error("Missing user-reviewed decisions");
+  userQA=deriveUserQAPreview(model,plinth,staged,await result.json());
+  model.elements.push(...userQA.columns,...userQA.footings);
+  model.counts["qa-column"]=userQA.columns.length;
+  model.counts["qa-footing"]=userQA.footings.length;
+  model.userQAWorkingReview=userQA;
+ }
 }else if(adapterResponse.status!==404)throw Error("Cannot load project stage adapter ("+adapterResponse.status+")");
 $("name").textContent=model.name;
 const labels={"column":"DXF comparison columns","footing":"DXF comparison footings",
  "beam":"DXF archived beam candidates","plinth-beam":"M70 GF/plinth beams",
- "stage-column":"M60 columns","stage-footing":"M40/V03 footings","architectural-line":"Architectural edges"};
+ "stage-column":"M60 columns","stage-footing":"M40/V03 footings",
+ "qa-column":"User QA proposed columns (HOLD)","qa-footing":"User QA DXF footings (HOLD)",
+ "architectural-line":"Architectural edges"};
 if(staged){
  $("m60-layer-label").hidden=false;$("m40-layer-label").hidden=false;
  for(const kind of ["beam","column","footing"]){
@@ -81,6 +99,23 @@ if(staged){
  for(const issue of staged.issues){
   const li=document.createElement("li");li.className="warning";
   li.textContent=issue.code+" · "+issue.note;$("issues").append(li);
+ }
+}
+if(userQA){
+ $("qa-column-label").hidden=false;$("qa-footing-label").hidden=false;
+ for(const kind of ["stage-column","stage-footing","column","footing","beam"]){
+  const ctl=document.querySelector('.toolbar input[value="'+kind+'"]');
+  if(ctl)ctl.checked=false;
+ }
+ const hold=document.createElement("li");hold.className="warning";
+ hold.textContent="M24 USER-REVIEWED WORKING PROPOSAL ONLY: 23 DXF-preferred columns with "+
+  "I4 removed from proposed geometry and Ø350 I3 added at M70 beam junction; "+
+  "21 original DXF footing outlines. NOT engineering-approved or for construction. "+
+  "F3 answer contradiction, G1 footing/excavation allowance and orphan CF1 I4 support remain unresolved.";
+ $("issues").append(hold);
+ for(const item of userQA.discrepancies){
+  const li=document.createElement("li");li.className="warning";
+  li.textContent=item.code+": "+item.note;$("issues").append(li);
  }
 }
 if(plinth){
@@ -114,11 +149,15 @@ supportNotice.textContent="GF BEAM ENDPOINTS · SOURCE REVIEW: "+beamReview.beyo
 $("issues").append(supportNotice);
 for(const issue of model.issues){const li=document.createElement("li");li.className="warning";
  li.textContent=issue.code+": "+(issue.note||issue.decision||"Source review HOLD");$("issues").append(li);}
-const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,"plinth-beam":0x984914,"stage-column":0x0a9665,"stage-footing":0x9567b1,"architectural-line":0x376b7f};
+const palette={"column":0x168267,"footing":0x9a79ba,"beam":0xd29a50,
+ "plinth-beam":0x984914,"stage-column":0x0a9665,"stage-footing":0x9567b1,
+ "qa-column":0x00598c,"qa-footing":0x9a5996,"architectural-line":0x376b7f};
 const shown=new Set(Object.keys(labels));
 if(plinth)shown.delete("beam");else shown.delete("plinth-beam");
 if(staged){shown.delete("column");shown.delete("footing");}
 else {shown.delete("stage-column");shown.delete("stage-footing");}
+if(userQA){shown.delete("stage-column");shown.delete("stage-footing");}
+else {shown.delete("qa-column");shown.delete("qa-footing");}
 const elementMap=new Map(model.elements.map(e=>[e.id,e]));
 let selectedId=null,pinned=null,hovered=null,threePinMarker=null,proposedCrossing=null;
 const fmt=n=>Number.isFinite(n)?n.toFixed(3):"—";
