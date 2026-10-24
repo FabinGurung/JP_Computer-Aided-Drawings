@@ -33,5 +33,13 @@
       "dataPath": "/JP_Computer-Aided-Drawings/stages/v03/stage-data.json",
       "metadataPath": "/JP_Computer-Aided-Drawings/stages/v03/meta.json"
     }
+  },
+  "optionalUserQA": {
+    "schema": "jp-cad://narayani-user-reviewed-qa/1",
+    "dataPath": "/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json",
+    "requiresExplicitQuery": "qa=user-reviewed",
+    "policy": "DERIVED_WORKING_GEOMETRY_PREVIEW_ONLY",
+    "sourceNeverMutated": true,
+    "constructionApproval": false
   }
 }
