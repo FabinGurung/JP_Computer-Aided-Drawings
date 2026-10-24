@@ -813,7 +813,7 @@ $("aad-import-file").addEventListener("change",async e=>{
 // it to the local working model. No raw-language interpreter is claimed here.
 window.AADStudio=Object.freeze({
  getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
-   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4",topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
+   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4_CONCEPTUAL_ENGINEERING_HOLD",sourceReviewedStructure:Boolean(building?.sourceStructuralReview),topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
  selectElementById:(id)=>{
   if(!building)return false;
   const e=building.elements.find(x=>x.id===id);
@@ -842,13 +842,23 @@ window.AADStudio=Object.freeze({
   const e=building?.elements.find(x=>x.id===id);
   if(!e)throw Error("Unknown AAD component "+id);
   const mesh=hitMeshes.find(m=>m.userData.element.id===id);
-  const plan=[...document.querySelectorAll("#viewer2d .aad-column")].find(n=>n.dataset.elementId===id);
+  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id);
+  const pointFromPlan=plan?plan.tagName.toLowerCase()==="circle"?
+   {x:Number(plan.getAttribute("cx")),z:Number(plan.getAttribute("cy")),
+    dx:2*Number(plan.getAttribute("r")),dz:2*Number(plan.getAttribute("r"))}:
+   plan.tagName.toLowerCase()==="line"?
+   {x:(Number(plan.getAttribute("x1"))+Number(plan.getAttribute("x2")))/2,
+    z:(Number(plan.getAttribute("y1"))+Number(plan.getAttribute("y2")))/2,
+    dx:Math.hypot(Number(plan.getAttribute("x2"))-Number(plan.getAttribute("x1")),
+     Number(plan.getAttribute("y2"))-Number(plan.getAttribute("y1"))),
+    dz:Number(plan.getAttribute("stroke-width"))}:
+   {x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
+    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
+    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null;
   const row=rowsById.get(id);
   return{elementId:id,kind:e.kind,model:{x:e.x,y:e.y,z:e.z,dx:e.dx,dz:e.dz},
    mesh:mesh?{x:mesh.position.x,y:mesh.position.y,z:mesh.position.z}:null,
-   plan:plan?{x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
-    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
-    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null,
+   plan:pointFromPlan,
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
