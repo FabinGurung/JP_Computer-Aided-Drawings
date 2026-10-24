@@ -277,7 +277,7 @@ function drawPlan(){
     fill:e.conflict?"#f4bca4":active?"#cfb5e3":"#c6b3da",
     "fill-opacity":".45",stroke:e.conflict?"#d7492b":"#8d64b2",
     "stroke-dasharray":e.conflict?".23 .12":undefined,"stroke-width":active?".095":".048"});
-   if(e.conflict){const alert=node("text",{x:e.x+e.dx/2+.12,y:e.z,"font-size":".27",fill:"#bb3920"},"G1 !");svg.append(alert);}
+   if(e.conflict){const alert=node("text",{x:e.x+e.dx/2+.12,y:e.z,"font-size":".19",fill:"#bb3920"},"!");svg.append(alert);}
   } else{
    const colors=e.kind==="plinth-beam"?"#984914":e.kind==="beam"?"#bd884b":"#356c79";
    g=node("line",{x1:e.ax,y1:e.az,x2:e.bx,y2:e.bz,
@@ -329,11 +329,14 @@ function renderThree(){
  for(const e of model.elements){
   if(!shown.has(e.kind))continue;
   const active=e.id===selectedId,color=active?0xf26b21:palette[e.kind];
-  if(e.kind==="column"){
+  if(e.kind==="column"||e.kind==="stage-column"){
    // Source identifies the CENTRE only; width/height here are schematic.
-   const mesh=new THREE.Mesh(new THREE.BoxGeometry(.17,2.8,.17),new THREE.MeshStandardMaterial({color}));
+   const stageCol=e.kind==="stage-column";
+    const shape=stageCol?(e.circular?new THREE.CylinderGeometry(e.width/2,e.width/2,2.8,24):
+     new THREE.BoxGeometry(e.width,2.8,e.depth)):new THREE.BoxGeometry(.17,2.8,.17);
+    const mesh=new THREE.Mesh(shape,new THREE.MeshStandardMaterial({color}));
    mesh.position.set(e.x,1.4,e.z);add(e,mesh);
-  }else if(e.kind==="footing"){
+  }else if(e.kind==="footing"||e.kind==="stage-footing"){
    // Preserve the real plan footprint; visible thickness is display-only.
    const mesh=new THREE.Mesh(new THREE.BoxGeometry(e.dx,.07,e.dz),new THREE.MeshStandardMaterial({
     color:e.conflict?0xd35030:color,transparent:true,opacity:.58}));
