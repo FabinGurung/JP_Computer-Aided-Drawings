@@ -77,7 +77,17 @@ if(adapterResponse.ok){
    throw Error("Unsupported user QA review file");
   const result=await fetch(qaURL.href,{cache:"no-store"});
   if(!result.ok)throw Error("Missing user-reviewed decisions");
-  userQA=deriveUserQAPreview(model,plinth,staged,await result.json());
+  let approval=null;
+  if(adapter.optionalUserQA.messageApprovalPath){
+   const approvedURL=new URL(adapter.optionalUserQA.messageApprovalPath,location.origin);
+   if(approvedURL.origin!==location.origin||
+      !approvedURL.pathname.endsWith("/aad-user-message-approval-20261024.json"))
+    throw Error("M25 unexpected user authorization source");
+   const approvedResponse=await fetch(approvedURL.href,{cache:"no-store"});
+   if(!approvedResponse.ok)throw Error("Missing M25 user message approval event");
+   approval=await approvedResponse.json();
+  }
+  userQA=deriveUserQAPreview(model,plinth,staged,await result.json(),approval);
   model.elements.push(...userQA.columns,...userQA.footings);
   model.counts["qa-column"]=userQA.columns.length;
   model.counts["qa-footing"]=userQA.footings.length;
@@ -108,7 +118,10 @@ if(userQA){
   if(ctl)ctl.checked=false;
  }
  const hold=document.createElement("li");hold.className="warning";
- hold.textContent="M24 USER-REVIEWED WORKING PROPOSAL ONLY: 23 DXF-preferred columns with "+
+ hold.textContent=(userQA.userMessageApproval?
+   "M25 USER CHAT APPROVAL RECORDED for the M24 review proposal. Engineering design checks remain OPEN. ":
+   "M24 USER-REVIEWED WORKING PROPOSAL ONLY. ")+
+  "23 DXF-preferred columns with "+
   "I4 removed from proposed geometry and Ø350 I3 added at M70 beam junction; "+
   "21 original DXF footing outlines. NOT engineering-approved or for construction. "+
   "F3 answer contradiction, G1 footing/excavation allowance and orphan CF1 I4 support remain unresolved.";

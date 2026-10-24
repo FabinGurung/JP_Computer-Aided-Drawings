@@ -5,7 +5,28 @@
  */
 const round6=x=>Math.round(x*1e6)/1e6;
 const finite=(v,l)=>{if(!Number.isFinite(v))throw Error("M24: "+l+" not finite");return v};
-export function deriveUserQAPreview(dxf,m70,m23,qa){
+export function deriveUserQAPreview(dxf,m70,m23,qa,approval=null){
+ let approvalStatus=null;
+ if(approval){
+  if(approval.schema!=="jp-cad://aad-user-message-approval/1"||
+     approval.projectId!==dxf.projectId||
+     approval.reference?.qaRecordSchema!==qa.schema||
+     approval.reference?.qaCaseCount!==qa.issues?.length||
+     approval.engineeringApprovalVerified!==false||
+     approval.constructionApproval!==false||
+     approval.engineeringHoldPreserved!==true||
+     approval.status!=="USER_APPROVED_WORKING_QA_PROPOSAL_FOR_FURTHER_REVIEW_AND_DEVELOPMENT")
+    throw Error("M25 user approval record contradicts original QA or attempts unsafe signoff");
+  approvalStatus={
+   eventId:approval.eventId,
+   status:approval.status,
+   quote:approval.approvalStatement,
+   channel:approval.channel,
+   recordedLocalContext:approval.recordedLocalContext,
+   engineeringApprovalVerified:false,constructionApproval:false
+  };
+ }
+
  if(qa?.schema!=="jp-cad://narayani-user-reviewed-qa/1"||
     qa.projectId!==dxf.projectId||qa.projectId!==m70.projectId)
   throw Error("M24 QA source project/schema mismatch");
@@ -119,12 +140,15 @@ export function deriveUserQAPreview(dxf,m70,m23,qa){
    dxfFootingM:[g1.dx,g1.dz],m40V03SizeM:[2.1,2.1],
    extraWorkingSpaceMM:">100, side convention unknown",
    note:"Extra field allowance is for excavation/formwork working space; 2.1m cannot be silently treated as concrete or excavation size"},
-  {code:"SIGNED_ENGINEER_APPROVAL_NOT_SUPPLIED",severity:"DOCUMENTARY_EVIDENCE_MISSING",
-   note:"All four checkbox flags claimed true per user, but no drawing revision/signed engineering instruction is attached"}
+  approvalStatus?{code:"USER_MESSAGE_APPROVAL_RECORDED",severity:"USER_AUTHORIZATION_DOCUMENTED",
+   note:"Direct user approval of the M24 working proposal has been recorded in the M25 append-only ledger. The user is not required to sign again to express their project preference; structural design adequacy and certified issue remain unverified."}:
+   {code:"SIGNED_ENGINEER_APPROVAL_NOT_SUPPLIED",severity:"DOCUMENTARY_EVIDENCE_MISSING",
+    note:"Review proposal awaits user's recorded authorization; source QA evidence alone cannot certify structural adequacy."}
  ];
  return{schema:"jp-cad://aad-m24-user-review-working-proposal/1",
   projectId:dxf.projectId,status:"ENGINEERING_HOLD_NOT_FOR_CONSTRUCTION",
-  engineeringApproval:false,sourceReviewRecordId:qa.recordedAt,
+  engineeringApproval:false,userMessageApproval:approvalStatus,
+  sourceReviewRecordId:qa.recordedAt,
   sourcePreference:"DXF_COLUMNS_AND_FOOTING_OUTLINES__M70_GROUND_FLOOR_BEAMS",
   sourcePreservation:"NO_ORIGINAL_DXF_OR_FROZEN_STAGE_MODIFIED",
   counts:{workingColumns:columns.length,workingFootings:footings.length,governingM70BeamRuns:m70.records.length,

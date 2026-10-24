@@ -1,0 +1,51 @@
+{
+  "schema": "jp-cad://aad-user-message-approval/1",
+  "eventId": "PRJ-000007-M25-USER-MESSAGE-APPROVAL-20261024",
+  "projectId": "PRJ-000007",
+  "project": "15_Narayani_Parajuli",
+  "approvalStatement": "i approve vervally or message-ly just now.",
+  "channel": "DIRECT_CHAT_MESSAGE",
+  "recordedLocalContext": {
+    "date": "2026-10-24",
+    "time": "18:09",
+    "timeZone": "Asia/Kathmandu",
+    "precision": "APPROXIMATE_MINUTE_FROM_CONVERSATION_CONTEXT"
+  },
+  "reference": {
+    "qaRecordPath": "public/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json",
+    "qaRecordSchema": "jp-cad://narayani-user-reviewed-qa/1",
+    "qaCaseCount": 13,
+    "reviewVersion": "M24",
+    "sourceReleaseCommit": "c2b07af57f3df00d22024869f5dc187bcc136429"
+  },
+  "approvalType": "USER_OR_PROJECT_OWNER_MESSAGE_AUTHORIZATION",
+  "status": "USER_APPROVED_WORKING_QA_PROPOSAL_FOR_FURTHER_REVIEW_AND_DEVELOPMENT",
+  "scope": {
+    "approvedAsUser": [
+      "M24 QA decision record acceptance as the user's preferred working layout",
+      "DXF-preferred columns and drawn footing footprints in the opt-in working preview",
+      "Proposed Ø350 mm I3 column replacing the I4 working display",
+      "M70 as the governing ground-floor/plinth beam network",
+      "Recording DXF G1 1.80×1.80 m and separate >100mm field working-space note"
+    ],
+    "notAuthorizedOrDemonstrated": [
+      "Engineering calculation adequacy",
+      "Final load path and I3 footing/support capacity",
+      "Combined footing support relocation/connection",
+      "G1 reinforcement redesign, concrete versus excavation-size reconciliation",
+      "Issued-for-construction drawings, IFC/model construction approval",
+      "Independent verification of professional licence or engineering sign-off"
+    ]
+  },
+  "engineeringApprovalVerified": false,
+  "constructionApproval": false,
+  "engineeringHoldPreserved": true,
+  "openTechnicalIssues": [
+    "F3_DECISION_FORM_NOTE_CONTRADICTION",
+    "I3_COLUMN_FOOTING_AND_VERTICAL_LOAD_PATH",
+    "CF1_ORPHAN_I4_SUPPORT",
+    "G1_FOOTING_REINFORCEMENT_AND_EXCAVATION_WORKING_CLEARANCE"
+  ],
+  "immutableRecordPolicy": "An append-only event. Do not alter original 13 responses, frozen stages, source DXF records or their original history.",
+  "auditNote": "Direct user chat statement is sufficient to document the user's own authorization; it is not evidence of a completed independent structural-design verification."
+}

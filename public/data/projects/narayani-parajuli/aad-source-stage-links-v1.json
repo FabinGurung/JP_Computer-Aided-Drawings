@@ -40,6 +40,8 @@
     "requiresExplicitQuery": "qa=user-reviewed",
     "policy": "DERIVED_WORKING_GEOMETRY_PREVIEW_ONLY",
     "sourceNeverMutated": true,
-    "constructionApproval": false
+    "constructionApproval": false,
+    "messageApprovalPath": "/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-user-message-approval-20261024.json",
+    "messageApprovalPolicy": "USER_AUTHORIZED_PROJECT_QA__ENGINEERING_HOLD_UNCHANGED"
   }
 }

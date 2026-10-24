@@ -14,6 +14,12 @@ try{
  const m=await page.evaluate(()=>window.AADSourceReview.getSnapshot());
  const qa=await page.evaluate(()=>window.AADSourceReview.getUserQAPreview());
  assert.equal(qa.status,"ENGINEERING_HOLD_NOT_FOR_CONSTRUCTION");
+ assert.equal(qa.userMessageApproval.status,
+  "USER_APPROVED_WORKING_QA_PROPOSAL_FOR_FURTHER_REVIEW_AND_DEVELOPMENT");
+ assert.equal(qa.userMessageApproval.engineeringApprovalVerified,false);
+ assert.ok(qa.discrepancies.some(x=>x.code==="USER_MESSAGE_APPROVAL_RECORDED"));
+ assert.match(await page.locator("#issues").innerText(),/M25 USER CHAT APPROVAL RECORDED/);
+ assert.match(await page.locator("#issues").innerText(),/Engineering design checks remain OPEN/);
  assert.equal(qa.columns.length,23);
  assert.equal(qa.footings.length,21);
  assert.equal(qa.counts.governingM70BeamRuns,16);
