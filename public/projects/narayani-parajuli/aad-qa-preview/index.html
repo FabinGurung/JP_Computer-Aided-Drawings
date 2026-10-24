@@ -1,0 +1,11 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Narayani — M24 user-reviewed structural proposal (HOLD)</title></head>
+<body><h1>Narayani M24 · user-reviewed structural proposal</h1><p>ENGINEERING HOLD · SOURCE REVIEW ONLY · NOT FOR CONSTRUCTION. The original structural DXF and frozen stages are preserved; this is a working geometry proposal.</p><p><a id="review">Open source-linked 2D / 3D / table working QA viewer</a></p>
+<script>
+const root=new URL("../../../",location.href);
+const preview=new URL("cad/aad/source-review/",root);
+const data=new URL("data/projects/narayani-parajuli/aad-source-gf-review-v1.json",root);
+preview.searchParams.set("data",data.pathname);
+preview.searchParams.set("qa","user-reviewed");
+document.getElementById("review").href=preview.href;
+location.replace(preview.href);
+</script></body></html>
