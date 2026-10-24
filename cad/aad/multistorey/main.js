@@ -393,6 +393,9 @@ function drawPlan(){
   const color=l.id==="gf"?"#2c7886":l.id==="ff"?"#9c8068":"#6782b4";
   outlines.push({l,g,nodeMap,color});pts.push(...nodeMap.values());
  }
+ if(building.sourceStructuralReview){
+  pts.push(...building.elements.filter(e=>e.previewOnly&&e.level==="gf").map(e=>({x:e.x,z:e.z})));
+ }
  const minX=Math.min(...pts.map(p=>p.x))-1.1,minZ=Math.min(...pts.map(p=>p.z))-1.1,
        maxX=Math.max(...pts.map(p=>p.x))+1.1,maxZ=Math.max(...pts.map(p=>p.z))+1.1;
  doc.setAttribute("viewBox",[minX,minZ,maxX-minX,maxZ-minZ].join(" "));
@@ -437,13 +440,35 @@ function drawPlan(){
   }
   // WORLD_XZ column solids, the same exact assembly instances as 3D and table.
   for(const col of building.elements.filter(e=>e.kind==="column"&&e.level===l.id)){
-   const rect=el("rect",{x:col.x-col.dx/2,y:col.z-col.dz/2,
-    width:col.dx,height:col.dz,class:"aad-column"+(selectedId===col.id?" is-selected":""),
+   const roundColumn=Boolean(col.previewOnly&&col.provenance?.section?.startsWith("Ø"));
+   const rect=el(roundColumn?"circle":"rect",{
+    ...(roundColumn?{cx:col.x,cy:col.z,r:col.dx/2}:{x:col.x-col.dx/2,y:col.z-col.dz/2,width:col.dx,height:col.dz}),
+    class:"aad-column"+(selectedId===col.id?" is-selected":""),
     "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
     "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
    rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
    rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(col);}});
    doc.append(rect);
+  }
+  if(building.sourceStructuralReview&&l.id==="gf"){
+   for(const f of building.elements.filter(e=>e.kind==="footing"&&e.level==="gf"&&e.previewOnly)){
+    const shape=el("rect",{x:f.x-f.dx/2,y:f.z-f.dz/2,width:f.dx,height:f.dz,
+     class:"aad-source-footing"+(selectedId===f.id?" is-selected":""),
+     "data-element-id":f.id,fill:"#9270ab","fill-opacity":".20",stroke:"#82619a",
+     "stroke-width":".06",role:"button",tabindex:"0",
+     "aria-label":f.name+" · source review engineering HOLD"});
+    shape.addEventListener("click",ev=>{ev.stopPropagation();selectElement(f);});doc.append(shape);
+   }
+   for(const b of building.elements.filter(e=>e.kind==="beam"&&e.level==="gf"&&e.previewOnly)){
+    const angle=(b.rotationDeg||0)*Math.PI/180,
+     x1=b.x-Math.cos(angle)*b.dx/2,z1=b.z-Math.sin(angle)*b.dx/2,
+     x2=b.x+Math.cos(angle)*b.dx/2,z2=b.z+Math.sin(angle)*b.dx/2;
+    const line=el("line",{x1,y1:z1,x2,y2:z2,stroke:"#ab783c","stroke-width":b.dz,
+     class:"aad-source-beam"+(selectedId===b.id?" is-selected":""),
+     "data-element-id":b.id,"data-world-x":b.x,"data-world-z":b.z,
+     role:"button",tabindex:"0","aria-label":b.name+" · M70 frozen source"});
+    line.addEventListener("click",ev=>{ev.stopPropagation();selectElement(b);});doc.append(line);
+   }
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
@@ -482,7 +507,7 @@ function drawPlan(){
  // Structural objects are 3D IFC components without authored 2D floor-graph
  // geometry. Display their world-coordinate locator instead of inventing one.
  const selected=building.elements.find(e=>e.id===selectedId);
- const hasPlan=selected&&["wall","door","window","column"].includes(selected.kind);
+ const hasPlan=selected&&(["wall","door","window","column"].includes(selected.kind)||selected.previewOnly&&["footing","beam"].includes(selected.kind));
  const position=selectedPosition(selected);
  if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
   const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
