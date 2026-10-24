@@ -383,7 +383,13 @@ function choose(id){
   (e.label||e.id)+" — "+labels[e.kind], "Stable ID: "+e.id, "World X/Z: "+fmt(e.x)+" / "+fmt(e.z)+" m",
   "Source: "+e.source.file,"Source handle / run: "+sourceHandles(e),"Source-native coordinates: "+
   JSON.stringify(e.source.sourceMM||e.source.nativeLineMM||e.source.nativeLineMM),
-  e.kind==="footing"?"Native drawn footprint: "+e.dx+" × "+e.dz+" m · columns: "+e.columnIds.join(", "):"",
+  ["footing","stage-footing"].includes(e.kind)?"Plan footing: "+e.dx+" × "+e.dz+" m · columns "+e.columnIds.join(", "):"",
+   e.kind==="stage-column"?"M60 section "+e.section+"; DXF candidate "+
+    (e.otherSource?.dxfColumnId||"none")+"; offset "+(e.otherSource?.distanceToDxfM??"unmatched")+" m":"",
+   e.kind==="stage-footing"?"M40 depth "+e.drawingDepthM+" m; V03 "+
+    e.rebar.barSpec+"; cover "+e.rebar.coverMm+" mm; original DXF "+
+    (e.otherSource.dxfFootingId||"unmatched")+" "+
+    (e.otherSource.dxfPlanSizeM?.join("×")||"no comparison")+" m":"",
   e.kind==="beam"?"GF DXF paired-edge width: "+e.width+" m; height and support graph unverified":"",
   e.kind==="plinth-beam"?"M70 plinth run "+e.fromGrid+" → "+e.toGrid+
    " · frozen centerline "+e.lengthM+" m · source section 230 × 300 mm. "+
@@ -392,7 +398,7 @@ function choose(id){
    "Endpoint "+v.end+": nearest column candidate "+v.nearestColumnId+
    " at "+v.distanceM+" m; proximity within "+beamReview.toleranceM+" m: "+
    (v.withinDisplayTolerance?"YES":"NO — REVIEW")+"; not confirmed as support"):[]),
-  e.conflict?"G1 CRITICAL: native drawn 1.8 × 1.8 m while IF3 callout/schedule requires 2.1 × 2.1 m":"",
+  e.conflict?"STAGE/DXF CONFLICT HOLD. G1: M40/V03 IF3 2.1×2.1 m; original DXF outline 1.8×1.8 m. Do not issue construction geometry.":"",
   "Status: "+e.status,"This is source geometry for review, NOT structural approval."
  ].filter(Boolean).join("\n");
  drawPlan();renderThree();drawTable();
@@ -404,7 +410,7 @@ for(const id of ["filter","search"])$(id).addEventListener(id==="filter"?"change
 initThree();drawPlan();renderThree();drawTable();
 window.AADSourceReview={
  getSnapshot:()=>model,getSelected:()=>elementMap.get(selectedId)||null,selectById:choose,
- getPlanView:()=>planNav.view(),resetPlanView:()=>planNav.reset(),
+ getPlanView:()=>planNav.view(),resetPlanView:()=>planNav.reset(),getGovernedStages:()=>staged,
  zoomPlan:factor=>planNav.zoom(factor),getM70Plinth:()=>plinth,
  getPinnedPoint:()=>pinned?{...pinned}:null,getHoverPoint:()=>hovered?{...hovered}:null,
  getProjectedCrossing:()=>proposedCrossing?{...proposedCrossing}:null,
@@ -415,13 +421,13 @@ window.AADSourceReview={
   const dom=[...svg.querySelectorAll("[data-id]")].find(x=>x.getAttribute("data-id")===id);
   const visual=clickables.find(x=>x.userData.id===id);
   const row=[...$("rows").querySelectorAll("tr")].find(x=>x.dataset.id===id);
-  const plan=dom&&e.kind==="column"?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
-   dom&&e.kind==="footing"?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
+  const plan=dom&&["column","stage-column"].includes(e.kind)?{x:Number(dom.getAttribute("cx")),z:Number(dom.getAttribute("cy"))}:
+   dom&&["footing","stage-footing"].includes(e.kind)?{x:Number(dom.getAttribute("x"))+Number(dom.getAttribute("width"))/2,
     z:Number(dom.getAttribute("y"))+Number(dom.getAttribute("height"))/2}:
    dom&&["beam","plinth-beam","architectural-line"].includes(e.kind)?
     {x:(Number(dom.getAttribute("x1"))+Number(dom.getAttribute("x2")))/2,
      z:(Number(dom.getAttribute("y1"))+Number(dom.getAttribute("y2")))/2}:null;
-  const mesh=visual&&["column","footing","plinth-beam"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
+  const mesh=visual&&["column","footing","plinth-beam","stage-column","stage-footing"].includes(e.kind)?{x:visual.position.x,z:visual.position.z}:null;
   return{elementId:id,source:{x:e.x,z:e.z},plan,mesh,
    table:row?{x:Number(row.cells[3].textContent.split("/")[0]),z:Number(row.cells[3].textContent.split("/")[1])}:null};
  }
