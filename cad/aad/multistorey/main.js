@@ -8,6 +8,7 @@ const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
+const {loadAADReviewedStructure}=await import(/* @vite-ignore */moduleURL("aad-reviewed-structural-intake.mjs"));
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
@@ -17,7 +18,7 @@ let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
-const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,stair:0x9386bb,landing:0xa48cc9};
+const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,footing:0x926aae,stair:0x9386bb,landing:0xa48cc9};
 const status=txt=>$("action-status").textContent=txt;
 function download(name,text,mime){
  const url=URL.createObjectURL(new Blob([text],{type:mime}));
@@ -238,7 +239,7 @@ function addStoreys(){
   c.addEventListener("change",()=>{floorFlags.set(l.id,c.checked);applyVisible();});
  }
  const nodeTypes=$("component-types");nodeTypes.replaceChildren();
- for(const k of ["wall","column","beam","slab","roof","door","window","stair","landing"]){
+ for(const k of ["wall","column","beam","footing","slab","roof","door","window","stair","landing"]){
   const label=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=true;
   const text=document.createElement("span");text.textContent=k+" ("+(building.counts[k]||0)+")";label.append(c,text);nodeTypes.append(label);
   kindFlags.set(k,true);c.addEventListener("change",()=>{kindFlags.set(k,c.checked);applyVisible();});
@@ -679,7 +680,15 @@ async function main(){
   const fetched=await fetch(modelURL,{cache:"no-store"});if(!fetched.ok)throw Error("Floor model HTTP "+fetched.status);
   models[l.id]=await fetched.json();
  }
- workspace=createAADWorkspace(manifest,models);
+ let reviewStructure=null;
+ if(params.get("structure")==="source-review"){
+  reviewStructure=await loadAADReviewedStructure(manifest,url,async path=>{
+   const result=await fetch(path.href,{cache:"no-store"});
+   if(!result.ok)throw Error("Structural source HTTP "+result.status+" / "+path.pathname);
+   return result.json();
+  });
+ }
+ workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey="aad:unified:draft:"+manifest.projectId;
  try{
   const stored=localStorage.getItem(storageKey);
@@ -697,7 +706,13 @@ async function main(){
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
  $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";
- status("Shared AAD building assembly ready · "+building.diagnostics.length+" QA findings (engineering HOLD)");
+ status((building.sourceStructuralReview?
+    "M26 source-backed structural GF: 23 DXF columns, 21 drawn footings, 16 M70 beams · old synthetic 4×3 excluded · ":
+    "Shared AAD building assembly ready · ")+building.diagnostics.length+
+   " QA findings (ENGINEERING HOLD)");
+ if(building.sourceStructuralReview){
+  $("building-subtitle").textContent+=" · USER-APPROVED GF SOURCE / UPPER STOREYS NOT STRUCTURALLY VERIFIED";
+ }
 }
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
