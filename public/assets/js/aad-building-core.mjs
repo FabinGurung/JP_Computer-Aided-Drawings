@@ -129,6 +129,7 @@ export function assembleBuilding(manifest,models,options={}){
  const pointInLevel=(x,z,id)=>inside({x,z},byLevel.get(id).perimeter);
  const bx=[...col.gridX],bz=[...col.gridZ];
  if(bx.length<2||bz.length<2||bx.length>12||bz.length>12)throw Error("Column grid size invalid");
+ if(!options.reviewStructure){
  for(const l of levels){
   const ceiling=l.elevation+l.height-slab.thickness;
   for(let ix=0;ix<bx.length;ix++)for(let iz=0;iz<bz.length;iz++){
@@ -154,6 +155,30 @@ export function assembleBuilding(manifest,models,options={}){
     source:col.source||"ASSUMED_STRUCTURAL_GRID_NOT_SOURCE_REGISTERED",status:"ENGINEERING_HOLD",name:"Beam Z "+xi+"-"+zi,provenance:beam.provenance||null
    });put(e);
   }
+ }
+ }else{
+  const review=options.reviewStructure;
+  if(review.schema!=="jp-cad://aad-reviewed-structural-assembly/1"||
+     review.projectId!==projectId||review.reviewStatus!=="ENGINEERING_HOLD_NOT_FOR_CONSTRUCTION")
+   throw Error("Refusing unverified structural review data");
+  if(review.elements.length!==60||review.elements.filter(e=>e.kind==="column").length!==23||
+     review.elements.filter(e=>e.kind==="footing").length!==21||
+     review.elements.filter(e=>e.kind==="beam").length!==16)
+   throw Error("Unexpected structural source review counts");
+  for(const element of review.elements){
+   if(element.level!=="gf"||!element.previewOnly||
+      element.status!=="USER_AUTHORIZED_SOURCE_GEOMETRY__ENGINEERING_HOLD")
+    throw Error("Untrusted structural review element");
+   elements.push({...element,profile:element.profile||null,holes:element.holes||null,steps:null});put(element);
+  }
+  diagnostics.push({severity:"WARNING",code:"SOURCE_REVIEW_GF_STRUCTURAL_ACTIVE",level:"gf",
+   message:"23 owner-reviewed DXF column candidates, 21 footing footprints, 16 M70 beams assembled into the common BIM state; coordinate registration with area-adjusted architectural walls is provisional."});
+  diagnostics.push({severity:"WARNING",code:"SOURCE_REVIEW_VERTICAL_SCHEMATIC",level:"gf",
+   message:"Column heights, footing founding depths/thickness and plinth beam elevation are schematic; not a construction detail."});
+  diagnostics.push({severity:"WARNING",code:"NO_UPPER_FLOOR_STRUCTURAL_SOURCE",level:null,
+   message:"Upper-storey source columns/beams were NOT inferred from the ground-floor M70 stage; vertical load path not certified."});
+  diagnostics.push({severity:"WARNING",code:"I3_CF1_G1_STILL_UNRESOLVED",level:"gf",
+   message:"I3 foundation not verified; DXF CF1 still names original I4 support; G1 concrete size and reinforcement versus excavation working area unresolved."});
  }
  if(manifest.stairs?.opening){
   const op=manifest.stairs.opening,steps=manifest.stairs.risers||18;
@@ -205,7 +230,11 @@ export function assembleBuilding(manifest,models,options={}){
  const count={};for(const e of elements)count[e.kind]=(count[e.kind]||0)+1;
  return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,
   levels:placements,elements,diagnostics,structuralAlignment,counts:count,area:{source:round(areaSum.source),model:round(areaSum.model)},
-  reviewStatus:"DRAFT_ENGINEERING_HOLD",manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
+  reviewStatus:"DRAFT_ENGINEERING_HOLD",
+  sourceStructuralReview:options.reviewStructure?{schema:options.reviewStructure.schema,
+   sourcePriority:options.reviewStructure.sourcePriority,scope:"GF_ONLY_SOURCE_PREVIEW",
+   notes:options.reviewStructure.notes}:null,
+  manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
 }
 export function verifyAssembly(assembly){
  const errors=assembly.diagnostics.filter(d=>d.severity==="ERROR");
