@@ -16,6 +16,14 @@ on:
       - "tools/site/aad-validate-project.mjs"
       - "cad/aad/TEMPLATE_AI_CONTRACT.md"
       - "tools/site/aad-unified-workspace-smoke.mjs"
+      - "tools/site/aad-m26-*.mjs"
+      - "public/assets/js/aad-reviewed-structural-assembly.mjs"
+      - "public/assets/js/aad-reviewed-structural-intake.mjs"
+      - "public/assets/js/aad-building-core.mjs"
+      - "public/assets/js/aad-unified-workspace.mjs"
+      - "public/assets/js/aad-component-register.mjs"
+      - "public/assets/js/aad-building-ifc4.mjs"
+      - "public/assets/js/aad-structural-registration-audit.mjs"
       - "tools/site/aad-topology-smoke.mjs"
       - "tools/site/aad-topology-browser-smoke.mjs"
       - "tools/site/aad-ai-generate.mjs"
@@ -76,6 +84,7 @@ jobs:
           CAD_AAD_URL=http://127.0.0.1:5175/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           node tools/site/aad-narayani-source-smoke.mjs
           node tools/site/aad-unified-workspace-smoke.mjs
+          node tools/site/aad-m26-canonical-source-integration-smoke.mjs
           node tools/site/aad-topology-smoke.mjs # project viewer asset test; browser route exercised against built Pages base
           echo CAD_AAD_BROWSER_LINKED_MODEL_PASS
       - name: Verify visible models at built GitHub Pages base path
@@ -84,6 +93,7 @@ jobs:
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
           CAD_AAD_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
+          AAD_M26_PROJECT_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5192/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
