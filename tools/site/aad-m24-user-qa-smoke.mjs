@@ -32,7 +32,19 @@ const meta={m60:json("public/stages/m60/meta.json"),m40:json("public/stages/m40/
  v03:json("public/stages/v03/meta.json")};
 const m23=reconcileM23Stages(dxf,m70,s60,s40,s03,meta);
 const stageString=JSON.stringify([m23.columns,m23.footings,m70.records]);
-const output=deriveUserQAPreview(dxf,m70,m23,qa);
+const approval=json(base+"aad-user-message-approval-20261024.json");
+assert.equal(approval.approvalStatement,"i approve vervally or message-ly just now.");
+assert.equal(approval.projectId,qa.projectId);
+assert.equal(approval.engineeringApprovalVerified,false);
+assert.equal(approval.engineeringHoldPreserved,true);
+const output=deriveUserQAPreview(dxf,m70,m23,qa,approval);
+assert.equal(output.userMessageApproval.status,"USER_APPROVED_WORKING_QA_PROPOSAL_FOR_FURTHER_REVIEW_AND_DEVELOPMENT");
+assert.equal(output.userMessageApproval.engineeringApprovalVerified,false);
+assert.equal(output.engineeringApproval,false);
+assert.ok(output.discrepancies.some(x=>x.code==="USER_MESSAGE_APPROVAL_RECORDED"));
+assert.ok(!output.discrepancies.some(x=>x.code==="SIGNED_ENGINEER_APPROVAL_NOT_SUPPLIED"));
+assert.throws(()=>deriveUserQAPreview(dxf,m70,m23,qa,{...approval,engineeringApprovalVerified:true}),
+ /contradicts original QA/);
 assert.equal(output.status,"ENGINEERING_HOLD_NOT_FOR_CONSTRUCTION");
 assert.equal(output.engineeringApproval,false);
 assert.equal(output.counts.workingColumns,23);
