@@ -136,7 +136,7 @@ export function writeIFC4(building){
    String(e.numberOfRisers||9),String(e.numberOfRisers||9),num(e.riserHeight||.1667),num(e.treadLength||.28),".STRAIGHT.");
   else{
    const predefined=e.ifcType==="IfcSlab"?(e.kind==="roof"?".ROOF.":".FLOOR."):
-    e.ifcType==="IfcColumn"?".COLUMN.":e.ifcType==="IfcBeam"?".BEAM.":".NOTDEFINED.";
+    e.ifcType==="IfcColumn"?".COLUMN.":e.ifcType==="IfcBeam"?".BEAM.":e.ifcType==="IfcFooting"?".PAD_FOOTING.":".NOTDEFINED.";
    ref=s.add(e.ifcType.toUpperCase(),...base,predefined);
   }
   idToRef.set(e.id,ref);story.contained.push(ref);
@@ -156,7 +156,7 @@ export function writeIFC4(building){
     "$",quote("Elements in "+id),"$",list(story.contained),story.obj);
  }
  const names={IfcDoor:s.typeCounts.IFCDOOR||0,IfcWindow:s.typeCounts.IFCWINDOW||0,IfcWall:s.typeCounts.IFCWALL||0,
-  IfcColumn:s.typeCounts.IFCCOLUMN||0,IfcBeam:s.typeCounts.IFCBEAM||0,IfcSlab:s.typeCounts.IFCSLAB||0,
+  IfcColumn:s.typeCounts.IFCCOLUMN||0,IfcBeam:s.typeCounts.IFCBEAM||0,IfcFooting:s.typeCounts.IFCFOOTING||0,IfcSlab:s.typeCounts.IFCSLAB||0,
   IfcStairFlight:s.typeCounts.IFCSTAIRFLIGHT||0};
  const filename=building.projectId.replaceAll(/[^A-Za-z0-9_-]/g,"_")+"_AAD_CONCEPTUAL_"+building.levels.length+"STOREY_IFC4.ifc";
  const header=["ISO-10303-21;","HEADER;",
@@ -165,7 +165,7 @@ export function writeIFC4(building){
   "FILE_SCHEMA(('IFC4'));","ENDSEC;","DATA;"];
  const result=header.concat(s.records,"ENDSEC;","END-ISO-10303-21;","").join("\n");
  return{filename,text:result,counts:names,entityCount:s.records.length,globalIds:idToRef.size,ifcSchema:"IFC4",
-  note:"IFC4 geometry with storey hierarchy, hosted openings and fills. All structural sizes and stair profiles are conceptual; not verified engineering design."};
+  note:"IFC4 conceptual geometry with storey hierarchy. Owner-reviewed structural plan locations may be source-derived; column heights, footing depth and plinth vertical placement are schematic. Engineering HOLD; NOT FOR CONSTRUCTION."};
 }
 export function checkIfcReferences(text){
  if(!text.startsWith("ISO-10303-21;")||!text.includes("FILE_SCHEMA(('IFC4'))"))throw Error("Not a parsed IFC4 STEP file");

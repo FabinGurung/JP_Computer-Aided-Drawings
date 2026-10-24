@@ -140,9 +140,22 @@
   "restrictions": {
     "engineeringApproval": "HOLD",
     "issueForConstruction": false,
-    "bimStage": "COORDINATED_CONCEPTUAL_3D_NOT_STRUCTURALLY_VERIFIED",
+    "bimStage": "M26_OWNER_APPROVED_STRUCTURAL_GF_REVIEW_PREVIEW_NOT_CONSTRUCTION_CERTIFIED",
     "surveyAlignment": "NOT_VERIFIED",
     "exportGate": "STEP_WRITER_ROUNDTRIP_REQUIRED",
     "reproducibility": "Same pinned AAD building engine plus unchanged project models and this manifest"
+  },
+  "structuralReview": {
+    "schema": "jp-cad://aad-structural-source-review/1",
+    "mode": "OWNER_APPROVED_SOURCE_QA_GROUND_FLOOR_ONLY",
+    "sourceLedger": "aad-source-gf-review-v1.json",
+    "stageLinks": "aad-source-stage-links-v1.json",
+    "userQA": "aad-user-qa-decisions-v1.json",
+    "userApproval": "aad-user-message-approval-20261024.json",
+    "originalSyntheticGridRetainedForHistoricalCompatibility": true,
+    "sourceMemberPlacement": "GROUND_FLOOR_SOURCE_REVIEW_ONLY__UPPER_STOREYS_NOT_RECONCILED",
+    "architecturalRegistration": "PROVISIONAL_AREA_ADJUSTED_AAD_VS_DXF_COORDINATE_RESIDUAL",
+    "constructionApproval": false,
+    "engineeringHold": true
   }
 }

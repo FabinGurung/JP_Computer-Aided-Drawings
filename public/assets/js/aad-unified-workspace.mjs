@@ -34,11 +34,11 @@ function geometricalIntegrity(models){
   }
  }
 }
-export function createAADWorkspace(manifest,initialModels){
- const baseManifest=clone(manifest),sourceModels=clone(initialModels);
+export function createAADWorkspace(manifest,initialModels,{reviewStructure=null}={}){
+ const baseManifest=clone(manifest),sourceModels=clone(initialModels),reviewData=reviewStructure?clone(reviewStructure):null;
  geometricalIntegrity(sourceModels);
  let models=clone(sourceModels),version=0,lastEdit=null;
- let assembly=assembleBuilding(baseManifest,models);
+ let assembly=assembleBuilding(baseManifest,models,{reviewStructure:reviewData});
  function change(level,entity,patch){
   const next=clone(models),graph=getFloor(next,level),change=patch||{};
   if(entity.kind==="node"){
@@ -57,7 +57,7 @@ export function createAADWorkspace(manifest,initialModels){
  }
  function admit(next,record){
   geometricalIntegrity(next);
-  const candidate=assembleBuilding(baseManifest,next,{allowAreaDrift:true});
+  const candidate=assembleBuilding(baseManifest,next,{allowAreaDrift:true,reviewStructure:reviewData});
   const qa=verifyAssembly(candidate);
   if(!qa.valid)throw Error("Editing blocked by building-wide QA: "+qa.errors.map(x=>x.code).join(", "));
   models=next;assembly=candidate;version++;lastEdit={...record,version};
@@ -83,7 +83,7 @@ export function createAADWorkspace(manifest,initialModels){
  
  function reset(){
   models=clone(sourceModels);
-  assembly=assembleBuilding(baseManifest,models);version++;lastEdit={kind:"reset",version};
+  assembly=assembleBuilding(baseManifest,models,{reviewStructure:reviewData});version++;lastEdit={kind:"reset",version};
   return snapshot();
  }
  function restore(bundle){
@@ -108,7 +108,7 @@ export function createAADWorkspace(manifest,initialModels){
     throw Error("Untrusted new opening provenance "+level+"/"+o.id);
   }
   geometricalIntegrity(candidateModels);
-  const candidate=assembleBuilding(baseManifest,candidateModels,{allowAreaDrift:true});
+  const candidate=assembleBuilding(baseManifest,candidateModels,{allowAreaDrift:true,reviewStructure:reviewData});
   if(!verifyAssembly(candidate).valid)throw Error("Imported draft fails building QA");
   models=candidateModels;assembly=candidate;version++;lastEdit={kind:"restore",version};
   return snapshot();

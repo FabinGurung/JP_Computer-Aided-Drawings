@@ -30,7 +30,7 @@ assert len({round(st.Elevation,3) for st in levels})==3,"Repeated storey elevati
 assert {round(st.Elevation,3) for st in levels}=={0,3,6}
 assert all(st.ObjectPlacement and st.ObjectPlacement.is_a("IfcLocalPlacement") for st in levels)
 assert all(st.ContainsElements for st in levels),"Storey missing contained elements"
-for kind in ("IfcWall","IfcDoor","IfcWindow","IfcSlab","IfcColumn","IfcBeam","IfcStairFlight"):
+for kind in ("IfcWall","IfcDoor","IfcWindow","IfcSlab","IfcColumn","IfcBeam","IfcFooting","IfcStairFlight"):
  for obj in model.by_type(kind):
   assert obj.GlobalId and len(obj.GlobalId)==22,(kind,obj)
   assert obj.ObjectPlacement and obj.Representation,(kind,obj)
@@ -43,18 +43,21 @@ for rel in model.by_type("IfcRelVoidsElement"):
 for rel in model.by_type("IfcRelFillsElement"):
  assert rel.RelatedBuildingElement.is_a() in ("IfcDoor","IfcWindow")
  assert rel.RelatingOpeningElement.is_a("IfcOpeningElement")
-assert count("IfcColumn")>=20
-assert count("IfcBeam")>=30
+assert count("IfcColumn")==23,"Source-reviewed 23 GF columns required"
+assert count("IfcBeam")==16,"Frozen M70 16 GF beams required"
+assert count("IfcFooting")==21,"Original DXF 21 footing outlines required"
+assert not any("BEAM-X" in x.Name or "BEAM-Z" in x.Name for x in model.by_type("IfcBeam"))
+
 assert count("IfcSlab")>=5
 assert count("IfcArbitraryProfileDefWithVoids")>=2
 report={
  "parser":"ifcopenshell", "schema":model.schema,
  "parsed":True,"stage":"BIM_INTERCHANGE_PARSED_ENGINEERING_HOLD",
  "counts":{kind:count(kind) for kind in expected},
- "columns":count("IfcColumn"),"beams":count("IfcBeam"),"slabs":count("IfcSlab"),
+ "columns":count("IfcColumn"),"beams":count("IfcBeam"),"footings":count("IfcFooting"),"slabs":count("IfcSlab"),
  "stairFlights":count("IfcStairFlight"),
  "geometryEntities":count("IfcExtrudedAreaSolid"),
- "metadata":"Structural strengths, reinforcement, plinth, global survey and member force envelopes unverified; not issued for construction"
+ "metadata":"User-reviewed source GF geometry, with schematic column height, footing depth and beam elevation, provisional architectural datum, I3/CF1/G1 HOLD, upper storeys not structural; NOT for construction"
 }
 assert report["geometryEntities"]>120,report
 (folder/"NARAYANI_BLOCK_B_AAD_BIM_A01_IFC_ROUNDTRIP.json").write_text(json.dumps(report,indent=2)+"\n")

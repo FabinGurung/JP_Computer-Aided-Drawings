@@ -8,6 +8,7 @@ const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
+const {loadAADReviewedStructure}=await import(/* @vite-ignore */moduleURL("aad-reviewed-structural-intake.mjs"));
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
@@ -17,7 +18,7 @@ let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
-const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,stair:0x9386bb,landing:0xa48cc9};
+const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,footing:0x926aae,stair:0x9386bb,landing:0xa48cc9};
 const status=txt=>$("action-status").textContent=txt;
 function download(name,text,mime){
  const url=URL.createObjectURL(new Blob([text],{type:mime}));
@@ -28,7 +29,9 @@ function shapeSolid(e){
  const p=e.profile,shape=new THREE.Shape();
  const contour=[...p],signed=contour.reduce((sum,v,i)=>{const q=contour[(i+1)%contour.length];return sum+v.x*q.z-q.x*v.z;},0);
  if(signed<0)contour.reverse();
- contour.forEach((v,i)=>i?shape.lineTo(v.x,-v.z):shape.moveTo(v.x,-v.z));
+ const sourceLocal=Boolean(e.previewOnly&&Number.isFinite(e.x)&&Number.isFinite(e.z));
+ const coordinates=v=>sourceLocal?{x:v.x-e.x,z:v.z-e.z}:v;
+ contour.forEach((v,i)=>{const p=coordinates(v);i?shape.lineTo(p.x,-p.z):shape.moveTo(p.x,-p.z);});
  shape.closePath();
  for(const hole of e.holes||[]){
   const h=new THREE.Path(),pts=[...hole],a=pts.reduce((sum,v,i)=>{const q=pts[(i+1)%pts.length];return sum+v.x*q.z-q.x*v.z;},0);
@@ -39,7 +42,7 @@ function shapeSolid(e){
  const geom=new THREE.ExtrudeGeometry(shape,{depth:e.dy,steps:1,bevelEnabled:false,curveSegments:1});
  geom.rotateX(-Math.PI/2);
  const mat=new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x8195a4,metalness:.03,roughness:.78,side:THREE.DoubleSide,transparent:true,opacity:e.kind==="roof"?.52:e.kind==="slab"?.75:.92});
- const m=new THREE.Mesh(geom,mat);m.position.y=e.y-e.dy/2;return [m];
+ const m=new THREE.Mesh(geom,mat);m.position.set(sourceLocal?e.x:0,e.y-e.dy/2,sourceLocal?e.z:0);return [m];
 }
 function boxes(e){
  const parts=e.steps||[e];
@@ -238,7 +241,7 @@ function addStoreys(){
   c.addEventListener("change",()=>{floorFlags.set(l.id,c.checked);applyVisible();});
  }
  const nodeTypes=$("component-types");nodeTypes.replaceChildren();
- for(const k of ["wall","column","beam","slab","roof","door","window","stair","landing"]){
+ for(const k of ["wall","column","beam","footing","slab","roof","door","window","stair","landing"]){
   const label=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=true;
   const text=document.createElement("span");text.textContent=k+" ("+(building.counts[k]||0)+")";label.append(c,text);nodeTypes.append(label);
   kindFlags.set(k,true);c.addEventListener("change",()=>{kindFlags.set(k,c.checked);applyVisible();});
@@ -392,6 +395,9 @@ function drawPlan(){
   const color=l.id==="gf"?"#2c7886":l.id==="ff"?"#9c8068":"#6782b4";
   outlines.push({l,g,nodeMap,color});pts.push(...nodeMap.values());
  }
+ if(building.sourceStructuralReview){
+  pts.push(...building.elements.filter(e=>e.previewOnly&&e.level==="gf").map(e=>({x:e.x,z:e.z})));
+ }
  const minX=Math.min(...pts.map(p=>p.x))-1.1,minZ=Math.min(...pts.map(p=>p.z))-1.1,
        maxX=Math.max(...pts.map(p=>p.x))+1.1,maxZ=Math.max(...pts.map(p=>p.z))+1.1;
  doc.setAttribute("viewBox",[minX,minZ,maxX-minX,maxZ-minZ].join(" "));
@@ -436,13 +442,35 @@ function drawPlan(){
   }
   // WORLD_XZ column solids, the same exact assembly instances as 3D and table.
   for(const col of building.elements.filter(e=>e.kind==="column"&&e.level===l.id)){
-   const rect=el("rect",{x:col.x-col.dx/2,y:col.z-col.dz/2,
-    width:col.dx,height:col.dz,class:"aad-column"+(selectedId===col.id?" is-selected":""),
+   const roundColumn=Boolean(col.previewOnly&&col.provenance?.section?.startsWith("Ø"));
+   const rect=el(roundColumn?"circle":"rect",{
+    ...(roundColumn?{cx:col.x,cy:col.z,r:col.dx/2}:{x:col.x-col.dx/2,y:col.z-col.dz/2,width:col.dx,height:col.dz}),
+    class:"aad-column"+(selectedId===col.id?" is-selected":""),
     "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
     "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
    rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
    rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(col);}});
    doc.append(rect);
+  }
+  if(building.sourceStructuralReview&&l.id==="gf"){
+   for(const f of building.elements.filter(e=>e.kind==="footing"&&e.level==="gf"&&e.previewOnly)){
+    const shape=el("rect",{x:f.x-f.dx/2,y:f.z-f.dz/2,width:f.dx,height:f.dz,
+     class:"aad-source-footing"+(selectedId===f.id?" is-selected":""),
+     "data-element-id":f.id,fill:"#9270ab","fill-opacity":".20",stroke:"#82619a",
+     "stroke-width":".06",role:"button",tabindex:"0",
+     "aria-label":f.name+" · source review engineering HOLD"});
+    shape.addEventListener("click",ev=>{ev.stopPropagation();selectElement(f);});doc.append(shape);
+   }
+   for(const b of building.elements.filter(e=>e.kind==="beam"&&e.level==="gf"&&e.previewOnly)){
+    const angle=(b.rotationDeg||0)*Math.PI/180,
+     x1=b.x-Math.cos(angle)*b.dx/2,z1=b.z-Math.sin(angle)*b.dx/2,
+     x2=b.x+Math.cos(angle)*b.dx/2,z2=b.z+Math.sin(angle)*b.dx/2;
+    const line=el("line",{x1,y1:z1,x2,y2:z2,stroke:"#ab783c","stroke-width":b.dz,
+     class:"aad-source-beam"+(selectedId===b.id?" is-selected":""),
+     "data-element-id":b.id,"data-world-x":b.x,"data-world-z":b.z,
+     role:"button",tabindex:"0","aria-label":b.name+" · M70 frozen source"});
+    line.addEventListener("click",ev=>{ev.stopPropagation();selectElement(b);});doc.append(line);
+   }
   }
   if(activeLevel===l.id){
    for(const n of g.nodes){
@@ -481,7 +509,7 @@ function drawPlan(){
  // Structural objects are 3D IFC components without authored 2D floor-graph
  // geometry. Display their world-coordinate locator instead of inventing one.
  const selected=building.elements.find(e=>e.id===selectedId);
- const hasPlan=selected&&["wall","door","window","column"].includes(selected.kind);
+ const hasPlan=selected&&(["wall","door","window","column"].includes(selected.kind)||selected.previewOnly&&["footing","beam"].includes(selected.kind));
  const position=selectedPosition(selected);
  if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
   const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
@@ -679,7 +707,15 @@ async function main(){
   const fetched=await fetch(modelURL,{cache:"no-store"});if(!fetched.ok)throw Error("Floor model HTTP "+fetched.status);
   models[l.id]=await fetched.json();
  }
- workspace=createAADWorkspace(manifest,models);
+ let reviewStructure=null;
+ if(params.get("structure")==="source-review"){
+  reviewStructure=await loadAADReviewedStructure(manifest,url,async path=>{
+   const result=await fetch(path.href,{cache:"no-store"});
+   if(!result.ok)throw Error("Structural source HTTP "+result.status+" / "+path.pathname);
+   return result.json();
+  });
+ }
+ workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey="aad:unified:draft:"+manifest.projectId;
  try{
   const stored=localStorage.getItem(storageKey);
@@ -697,7 +733,13 @@ async function main(){
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
  $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";
- status("Shared AAD building assembly ready · "+building.diagnostics.length+" QA findings (engineering HOLD)");
+ status((building.sourceStructuralReview?
+    "M26 source-backed structural GF: 23 DXF columns, 21 drawn footings, 16 M70 beams · old synthetic 4×3 excluded · ":
+    "Shared AAD building assembly ready · ")+building.diagnostics.length+
+   " QA findings (ENGINEERING HOLD)");
+ if(building.sourceStructuralReview){
+  $("building-subtitle").textContent+=" · USER-APPROVED GF SOURCE / UPPER STOREYS NOT STRUCTURALLY VERIFIED";
+ }
 }
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
@@ -773,7 +815,7 @@ $("aad-import-file").addEventListener("change",async e=>{
 // it to the local working model. No raw-language interpreter is claimed here.
 window.AADStudio=Object.freeze({
  getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
-   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4",topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
+   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4_CONCEPTUAL_ENGINEERING_HOLD",sourceReviewedStructure:Boolean(building?.sourceStructuralReview),topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
  selectElementById:(id)=>{
   if(!building)return false;
   const e=building.elements.find(x=>x.id===id);
@@ -802,13 +844,23 @@ window.AADStudio=Object.freeze({
   const e=building?.elements.find(x=>x.id===id);
   if(!e)throw Error("Unknown AAD component "+id);
   const mesh=hitMeshes.find(m=>m.userData.element.id===id);
-  const plan=[...document.querySelectorAll("#viewer2d .aad-column")].find(n=>n.dataset.elementId===id);
+  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id);
+  const pointFromPlan=plan?plan.tagName.toLowerCase()==="circle"?
+   {x:Number(plan.getAttribute("cx")),z:Number(plan.getAttribute("cy")),
+    dx:2*Number(plan.getAttribute("r")),dz:2*Number(plan.getAttribute("r"))}:
+   plan.tagName.toLowerCase()==="line"?
+   {x:(Number(plan.getAttribute("x1"))+Number(plan.getAttribute("x2")))/2,
+    z:(Number(plan.getAttribute("y1"))+Number(plan.getAttribute("y2")))/2,
+    dx:Math.hypot(Number(plan.getAttribute("x2"))-Number(plan.getAttribute("x1")),
+     Number(plan.getAttribute("y2"))-Number(plan.getAttribute("y1"))),
+    dz:Number(plan.getAttribute("stroke-width"))}:
+   {x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
+    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
+    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null;
   const row=rowsById.get(id);
   return{elementId:id,kind:e.kind,model:{x:e.x,y:e.y,z:e.z,dx:e.dx,dz:e.dz},
    mesh:mesh?{x:mesh.position.x,y:mesh.position.y,z:mesh.position.z}:null,
-   plan:plan?{x:Number(plan.getAttribute("x"))+Number(plan.getAttribute("width"))/2,
-    z:Number(plan.getAttribute("y"))+Number(plan.getAttribute("height"))/2,
-    dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null,
+   plan:pointFromPlan,
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },

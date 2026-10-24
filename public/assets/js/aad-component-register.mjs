@@ -9,11 +9,12 @@ const CATEGORIES={
  stair:["Architecture","Stairs","Conceptual staircase / stair flight; structural adequacy unverified"],
  column:["Structure","Columns","Conceptual structural column; dimensions and capacity unverified"],
  beam:["Structure","Beams","Conceptual structural beam; dimensions and capacity unverified"],
+ footing:["Structure","Footings","Source-derived or conceptual footing footprint; thickness, founding depth and reinforced capacity not verified"],
  slab:["Structure","Floor slabs","Conceptual floor slab; engineering design not certified"],
  landing:["Structure","Landings","Conceptual stair landing; engineering design not certified"],
  roof:["Structure","Roofs","Conceptual roof plate; engineering design not certified"]
 };
-const PLAN_SHAPES=new Set(["wall","door","window","column"]);
+const PLAN_SHAPES=new Set(["wall","door","window","column","footing"]);
 const CLASS_ORDER=["Architecture","Structure","Other"];
 const numeric=(n)=>Number.isFinite(n)?n:Infinity;
 export function classifyAADComponent(e){
@@ -24,8 +25,8 @@ export function describeAADSelection(e){
  const cls=classifyAADComponent(e);
  return{
   name:e.name||e.id,kind:e.kind,discipline:cls.discipline,meaning:cls.meaning,
-  representation:PLAN_SHAPES.has(e.kind)?"ACTUAL_2D_GEOMETRY_AND_3D":"2D_LOCATION_ONLY__3D_GEOMETRY",
-  representationHint:PLAN_SHAPES.has(e.kind)?
+  representation:(PLAN_SHAPES.has(e.kind)||(e.previewOnly&&e.kind==="beam"))?"ACTUAL_2D_GEOMETRY_AND_3D":"2D_LOCATION_ONLY__3D_GEOMETRY",
+  representationHint:(PLAN_SHAPES.has(e.kind)||(e.previewOnly&&e.kind==="beam"))?
    "2D highlights this element's drawn plan geometry. The 3D highlight and table use the same BIM ID.":
    "The orange 2D dot is only the element's world-coordinate locator, not a physical dot or a drawn footprint. Its 3D geometry and table record share this BIM ID.",
   evidence:e.provenance?.basis||e.status||"UNVERIFIED",
