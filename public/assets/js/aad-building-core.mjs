@@ -223,9 +223,9 @@ export function assembleBuilding(manifest,models,options={}){
    if(!colByLevel.get(levels[i-1].id).has(key(e)))diagnostics.push({severity:"ERROR",code:"UNSUPPORTED_COLUMN",level:levels[i].id,message:e.id+" has no same-grid column below"});
   }
  }
- const structuralAlignment=auditAADStructuralRegistration(elements,levels,manifest);
+ const structuralAlignment=auditAADStructuralRegistration(elements,levels,manifest,options.reviewStructure?{sourceReviewed:true,sourceOrigin:"OWNER_APPROVED_DXF_COLUMNS_FOOTINGS_AND_M70_GF_BEAMS"}:{});
  diagnostics.push(...structuralAlignment.diagnostics);
- diagnostics.push({severity:"WARNING",code:"ENGINEERING_UNVERIFIED",level:null,message:"Column/beam sections, spans, foundations and stair load path are assumed; source structural DXF not reconciled with member detail"});
+ diagnostics.push({severity:"WARNING",code:"ENGINEERING_UNVERIFIED",level:null,message:options.reviewStructure?"Source-reviewed GF member plan coordinates are not evidence of verified column/beam spans, vertical load path, founding depths, upper floors or construction approval.":"Column/beam sections, spans, foundations and stair load path are assumed; source structural DXF not reconciled with member detail"});
  diagnostics.push({severity:"WARNING",code:"STOREY_ORIGINS_NOT_SURVEY_VERIFIED",level:null,message:"Floor transforms use an owner-approved metric hypothesis, not surveyed global coordinates"});
  const count={};for(const e of elements)count[e.kind]=(count[e.kind]||0)+1;
  return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,
