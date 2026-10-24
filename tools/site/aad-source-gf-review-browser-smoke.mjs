@@ -146,7 +146,7 @@ try{
  await page.locator('#rows tr[data-id="SF-ACE9E"]').click();
  assert.ok((await page.locator("#selected").innerText()).includes("STAGE/DXF CONFLICT HOLD"));
  assert.match(await page.locator("#selected").innerText(),/1.8 × 1.8/);
- assert.match(await page.locator("#selected").innerText(),/2.1 × 2.1/);
+ assert.match(await page.locator("#selected").innerText(),/2.1×2.1/);
  assert.equal(await page.locator('#rows tr[data-id="SF-ACE9E"].selected').count(),1);
  await page.locator("#filter").selectOption("stage-column");
  assert.equal(await page.locator("#rows tr").count(),23);
