@@ -62,7 +62,7 @@ assert.equal(workspace.snapshot().assembly.counts.column,23);
 workspace.reset();
 assert.equal(workspace.snapshot().assembly.counts.beam,16);
 assert.throws(()=>assembleBuilding(manifest,models,{reviewStructure:{...review,projectId:"WRONG"}}),/unverified structural review data/);
-assert.equal(loads.length,11); // DXF ledger + adapter + M70/meta + M60/M40/V03/meta (6) + QA + approval
+assert.equal(loads.length,12); // DXF ledger + adapter + M70/meta + M60/M40/V03/meta (6) + QA + approval
 console.log("AAD_M26_CANONICAL_SOURCE_INTEGRATION_PASS",JSON.stringify({
  loadedSourceFiles:loads,counts:model.counts,ifcCounts:ifc.counts,qaWarnings:model.diagnostics.length,
  activeMode:model.sourceStructuralReview.scope,
