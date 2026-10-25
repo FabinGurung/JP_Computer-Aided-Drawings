@@ -1,41 +1,9 @@
 name: CAD Main GitHub Pages (validated CAD publishing)
 on:
-  push:
-    branches: [main]
-    paths:
-      - "cad/**"
-      - "public/**"
-      - "tools/site/check_public_routes.py"
-      - "tools/site/cad-aad-linked-smoke.mjs"
-      - "tools/site/aad-narayani-browser-smoke.mjs"
-      - "tools/site/aad-building-build.mjs"
-      - "tools/site/aad-ifc-independent-check.py"
-      - "tools/site/aad-building-browser-smoke.mjs"
-      - "tools/site/aad-selection-sync-smoke.mjs"
-      - "tools/site/aad-validate-project.mjs"
-      - "cad/aad/TEMPLATE_AI_CONTRACT.md"
-      - "tools/site/aad-unified-workspace-smoke.mjs"
-      - "tools/site/aad-topology-smoke.mjs"
-      - "tools/site/aad-topology-browser-smoke.mjs"
-      - "tools/site/aad-ai-generate.mjs"
-      - "tools/site/aad-ai-build-all.mjs"
-      - "design_jobs/ai-projects/**"
-      - "tools/site/aad-ai-pipeline-smoke.mjs"
-      - "tools/site/aad-ai-demo-browser-smoke.mjs"
-      - "public/assets/js/aad-ai-design-compiler.mjs"
-      - "design_jobs/synthetic/aad-ai-two-storey.json"
-      - "tools/site/aad-narayani-source-smoke.mjs"
-      - "tools/site/cad-unified-shell-smoke.mjs"
-      - "backend/cad_bridge/design_*.py"
-      - "design_jobs/synthetic/**"
-      - "tools/site/cad-m08-verify.py"
-      - "package.json"
-      - "package-lock.json"
-      - "vite.config.ts"
-      - "tsconfig.json"
-      - "scripts/copy-ifc-wasm.mjs"
-      - "index.html"
-      - ".github/workflows/cad-main-pages.yml"
+  # Always publish the exact audited main commit; never publish PR head code.
+  workflow_run:
+    workflows: ["CAD Unified Website Staging QA"]
+    types: [completed]
   workflow_dispatch:
 permissions:
   contents: read
@@ -46,13 +14,19 @@ concurrency:
   cancel-in-progress: false
 jobs:
   validate-and-build:
-    if: github.ref == 'refs/heads/main'
+    if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.conclusion == 'success')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
       - uses: actions/setup-node@v4
         with: {node-version: "22", cache: "npm"}
       - run: npm ci
+      - name: M26 immutable source-backed 2D/3D/table/IFC acceptance
+        run: node tools/site/aad-m26-canonical-source-integration-smoke.mjs
+      - name: M27 engineering source-preservation and open-HOLD gate
+        run: node tools/site/aad-m27-hold-gate.mjs
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs
@@ -83,6 +57,7 @@ jobs:
           for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
           CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
+          AAD_M26_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
@@ -95,6 +70,7 @@ jobs:
           path: |
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
+            /tmp/aad-m26-main-studio-source-structural.png
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
