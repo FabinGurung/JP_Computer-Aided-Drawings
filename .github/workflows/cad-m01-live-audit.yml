@@ -91,17 +91,22 @@ jobs:
           manifest=json.loads(Path('/tmp/aad-live-manifest.json').read_text())
           assert manifest['schema']=='jp-cad://aad-building/1'
           assert manifest['projectId']=='PRJ-000007'
+          assert manifest['structuralReview']['mode']=='OWNER_APPROVED_SOURCE_QA_GROUND_FLOOR_ONLY'
+          assert manifest['structuralReview']['constructionApproval'] is False
           assert [r['id'] for r in manifest['levels']]==['gf','ff','sf']
           ifc=Path('/tmp/aad-live-building.ifc')
           assert ifc.stat().st_size>50000
           text=ifc.read_text()
           assert "FILE_SCHEMA(('IFC4'))" in text
           assert text.count('=IFCBUILDINGSTOREY(')==3
+          assert text.count('=IFCCOLUMN(')==23, 'M27: live IFC columns differ from source-approved M26'
+          assert text.count('=IFCFOOTING(')==21, 'M27: live IFC footings differ from original DXF'
+          assert text.count('=IFCBEAM(')==16, 'M27: live IFC beams differ from frozen M70'
           assert text.count('=IFCRELVOIDSELEMENT(')==43
           assert text.count('=IFCRELFILLSELEMENT(')==43
           engine=Path('/tmp/aad-live-engine.mjs').read_text()
           assert 'createAADWorkspace' in engine and 'function snapshot()' in engine
-          print('CAD_AAD_TEMPLATE_PROJECT_IFC_LIVE_READBACK_PASS',ifc.stat().st_size)
+          print('CAD_M27_NARAYANI_LIVE_23_21_16_IFC_READBACK_PASS',ifc.stat().st_size)
           PY
 
       - name: Verify generated AI-to-AAD project on live GitHub Pages
@@ -134,3 +139,27 @@ jobs:
           assert Path('/tmp/aad-ai-live-ifc.ifc').stat().st_size>15000
           print('AAD_AI_GENERATED_PROJECT_LIVE_READBACK_PASS')
           PY
+
+      - name: Checkout exact M26 production revision for live browser parity
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Install browser parity runner for real public Narayani studio
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
+          npx playwright install --with-deps chromium
+      - name: Independently verify LIVE SVG Three.js component register and IFC4 from one source model
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        env:
+          AAD_M26_PROJECT_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/
+        run: node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+      - name: Archive evidence screenshot of live M26 primary studio
+        if: always() && github.event_name == 'workflow_run'
+        uses: actions/upload-artifact@v4
+        with:
+          name: m27-live-primary-aad-2d-3d-ifc-parity
+          path: /tmp/aad-m26-main-studio-source-structural.png
+          if-no-files-found: ignore

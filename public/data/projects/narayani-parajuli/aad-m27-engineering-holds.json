@@ -1,0 +1,67 @@
+{
+  "schema": "jp-cad://aad-engineering-hold-register/1",
+  "projectId": "PRJ-000007",
+  "revision": "M27-20261025",
+  "status": "ENGINEERING_HOLD_NOT_FOR_CONSTRUCTION",
+  "sourcePolicy": "IMMUTABLE_ORIGINAL_DXF_M70_M60_M40_V03",
+  "ownerMessageApproval": "M25_ACCEPTED_WORKING_LAYOUT_ONLY",
+  "issues": [
+    {
+      "id": "F3_SELECTION_NOTE_MISMATCH",
+      "status": "OPEN",
+      "finding": "QA F3 dropdown says propose-stage; narrative says DXF is correct. Preview follows narrative.",
+      "requiredEvidence": "Owner/source-author clarification, original response retained.",
+      "source": "aad-user-qa-decisions-v1.json/issues/COL-F3"
+    },
+    {
+      "id": "I3_COLUMN_VERTICAL_LOAD_PATH",
+      "status": "OPEN",
+      "finding": "M70 intersection I3 visually supports Ø350 proposed replacement for I4, but not a certified foundation or continuous column.",
+      "requiredEvidence": "Approved I3 footing and column schedule; load reactions, capacities and vertical continuity verified.",
+      "source": "aad-user-qa-decisions-v1.json/issues/JOINT-I3"
+    },
+    {
+      "id": "CF1_SUPPORT_ORPHAN",
+      "status": "OPEN",
+      "finding": "DXF combined footing AD0BC references H3 and I4. Proposed I4 relocation to I3 leaves stale load-bearing support reference.",
+      "requiredEvidence": "Revised CF1 support plan, reactions, capacity and approved member link; preserve native DXF record.",
+      "source": "aad-source-gf-review-v1.json/footings/SF-AD0BC"
+    },
+    {
+      "id": "G1_CONCRETE_EXCAVATION_DISAMBIGUATION",
+      "status": "OPEN",
+      "finding": "Original DXF G1 1.80m × 1.80m footing conflicts with frozen M40/V03 2.10m × 2.10m; additional >100mm working-space note refers to excavation/work area, not concrete size and not defined per side.",
+      "requiredEvidence": "Approved footing dimensions/rebar/bearing, excavation dimensions and exact per-side allowances.",
+      "source": "aad-user-qa-decisions-v1.json/workingProposal/footings"
+    },
+    {
+      "id": "DOCUMENTARY_ENGINEERING_APPROVAL",
+      "status": "OPEN",
+      "finding": "M25 message records user authorization; structural capacity/sign-off and drawing revision not supplied.",
+      "requiredEvidence": "Independent structural review calculations, revision identifiers and construction authorization.",
+      "source": "aad-user-message-approval-20261024.json"
+    },
+    {
+      "id": "ARCHITECTURAL_STRUCTURAL_DATUM",
+      "status": "OPEN",
+      "finding": "Plan wall topology is area-calibrated, with provisional architectural/structural registration; visual proximity is not a setting-out datum.",
+      "requiredEvidence": "Reviewed survey/control points and common coordinate transformation with residuals.",
+      "source": "aad-building-v1.json/coordinateSystem"
+    },
+    {
+      "id": "GF_TO_UPPER_STOREYS_LOAD_PATH",
+      "status": "OPEN",
+      "finding": "GF has 23 source-reviewed columns and 16 beams, but structural members of FF/SF not reconciled.",
+      "requiredEvidence": "Approved upper-storey plans, beam-column schedule, load continuity checks.",
+      "source": "aad-building-v1.json/levels"
+    },
+    {
+      "id": "SCHEMATIC_VERTICAL_DIMENSIONS",
+      "status": "OPEN",
+      "finding": "Rendered GF column height 2.80m, footing thickness 0.30m at y=-0.25m, beam height positions are illustrative.",
+      "requiredEvidence": "Approved elevation/section schedule and actual foundation level/depth.",
+      "source": "aad-reviewed-structural-assembly.mjs"
+    }
+  ],
+  "releaseCriteria": "All open issues require independently reviewed design evidence before engineering HOLD can be lifted. M26 CI success is NOT construction certification."
+}
