@@ -139,3 +139,27 @@ jobs:
           assert Path('/tmp/aad-ai-live-ifc.ifc').stat().st_size>15000
           print('AAD_AI_GENERATED_PROJECT_LIVE_READBACK_PASS')
           PY
+
+      - name: Checkout exact M26 production revision for live browser parity
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+      - name: Install browser parity runner for real public Narayani studio
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          npm ci
+          npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
+          npx playwright install --with-deps chromium
+      - name: Independently verify LIVE SVG Three.js component register and IFC4 from one source model
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        env:
+          AAD_M26_PROJECT_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/
+        run: node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+      - name: Archive evidence screenshot of live M26 primary studio
+        if: always() && github.event_name == 'workflow_run'
+        uses: actions/upload-artifact@v4
+        with:
+          name: m27-live-primary-aad-2d-3d-ifc-parity
+          path: /tmp/aad-m26-main-studio-source-structural.png
+          if-no-files-found: ignore
