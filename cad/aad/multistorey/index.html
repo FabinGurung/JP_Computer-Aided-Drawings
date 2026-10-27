@@ -82,6 +82,8 @@ body[data-view-mode="building"] #viewport2d{display:none}
 #viewer2d .aad-node.dragging{fill:#feaf6c;cursor:grabbing}
 #viewer2d text{fill:#355a64;font-size:.36px;pointer-events:none}
 #viewer2d .aad-ghost{fill:none;stroke:#a1b5be;stroke-width:.11;stroke-dasharray:.3 .2}
+#viewer2d .aad-m29-original-dxf-edge{stroke:#d14d8d;stroke-width:.075;stroke-dasharray:.20 .12;opacity:.85;pointer-events:none;vector-effect:non-scaling-stroke}
+#viewer2d .aad-m29-upper-projection{stroke-width:.095;fill:none;stroke-dasharray:.15 .12;pointer-events:none;vector-effect:non-scaling-stroke}
 .dirty-chip{background:#fff2db;color:#825713;border-radius:6px;padding:5px 8px;font-size:11px}
 @media(max-width:1050px){.workspace{grid-template-columns:1fr!important}.linked-views{grid-template-columns:1fr!important}#viewer2d,#viewer3d{height:500px;min-height:320px}aside{max-height:none}}
 @media(max-width:660px){.linked-views{padding:6px}#viewer2d,#viewer3d{height:365px;min-height:300px}.unified-toolbar>*{flex:1}.unified-toolbar .spacer{display:none}}
@@ -200,6 +202,16 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <div id="aad-join-wrap"><input id="aad-join-first" aria-label="First wall ID" placeholder="First wall ID"><input id="aad-join-second" aria-label="Second wall ID" placeholder="Second wall ID"></div>
 <button id="aad-join-walls" type="button">Join walls</button></details>
 <div id="aad-topology-help" aria-live="polite">Choose a storey, then click Draw connected wall and two plan locations. Junctions snap/split automatically. Exteriors stay source-protected.</div>
+</section>
+<section id="aad-m29-controls" hidden aria-label="M29 partial DXF source registration and upper-storey projection layers">
+<h2>M29 · Original DXF and vertical plan evidence</h2>
+<p id="aad-m29-summary" style="font-size:11px;color:#4b6572">Loading partial source registration evidence…</p>
+<label style="display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0">
+<input id="aad-m29-source-toggle" type="checkbox"> Original DXF architectural edges (GF)</label>
+<label style="display:flex;align-items:center;gap:8px;font-size:12px;margin:10px 0">
+<input id="aad-m29-projection-toggle" type="checkbox"> GF columns projected onto FF / SF plans</label>
+<small style="font-size:11px;color:#726349">Source edges vs modeled wall centre-lines are an alignment comparison, not a surveyed residual. Ghost projection circles on upper floors are not real columns, IFC objects or a verified vertical load path.</small>
+<a id="aad-m29-register-link" target="_blank" rel="noopener" style="display:block;margin-top:7px;font-size:12px" href="#">Open M29 source evidence and limits ↗</a>
 </section>
 <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
  <section><details><summary>AI-controlled authoring · machine-readable inputs</summary>
