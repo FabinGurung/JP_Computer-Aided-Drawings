@@ -32,9 +32,21 @@ export function buildAADReviewedStructure(manifest,qa,m70){
     grid:c.grid,section:c.section,qaId:c.id,approval:"USER_MESSAGE_ONLY",
     engineeringStatus:"HOLD",sourceElement:c.source}};
  });
+ // M28: derived owner-verified plan-support linkage does not change original DXF IDs.
+ const i3=qa.columns.find(c=>c.grid==="I3"),h3=qa.columns.find(c=>c.grid==="H3");
  const pads=qa.footings.map(f=>{
   finite(f.x,"footing X");finite(f.z,"footing Z");
   check(f.dx>1&&f.dz>1&&f.dx<5&&f.dz<5,"footing footprint outside expected bounds");
+  const needsLink=f.orphanOriginalColumnIds?.includes("SC-I4")&&
+    f.originalDxfColumnIds?.includes("SC-H3");
+  const inside=c=>c&&Math.abs(c.x-f.x)<=f.dx/2+1e-6&&Math.abs(c.z-f.z)<=f.dz/2+1e-6;
+  if(needsLink)check(inside(i3)&&inside(h3),"H3/I3 working centres not both inside original CF1 source footprint");
+  const workingSupportProposal=needsLink?{
+   status:"OWNER_VERIFIED_GEOMETRIC_CENTRE_CONTAINMENT_NOT_CAPACITY_CHECKED",
+   originalNativeIds:[...f.originalDxfColumnIds],
+   workingIds:[manifest.projectId+":gf:QA-COL:H3",manifest.projectId+":gf:QA-COL:I3"],
+   nativeI4OrphanPreserved:true,H3CenterInside:true,I3CenterInside:true
+  }:null;
   return{id:manifest.projectId+":gf:QA-FOOT:"+f.id,kind:"footing",ifcType:"IfcFooting",
    level:"gf",x:f.x,z:f.z,y:-.25,dx:f.dx,dy:.30,dz:f.dz,rotationDeg:0,
    name:f.label,source:f.source.file,status:reviewStatus,previewOnly:true,
@@ -43,7 +55,7 @@ export function buildAADReviewedStructure(manifest,qa,m70){
    provenance:{basis:"user-reviewed-dxf-footing",sourceId:f.source.dxfId,
     grid:f.grid,qaId:f.id,orphanIds:f.orphanOriginalColumnIds,
     engineeringStatus:f.status,stageComparison:f.stageComparison,
-    excavationWorkingArea:f.excavationWorkingArea,approval:"USER_MESSAGE_ONLY"}};
+    excavationWorkingArea:f.excavationWorkingArea,workingSupportProposal,approval:"USER_MESSAGE_ONLY"}};
  });
  const beams=m70.records.map(b=>{
   const dx=b.bx-b.ax,dz=b.bz-b.az,len=Math.hypot(dx,dz);

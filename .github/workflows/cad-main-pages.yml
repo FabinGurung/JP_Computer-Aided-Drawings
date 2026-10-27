@@ -27,6 +27,8 @@ jobs:
         run: node tools/site/aad-m26-canonical-source-integration-smoke.mjs
       - name: M27 engineering source-preservation and open-HOLD gate
         run: node tools/site/aad-m27-hold-gate.mjs
+      - name: M28 owner verification and source-derived H3/I3-CF1 footprint check
+        run: node tools/site/aad-m28-reconciliation-smoke.mjs
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs

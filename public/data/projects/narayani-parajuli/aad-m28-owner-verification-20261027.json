@@ -1,0 +1,23 @@
+{
+  "schema": "jp-cad://aad-owner-verification/1",
+  "projectId": "PRJ-000007",
+  "eventId": "PRJ-000007-M28-USER-VERIFICATION-20261027",
+  "recordedDate": "2026-10-27",
+  "timeZone": "Asia/Kathmandu",
+  "channel": "DIRECT_CHAT_MESSAGE",
+  "exactStatement": "i verify and approve it. now get to the next stage.",
+  "previousApprovalEventId": "PRJ-000007-M25-USER-MESSAGE-APPROVAL-20261024",
+  "ownerDecisionStatus": "VERIFIED_AND_APPROVED_NO_REAPPROVAL_REQUEST",
+  "scope": "The user confirms the previously approved working I3, CF1, G1, F3 layout and requests next-stage execution.",
+  "confirmedDecisions": [
+    "I3 Ø350 replaces I4 in working geometry at M70 I3",
+    "CF1 H3-I3 geometrical relationship may be derived in working model; original H3-I4 preserved",
+    "G1 uses 1.80x1.80 m original DXF working outline, independent from excavation",
+    "F3 follows DXF written note; original mismatched dropdown retained"
+  ],
+  "independentEngineeringCalculationEvidenceAttached": false,
+  "constructionApproval": false,
+  "authority": "USER_VERIFIED_DESIGN_PREFERENCE_AND_WORKING_MODEL",
+  "preserved": "Native source DXFs, stage M70/M60/M40/V03, original 13 QA responses and M25 event untouched",
+  "notes": "Approval is recorded; no further request for this working-model decision. Plan centre containment alone does not establish footing/beam/rebar/soil adequacy."
+}

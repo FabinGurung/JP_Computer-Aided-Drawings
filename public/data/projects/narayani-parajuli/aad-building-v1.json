@@ -156,6 +156,8 @@
     "sourceMemberPlacement": "GROUND_FLOOR_SOURCE_REVIEW_ONLY__UPPER_STOREYS_NOT_RECONCILED",
     "architecturalRegistration": "PROVISIONAL_AREA_ADJUSTED_AAD_VS_DXF_COORDINATE_RESIDUAL",
     "constructionApproval": false,
-    "engineeringHold": true
+    "engineeringHold": true,
+    "ownerVerification": "aad-m28-owner-verification-20261027.json",
+    "derivedReconciliation": "aad-m28-reconciliation-20261027.json"
   }
 }

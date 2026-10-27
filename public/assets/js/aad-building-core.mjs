@@ -233,6 +233,7 @@ export function assembleBuilding(manifest,models,options={}){
   reviewStatus:"DRAFT_ENGINEERING_HOLD",
   sourceStructuralReview:options.reviewStructure?{schema:options.reviewStructure.schema,
    sourcePriority:options.reviewStructure.sourcePriority,scope:"GF_ONLY_SOURCE_PREVIEW",
+   ownerVerificationEventId:options.reviewStructure.ownerVerificationEventId||null,
    notes:options.reviewStructure.notes}:null,
   manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
 }
