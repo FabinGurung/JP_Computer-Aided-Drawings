@@ -47,9 +47,20 @@ export async function loadAADReviewedStructure(manifest,manifestURL,fetchJSON){
  const approval=await load(spec.userApproval);
  const reviewed=deriveUserQAPreview(dxf,m70,m23,qa,approval);
  if(!reviewed.userMessageApproval)throw Error("M26 user message authorization missing");
+ const ownerVerification=spec.ownerVerification?await load(spec.ownerVerification):null;
+ if(ownerVerification&&(ownerVerification.schema!=="jp-cad://aad-owner-verification/1"||
+  ownerVerification.projectId!==manifest.projectId||
+  ownerVerification.previousApprovalEventId!==reviewed.userMessageApproval.eventId||
+  ownerVerification.ownerDecisionStatus!=="VERIFIED_AND_APPROVED_NO_REAPPROVAL_REQUEST"||
+  ownerVerification.constructionApproval!==false||
+  ownerVerification.independentEngineeringCalculationEvidenceAttached!==false))
+   throw Error("M28 owner verification source chain invalid");
  const assembly=buildAADReviewedStructure(manifest,reviewed,m70);
  return{...assembly,approvalEventId:reviewed.userMessageApproval.eventId,
+  userAuthorization:ownerVerification?"M28_OWNER_VERIFIED":assembly.userAuthorization,
+  ownerVerificationEventId:ownerVerification?.eventId||null,
   sourceFiles:{sourceLedger:spec.sourceLedger,stageLinks:spec.stageLinks,
-   userQA:spec.userQA,userApproval:spec.userApproval},
+   userQA:spec.userQA,userApproval:spec.userApproval,
+   ...(ownerVerification?{ownerVerification:spec.ownerVerification}:{})},
   sourceCounts:reviewed.counts,discrepancies:reviewed.discrepancies};
 }
