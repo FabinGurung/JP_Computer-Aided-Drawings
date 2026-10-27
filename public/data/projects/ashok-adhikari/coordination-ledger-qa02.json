@@ -1,0 +1,855 @@
+{
+  "assumptions": [
+    "Standard window sill 900 mm, kitchen 1100 mm, stair 600 mm, high vents 2100 mm; kitchen 203 mm vent top remains 914 mm below assumed slab underside.",
+    "150 mm floor plate thickness is display-only; amber 300 mm column glyphs are not structural sections.",
+    "Furniture chosen to fit available space; actual products and MEP remain unselected. The GF tub is rotated to leave a 1037 mm approach aisle; basin/WC positions are staggered rather than blocking entries.",
+    "External WC floor at +150 mm is a separate assumed datum, with one 150 mm step and its source 1000x1200 mm clear internal size.",
+    "GF+FF model only. No unsupported historical top floor silently added. Roof terrace is a labeled proposal."
+  ],
+  "authority": {
+    "approvedVisuals": "v0.9 GF c016 / FF c012 preserved",
+    "candidate": "QA02 unpromoted architectural scheme",
+    "clientBaseline": "REV03 v0.4 preserved",
+    "sourceGeometry": "REV04 v0.8 preserved"
+  },
+  "authorization": "User requested practical aesthetic completion with up to 30% schematic allowance and no further approval pause.",
+  "changes": [
+    {
+      "candidate_mm": [
+        7200,
+        14400
+      ],
+      "change_percent": [
+        0,
+        0
+      ],
+      "item": "External envelope",
+      "reason": "Treat these as OUTER wall faces; move 230 mm wall centre-lines 115 mm inward.",
+      "source_mm": [
+        7200,
+        14400
+      ]
+    },
+    {
+      "candidate_mm": 4290,
+      "change_percent": 30,
+      "item": "Stair bay width",
+      "reason": "Fits two 900 mm flights, 2000 mm run, 900 mm mid/arrival/start landings; independent porch/balcony access.",
+      "source_mm": 3300
+    },
+    {
+      "candidate_mm": 2200,
+      "change_percent": 10,
+      "item": "GF stair bay depth",
+      "reason": "1920 mm clear depth after outer and inner wall thicknesses.",
+      "source_mm": 2000
+    },
+    {
+      "candidate_mm": 2200,
+      "change_percent": 29.412,
+      "item": "FF stair bay depth",
+      "reason": "Remove the arrival/entry mismatch; give both floors the same workable stair well.",
+      "source_mm": 1700
+    },
+    {
+      "candidate_mm": 1188,
+      "change_percent": 29.978,
+      "item": "GF hall nominal width",
+      "reason": "1088 mm clear between 100 mm walls, with retained 914 mm bedroom doors.",
+      "source_mm": 914
+    },
+    {
+      "candidate_mm": 1067,
+      "change_percent": 0,
+      "item": "Main entry width",
+      "reason": "Source door width retained; new host at x=4975 gives a real corner jamb and a separate front window.",
+      "source_mm": 1067
+    },
+    {
+      "candidate_mm": 1219,
+      "change_percent": -20.013,
+      "item": "Lounge front window width",
+      "reason": "Keep a proper pier between entry and window; retain source height and material.",
+      "source_mm": 1524
+    },
+    {
+      "candidate_mm": 4056,
+      "change_percent": -29.998,
+      "item": "Transverse parking centre X in plot",
+      "reason": "Shift left by 29.998% of plot width to release a 2943 mm clear pedestrian approach on the right. Vehicle dimensions unchanged; driving/turning not certified.",
+      "reference_dimension_mm": 9144,
+      "source_mm": 6799
+    },
+    {
+      "candidate_x_mm": 3300,
+      "item": "GF hall/living partition stubs",
+      "max_normalization_mm": 45,
+      "reason": "Remove coincident duplicate wall; preserve the 1911 mm open passage between y=6833 and 8744.",
+      "source_x_mm": [
+        3255,
+        3261,
+        3267,
+        3297
+      ]
+    },
+    {
+      "candidate": "Lower flight runs right-to-left; upper flight returns left-to-right, with a level right-side landing to porch/balcony",
+      "item": "Stair handedness and access",
+      "reason": "Avoid circulation through Bedroom 2 and provide complete 900 mm start/arrival landings.",
+      "source": "U-stair; start/arrival route unresolved in REV04 structured model"
+    }
+  ],
+  "dateNpt": "2026-10-27",
+  "inputs": [
+    {
+      "name": "REV04 semantic model",
+      "sha256": "6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e"
+    },
+    {
+      "finding": "10 LINE entities, no column or furniture objects",
+      "name": "REV02 native DXF",
+      "sha256": "475f3dd8c06a927443319bd72741e501a75dbaf1d205ce2e1e53daba5921cd41"
+    },
+    {
+      "name": "REV02 user sketch",
+      "sha256": "4714929bdfe2d7b2ac04475944eec100c94c885688fbbcd6caf0008ca2be7789"
+    },
+    {
+      "name": "REV03 GF intent",
+      "sha256": "c08c85080f1d9a3ec2c1ec0c5283f101f9bfe6a99353758c8852ef42d89844ae"
+    },
+    {
+      "name": "REV02 FF intent",
+      "sha256": "0c67c32bd2a3091b0fdf1b790fa804eb9ca6b6325522d7e441174b81452a48e1"
+    }
+  ],
+  "openings": [
+    {
+      "candidateAnchor": [
+        4975,
+        2315
+      ],
+      "candidateSize": [
+        1067,
+        2134
+      ],
+      "host": "GF-EXT-03",
+      "id": "GF-D-MAIN",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        3839,
+        2000
+      ],
+      "sourceSize": [
+        1067,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        4230,
+        14285
+      ],
+      "candidateSize": [
+        914,
+        2134
+      ],
+      "host": "GF-EXT-05-1",
+      "id": "GF-D-REAR",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        4057,
+        14400
+      ],
+      "sourceSize": [
+        914,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        1800,
+        14285
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "GF-EXT-05-2",
+      "id": "GF-W001",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        1800,
+        14400
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        11900
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "GF-EXT-06-1",
+      "id": "GF-W002",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        11900
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        5400,
+        14285
+      ],
+      "candidateSize": [
+        1219,
+        914
+      ],
+      "host": "GF-EXT-05-1",
+      "id": "GF-W003",
+      "sill_mm": 1100,
+      "sourceAnchor": [
+        5400,
+        14400
+      ],
+      "sourceSize": [
+        1219,
+        914
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        7500
+      ],
+      "candidateSize": [
+        610,
+        457
+      ],
+      "host": "GF-EXT-06-2",
+      "id": "GF-V001",
+      "sill_mm": 2100,
+      "sourceAnchor": [
+        0,
+        7500
+      ],
+      "sourceSize": [
+        610,
+        457
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        3800
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "GF-EXT-06-3",
+      "id": "GF-W004",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        3800
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        6250,
+        2315
+      ],
+      "candidateSize": [
+        1219,
+        1372
+      ],
+      "host": "GF-EXT-03",
+      "id": "GF-W005",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        5250,
+        2000
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        1650,
+        115
+      ],
+      "candidateSize": [
+        1067,
+        1829
+      ],
+      "host": "GF-EXT-01",
+      "id": "GF-W006",
+      "sill_mm": 600,
+      "sourceAnchor": [
+        1650,
+        0
+      ],
+      "sourceSize": [
+        1067,
+        1829
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        1000
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "GF-EXT-06-4",
+      "id": "GF-W007",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        1000
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        6421,
+        14285
+      ],
+      "candidateSize": [
+        203,
+        203
+      ],
+      "host": "GF-EXT-05-1",
+      "id": "GF-V002",
+      "sill_mm": 1759,
+      "sourceAnchor": [
+        6421,
+        14400
+      ],
+      "sourceSize": [
+        203,
+        203
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        2706,
+        9400
+      ],
+      "candidateSize": [
+        914,
+        2134
+      ],
+      "host": "GF-REAR-BAND-2",
+      "id": "GF-D-BED1-HALL",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        2843,
+        9400
+      ],
+      "sourceSize": [
+        914,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        2706,
+        5600
+      ],
+      "candidateSize": [
+        914,
+        2134
+      ],
+      "host": "GF-BED2-HALL-2",
+      "id": "GF-D-BED2-HALL",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        2843,
+        5600
+      ],
+      "sourceSize": [
+        914,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        2112,
+        6200
+      ],
+      "candidateSize": [
+        850,
+        1981
+      ],
+      "host": "GF-BATH-HALL",
+      "id": "GF-D-BATH-HALL",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        2386,
+        6100
+      ],
+      "sourceSize": [
+        762,
+        1981
+      ],
+      "style": "sliding"
+    },
+    {
+      "candidateAnchor": [
+        4175,
+        1000
+      ],
+      "candidateSize": [
+        1067,
+        2134
+      ],
+      "host": "GF-EXT-02-1",
+      "id": "GF-D-STAIR-PORCH",
+      "sill_mm": 0,
+      "sourceAnchor": null,
+      "sourceSize": null,
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        5500,
+        9400
+      ],
+      "candidateSize": [
+        1100,
+        2300
+      ],
+      "host": "GF-REAR-BAND-4",
+      "id": "GF-OPEN-KITCHEN",
+      "sill_mm": 0,
+      "sourceAnchor": null,
+      "sourceSize": null,
+      "style": "passage"
+    },
+    {
+      "candidateAnchor": [
+        4975,
+        2315
+      ],
+      "candidateSize": [
+        1067,
+        2134
+      ],
+      "host": "FF-EXT-03",
+      "id": "FF-D-MAIN",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        3839,
+        2000
+      ],
+      "sourceSize": [
+        1067,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        4212,
+        9600
+      ],
+      "candidateSize": [
+        914,
+        2134
+      ],
+      "host": "FF-MAIN-BAND-3",
+      "id": "FF-D-LOUNGE-MAIN",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        4212,
+        9600
+      ],
+      "sourceSize": [
+        914,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        1800,
+        14285
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "FF-EXT-05",
+      "id": "FF-W001",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        1800,
+        14400
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        5400,
+        14285
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "FF-EXT-05",
+      "id": "FF-W002",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        5400,
+        14400
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        12000
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "FF-EXT-06-1",
+      "id": "FF-W003",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        12000
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        8500
+      ],
+      "candidateSize": [
+        610,
+        457
+      ],
+      "host": "FF-EXT-06-2",
+      "id": "FF-V001",
+      "sill_mm": 2100,
+      "sourceAnchor": [
+        0,
+        8500
+      ],
+      "sourceSize": [
+        610,
+        457
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        6525
+      ],
+      "candidateSize": [
+        610,
+        457
+      ],
+      "host": "FF-EXT-06-3",
+      "id": "FF-V002",
+      "sill_mm": 2100,
+      "sourceAnchor": [
+        0,
+        6525
+      ],
+      "sourceSize": [
+        610,
+        457
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        3625
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "FF-EXT-06-4",
+      "id": "FF-W004",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        3625
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        6250,
+        2315
+      ],
+      "candidateSize": [
+        1219,
+        1372
+      ],
+      "host": "FF-EXT-03",
+      "id": "FF-W005",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        5250,
+        1700
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        1650,
+        115
+      ],
+      "candidateSize": [
+        1067,
+        1829
+      ],
+      "host": "FF-EXT-01",
+      "id": "FF-W006",
+      "sill_mm": 600,
+      "sourceAnchor": [
+        1650,
+        0
+      ],
+      "sourceSize": [
+        1067,
+        1829
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        115,
+        1000
+      ],
+      "candidateSize": [
+        1524,
+        1372
+      ],
+      "host": "FF-EXT-06-5",
+      "id": "FF-W007",
+      "sill_mm": 900,
+      "sourceAnchor": [
+        0,
+        850
+      ],
+      "sourceSize": [
+        1524,
+        1372
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        825,
+        9600
+      ],
+      "candidateSize": [
+        850,
+        1981
+      ],
+      "host": "FF-MAIN-BAND-1",
+      "id": "FF-D-MAIN-ENS",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        825,
+        9600
+      ],
+      "sourceSize": [
+        762,
+        1981
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        3300,
+        6500
+      ],
+      "candidateSize": [
+        850,
+        1981
+      ],
+      "host": "FF-ROOM-LOUNGE-2",
+      "id": "FF-D-MAINBATH-LOUNGE",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        3300,
+        6500
+      ],
+      "sourceSize": [
+        762,
+        1981
+      ],
+      "style": "sliding"
+    },
+    {
+      "candidateAnchor": [
+        3300,
+        4500
+      ],
+      "candidateSize": [
+        914,
+        2134
+      ],
+      "host": "FF-ROOM-LOUNGE-1",
+      "id": "FF-D-BED2-LOUNGE",
+      "sill_mm": 0,
+      "sourceAnchor": [
+        3300,
+        4500
+      ],
+      "sourceSize": [
+        914,
+        2134
+      ],
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        4175,
+        1000
+      ],
+      "candidateSize": [
+        1067,
+        2134
+      ],
+      "host": "FF-EXT-02-1",
+      "id": "FF-D-STAIR-PORCH",
+      "sill_mm": 0,
+      "sourceAnchor": null,
+      "sourceSize": null,
+      "style": "hinged"
+    },
+    {
+      "candidateAnchor": [
+        2475,
+        9600
+      ],
+      "candidateSize": [
+        850,
+        1981
+      ],
+      "host": "FF-MAIN-BAND-2",
+      "id": "FF-D-WIR-MAIN",
+      "sill_mm": 0,
+      "sourceAnchor": null,
+      "sourceSize": null,
+      "style": "sliding"
+    }
+  ],
+  "remainingHolds": [
+    {
+      "code": "ENGINEERING_DESIGN",
+      "message": "Amber columns are proposed location markers, not designed sections. No foundation/rebar/capacity certification."
+    },
+    {
+      "code": "MUNICIPAL",
+      "message": "Zero-right setback and external WC location remain unverified for municipal submission."
+    },
+    {
+      "code": "STAIR_DETAIL",
+      "message": "18 risers, tread/landing dimensions and a real slab void coordinated; structural waist/beam/guard details and finished headroom need professional checking."
+    },
+    {
+      "code": "PARKING",
+      "message": "Static vehicle fits with a clear right approach. Driving/turning/gate operation still unverified."
+    },
+    {
+      "code": "SOURCE_CUSTODY",
+      "message": "Historical M08 native bytes remain unavailable. Current derivative uses live REV04 JSON, REV02 DXF and user sketch; originals preserved."
+    }
+  ],
+  "revision": "M10-REV04-QA02-20261027",
+  "schema": "jp-cad://coordination-ledger/1",
+  "sourceRemovedOrPassage": [
+    {
+      "id": "GF-D-RM-BED2-BATH",
+      "reason": "REMOVED_IN_SOURCE"
+    },
+    {
+      "id": "GF-D-RM-STAIR-BED2",
+      "reason": "REMOVED_IN_SOURCE"
+    },
+    {
+      "id": "GF-OPEN-HALL-LOUNGE-001",
+      "reason": "UNENCLOSED_PASSAGE_RETAINED_IN_WALL_NETWORK"
+    },
+    {
+      "id": "FF-D-RM-STAIR-BED2",
+      "reason": "REMOVED_IN_SOURCE"
+    },
+    {
+      "id": "FF-D-RM-BATH-ENS",
+      "reason": "REMOVED_IN_SOURCE"
+    }
+  ],
+  "tolerancePolicy": "Known outer plot, footprint, wall thickness, source room rear boundaries and storey rise remain exact. Listed interior coordination changes are proposals, not a claim of quantified 30% engineering accuracy."
+}

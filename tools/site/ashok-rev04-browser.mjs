@@ -1,27 +1,50 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
+import fs from 'node:fs';
 const base=process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/';
+const widths=(process.env.ASHOK_WIDTHS||'390,820,1440').split(',').map(Number);
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader']});
 try{
- for(const width of [390,820,1440]){
+ for(const width of widths){
   const page=await browser.newPage({viewport:{width,height:950},acceptDownloads:true});
   const errors=[];page.on('pageerror',e=>errors.push(e.message));
   const response=await page.goto(base,{waitUntil:'networkidle',timeout:90000});
   assert.equal(response.status(),200);assert.equal(await page.locator('body').getAttribute('data-cad-route'),'projects/ashok-adhikari/');
   const frame=page.frameLocator('#ashok-engine');
+  const renderProof=()=>page.locator('#ashok-engine').evaluate(f=>f.contentWindow.AADStudio.getViewportProof());
   await frame.locator('#viewer3d canvas').waitFor({timeout:45000});
   await frame.locator('#action-status').filter({hasText:'Shared AAD building assembly ready'}).waitFor({timeout:45000});
   const result=await page.locator('#ashok-engine').evaluate(f=>f.contentWindow.AADStudio.getSnapshot().assembly);
-  assert.equal(result.projectId,'ashok-adhikari');assert.equal(result.levels.length,2);assert.equal(result.counts.wall,24);
-  assert.equal(result.counts.column,undefined);assert.equal(result.counts.slab,undefined);
+  assert.equal(result.projectId,'ashok-adhikari');assert.equal(result.levels.length,2);assert.equal(result.counts.wall,49);
+  assert.equal(result.counts.column,28);assert.equal(result.counts.window,18);assert.ok(result.counts.furniture>=30);
   await frame.locator('#aad-storey').selectOption('gf');
+  await frame.locator('#aad-view-both').click();
   const parity=await page.locator('#ashok-engine').evaluate(f=>{
    const s=f.contentWindow.AADStudio,b=s.getSnapshot().assembly;
    return s.getViewCoordinateProof(b.elements.find(e=>e.kind==='wall'&&e.level==='gf').id);
   });
   assert.ok(parity.mesh&&parity.plan&&parity.table);
   for(const axis of ['x','z'])for(const target of ['mesh','plan','table'])assert.ok(Math.abs(parity.model[axis]-parity[target][axis])<.001);
+  const gfProof=await renderProof();assert.equal(gfProof.activeLevel,'gf');assert.equal(gfProof.visibleWalls,25);assert.equal(gfProof.visibleRoof,false);assert.ok(gfProof.visibleFurniture>=15);
   await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-rev04-model-'+width+'.png'});
+  const holes=await page.locator('#ashok-engine').evaluate(f=>{
+   const api=f.contentWindow.AADStudio;return api.getSnapshot().assembly.elements.filter(e=>e.host).map(e=>api.getOpeningVoidProof(e.id));
+  });
+  assert.equal(holes.length,32);assert.ok(holes.every(h=>h.wallTriangleHitsThroughAperture===0),'A wall still fills an opening');
+  assert.ok(await frame.locator('#viewer2d .aad-dim-text').count()>=5,'Dimension strings missing');
+  assert.equal(await frame.locator('#viewer2d [data-grid-spacing]').count(),3,'Callable grid hierarchy missing');
+  assert.ok(await frame.locator('#viewer2d .aad-space-title').first().evaluate(n=>parseFloat(getComputedStyle(n).fontSize)<.3),'Generic text style crowds architectural labels');
+  const bed=await page.locator('#ashok-engine').evaluate(f=>f.contentWindow.AADStudio.getSnapshot().assembly.elements.find(e=>e.level==='gf'&&e.kind==='furniture'&&/bed/i.test(e.name))?.id);
+  assert.ok(bed,'No furnished bed');
+  const furnitureParity=await page.locator('#ashok-engine').evaluate((f,id)=>f.contentWindow.AADStudio.getViewCoordinateProof(id),bed);
+  for(const axis of ['x','z'])for(const target of ['mesh','plan','table'])assert.ok(Math.abs(furnitureParity.model[axis]-furnitureParity[target][axis])<.001,'Furniture coordinate drift');
+  await frame.locator('#viewer2d [data-presentation-id="'+bed+'"]').click();
+  assert.equal(await frame.locator('#viewer2d .aad-furnishing.is-selected').getAttribute('data-presentation-id'),bed);
+  const dl=page.waitForEvent('download');await frame.locator('#aad-plan-export').click();const exported=await dl;assert.match(exported.suggestedFilename(),/DIMENSIONED_PLAN\.svg$/);
+  const svg=fs.readFileSync(await exported.path(),'utf8');assert.match(svg,/<style/);assert.match(svg,/aad-opening-swing/);assert.match(svg,/7,200 overall/);assert.ok(!svg.includes('undefined'));
+  await frame.locator('#aad-view-plan').click();await frame.locator('#viewer2d').screenshot({path:'/tmp/ashok-qa02-dimensioned-plan-'+width+'.png'});await frame.locator('#aad-view-3d').click();
+  await frame.locator('#aad-preset-ff').click();const ffProof=await renderProof();assert.equal(ffProof.visibleWalls,24);assert.equal(ffProof.visibleRoof,false);await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-ff-'+width+'.png'});
+  await frame.locator('#aad-preset-exterior').click();const exteriorProof=await renderProof();assert.equal(exteriorProof.visibleWalls,49);assert.equal(exteriorProof.visibleRoof,true);await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-exterior-'+width+'.png'});
   await page.locator('[data-view="plans"]').click();
   assert.ok(await page.locator('#panel-plans').isVisible());
   for(const img of await page.locator('#panel-plans img').all())assert.ok(await img.evaluate(n=>n.complete&&n.naturalWidth>0));
@@ -35,5 +58,5 @@ try{
   await page.locator('[data-view="studio"]').click();await page.screenshot({path:'/tmp/ashok-rev04-studio-'+width+'.png',fullPage:false});
   assert.deepEqual(errors,[]);await page.close();
  }
- console.log('ASHOK_REV04_BROWSER_PASS mobile/tablet/desktop; shared 2D/3D/table; sources; visuals; notes');
+ console.log('ASHOK_REV04_BROWSER_PASS widths='+widths.join('/')+'; real apertures; furnished 2D/3D/table; floor isolation; dimensioned SVG; sources; notes');
 }finally{await browser.close();}

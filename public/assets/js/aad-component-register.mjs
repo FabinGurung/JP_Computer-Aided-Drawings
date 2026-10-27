@@ -3,6 +3,13 @@
  * Disciplines are UI grouping, not an IFC semantic/structural code approval.
  */
 const CATEGORIES={
+ furniture:["Architecture","Furniture","Schematic furnishing envelope; manufacturer and final selection unverified"],
+ fixture:["Architecture","Fixtures","Source-constrained sanitary or kitchen fixture envelope"],
+ floor:["Architecture","Floor finishes","Architectural floor surface; thickness is a display assumption"],
+ guard:["Architecture","Guards","Proposed guard coordination geometry; fixings and capacity not designed"],
+ site:["Other","Site context","Site or vehicle coordination envelope"],
+ landscape:["Other","Landscape","Illustrative landscape object"],
+ auxiliary:["Architecture","External service enclosure","Source-constrained external WC enclosure; municipal position unverified"],
  wall:["Architecture","Walls","Plan wall (may be load-bearing; not classified by this grouping)"],
  door:["Architecture","Doors","Hosted architectural door opening"],
  window:["Architecture","Windows","Hosted architectural window opening"],

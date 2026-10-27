@@ -177,5 +177,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: ashok-rev04-live-working-studio
-          path: /tmp/ashok-rev04-*.png
+          path: |
+            /tmp/ashok-rev04-*.png
+            /tmp/ashok-qa02-*.png
           if-no-files-found: ignore

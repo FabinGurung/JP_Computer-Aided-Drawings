@@ -60,6 +60,30 @@ node tools/site/aad-validate-project.mjs public/data/projects/<project_slug>/aad
 
 The CLI does not need a project-specific engine and does not alter source data. A successful geometric or IFC import **never** claims site survey, design approval, construction clearance or valid member capacities. The source-area schedule remains authoritative, and any changed area is an explicit QA deviation. Export is IFC4, with independent IfcOpenShell CI checks for deployed projects.
 
+## Opt-in architectural presentation
+
+A project may supply `presentation` in its building manifest. This is explicit
+project data, not permission to invent source evidence. The shared
+`aad-presentation-assembly.mjs` validates metric composite objects and provenance;
+`aad-wall-voids.mjs` subtracts hosted apertures from the actual 3D wall mesh;
+`aad-dimensioned-plan.mjs` supplies selectable furnishings, dimensions, room
+envelopes and a 100/500/1000 mm grid. The source floor graph remains the editable
+wall/opening authority. Furnishing footprints share the same world X/Z as the
+mesh and component table. SVG exports embed their required style rules.
+
+Mark unverified structure as `IfcBuildingElementProxy` with an explicit status;
+display glyph sizes must never be exported as designed `IfcColumn` sections.
+Known source bounds remain exact. A coordination ledger records each changed
+dimension, source hash, rationale and assumption. Original plans and approved
+images stay available for comparison. Architectural presentation defaults do not
+change other projects. Version shared dynamic imports when their dependency
+contract changes to prevent mixing cached browser modules.
+
+`tools/site/ashok-build-coordinated.py` demonstrates this contract without
+forking the studio. Its QA checks enforce exact outer faces, hosted openings,
+room-contained furniture, circulation bands, IFC parser readback and actual
+browser mesh raycasts. A passing deployment alone is not architectural QA.
+
 ## Selection contract
 
 All physical assembly elements have stable IDs `projectId:level:elementId`. Clicking a 2D authored wall/door/window, a 3D geometry mesh or a row in the schedule invokes one selected-element state: all three present an amber selection indicator, and the inspector resolves its provenance and editable parameters. For a 3D-only structural element, show its **plan location marker**, not a fictitious 2D footprint. Nonphysical control nodes receive a 3D editing marker but are not incorrectly represented as IFC products. No project-specific selection logic is permitted.

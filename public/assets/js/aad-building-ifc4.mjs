@@ -45,6 +45,8 @@ export function writeIFC4(building){
  const pt=(x,y,z)=>s.add("IFCCARTESIANPOINT",list([num(x),num(y),num(z)]));
  const dir=(x,y,z)=>s.add("IFCDIRECTION",list([num(x),num(y),num(z)]));
  const zero=pt(0,0,0),up=dir(0,0,1),east=dir(1,0,0);
+ const zero2=s.add('IFCCARTESIANPOINT','(0.,0.)'),east2=s.add('IFCDIRECTION','(1.,0.)');
+ const profileAxis=s.add('IFCAXIS2PLACEMENT2D',zero2,east2);
  const axis=(x,y,z,angle=0)=>{
   const origin=pt(x,y,z),rotation=dir(Math.cos(angle),Math.sin(angle),0);
   return s.add("IFCAXIS2PLACEMENT3D",origin,up,rotation);
@@ -101,15 +103,20 @@ export function writeIFC4(building){
    }
    return s.add("IFCARBITRARYCLOSEDPROFILEDEF",".AREA.","$",main);
   }
-  return s.add("IFCRECTANGLEPROFILEDEF",".AREA.","$","$",num(element.dx),num(element.dz));
+  return s.add("IFCRECTANGLEPROFILEDEF",".AREA.","$",profileAxis,num(element.dx),num(element.dz));
  };
  function makeGeometry(element,story){
   let items=[],placement;
-  if(element.steps?.length){
+  if(element.steps?.length||element.parts?.length){
    placement=s.add("IFCLOCALPLACEMENT",story.placement,axis(0,0,0));
-   for(const part of element.steps){
-    const profile=s.add("IFCRECTANGLEPROFILEDEF",".AREA.","$","$",num(part.dx),num(part.dz));
-    const position=axis(part.x,part.z,part.y-part.dy/2-story.elevation);
+   for(const part of element.parts||element.steps){
+    const profile=s.add("IFCRECTANGLEPROFILEDEF",".AREA.","$",profileAxis,num(part.dx),num(part.dz));
+    let position;
+    if(part.rotationZ){
+     const a=part.rotationZ*Math.PI/180,normal=dir(-Math.sin(a),0,Math.cos(a)),along=dir(Math.cos(a),0,Math.sin(a));
+     const origin=pt(part.x+Math.sin(a)*part.dy/2,part.z,part.y-Math.cos(a)*part.dy/2-story.elevation);
+     position=s.add('IFCAXIS2PLACEMENT3D',origin,normal,along);
+    }else position=axis(part.x,part.z,part.y-part.dy/2-story.elevation);
     items.push(s.add("IFCEXTRUDEDAREASOLID",profile,position,up,num(part.dy)));
    }
   }else if(element.profile){

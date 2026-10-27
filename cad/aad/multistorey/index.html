@@ -135,6 +135,12 @@ body[data-view-mode="building"] #viewport2d{display:none}
 #viewer2d .aad-room-polygon{fill:#66bea0;fill-opacity:.09;stroke:#22967d;stroke-width:.035;stroke-dasharray:.14 .10;pointer-events:none}
 #viewer2d .aad-room-text{font-size:.32px;fill:#116b60;font-weight:600}
 #viewer2d .aad-draw-first{fill:#ffb13c;stroke:#a95906;stroke-width:.1}
+#aad-presentation-controls[hidden]{display:none!important}
+body[data-aad-embed] header,body[data-aad-embed] #cad-global-navigation{display:none!important}
+body[data-aad-embed] main{padding:5px}
+body[data-aad-embed] #aad-selected-details{display:none}
+body[data-aad-embed] .head h1{font-size:22px}
+body[data-aad-embed] .actions{margin-top:5px}
 
 </style>
 </head>
@@ -161,6 +167,13 @@ body[data-view-mode="building"] #viewport2d{display:none}
 <button id="aad-import-working" type="button">Open BIM draft</button><input id="aad-import-file" type="file" accept=".json,application/json" hidden>
 </div>
 <div class="workspace">
+<div id="aad-presentation-controls" class="unified-toolbar" hidden style="grid-column:1/-1">
+<strong>Architectural views</strong><button id="aad-preset-gf" type="button">Furnished GF</button><button id="aad-preset-ff" type="button">Furnished FF</button><button id="aad-preset-exterior" type="button">Exterior</button>
+<button id="aad-view-3d" type="button">3D model</button><button id="aad-view-plan" type="button">Dimensioned plan</button><button id="aad-view-both" type="button">Both views</button>
+<label><input id="aad-cutaway" type="checkbox" checked> Cutaway walls</label><label><input id="aad-dimensions" type="checkbox" checked> Dimensions</label><label><input id="aad-plan-grid" type="checkbox" checked> 100/500/1000 grid</label><label><input id="aad-furniture" type="checkbox" checked> Furniture</label>
+<button id="aad-plan-in" type="button">Plan +</button><button id="aad-plan-out" type="button">Plan −</button><button id="aad-plan-export" type="button">Save dimensioned SVG</button>
+<output id="aad-coordinate-readout" style="font-size:11px">X/Y coordinates in source millimetres</output>
+</div>
  <div class="panel">
   <div class="panel-title"><strong>One editable building · linked 2D + 3D</strong><small>One authoritative building state updates all viewports, components and IFC</small></div>
   <div class="linked-views">

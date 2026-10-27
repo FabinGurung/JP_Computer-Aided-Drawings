@@ -3,24 +3,30 @@
  */
 import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
+import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>new URL("../../../assets/js/"+file,location.href).href;
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261027-qa02');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
 const {loadAADReviewedStructure}=await import(/* @vite-ignore */moduleURL("aad-reviewed-structural-intake.mjs"));
 const {deriveM29DatumEvidence}=await import(/* @vite-ignore */moduleURL("aad-m29-source-datum.mjs"));
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
+const {wallSolidCells}=await import(/* @vite-ignore */moduleURL("aad-wall-voids.mjs"));
+const {drawPresentationPlan}=await import(/* @vite-ignore */moduleURL("aad-dimensioned-plan.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
+if(params.get('embed')==='1')document.body.dataset.aadEmbed='true';
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
+let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
 const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,footing:0x926aae,stair:0x9386bb,landing:0xa48cc9};
+Object.assign(palettes,{floor:0xd8c7a5,furniture:0xb49d7d,fixture:0xd9e3de,guard:0x91b4b7,site:0xc4c4ae,landscape:0x708b62});
 const status=txt=>$("action-status").textContent=txt;
 function download(name,text,mime){
  const url=URL.createObjectURL(new Blob([text],{type:mime}));
@@ -43,17 +49,58 @@ function shapeSolid(e){
  }
  const geom=new THREE.ExtrudeGeometry(shape,{depth:e.dy,steps:1,bevelEnabled:false,curveSegments:1});
  geom.rotateX(-Math.PI/2);
- const mat=new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x8195a4,metalness:.03,roughness:.78,side:THREE.DoubleSide,transparent:true,opacity:e.kind==="roof"?.52:e.kind==="slab"?.75:.92});
+ const mat=building?.manifest.presentation?coordinatedMaterial(e):new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x8195a4,metalness:.03,roughness:.78,side:THREE.DoubleSide,transparent:true,opacity:e.kind==="roof"?.52:e.kind==="slab"?.75:.92});
  const m=new THREE.Mesh(geom,mat);m.position.set(sourceLocal?e.x:0,e.y-e.dy/2,sourceLocal?e.z:0);return [m];
 }
+function coordinatedMaterial(e,colour){
+ const p=building?.manifest.presentation;
+ const mat=new THREE.MeshStandardMaterial({color:colour||e.colour||(e.kind==='wall'&&p?p.wallColour:palettes[e.kind])||0x647b8a,roughness:e.kind==='window'?.22:.84,metalness:0,
+  transparent:e.kind==='guard'&&e.colour==='#91b4b7',opacity:e.kind==='guard'&&e.colour==='#91b4b7'?.48:1,side:THREE.DoubleSide});
+ if(p&&cutaway&&['wall','door','window','column'].includes(e.kind)){
+  const l=building.levels.find(l=>l.id===e.level);mat.clippingPlanes=[new THREE.Plane(new THREE.Vector3(0,-1,0),l.elevation+1.3)];
+ }
+ return mat;
+}
+function mergedBoxes(parts){
+ const geometries=parts.map(p=>new THREE.BoxGeometry(p.dx,p.dy,p.dz).translate(p.x,p.y,p.z));
+ const geometry=mergeGeometries(geometries);geometries.forEach(g=>g.dispose());return geometry;
+}
+function openingMesh(e){
+ const w=e.dx,h=e.dy,t=.045,parts=[
+  {x:-w/2+t/2,y:0,z:0,dx:t,dy:h,dz:.09},{x:w/2-t/2,y:0,z:0,dx:t,dy:h,dz:.09},
+  {x:0,y:h/2-t/2,z:0,dx:w,dy:t,dz:.09}];
+ if(e.kind==='window')parts.push({x:0,y:-h/2+t/2,z:0,dx:w,dy:t,dz:.09},{x:0,y:0,z:0,dx:.035,dy:h,dz:.07});
+ const geometry=mergedBoxes(parts),frame=new THREE.Mesh(geometry,coordinatedMaterial(e,e.kind==='window'?'#5a6b64':'#a57d55'));
+ const meshes=[frame],graph=workspace.snapshot().models[e.level].floorGraph;
+ const o=graph.openings.find(o=>e.id.endsWith(':'+o.id));
+ if(e.kind==='window'){
+  const glass=new THREE.Mesh(new THREE.BoxGeometry(w-.09,h-.09,.015),new THREE.MeshPhysicalMaterial({color:'#b7d4d4',roughness:.12,transparent:true,opacity:.22,metalness:.02,side:THREE.DoubleSide}));
+  glass.material.clippingPlanes=frame.material.clippingPlanes;
+  meshes.push(glass);
+ }else if(o?.style!=='passage'){
+  const leafWidth=w-.09,leaf=new THREE.BoxGeometry(leafWidth,h-.055,.04);
+  if(o?.style==='sliding')leaf.translate(w-.06,0,.08);
+  else{const a=Math.PI/2,sign=o?.swingSign||1;leaf.rotateY(-sign*a);leaf.translate(-w/2+.045+leafWidth/2*Math.cos(a),0,sign*leafWidth/2*Math.sin(a));}
+  meshes.push(new THREE.Mesh(leaf,coordinatedMaterial(e,'#b58d60')));
+ }
+ for(const m of meshes){m.position.set(e.x,e.y,e.z);m.rotation.y=-(e.rotationDeg||0)*Math.PI/180;}
+ return meshes;
+}
 function boxes(e){
- const parts=e.steps||[e];
+ if(e.kind==='wall'){
+  const proof=wallSolidCells(e,building.elements),geometry=mergedBoxes(proof.cells);
+  const m=new THREE.Mesh(geometry,coordinatedMaterial(e));m.position.set(e.x,e.y,e.z);m.rotation.y=-(e.rotationDeg||0)*Math.PI/180;
+  m.userData.wallVoidProof=proof;return[m];
+ }
+ if(building?.manifest.presentation&&['door','window'].includes(e.kind))return openingMesh(e);
+ const parts=e.parts||e.steps||[e];
  return parts.map(p=>{
   const geom=new THREE.BoxGeometry(p.dx,p.dy,p.dz);
-  const mat=new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x647b8a,roughness:.75,transparent:e.kind==="window",opacity:e.kind==="window"?.78:1});
+  const mat=building?.manifest.presentation?coordinatedMaterial(e,p.colour):new THREE.MeshStandardMaterial({color:palettes[e.kind]||0x647b8a,roughness:.75,transparent:e.kind==="window",opacity:e.kind==="window"?.78:1});
   const mesh=new THREE.Mesh(geom,mat);
   mesh.position.set(p.x,p.y,p.z);
   mesh.rotation.y=-(e.rotationDeg||0)*Math.PI/180;
+  if(p.rotationZ)mesh.rotation.z=p.rotationZ*Math.PI/180;
   return mesh;
  });
 }
@@ -66,6 +113,7 @@ function renderModel(){
   const groupMeshes=e.profile?shapeSolid(e):boxes(e);
   for(const m of groupMeshes){
    m.userData.element=e;m.userData.normalColor=palettes[e.kind]||0x8195a4;
+   m.castShadow=true;m.receiveShadow=true;
    geometryGroup.add(m);hitMeshes.push(m);
   }
  }
@@ -75,7 +123,7 @@ function applyVisible(){
  if(!geometryGroup)return;
  for(const m of hitMeshes){
   const e=m.userData.element;
-  m.visible=(floorFlags.get(e.level)!==false)&&(kindFlags.get(e.kind)!==false);
+  m.visible=Boolean((floorFlags.get(e.level)!==false||e.contextLevels?.includes(activeLevel))&&(kindFlags.get(e.kind)!==false)&&(!e.roofPart||kindFlags.get('roof')!==false)&&(!['furniture','fixture'].includes(e.kind)||showFurniture));
  }
  paintSelection();
 }
@@ -101,7 +149,7 @@ function paintSelection(){
   if(m.material?.emissive){
    m.material.emissive.setHex(on?0xff9300:0x000000);
    m.material.emissiveIntensity=on?.8:0;
-   if(m.material.opacity<.98)m.material.opacity=on?1:(m.userData.element.kind==="roof"?.52:.75);
+   if(m.material.opacity<.98&&!building?.manifest.presentation)m.material.opacity=on?1:(m.userData.element.kind==="roof"?.52:.75);
   }
   m.userData.isSelected=on;
  }
@@ -178,7 +226,11 @@ function showAADSelectionDetails(picked){
 function centerView(){
  if(!geometryGroup)return;
  const box=new THREE.Box3();
- for(const m of hitMeshes)if(m.visible)box.expandByObject(m);
+ for(const m of hitMeshes)if(m.visible){
+  const b=new THREE.Box3().setFromObject(m);
+  if(building?.manifest.presentation&&cutaway&&m.material.clippingPlanes?.length){b.max.y=Math.min(b.max.y,m.material.clippingPlanes[0].constant);}
+  if(!b.isEmpty())box.union(b);
+ }
  if(box.isEmpty())return;
  const center=box.getCenter(new THREE.Vector3()),span=box.getSize(new THREE.Vector3());
  // Fit the whole building even in the narrow half-width split viewport.
@@ -186,9 +238,17 @@ function centerView(){
  camera.aspect=Math.max(1,node.clientWidth)/Math.max(1,node.clientHeight);
  const halfVertical=THREE.MathUtils.degToRad(camera.fov/2);
  const halfHorizontal=Math.atan(Math.tan(halfVertical)*camera.aspect);
- const distance=radius/Math.sin(Math.min(halfVertical,halfHorizontal))*1.12;
+ let distance=radius/Math.sin(Math.min(halfVertical,halfHorizontal))*1.12;
  orbit.target.copy(center);
- camera.position.copy(center).add(new THREE.Vector3(.8,.95,1.05).normalize().multiplyScalar(distance));
+ const direction=new THREE.Vector3(...(building?.manifest.presentation?.cameraDirection||[.8,.95,1.05])).normalize();
+ if(building?.manifest.presentation){
+  camera.position.copy(center).add(direction);camera.lookAt(center);const inverse=camera.quaternion.clone().invert();distance=0;
+  for(const x of [box.min.x,box.max.x])for(const y of [box.min.y,box.max.y])for(const z of [box.min.z,box.max.z]){
+   const p=new THREE.Vector3(x,y,z).sub(center).applyQuaternion(inverse);
+   distance=Math.max(distance,p.z+Math.abs(p.x)/(Math.tan(halfHorizontal)*.88),p.z+Math.abs(p.y)/(Math.tan(halfVertical)*.88));
+  }
+ }
+ camera.position.copy(center).add(direction.multiplyScalar(distance));
  camera.near=.05;camera.far=Math.max(200,distance*4);camera.updateProjectionMatrix();orbit.update();
 }
 function initRenderer(){
@@ -196,12 +256,16 @@ function initRenderer(){
  scene=new THREE.Scene();scene.background=new THREE.Color(0xeaf2f4);
  camera=new THREE.PerspectiveCamera(48,node.clientWidth/Math.max(100,node.clientHeight),.05,500);
  renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+ renderer.localClippingEnabled=true;
+ if(building?.manifest.presentation){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;scene.background=new THREE.Color('#ecece2');}
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(node.clientWidth,node.clientHeight);
  renderer.outputColorSpace=THREE.SRGBColorSpace;node.append(renderer.domElement);
  orbit=new OrbitControls(camera,renderer.domElement);orbit.enableDamping=true;orbit.dampingFactor=.07;
  scene.add(new THREE.HemisphereLight(0xffffff,0x657c83,2.4));
- const directional=new THREE.DirectionalLight(0xffffff,1.8);directional.position.set(19,32,13);scene.add(directional);
+ const directional=new THREE.DirectionalLight(0xfff6dd,1.8);directional.position.set(19,32,13);scene.add(directional);
+ if(building?.manifest.presentation){directional.castShadow=true;directional.shadow.mapSize.set(2048,2048);directional.shadow.camera.left=-20;directional.shadow.camera.right=20;directional.shadow.camera.top=20;directional.shadow.camera.bottom=-20;directional.shadow.bias=-.0003;}
  const ground=new THREE.GridHelper(60,30,0x9ab3ba,0xcbdde1);ground.position.y=-.22;scene.add(ground);
+ if(building?.manifest.presentation)ground.visible=false;
  const axes=new THREE.AxesHelper(2);axes.position.set(-1,0,-1);scene.add(axes);
  renderer.domElement.addEventListener("click",ev=>{
   if(!building)return;
@@ -221,8 +285,8 @@ function htmlText(e){
  if(Number.isFinite(e.dx))spans.push("Metric size (L/H/T): "+[e.dx,e.dy,e.dz].map(v=>Number(v).toFixed(3)).join(" × ")+" m");
  if(e.profile)spans.push("Polygon vertices: "+e.profile.length+", stair voids: "+(e.holes?.length||0));
  if(e.provenance){
-  spans.push("Evidence basis: "+e.provenance.basis+" ("+e.provenance.scope+")");
-  if(e.provenance.sourceId)spans.push("Source ID: "+e.provenance.sourceId+" · locator: "+e.provenance.locator);
+  spans.push("Evidence basis: "+e.provenance.basis+(e.provenance.scope?" ("+e.provenance.scope+")":""));
+  if(e.provenance.sourceId)spans.push("Source ID: "+e.provenance.sourceId+(e.provenance.locator?" · locator: "+e.provenance.locator:""));
   if(e.provenance.rationale)spans.push("AI assumption: "+e.provenance.rationale);
  }
  if(e.host)spans.push("Hosted on: "+e.host);
@@ -230,7 +294,7 @@ function htmlText(e){
 }
 function selectElement(e){
  selectedId=e.id;
- if(e.level&&building.levels.some(l=>l.id===e.level))setLevel(e.level);
+ if(e.level&&building.levels.some(l=>l.id===e.level)&&!e.contextLevels?.includes(activeLevel))setLevel(e.level);
  if(e.kind==="wall"||e.kind==="door"||e.kind==="window")activeEdit={level:e.level,kind:e.kind==="wall"?"wall":"opening",id:e.id.split(":").slice(2).join(":")};
  else activeEdit=null;
  refreshEditPanel();
@@ -249,7 +313,7 @@ function addStoreys(){
  }
  const nodeTypes=$("component-types");nodeTypes.replaceChildren();
  for(const k of ["wall","column","beam","footing","slab","roof","door","window","stair","landing"]){
-  const label=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=true;
+  const label=document.createElement("label"),c=document.createElement("input");c.type="checkbox";c.checked=true;c.dataset.kind=k;
   const text=document.createElement("span");text.textContent=k+" ("+(building.counts[k]||0)+")";label.append(c,text);nodeTypes.append(label);
   kindFlags.set(k,true);c.addEventListener("change",()=>{kindFlags.set(k,c.checked);applyVisible();});
  }
@@ -435,7 +499,7 @@ function drawPlan(){
  }
  for(const {l,g,nodeMap,color} of outlines){
   const faded=activeLevel==="all"?.64:1;
-  if(activeLevel===l.id){
+  if(activeLevel===l.id&&!building.manifest.presentation){
    try{for(const room of workspace.rooms(l.id)){
     if(room.area<.5)continue;
     const positions=room.nodes.map(id=>nodeMap.get(id)).filter(Boolean);
@@ -458,10 +522,22 @@ function drawPlan(){
   for(const o of g.openings){
    const wall=g.walls.find(w=>w.id===o.wallId),a=nodeMap.get(wall.a),b=nodeMap.get(wall.b);
    const length=Math.hypot(b.x-a.x,b.z-a.z),from=o.offset/length,to=(o.offset+o.width)/length;
+   const x1=a.x+(b.x-a.x)*from,z1=a.z+(b.z-a.z)*from,x2=a.x+(b.x-a.x)*to,z2=a.z+(b.z-a.z)*to;
+   if(building.manifest.presentation){
+    doc.append(el('line',{x1,y1:z1,x2,y2:z2,stroke:'#faf8ef','stroke-width':wall.thickness+.04,'pointer-events':'none'}));
+    if(o.kind==='door'&&o.style!=='passage'){
+     const ux=(b.x-a.x)/length,uz=(b.z-a.z)/length,sign=o.swingSign||1;
+     if(o.style==='sliding')doc.append(el('line',{x1:x2-uz*.08,y1:z2+ux*.08,x2:x2+ux*o.width-uz*.08,y2:z2+uz*o.width+ux*.08,class:'aad-opening-swing'}));
+     else{
+      const endX=x1-uz*sign*o.width,endZ=z1+ux*sign*o.width;
+      doc.append(el('path',{d:`M${x1} ${z1}L${endX} ${endZ}M${x2} ${z2}A${o.width} ${o.width} 0 0 ${sign>0?1:0} ${endX} ${endZ}`,class:'aad-opening-swing'}));
+     }
+    }
+   }
    const item=el("line",{
     x1:a.x+(b.x-a.x)*from,y1:a.z+(b.z-a.z)*from,x2:a.x+(b.x-a.x)*to,y2:a.z+(b.z-a.z)*to,
     class:(o.kind==="door"?"aad-door":"aad-window")+(selectedId===building.projectId+":"+l.id+":"+o.id?" is-selected":""),
-    "stroke-width":o.kind==="door"?.21:.28
+    "stroke-width":building.manifest.presentation?(o.kind==='door'?.045:.07):(o.kind==="door"?.21:.28)
    });
    item.dataset.part=l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
@@ -473,6 +549,7 @@ function drawPlan(){
    const rect=el(roundColumn?"circle":"rect",{
     ...(roundColumn?{cx:col.x,cy:col.z,r:col.dx/2}:{x:col.x-col.dx/2,y:col.z-col.dz/2,width:col.dx,height:col.dz}),
     class:"aad-column"+(selectedId===col.id?" is-selected":""),
+    ...(col.colour?{fill:col.colour,stroke:'#b37c2e','fill-opacity':.65}:{}),
     "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
     "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
    rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
@@ -516,7 +593,7 @@ function drawPlan(){
     circle.append(desc);doc.append(circle);
    }
   }
-  if(activeLevel===l.id){
+  if(activeLevel===l.id&&!building.manifest.presentation){
    for(const n of g.nodes){
     const p=nodeMap.get(n.id),circle=el("circle",{cx:p.x,cy:p.z,r:selectedId===building.projectId+":"+l.id+":NODE:"+n.id?.23:.13,class:"aad-node"+(selectedId===building.projectId+":"+l.id+":NODE:"+n.id?" is-selected":""),"data-node":n.id,tabindex:"0",role:"button","aria-label":"Move node "+n.id});
     circle.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"node",n.id);});
@@ -544,6 +621,7 @@ function drawPlan(){
    }
   }
  }
+ if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,selectedId,onSelect:selectElement});
  if(drawMode&&drawFirst&&activeLevel!=="all"){
   const l=state.manifest.levels.find(x=>x.id===activeLevel);
   const p=projectToWorld(drawFirst,l.transform);
@@ -553,7 +631,7 @@ function drawPlan(){
  // Structural objects are 3D IFC components without authored 2D floor-graph
  // geometry. Display their world-coordinate locator instead of inventing one.
  const selected=building.elements.find(e=>e.id===selectedId);
- const hasPlan=selected&&(["wall","door","window","column"].includes(selected.kind)||selected.previewOnly&&["footing","beam"].includes(selected.kind));
+ const hasPlan=selected&&(["wall","door","window","column"].includes(selected.kind)||selected.previewOnly&&["footing","beam"].includes(selected.kind)||building.manifest.presentation&&showFurniture&&['furniture','fixture','stair','landing','auxiliary'].includes(selected.kind)&&activeLevel!=='all');
  const position=selectedPosition(selected);
  if(position&&selected&&!hasPlan&&(activeLevel==="all"||activeLevel===selected.level)){
   const marker=el("g",{"data-plan-selection-marker":selected.id,role:"img","aria-label":"Selected element world-location indicator"});
@@ -720,8 +798,9 @@ function refreshAll(){
  $("aad-edit-version").textContent="Working BIM draft v"+workspace.snapshot().version+(workspace.snapshot().lastEdit?" · unsent to source":"");
  $("aad-undo").disabled=!lastUndo;
 }
+function draftStorageKey(manifest){return "aad:unified:draft:"+manifest.projectId+(manifest.presentation?":"+(manifest.revision||"presentation-v1"):"");}
 function persistDraft(){
- try{localStorage.setItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId,JSON.stringify(workspace.bundle()));}catch(_){}
+ try{localStorage.setItem(draftStorageKey(workspace.snapshot().manifest),JSON.stringify(workspace.bundle()));}catch(_){}
 }
 function setLevel(level){
  activeLevel=level;drawFirst=null;
@@ -789,7 +868,7 @@ async function main(){
    showM29UpperProjection=e.target.checked;drawPlan();});
  }
  workspace=createAADWorkspace(manifest,models,{reviewStructure});
- const storageKey="aad:unified:draft:"+manifest.projectId;
+ const storageKey=draftStorageKey(manifest);
  try{
   const stored=localStorage.getItem(storageKey);
   if(stored){workspace.restore(JSON.parse(stored));status("Recovered locally saved working draft · canonical sources unchanged");}
@@ -801,7 +880,9 @@ async function main(){
  }
  $("building-name").textContent=building.name;
  initAADRegister();
- $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
+ $("building-subtitle").textContent=manifest.presentation?
+  (manifest.presentation.outerBounds[2]-manifest.presentation.outerBounds[0]).toFixed(2)+' × '+(manifest.presentation.outerBounds[3]-manifest.presentation.outerBounds[1]).toFixed(2)+' m outer envelope · '+building.levels.map(l=>l.id.toUpperCase()).join(' + ')+' · '+Math.round(manifest.presentation.plinth*1000)+' mm plinth · '+Math.round(manifest.presentation.floorToFloor*1000)+' mm storeys · architectural coordination candidate':
+  building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
  const link=$("source-ledger");link.href=new URL(manifest.sourceLedger||"MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
@@ -813,7 +894,27 @@ async function main(){
  if(building.sourceStructuralReview){
   $("building-subtitle").textContent+=" · USER-APPROVED GF SOURCE / UPPER STOREYS NOT STRUCTURALLY VERIFIED";
  }
+ if(manifest.presentation){
+  cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
+  setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
+ }
 }
+for(const [id,stateKey]of [['aad-cutaway','cutaway'],['aad-dimensions','dimensions'],['aad-plan-grid','grid'],['aad-furniture','furniture']]){
+ $(id).addEventListener('change',e=>{if(!building)return;const on=e.target.checked;if(stateKey==='cutaway')cutaway=on;if(stateKey==='dimensions')showDimensions=on;if(stateKey==='grid')showPlanGrid=on;if(stateKey==='furniture')showFurniture=on;renderModel();drawPlan();});
+}
+function setKindVisibility(kind,visible){kindFlags.set(kind,visible);const box=document.querySelector(`#component-types input[data-kind="${kind}"]`);if(box)box.checked=visible;}
+for(const[id,level]of [['aad-preset-gf','gf'],['aad-preset-ff','ff'],['aad-preset-exterior','all']])$(id).addEventListener('click',()=>{
+ if(!building)return;cutaway=level!=='all';$('aad-cutaway').checked=cutaway;setKindVisibility('roof',level==='all');setLevel(level);renderModel();drawPlan();centerView();
+});
+for(const[id,mode]of [['aad-view-3d','building'],['aad-view-plan','plan'],['aad-view-both','split']])$(id).addEventListener('click',()=>{if(building)setViewMode(mode);});
+for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEventListener('click',()=>{
+ const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
+});
+$('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg=$('viewer2d').cloneNode(true);svg.setAttribute('xmlns',svgNS);download(building.projectId+'_'+activeLevel+'_DIMENSIONED_PLAN.svg',new XMLSerializer().serializeToString(svg),'image/svg+xml');});
+$('viewer2d').addEventListener('pointermove',ev=>{
+ if(!building?.manifest.presentation)return;const svg=$('viewer2d'),p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
+ const x=Math.round(q.x*1000),y=Math.round((building.manifest.presentation.sourceYLength-q.y)*1000),cell=(building.manifest.presentation.grid?.minor||.1)*1000;$('aad-coordinate-readout').textContent=`${activeLevel.toUpperCase()} · X ${x} mm · Y ${y} mm · cell ${Math.floor(x/cell)},${Math.floor(y/cell)}`;
+});
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
  for(const label of $("storeys").querySelectorAll("label")){
@@ -866,7 +967,7 @@ $("aad-undo").addEventListener("click",()=>{
 });
 $("aad-reset").addEventListener("click",()=>{
  if(!workspace)return;lastUndo=workspace.bundle();workspace.reset();activeEdit=null;selectedId=null;
- try{localStorage.removeItem("aad:unified:draft:"+workspace.snapshot().manifest.projectId);}catch(_){}
+ try{localStorage.removeItem(draftStorageKey(workspace.snapshot().manifest));}catch(_){}
  refreshAll();status("Restored canonical source geometry; source data unchanged.");
 });
 $("aad-save-working").addEventListener("click",()=>{
@@ -887,6 +988,21 @@ $("aad-import-file").addEventListener("change",async e=>{
 // An AI decides/constructs the action; the shared engine validates and commits
 // it to the local working model. No raw-language interpreter is claimed here.
 window.AADStudio=Object.freeze({
+ getViewportProof:()=>{
+  // Complete the current WebGL frame before a screenshot/export reads pixels.
+  // This also prevents headless software rendering from capturing a prior preset.
+  renderer.render(scene,camera);renderer.getContext().finish();
+  const visible=[...new Map(hitMeshes.filter(m=>m.visible!==false).map(m=>[m.userData.element.id,m.userData.element])).values()];
+  return{activeLevel,cutaway,visibleWalls:visible.filter(e=>e.kind==='wall').length,
+   visibleRoof:visible.some(e=>e.kind==='roof'),visibleFurniture:visible.filter(e=>e.kind==='furniture').length};
+ },
+ getOpeningVoidProof:(id)=>{
+  const o=building?.elements.find(e=>e.id===id&&e.host);if(!o)throw Error('Unknown opening '+id);
+  const wall=building.elements.find(e=>e.id===o.host),mesh=hitMeshes.find(m=>m.userData.element.id===wall.id);
+  const a=(wall.rotationDeg||0)*Math.PI/180,normal=new THREE.Vector3(-Math.sin(a),0,Math.cos(a));
+  mesh.updateMatrixWorld(true);const origin=new THREE.Vector3(o.x,o.y,o.z).addScaledVector(normal,.8),ray=new THREE.Raycaster(origin,normal.clone().negate(),0,1.6);
+  return{openingId:id,host:wall.id,wallTriangleHitsThroughAperture:ray.intersectObject(mesh,false).length,solidVolume:mesh.userData.wallVoidProof?.solidVolume,grossVolume:mesh.userData.wallVoidProof?.grossVolume};
+ },
  getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
    actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4_CONCEPTUAL_ENGINEERING_HOLD",sourceReviewedStructure:Boolean(building?.sourceStructuralReview),topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
  selectElementById:(id)=>{
@@ -917,9 +1033,11 @@ window.AADStudio=Object.freeze({
   const e=building?.elements.find(x=>x.id===id);
   if(!e)throw Error("Unknown AAD component "+id);
   const mesh=hitMeshes.find(m=>m.userData.element.id===id);
+  const compositeCentre=e.parts?.length?hitMeshes.filter(m=>m.userData.element.id===id).reduce((b,m)=>b.union(new THREE.Box3().setFromObject(m)),new THREE.Box3()).getCenter(new THREE.Vector3()):null;
   const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id)||
-   [...document.querySelectorAll("#viewer2d [data-part]")].find(n=>building.projectId+":"+n.dataset.part===id);
-  const pointFromPlan=plan?plan.tagName.toLowerCase()==="circle"?
+   [...document.querySelectorAll("#viewer2d [data-part]")].find(n=>building.projectId+":"+n.dataset.part===id)||
+   [...document.querySelectorAll('#viewer2d [data-presentation-id]')].find(n=>n.dataset.presentationId===id);
+  const pointFromPlan=plan?plan.tagName.toLowerCase()==="g"?(()=>{const b=plan.getBBox();return{x:b.x+b.width/2,z:b.y+b.height/2,dx:b.width,dz:b.height};})():plan.tagName.toLowerCase()==="circle"?
    {x:Number(plan.getAttribute("cx")),z:Number(plan.getAttribute("cy")),
     dx:2*Number(plan.getAttribute("r")),dz:2*Number(plan.getAttribute("r"))}:
    plan.tagName.toLowerCase()==="line"?
@@ -933,7 +1051,7 @@ window.AADStudio=Object.freeze({
     dx:Number(plan.getAttribute("width")),dz:Number(plan.getAttribute("height"))}:null;
   const row=rowsById.get(id);
   return{elementId:id,kind:e.kind,model:{x:e.x,y:e.y,z:e.z,dx:e.dx,dz:e.dz},
-   mesh:mesh?{x:mesh.position.x,y:mesh.position.y,z:mesh.position.z}:null,
+   mesh:mesh?{x:compositeCentre?.x??mesh.position.x,y:compositeCentre?.y??mesh.position.y,z:compositeCentre?.z??mesh.position.z}:null,
    plan:pointFromPlan,
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};

@@ -1,0 +1,4104 @@
+{
+  "coordinateSystem": {
+    "axes": "X page-right NE; Z page-down SE; Y elevation",
+    "sourceOrigin": "Front-left outer building corner",
+    "sourceXY": "x=1000X; y=14400-1000Z",
+    "surveyAlignment": "NOT_VERIFIED",
+    "units": "m"
+  },
+  "levels": [
+    {
+      "elevation": 0.61,
+      "height": 3.048,
+      "id": "gf",
+      "model": "aad-gf-model-qa02.json",
+      "name": "Ground floor",
+      "sourceArea": 92.3629,
+      "status": "QA02_CONNECTED_CENTRELINE_COORDINATION",
+      "transform": {
+        "rotationDeg": 0,
+        "x": 0,
+        "z": 0
+      }
+    },
+    {
+      "elevation": 3.658,
+      "height": 3.048,
+      "id": "ff",
+      "model": "aad-ff-model-qa02.json",
+      "name": "First floor",
+      "sourceArea": 92.3629,
+      "status": "QA02_CONNECTED_CENTRELINE_COORDINATION",
+      "transform": {
+        "rotationDeg": 0,
+        "x": 0,
+        "z": 0
+      }
+    }
+  ],
+  "name": "Ashok Adhikari · furnished coordination model",
+  "presentation": {
+    "cameraDirection": [
+      -1,
+      0.9,
+      1
+    ],
+    "cleanPlan": true,
+    "columnLegend": "Amber = proposed column positions / display envelopes, NOT designed member sizes",
+    "defaultCutaway": true,
+    "defaultLevel": "gf",
+    "defaultView": "building",
+    "elements": [
+      {
+        "colour": null,
+        "dx": 1.7,
+        "dy": 0.95,
+        "dz": 2.1,
+        "id": "GF-BED1-BED",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed1 Bed",
+        "parts": [
+          {
+            "colour": "#aa8263",
+            "dx": 1.6,
+            "dy": 0.28,
+            "dz": 2.0,
+            "x": 1.8,
+            "y": 0.75,
+            "z": 1.75
+          },
+          {
+            "colour": "#f4f0e5",
+            "dx": 1.56,
+            "dy": 0.18,
+            "dz": 1.96,
+            "x": 1.8,
+            "y": 0.98,
+            "z": 1.75
+          },
+          {
+            "colour": "#839b8a",
+            "dx": 1.52,
+            "dy": 0.065,
+            "dz": 1.5,
+            "x": 1.8,
+            "y": 1.1025,
+            "z": 1.95
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.72,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 1.4,
+            "y": 1.13,
+            "z": 1.05
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.72,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 2.2,
+            "y": 1.13,
+            "z": 1.05
+          },
+          {
+            "colour": "#876b53",
+            "dx": 1.7,
+            "dy": 0.95,
+            "dz": 0.09,
+            "x": 1.8,
+            "y": 1.085,
+            "z": 0.72
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED1-BED"
+        },
+        "roomId": "GF-BED1",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.8,
+        "y": 1.085,
+        "z": 1.75
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "GF-BED1-BED-BEDSIDE--1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed1 Bed Bedside  1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED1-BED-BEDSIDE--1"
+        },
+        "roomId": "GF-BED1",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 0.72,
+        "y": 0.835,
+        "z": 1.0
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "GF-BED1-BED-BEDSIDE-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed1 Bed Bedside 1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED1-BED-BEDSIDE-1"
+        },
+        "roomId": "GF-BED1",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.88,
+        "y": 0.835,
+        "z": 1.0
+      },
+      {
+        "colour": "#b68e67",
+        "dx": 1.7,
+        "dy": 2.25,
+        "dz": 0.55,
+        "id": "GF-BED1-WARDROBE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed1 Wardrobe",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED1-WARDROBE"
+        },
+        "roomId": "GF-BED1",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.2,
+        "y": 1.735,
+        "z": 4.45
+      },
+      {
+        "colour": null,
+        "dx": 1.45,
+        "dy": 0.95,
+        "dz": 2.1,
+        "id": "GF-BED2-BED",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed2 Bed",
+        "parts": [
+          {
+            "colour": "#aa8263",
+            "dx": 1.35,
+            "dy": 0.28,
+            "dz": 2.0,
+            "x": 1.125,
+            "y": 0.75,
+            "z": 10.38
+          },
+          {
+            "colour": "#f4f0e5",
+            "dx": 1.31,
+            "dy": 0.18,
+            "dz": 1.96,
+            "x": 1.125,
+            "y": 0.98,
+            "z": 10.38
+          },
+          {
+            "colour": "#839b8a",
+            "dx": 1.27,
+            "dy": 0.065,
+            "dz": 1.5,
+            "x": 1.125,
+            "y": 1.1025,
+            "z": 10.58
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.595,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 0.7875,
+            "y": 1.13,
+            "z": 9.68
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.595,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 1.4625,
+            "y": 1.13,
+            "z": 9.68
+          },
+          {
+            "colour": "#876b53",
+            "dx": 1.45,
+            "dy": 0.95,
+            "dz": 0.09,
+            "x": 1.125,
+            "y": 1.085,
+            "z": 9.35
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED2-BED"
+        },
+        "roomId": "GF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.125,
+        "y": 1.085,
+        "z": 10.38
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "GF-BED2-BED-BEDSIDE-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed2 Bed Bedside 1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED2-BED-BEDSIDE-1"
+        },
+        "roomId": "GF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.08,
+        "y": 0.835,
+        "z": 9.63
+      },
+      {
+        "colour": "#b68e67",
+        "dx": 0.45,
+        "dy": 2.25,
+        "dz": 1.5,
+        "id": "GF-BED2-WARDROBE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Bed2 Wardrobe",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED2-WARDROBE"
+        },
+        "roomId": "GF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.975,
+        "y": 1.735,
+        "z": 11.2
+      },
+      {
+        "colour": null,
+        "dx": 0.9,
+        "dy": 0.85,
+        "dz": 2.3,
+        "id": "GF-LOUNGE-SOFA",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Lounge Sofa",
+        "parts": [
+          {
+            "colour": "#876d55",
+            "dx": 0.85,
+            "dy": 0.22,
+            "dz": 2.2,
+            "x": 4.75,
+            "y": 0.72,
+            "z": 9.9
+          },
+          {
+            "colour": "#c6cbb9",
+            "dx": 0.82,
+            "dy": 0.23,
+            "dz": 2.15,
+            "x": 4.75,
+            "y": 0.945,
+            "z": 9.9
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.12,
+            "dy": 0.38,
+            "dz": 2.2,
+            "x": 4.39,
+            "y": 1.25,
+            "z": 9.9
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.85,
+            "dy": 0.28,
+            "dz": 0.11,
+            "x": 4.75,
+            "y": 1.2,
+            "z": 10.95
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.85,
+            "dy": 0.28,
+            "dz": 0.11,
+            "x": 4.75,
+            "y": 1.2,
+            "z": 8.85
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-LOUNGE-SOFA"
+        },
+        "roomId": "GF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 4.75,
+        "y": 1.035,
+        "z": 9.9
+      },
+      {
+        "colour": "#e6d9bd",
+        "dx": 1.8,
+        "dy": 0.012,
+        "dz": 2.4,
+        "id": "GF-LOUNGE-SOFA-RUG",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Lounge Sofa Rug",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-LOUNGE-SOFA-RUG"
+        },
+        "roomId": "GF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.6,
+        "y": 0.616,
+        "z": 9.9
+      },
+      {
+        "colour": "#b1845d",
+        "dx": 0.7,
+        "dy": 0.38,
+        "dz": 1.1,
+        "id": "GF-LOUNGE-SOFA-COFFEE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Lounge Sofa Coffee",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-LOUNGE-SOFA-COFFEE"
+        },
+        "roomId": "GF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.0,
+        "y": 0.8,
+        "z": 9.9
+      },
+      {
+        "colour": null,
+        "dx": 0.35,
+        "dy": 0.55,
+        "dz": 1.6,
+        "id": "GF-LOUNGE-SOFA-TV",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Lounge Sofa Tv",
+        "parts": [
+          {
+            "colour": "#9c7958",
+            "dx": 0.35,
+            "dy": 0.45,
+            "dz": 1.6,
+            "x": 6.73,
+            "y": 0.835,
+            "z": 9.9
+          },
+          {
+            "colour": "#263a3f",
+            "dx": 0.08,
+            "dy": 0.7,
+            "dz": 1.2,
+            "x": 6.68,
+            "y": 1.51,
+            "z": 9.9
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-LOUNGE-SOFA-TV"
+        },
+        "roomId": "GF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.73,
+        "y": 0.885,
+        "z": 9.9
+      },
+      {
+        "colour": null,
+        "dx": 1.3,
+        "dy": 0.775,
+        "dz": 0.8,
+        "id": "GF-KITCHEN-DINING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Dining",
+        "parts": [
+          {
+            "colour": "#c09d76",
+            "dx": 1.3,
+            "dy": 0.055,
+            "dz": 0.8,
+            "x": 5.3,
+            "y": 1.3575,
+            "z": 3.1
+          },
+          {
+            "colour": "#87654b",
+            "dx": 0.065,
+            "dy": 0.72,
+            "dz": 0.065,
+            "x": 4.78,
+            "y": 0.97,
+            "z": 3.39
+          },
+          {
+            "colour": "#87654b",
+            "dx": 0.065,
+            "dy": 0.72,
+            "dz": 0.065,
+            "x": 4.78,
+            "y": 0.97,
+            "z": 2.81
+          },
+          {
+            "colour": "#87654b",
+            "dx": 0.065,
+            "dy": 0.72,
+            "dz": 0.065,
+            "x": 5.82,
+            "y": 0.97,
+            "z": 3.39
+          },
+          {
+            "colour": "#87654b",
+            "dx": 0.065,
+            "dy": 0.72,
+            "dz": 0.065,
+            "x": 5.82,
+            "y": 0.97,
+            "z": 2.81
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-DINING"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.3,
+        "y": 0.9975,
+        "z": 3.1
+      },
+      {
+        "colour": null,
+        "dx": 0.45,
+        "dy": 0.8,
+        "dz": 0.45,
+        "id": "GF-KITCHEN-DINING-CHAIR--380--700",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Dining Chair  380  700",
+        "parts": [
+          {
+            "colour": "#bba180",
+            "dx": 0.42,
+            "dy": 0.45,
+            "dz": 0.42,
+            "x": 4.92,
+            "y": 0.835,
+            "z": 3.8
+          },
+          {
+            "colour": "#a9b59d",
+            "dx": 0.45,
+            "dy": 0.35,
+            "dz": 0.065,
+            "x": 4.92,
+            "y": 1.235,
+            "z": 3.97
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-DINING-CHAIR--380--700"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 4.92,
+        "y": 1.01,
+        "z": 3.8
+      },
+      {
+        "colour": null,
+        "dx": 0.45,
+        "dy": 0.8,
+        "dz": 0.45,
+        "id": "GF-KITCHEN-DINING-CHAIR--380-700",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Dining Chair  380 700",
+        "parts": [
+          {
+            "colour": "#bba180",
+            "dx": 0.42,
+            "dy": 0.45,
+            "dz": 0.42,
+            "x": 4.92,
+            "y": 0.835,
+            "z": 2.4
+          },
+          {
+            "colour": "#a9b59d",
+            "dx": 0.45,
+            "dy": 0.35,
+            "dz": 0.065,
+            "x": 4.92,
+            "y": 1.235,
+            "z": 2.23
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-DINING-CHAIR--380-700"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 4.92,
+        "y": 1.01,
+        "z": 2.4
+      },
+      {
+        "colour": null,
+        "dx": 0.45,
+        "dy": 0.8,
+        "dz": 0.45,
+        "id": "GF-KITCHEN-DINING-CHAIR-380--700",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Dining Chair 380  700",
+        "parts": [
+          {
+            "colour": "#bba180",
+            "dx": 0.42,
+            "dy": 0.45,
+            "dz": 0.42,
+            "x": 5.68,
+            "y": 0.835,
+            "z": 3.8
+          },
+          {
+            "colour": "#a9b59d",
+            "dx": 0.45,
+            "dy": 0.35,
+            "dz": 0.065,
+            "x": 5.68,
+            "y": 1.235,
+            "z": 3.97
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-DINING-CHAIR-380--700"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.68,
+        "y": 1.01,
+        "z": 3.8
+      },
+      {
+        "colour": null,
+        "dx": 0.45,
+        "dy": 0.8,
+        "dz": 0.45,
+        "id": "GF-KITCHEN-DINING-CHAIR-380-700",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Dining Chair 380 700",
+        "parts": [
+          {
+            "colour": "#bba180",
+            "dx": 0.42,
+            "dy": 0.45,
+            "dz": 0.42,
+            "x": 5.68,
+            "y": 0.835,
+            "z": 2.4
+          },
+          {
+            "colour": "#a9b59d",
+            "dx": 0.45,
+            "dy": 0.35,
+            "dz": 0.065,
+            "x": 5.68,
+            "y": 1.235,
+            "z": 2.23
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-DINING-CHAIR-380-700"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.68,
+        "y": 1.01,
+        "z": 2.4
+      },
+      {
+        "colour": "#b7ad92",
+        "dx": 2.8,
+        "dy": 0.9,
+        "dz": 0.54,
+        "id": "GF-KITCHEN-REAR-COUNTER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Rear Counter",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-REAR-COUNTER"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.55,
+        "y": 1.06,
+        "z": 0.5
+      },
+      {
+        "colour": "#b7ad92",
+        "dx": 0.54,
+        "dy": 0.9,
+        "dz": 1.7,
+        "id": "GF-KITCHEN-SIDE-COUNTER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Side Counter",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-SIDE-COUNTER"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.7,
+        "y": 1.06,
+        "z": 1.6
+      },
+      {
+        "colour": "#b9c8c7",
+        "dx": 0.7,
+        "dy": 1.85,
+        "dz": 0.7,
+        "id": "GF-KITCHEN-FRIDGE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "gf",
+        "name": "Gf Kitchen Fridge",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-FRIDGE"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 4.05,
+        "y": 1.535,
+        "z": 1.2
+      },
+      {
+        "colour": null,
+        "dx": 0.6,
+        "dy": 0.81,
+        "dz": 0.4,
+        "id": "FIX-GF-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Gf Basin",
+        "parts": [
+          {
+            "colour": "#a6b4a6",
+            "dx": 0.6,
+            "dy": 0.75,
+            "dz": 0.4,
+            "x": 1.73,
+            "y": 0.985,
+            "z": 7.85
+          },
+          {
+            "colour": "#faf8f0",
+            "dx": 0.6,
+            "dy": 0.045,
+            "dz": 0.4,
+            "x": 1.73,
+            "y": 1.3825,
+            "z": 7.85
+          },
+          {
+            "colour": "#bcced0",
+            "dx": 0.42,
+            "dy": 0.015,
+            "dz": 0.28,
+            "x": 1.73,
+            "y": 1.4075,
+            "z": 7.85
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-GF-BASIN"
+        },
+        "roomId": "GF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 1.73,
+        "y": 1.015,
+        "z": 7.85
+      },
+      {
+        "colour": null,
+        "dx": 0.41,
+        "dy": 0.845,
+        "dz": 0.695,
+        "id": "FIX-GF-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Gf Wc",
+        "parts": [
+          {
+            "colour": "#f5f4ef",
+            "dx": 0.287,
+            "dy": 0.5495,
+            "dz": 0.4865,
+            "x": 0.65,
+            "y": 0.88475,
+            "z": 7.2
+          },
+          {
+            "colour": "#fffdfa",
+            "dx": 0.41,
+            "dy": 0.27475,
+            "dz": 0.45175,
+            "x": 0.65,
+            "y": 1.257625,
+            "z": 7.37375
+          },
+          {
+            "colour": "#f2f3ef",
+            "dx": 0.41,
+            "dy": 0.785,
+            "dz": 0.17375,
+            "x": 0.65,
+            "y": 1.0025,
+            "z": 6.95675
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-GF-WC"
+        },
+        "roomId": "GF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 0.65,
+        "y": 1.0325,
+        "z": 7.2
+      },
+      {
+        "colour": null,
+        "dx": 0.75,
+        "dy": 0.48,
+        "dz": 1.5,
+        "id": "FIX-GF-TUB",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Gf Tub",
+        "parts": [
+          {
+            "colour": "#f7f6ed",
+            "dx": 0.75,
+            "dy": 0.315,
+            "dz": 1.5,
+            "x": 0.65,
+            "y": 0.7675,
+            "z": 6.05
+          },
+          {
+            "colour": "#aac7c5",
+            "dx": 0.6,
+            "dy": 0.02,
+            "dz": 0.975,
+            "x": 0.65,
+            "y": 0.935,
+            "z": 6.05
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-GF-TUB"
+        },
+        "roomId": "GF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 0.65,
+        "y": 0.85,
+        "z": 6.05
+      },
+      {
+        "colour": null,
+        "dx": 0.9,
+        "dy": 1.8,
+        "dz": 0.9,
+        "id": "FIX-GF-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Gf Shower",
+        "parts": [
+          {
+            "colour": "#c8dedb",
+            "dx": 0.9,
+            "dy": 0.03,
+            "dz": 0.9,
+            "x": 1.612,
+            "y": 0.625,
+            "z": 5.55
+          },
+          {
+            "colour": "#9fbfc2",
+            "dx": 0.018,
+            "dy": 1.75,
+            "dz": 0.9,
+            "x": 2.047,
+            "y": 1.515,
+            "z": 5.55
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-GF-SHOWER"
+        },
+        "roomId": "GF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 1.612,
+        "y": 1.51,
+        "z": 5.55
+      },
+      {
+        "colour": null,
+        "dx": 0.9,
+        "dy": 0.975,
+        "dz": 0.5,
+        "id": "FIX-KITCHEN-SINK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Kitchen Sink",
+        "parts": [
+          {
+            "colour": "#d5e0db",
+            "dx": 0.9,
+            "dy": 0.915,
+            "dz": 0.5,
+            "x": 5.4,
+            "y": 1.0675,
+            "z": 0.5
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-KITCHEN-SINK"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 5.4,
+        "y": 1.0975,
+        "z": 0.5
+      },
+      {
+        "colour": null,
+        "dx": 1.9,
+        "dy": 0.95,
+        "dz": 2.1,
+        "id": "FF-MAIN-BED",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Main Bed",
+        "parts": [
+          {
+            "colour": "#aa8263",
+            "dx": 1.8,
+            "dy": 0.28,
+            "dz": 2.0,
+            "x": 2.7,
+            "y": 3.798,
+            "z": 1.75
+          },
+          {
+            "colour": "#f4f0e5",
+            "dx": 1.76,
+            "dy": 0.18,
+            "dz": 1.96,
+            "x": 2.7,
+            "y": 4.028,
+            "z": 1.75
+          },
+          {
+            "colour": "#839b8a",
+            "dx": 1.72,
+            "dy": 0.065,
+            "dz": 1.5,
+            "x": 2.7,
+            "y": 4.1505,
+            "z": 1.95
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.82,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 2.25,
+            "y": 4.178,
+            "z": 1.05
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.82,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 3.15,
+            "y": 4.178,
+            "z": 1.05
+          },
+          {
+            "colour": "#876b53",
+            "dx": 1.9,
+            "dy": 0.95,
+            "dz": 0.09,
+            "x": 2.7,
+            "y": 4.133,
+            "z": 0.72
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-BED"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.7,
+        "y": 4.133,
+        "z": 1.75
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "FF-MAIN-BED-BEDSIDE--1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Main Bed Bedside  1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-BED-BEDSIDE--1"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.52,
+        "y": 3.883,
+        "z": 1.0
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "FF-MAIN-BED-BEDSIDE-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Main Bed Bedside 1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-BED-BEDSIDE-1"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 3.88,
+        "y": 3.883,
+        "z": 1.0
+      },
+      {
+        "colour": "#b68e67",
+        "dx": 0.5,
+        "dy": 2.25,
+        "dz": 1.7,
+        "id": "FF-WIR-CABINET",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Wir Cabinet",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-WIR-CABINET"
+        },
+        "roomId": "FF-WIR",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.95,
+        "y": 4.783,
+        "z": 5.9
+      },
+      {
+        "colour": null,
+        "dx": 1.45,
+        "dy": 0.95,
+        "dz": 2.1,
+        "id": "FF-BED2-BED",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Bed2 Bed",
+        "parts": [
+          {
+            "colour": "#aa8263",
+            "dx": 1.35,
+            "dy": 0.28,
+            "dz": 2.0,
+            "x": 1.125,
+            "y": 3.798,
+            "z": 10.38
+          },
+          {
+            "colour": "#f4f0e5",
+            "dx": 1.31,
+            "dy": 0.18,
+            "dz": 1.96,
+            "x": 1.125,
+            "y": 4.028,
+            "z": 10.38
+          },
+          {
+            "colour": "#839b8a",
+            "dx": 1.27,
+            "dy": 0.065,
+            "dz": 1.5,
+            "x": 1.125,
+            "y": 4.1505,
+            "z": 10.58
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.595,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 0.7875,
+            "y": 4.178,
+            "z": 9.68
+          },
+          {
+            "colour": "#fffdf6",
+            "dx": 0.595,
+            "dy": 0.12,
+            "dz": 0.4,
+            "x": 1.4625,
+            "y": 4.178,
+            "z": 9.68
+          },
+          {
+            "colour": "#876b53",
+            "dx": 1.45,
+            "dy": 0.95,
+            "dz": 0.09,
+            "x": 1.125,
+            "y": 4.133,
+            "z": 9.35
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BED2-BED"
+        },
+        "roomId": "FF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 1.125,
+        "y": 4.133,
+        "z": 10.38
+      },
+      {
+        "colour": "#d3b58b",
+        "dx": 0.42,
+        "dy": 0.45,
+        "dz": 0.42,
+        "id": "FF-BED2-BED-BEDSIDE-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Bed2 Bed Bedside 1",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BED2-BED-BEDSIDE-1"
+        },
+        "roomId": "FF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.08,
+        "y": 3.883,
+        "z": 9.63
+      },
+      {
+        "colour": "#b68e67",
+        "dx": 0.45,
+        "dy": 2.25,
+        "dz": 1.5,
+        "id": "FF-BED2-WARDROBE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Bed2 Wardrobe",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BED2-WARDROBE"
+        },
+        "roomId": "FF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 2.975,
+        "y": 4.783,
+        "z": 11.2
+      },
+      {
+        "colour": null,
+        "dx": 0.9,
+        "dy": 0.85,
+        "dz": 2.3,
+        "id": "FF-LOUNGE-SOFA",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Lounge Sofa",
+        "parts": [
+          {
+            "colour": "#876d55",
+            "dx": 0.85,
+            "dy": 0.22,
+            "dz": 2.2,
+            "x": 4.75,
+            "y": 3.768,
+            "z": 9.6
+          },
+          {
+            "colour": "#c6cbb9",
+            "dx": 0.82,
+            "dy": 0.23,
+            "dz": 2.15,
+            "x": 4.75,
+            "y": 3.993,
+            "z": 9.6
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.12,
+            "dy": 0.38,
+            "dz": 2.2,
+            "x": 4.39,
+            "y": 4.298,
+            "z": 9.6
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.85,
+            "dy": 0.28,
+            "dz": 0.11,
+            "x": 4.75,
+            "y": 4.248,
+            "z": 10.65
+          },
+          {
+            "colour": "#aeb9a1",
+            "dx": 0.85,
+            "dy": 0.28,
+            "dz": 0.11,
+            "x": 4.75,
+            "y": 4.248,
+            "z": 8.55
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-LOUNGE-SOFA"
+        },
+        "roomId": "FF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 4.75,
+        "y": 4.083,
+        "z": 9.6
+      },
+      {
+        "colour": "#e6d9bd",
+        "dx": 1.8,
+        "dy": 0.012,
+        "dz": 2.4,
+        "id": "FF-LOUNGE-SOFA-RUG",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Lounge Sofa Rug",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-LOUNGE-SOFA-RUG"
+        },
+        "roomId": "FF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.6,
+        "y": 3.664,
+        "z": 9.6
+      },
+      {
+        "colour": "#b1845d",
+        "dx": 0.7,
+        "dy": 0.38,
+        "dz": 1.1,
+        "id": "FF-LOUNGE-SOFA-COFFEE",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Lounge Sofa Coffee",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-LOUNGE-SOFA-COFFEE"
+        },
+        "roomId": "FF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.0,
+        "y": 3.848,
+        "z": 9.6
+      },
+      {
+        "colour": null,
+        "dx": 0.35,
+        "dy": 0.55,
+        "dz": 1.6,
+        "id": "FF-LOUNGE-SOFA-TV",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Lounge Sofa Tv",
+        "parts": [
+          {
+            "colour": "#9c7958",
+            "dx": 0.35,
+            "dy": 0.45,
+            "dz": 1.6,
+            "x": 6.73,
+            "y": 3.883,
+            "z": 9.6
+          },
+          {
+            "colour": "#263a3f",
+            "dx": 0.08,
+            "dy": 0.7,
+            "dz": 1.2,
+            "x": 6.68,
+            "y": 4.558,
+            "z": 9.6
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-LOUNGE-SOFA-TV"
+        },
+        "roomId": "FF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.73,
+        "y": 3.933,
+        "z": 9.6
+      },
+      {
+        "colour": "#bca17b",
+        "dx": 1.5,
+        "dy": 0.75,
+        "dz": 0.5,
+        "id": "FF-MAIN-DESK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Main Desk",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-DESK"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.6,
+        "y": 4.033,
+        "z": 0.5
+      },
+      {
+        "colour": "#9fae92",
+        "dx": 0.75,
+        "dy": 0.85,
+        "dz": 0.8,
+        "id": "FF-MAIN-READING-CHAIR",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "furniture",
+        "level": "ff",
+        "name": "Ff Main Reading Chair",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-READING-CHAIR"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 5.7,
+        "y": 4.083,
+        "z": 2.75
+      },
+      {
+        "colour": null,
+        "dx": 0.52,
+        "dy": 0.45,
+        "dz": 0.36,
+        "id": "FIX-FF-ENS-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Ens Wc",
+        "parts": [
+          {
+            "colour": "#f5f4ef",
+            "dx": 0.364,
+            "dy": 0.273,
+            "dz": 0.252,
+            "x": 0.5,
+            "y": 3.7945,
+            "z": 5.8
+          },
+          {
+            "colour": "#fffdfa",
+            "dx": 0.52,
+            "dy": 0.1365,
+            "dz": 0.234,
+            "x": 0.5,
+            "y": 3.97975,
+            "z": 5.89
+          },
+          {
+            "colour": "#f2f3ef",
+            "dx": 0.52,
+            "dy": 0.39,
+            "dz": 0.09,
+            "x": 0.5,
+            "y": 3.853,
+            "z": 5.674
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-ENS-WC"
+        },
+        "roomId": "FF-ENS",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 0.5,
+        "y": 3.883,
+        "z": 5.8
+      },
+      {
+        "colour": null,
+        "dx": 0.395,
+        "dy": 0.81,
+        "dz": 0.37,
+        "id": "FIX-FF-ENS-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Ens Basin",
+        "parts": [
+          {
+            "colour": "#a6b4a6",
+            "dx": 0.395,
+            "dy": 0.75,
+            "dz": 0.37,
+            "x": 1.4025,
+            "y": 4.033,
+            "z": 5.25
+          },
+          {
+            "colour": "#faf8f0",
+            "dx": 0.395,
+            "dy": 0.045,
+            "dz": 0.37,
+            "x": 1.4025,
+            "y": 4.4305,
+            "z": 5.25
+          },
+          {
+            "colour": "#bcced0",
+            "dx": 0.2765,
+            "dy": 0.015,
+            "dz": 0.259,
+            "x": 1.4025,
+            "y": 4.4555,
+            "z": 5.25
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-ENS-BASIN"
+        },
+        "roomId": "FF-ENS",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 1.4025,
+        "y": 4.063,
+        "z": 5.25
+      },
+      {
+        "colour": null,
+        "dx": 0.8,
+        "dy": 1.8,
+        "dz": 0.8,
+        "id": "FIX-FF-ENS-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Ens Shower",
+        "parts": [
+          {
+            "colour": "#c8dedb",
+            "dx": 0.8,
+            "dy": 0.03,
+            "dz": 0.8,
+            "x": 1.125,
+            "y": 3.673,
+            "z": 6.55
+          },
+          {
+            "colour": "#9fbfc2",
+            "dx": 0.018,
+            "dy": 1.75,
+            "dz": 0.8,
+            "x": 1.51,
+            "y": 4.563,
+            "z": 6.55
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-ENS-SHOWER"
+        },
+        "roomId": "FF-ENS",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 1.125,
+        "y": 4.558,
+        "z": 6.55
+      },
+      {
+        "colour": null,
+        "dx": 0.6,
+        "dy": 0.81,
+        "dz": 0.4,
+        "id": "FIX-FF-MB-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Mb Basin",
+        "parts": [
+          {
+            "colour": "#a6b4a6",
+            "dx": 0.6,
+            "dy": 0.75,
+            "dz": 0.4,
+            "x": 2.85,
+            "y": 4.033,
+            "z": 8.5
+          },
+          {
+            "colour": "#faf8f0",
+            "dx": 0.6,
+            "dy": 0.045,
+            "dz": 0.4,
+            "x": 2.85,
+            "y": 4.4305,
+            "z": 8.5
+          },
+          {
+            "colour": "#bcced0",
+            "dx": 0.42,
+            "dy": 0.015,
+            "dz": 0.28,
+            "x": 2.85,
+            "y": 4.4555,
+            "z": 8.5
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-MB-BASIN"
+        },
+        "roomId": "FF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 2.85,
+        "y": 4.063,
+        "z": 8.5
+      },
+      {
+        "colour": null,
+        "dx": 0.52,
+        "dy": 0.45,
+        "dz": 0.36,
+        "id": "FIX-FF-MB-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Mb Wc",
+        "parts": [
+          {
+            "colour": "#f5f4ef",
+            "dx": 0.364,
+            "dy": 0.273,
+            "dz": 0.252,
+            "x": 2.45,
+            "y": 3.7945,
+            "z": 7.33
+          },
+          {
+            "colour": "#fffdfa",
+            "dx": 0.52,
+            "dy": 0.1365,
+            "dz": 0.234,
+            "x": 2.45,
+            "y": 3.97975,
+            "z": 7.42
+          },
+          {
+            "colour": "#f2f3ef",
+            "dx": 0.52,
+            "dy": 0.39,
+            "dz": 0.09,
+            "x": 2.45,
+            "y": 3.853,
+            "z": 7.204
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-MB-WC"
+        },
+        "roomId": "FF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 2.45,
+        "y": 3.883,
+        "z": 7.33
+      },
+      {
+        "colour": null,
+        "dx": 0.9,
+        "dy": 1.8,
+        "dz": 0.9,
+        "id": "FIX-FF-MB-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "ff",
+        "name": "Fix Ff Mb Shower",
+        "parts": [
+          {
+            "colour": "#c8dedb",
+            "dx": 0.9,
+            "dy": 0.03,
+            "dz": 0.9,
+            "x": 0.7,
+            "y": 3.673,
+            "z": 7.875
+          },
+          {
+            "colour": "#9fbfc2",
+            "dx": 0.018,
+            "dy": 1.75,
+            "dz": 0.9,
+            "x": 1.135,
+            "y": 4.563,
+            "z": 7.875
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-FF-MB-SHOWER"
+        },
+        "roomId": "FF-BATH",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": 0.7,
+        "y": 4.558,
+        "z": 7.875
+      },
+      {
+        "colour": "#d7bd98",
+        "dx": 3.315,
+        "dy": 0.022,
+        "dz": 4.715,
+        "id": "GF-BED1-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Bed1 Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED1-FINISH"
+        },
+        "roomId": "GF-BED1",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 1.8875,
+        "y": 0.599,
+        "z": 2.5875
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 3.315,
+        "dy": 0.022,
+        "dz": 4.715,
+        "id": "GF-KITCHEN-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Kitchen Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-KITCHEN-FINISH"
+        },
+        "roomId": "GF-KITCHEN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 5.3125,
+        "y": 0.599,
+        "z": 2.5875
+      },
+      {
+        "colour": "#c8d9d4",
+        "dx": 1.827,
+        "dy": 0.022,
+        "dz": 3.69,
+        "id": "GF-BATH-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Bath Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BATH-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 1.1435,
+        "y": 0.599,
+        "z": 6.9
+      },
+      {
+        "colour": "#d7bd98",
+        "dx": 3.015,
+        "dy": 0.022,
+        "dz": 3.29,
+        "id": "GF-BED2-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Bed2 Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-BED2-FINISH"
+        },
+        "roomId": "GF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 1.7375,
+        "y": 0.599,
+        "z": 10.5
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 3.615,
+        "dy": 0.022,
+        "dz": 7.09,
+        "id": "GF-LOUNGE-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Lounge Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-LOUNGE-FINISH"
+        },
+        "roomId": "GF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 5.1625,
+        "y": 0.599,
+        "z": 8.6
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 2.91,
+        "dy": 0.022,
+        "dz": 2.2,
+        "id": "GF-PARK-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Park Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-PARK-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 5.745,
+        "y": 0.599,
+        "z": 13.3
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 1.078,
+        "dy": 0.022,
+        "dz": 3.69,
+        "id": "GF-HALL-REV04-001-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Hall Rev04 001 Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-HALL-REV04-001-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 2.706,
+        "y": 0.599,
+        "z": 6.9
+      },
+      {
+        "colour": "#ded8c9",
+        "dx": 7.2,
+        "dy": 0.15,
+        "dz": 14.4,
+        "holes": [],
+        "id": "GF-FLOOR-PLATE",
+        "ifcType": "IfcSlab",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Gf Floor Plate",
+        "profile": [
+          {
+            "x": 0.0,
+            "z": 14.4
+          },
+          {
+            "x": 7.2,
+            "z": 14.4
+          },
+          {
+            "x": 7.2,
+            "z": 0.0
+          },
+          {
+            "x": 0.0,
+            "z": 0.0
+          }
+        ],
+        "provenance": {
+          "basis": "Outer footprint exact; 150 mm thickness assumed for architectural visualization only",
+          "sourceId": "GF-FLOOR-PLATE"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "DISPLAY_THICKNESS_NOT_STRUCTURAL_DESIGN",
+        "x": 3.6,
+        "y": 0.513,
+        "z": 7.2
+      },
+      {
+        "colour": "#d7bd98",
+        "dx": 6.74,
+        "dy": 0.022,
+        "dz": 4.515,
+        "id": "FF-MAIN-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Main Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-MAIN-FINISH"
+        },
+        "roomId": "FF-MAIN",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 3.6,
+        "y": 3.647,
+        "z": 2.4875
+      },
+      {
+        "colour": "#c8d9d4",
+        "dx": 1.365,
+        "dy": 0.022,
+        "dz": 2.09,
+        "id": "FF-ENS-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Ens Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-ENS-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 0.9125,
+        "y": 3.647,
+        "z": 5.9
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 1.54,
+        "dy": 0.022,
+        "dz": 2.09,
+        "id": "FF-WIR-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Wir Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-WIR-FINISH"
+        },
+        "roomId": "FF-WIR",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 2.475,
+        "y": 3.647,
+        "z": 5.9
+      },
+      {
+        "colour": "#c8d9d4",
+        "dx": 3.015,
+        "dy": 0.022,
+        "dz": 1.64,
+        "id": "FF-BATH-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Bath Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BATH-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 1.7375,
+        "y": 3.647,
+        "z": 7.875
+      },
+      {
+        "colour": "#d7bd98",
+        "dx": 3.015,
+        "dy": 0.022,
+        "dz": 3.34,
+        "id": "FF-BED2-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Bed2 Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BED2-FINISH"
+        },
+        "roomId": "FF-BED2",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 1.7375,
+        "y": 3.647,
+        "z": 10.475
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 3.615,
+        "dy": 0.022,
+        "dz": 7.29,
+        "id": "FF-LOUNGE-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Lounge Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-LOUNGE-FINISH"
+        },
+        "roomId": "FF-LOUNGE",
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 5.1625,
+        "y": 3.647,
+        "z": 8.5
+      },
+      {
+        "colour": "#ddd5c4",
+        "dx": 2.91,
+        "dy": 0.022,
+        "dz": 2.2,
+        "id": "FF-BALC-FINISH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Balc Finish",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BALC-FINISH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_FINISH_ASSUMPTION",
+        "x": 5.745,
+        "y": 3.647,
+        "z": 13.3
+      },
+      {
+        "colour": "#ded8c9",
+        "dx": 7.2,
+        "dy": 0.15,
+        "dz": 14.4,
+        "holes": [
+          [
+            {
+              "x": 0.25,
+              "z": 14.15
+            },
+            {
+              "x": 3.15,
+              "z": 14.15
+            },
+            {
+              "x": 3.15,
+              "z": 12.25
+            },
+            {
+              "x": 0.25,
+              "z": 12.25
+            }
+          ]
+        ],
+        "id": "FF-FLOOR-PLATE",
+        "ifcType": "IfcSlab",
+        "kind": "floor",
+        "level": "ff",
+        "name": "Ff Floor Plate",
+        "profile": [
+          {
+            "x": 0.0,
+            "z": 14.4
+          },
+          {
+            "x": 7.2,
+            "z": 14.4
+          },
+          {
+            "x": 7.2,
+            "z": 0.0
+          },
+          {
+            "x": 0.0,
+            "z": 0.0
+          }
+        ],
+        "provenance": {
+          "basis": "Outer footprint exact; 150 mm thickness assumed for architectural visualization only",
+          "sourceId": "FF-FLOOR-PLATE"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "DISPLAY_THICKNESS_NOT_STRUCTURAL_DESIGN",
+        "x": 3.6,
+        "y": 3.561,
+        "z": 7.2
+      },
+      {
+        "colour": null,
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "dx": 2.0,
+        "dy": 3.048,
+        "dz": 1.9,
+        "id": "GF-STAIR-FLIGHTS",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "stair",
+        "level": "gf",
+        "name": "Gf Stair Flights",
+        "parts": [
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.169333,
+            "dz": 0.9,
+            "x": 3.025,
+            "y": 0.694667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 1.693333,
+            "dz": 0.9,
+            "x": 1.275,
+            "y": 1.456667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.338667,
+            "dz": 0.9,
+            "x": 2.775,
+            "y": 0.779333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 1.862667,
+            "dz": 0.9,
+            "x": 1.525,
+            "y": 1.541333,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.508,
+            "dz": 0.9,
+            "x": 2.525,
+            "y": 0.864,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.032,
+            "dz": 0.9,
+            "x": 1.775,
+            "y": 1.626,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.677333,
+            "dz": 0.9,
+            "x": 2.275,
+            "y": 0.948667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.201333,
+            "dz": 0.9,
+            "x": 2.025,
+            "y": 1.710667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.846667,
+            "dz": 0.9,
+            "x": 2.025,
+            "y": 1.033333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.370667,
+            "dz": 0.9,
+            "x": 2.275,
+            "y": 1.795333,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 1.016,
+            "dz": 0.9,
+            "x": 1.775,
+            "y": 1.118,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.54,
+            "dz": 0.9,
+            "x": 2.525,
+            "y": 1.88,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 1.185333,
+            "dz": 0.9,
+            "x": 1.525,
+            "y": 1.202667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.709333,
+            "dz": 0.9,
+            "x": 2.775,
+            "y": 1.964667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 1.354667,
+            "dz": 0.9,
+            "x": 1.275,
+            "y": 1.287333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 2.878667,
+            "dz": 0.9,
+            "x": 3.025,
+            "y": 2.049333,
+            "z": 12.7
+          }
+        ],
+        "provenance": {
+          "basis": "18 risers / 169.333 mm, two 8-tread runs at 250 mm; direction reverses around a 900 mm landing",
+          "sourceId": "GF-STAIR-FLIGHTS"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "DIMENSIONAL_COORDINATION_NOT_STRUCTURAL_DESIGN",
+        "x": 2.15,
+        "y": 2.134,
+        "z": 13.2
+      },
+      {
+        "colour": "#c2ad8c",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "dx": 0.9,
+        "dy": 0.15,
+        "dz": 1.9,
+        "id": "GF-STAIR-MID-LANDING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landing",
+        "level": "gf",
+        "name": "Gf Stair Mid Landing",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-STAIR-MID-LANDING"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "LANDING_COORDINATION",
+        "x": 0.7,
+        "y": 2.059,
+        "z": 13.2
+      },
+      {
+        "colour": null,
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "dx": 2.1,
+        "dy": 4.0,
+        "dz": 0.2,
+        "id": "GF-STAIR-HANDRAILS",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "gf",
+        "name": "Gf Stair Handrails",
+        "parts": [
+          {
+            "colour": "#806c4d",
+            "dx": 2.514473,
+            "dy": 0.04,
+            "dz": 0.04,
+            "rotationZ": -37.30740066286194,
+            "x": 2.15,
+            "y": 2.272,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 3.15,
+            "y": 1.06,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.9,
+            "y": 1.229333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.65,
+            "y": 1.398667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.4,
+            "y": 1.568,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.15,
+            "y": 1.737333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.9,
+            "y": 1.906667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.65,
+            "y": 2.076,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.4,
+            "y": 2.245333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.15,
+            "y": 2.414667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 2.514473,
+            "dy": 0.04,
+            "dz": 0.04,
+            "rotationZ": 37.30740066286194,
+            "x": 2.15,
+            "y": 3.796,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.15,
+            "y": 2.584,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.4,
+            "y": 2.753333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.65,
+            "y": 2.922667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.9,
+            "y": 3.092,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.15,
+            "y": 3.261333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.4,
+            "y": 3.430667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.65,
+            "y": 3.6,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.9,
+            "y": 3.769333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 3.15,
+            "y": 3.938667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.04,
+            "dz": 1.9,
+            "x": 0.235,
+            "y": 3.034,
+            "z": 13.2
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 2.584,
+            "z": 14.1
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 2.584,
+            "z": 13.65
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 2.584,
+            "z": 13.2
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 2.584,
+            "z": 12.75
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 2.584,
+            "z": 12.3
+          }
+        ],
+        "provenance": {
+          "basis": "900 mm above the two source stair flight pitch lines; posts and rail sizing are illustrative",
+          "sourceId": "GF-STAIR-HANDRAILS"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "900MM_STAIR_GUARD_COORDINATION_NOT_FIXING_DESIGN",
+        "x": 2.15,
+        "y": 2.61,
+        "z": 13.2
+      },
+      {
+        "colour": null,
+        "dx": 1.1,
+        "dy": 0.61,
+        "dz": 0.9,
+        "id": "GF-ENTRY-STEPS",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "stair",
+        "level": "gf",
+        "name": "Gf Entry Steps",
+        "parts": [
+          {
+            "colour": "#c2b89f",
+            "dx": 1.1,
+            "dy": 0.1525,
+            "dz": 0.3,
+            "x": 5.5,
+            "y": 0.07625,
+            "z": 15.15
+          },
+          {
+            "colour": "#c2b89f",
+            "dx": 1.1,
+            "dy": 0.305,
+            "dz": 0.3,
+            "x": 5.5,
+            "y": 0.1525,
+            "z": 14.85
+          },
+          {
+            "colour": "#c2b89f",
+            "dx": 1.1,
+            "dy": 0.4575,
+            "dz": 0.3,
+            "x": 5.5,
+            "y": 0.22875,
+            "z": 14.55
+          }
+        ],
+        "provenance": {
+          "basis": "610 mm source plinth; four equal risers with three 300 mm goings; porch is final landing",
+          "sourceId": "GF-ENTRY-STEPS"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "FOUR_RISERS_152_5MM_PLINTH_ACCESS",
+        "x": 5.5,
+        "y": 0.305,
+        "z": 14.4
+      },
+      {
+        "colour": "#d4c8b1",
+        "dx": 0.9,
+        "dy": 0.1,
+        "dz": 1.9,
+        "id": "GF-STAIR-SIDE-LANDING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landing",
+        "level": "gf",
+        "name": "Gf Stair Side Landing",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "GF-STAIR-SIDE-LANDING"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "900MM_CLEAR_LEVEL_START_OR_ARRIVAL",
+        "x": 3.6,
+        "y": 0.56,
+        "z": 13.2
+      },
+      {
+        "colour": "#d4c8b1",
+        "dx": 0.9,
+        "dy": 0.1,
+        "dz": 1.9,
+        "id": "FF-STAIR-SIDE-LANDING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landing",
+        "level": "ff",
+        "name": "Ff Stair Side Landing",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-STAIR-SIDE-LANDING"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "900MM_CLEAR_LEVEL_START_OR_ARRIVAL",
+        "x": 3.6,
+        "y": 3.608,
+        "z": 13.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-1-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 1 1",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-1-1"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 2.059,
+        "z": 14.25
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-1-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 1 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-1-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 2.059,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-1-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 1 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-1-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 2.059,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-1-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 1 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-1-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 2.059,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-1-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 1 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-1-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 2.059,
+        "z": 0.15
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-2-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 2 1",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-2-1"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 2.059,
+        "z": 14.25
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-2-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 2 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-2-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 2.059,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-2-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 2 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-2-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 2.059,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-2-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 2 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-2-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 2.059,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-2-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 2 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-2-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 2.059,
+        "z": 0.15
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-3-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 3 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-3-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 2.059,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-3-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 3 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-3-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 2.059,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-3-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 3 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-3-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 2.059,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "GF-COLUMN-MARKER-3-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "gf",
+        "name": "Gf Column Marker 3 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "GF-COLUMN-MARKER-3-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 2.059,
+        "z": 0.15
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-1-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 1 1",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-1-1"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 5.107,
+        "z": 14.25
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-1-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 1 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-1-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 5.107,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-1-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 1 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-1-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 5.107,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-1-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 1 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-1-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 5.107,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-1-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 1 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-1-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 0.15,
+        "y": 5.107,
+        "z": 0.15
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-2-1",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 2 1",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-2-1"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 5.107,
+        "z": 14.25
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-2-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 2 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-2-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 5.107,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-2-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 2 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-2-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 5.107,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-2-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 2 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-2-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 5.107,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-2-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 2 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-2-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 4.29,
+        "y": 5.107,
+        "z": 0.15
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-3-2",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 3 2",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-3-2"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 5.107,
+        "z": 12.2
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-3-3",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 3 3",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-3-3"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 5.107,
+        "z": 8.8
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-3-4",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 3 4",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-3-4"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 5.107,
+        "z": 5.0
+      },
+      {
+        "colour": "#d7a14b",
+        "dx": 0.3,
+        "dy": 2.898,
+        "dz": 0.3,
+        "id": "FF-COLUMN-MARKER-3-5",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "column",
+        "level": "ff",
+        "name": "Ff Column Marker 3 5",
+        "provenance": {
+          "basis": "User requested visible columns; source DXF has no columns. Amber 300 mm glyphs show coordination positions only; foundations/rebar/sections require engineering.",
+          "sourceId": "FF-COLUMN-MARKER-3-5"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
+        "x": 7.05,
+        "y": 5.107,
+        "z": 0.15
+      },
+      {
+        "colour": "#91b4b7",
+        "dx": 2.91,
+        "dy": 1.1,
+        "dz": 0.05,
+        "id": "FF-BALCONY-GUARD-FRONT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Ff Balcony Guard Front",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BALCONY-GUARD-FRONT"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_GUARD_NOT_ENGINEERING_DESIGNED",
+        "x": 5.745,
+        "y": 4.208,
+        "z": 14.365
+      },
+      {
+        "colour": "#91b4b7",
+        "dx": 0.05,
+        "dy": 1.1,
+        "dz": 2.2,
+        "id": "FF-BALCONY-GUARD-RIGHT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Ff Balcony Guard Right",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-BALCONY-GUARD-RIGHT"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "PROPOSED_GUARD_NOT_ENGINEERING_DESIGNED",
+        "x": 7.165,
+        "y": 4.208,
+        "z": 13.3
+      },
+      {
+        "colour": "#c6c8bc",
+        "dx": 7.2,
+        "dy": 0.172,
+        "dz": 14.4,
+        "holes": [],
+        "id": "FF-ROOF-TERRACE",
+        "ifcType": "IfcSlab",
+        "kind": "roof",
+        "level": "ff",
+        "name": "Ff Roof Terrace",
+        "profile": [
+          {
+            "x": 0.0,
+            "z": 14.4
+          },
+          {
+            "x": 4.29,
+            "z": 14.4
+          },
+          {
+            "x": 4.29,
+            "z": 12.2
+          },
+          {
+            "x": 7.2,
+            "z": 12.2
+          },
+          {
+            "x": 7.2,
+            "z": 0.0
+          },
+          {
+            "x": 0.0,
+            "z": 0.0
+          }
+        ],
+        "provenance": {
+          "basis": "Candidate roof above admitted GF+FF only; historic M08 top floor is not silently imported",
+          "sourceId": "FF-ROOF-TERRACE"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "TWO_STOREY_TERRACE_CONCEPT__TOP_STOREY_NOT_ADMITTED",
+        "x": 3.6,
+        "y": 6.62,
+        "z": 7.2
+      },
+      {
+        "colour": "#ddd7c8",
+        "dx": 7.2,
+        "dy": 1.0668,
+        "dz": 0.12,
+        "id": "FF-ROOF-PARAPET-REAR",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Ff Roof Parapet Rear",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-ROOF-PARAPET-REAR"
+        },
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "HISTORIC_PARAPET_HEIGHT_REUSED_FOR_TERRACE_CONCEPT",
+        "x": 3.6,
+        "y": 7.2394,
+        "z": 0.06
+      },
+      {
+        "colour": "#ddd7c8",
+        "dx": 0.12,
+        "dy": 1.0668,
+        "dz": 14.4,
+        "id": "FF-ROOF-PARAPET-LEFT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Ff Roof Parapet Left",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-ROOF-PARAPET-LEFT"
+        },
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "HISTORIC_PARAPET_HEIGHT_REUSED_FOR_TERRACE_CONCEPT",
+        "x": 0.06,
+        "y": 7.2394,
+        "z": 7.2
+      },
+      {
+        "colour": "#ddd7c8",
+        "dx": 0.12,
+        "dy": 1.0668,
+        "dz": 12.2,
+        "id": "FF-ROOF-PARAPET-RIGHT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Ff Roof Parapet Right",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FF-ROOF-PARAPET-RIGHT"
+        },
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "HISTORIC_PARAPET_HEIGHT_REUSED_FOR_TERRACE_CONCEPT",
+        "x": 7.14,
+        "y": 7.2394,
+        "z": 6.1
+      },
+      {
+        "colour": "#afbd96",
+        "dx": 9.144,
+        "dy": 0.04,
+        "dz": 18.288,
+        "id": "SITE-PLOT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "site",
+        "level": "gf",
+        "name": "Site Plot",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "SITE-PLOT"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_PLOT_CONTEXT",
+        "x": 2.628,
+        "y": -0.03,
+        "z": 7.256
+      },
+      {
+        "colour": "#c3bcaa",
+        "dx": 9.144,
+        "dy": 0.03,
+        "dz": 2.0,
+        "id": "SITE-PATH",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "site",
+        "level": "gf",
+        "name": "Site Path",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "SITE-PATH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "FRONT_SETBACK_APPROACH_CONTEXT",
+        "x": 2.628,
+        "y": -0.015,
+        "z": 15.4
+      },
+      {
+        "colour": null,
+        "dx": 4.29,
+        "dy": 1.57,
+        "dz": 1.77,
+        "id": "SITE-CAR-DOLPHIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "site",
+        "level": "gf",
+        "name": "Site Car Dolphin",
+        "parts": [
+          {
+            "colour": "#e4e8dd",
+            "dx": 4.29,
+            "dy": 0.7,
+            "dz": 1.77,
+            "x": 2.112,
+            "y": 0.53,
+            "z": 15.4
+          },
+          {
+            "colour": "#709798",
+            "dx": 2.5,
+            "dy": 0.69,
+            "dz": 1.55,
+            "x": 2.112,
+            "y": 1.225,
+            "z": 15.4
+          },
+          {
+            "colour": "#333f3d",
+            "dx": 0.65,
+            "dy": 0.5,
+            "dz": 0.18,
+            "x": 0.812,
+            "y": 0.25,
+            "z": 16.18
+          },
+          {
+            "colour": "#333f3d",
+            "dx": 0.65,
+            "dy": 0.5,
+            "dz": 0.18,
+            "x": 3.412,
+            "y": 0.25,
+            "z": 16.18
+          },
+          {
+            "colour": "#333f3d",
+            "dx": 0.65,
+            "dy": 0.5,
+            "dz": 0.18,
+            "x": 0.812,
+            "y": 0.25,
+            "z": 14.62
+          },
+          {
+            "colour": "#333f3d",
+            "dx": 0.65,
+            "dy": 0.5,
+            "dz": 0.18,
+            "x": 3.412,
+            "y": 0.25,
+            "z": 14.62
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "SITE-CAR-DOLPHIN"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "EXACT_VEHICLE_SIZE__PROPOSED_STATIC_PARKING__DRIVING_QA_PENDING",
+        "x": 2.112,
+        "y": 0.785,
+        "z": 15.4
+      },
+      {
+        "colour": null,
+        "dx": 0.4,
+        "dy": 1.1,
+        "dz": 0.4,
+        "id": "PLANT--1300-1000",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landscape",
+        "level": "gf",
+        "name": "Plant  1300 1000",
+        "parts": [
+          {
+            "colour": "#b28d68",
+            "dx": 0.38,
+            "dy": 0.4,
+            "dz": 0.38,
+            "x": -1.3,
+            "y": 0.81,
+            "z": 13.4
+          },
+          {
+            "colour": "#6f8c63",
+            "dx": 0.5,
+            "dy": 0.65,
+            "dz": 0.5,
+            "x": -1.3,
+            "y": 1.335,
+            "z": 13.4
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "PLANT--1300-1000"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": -1.3,
+        "y": 1.16,
+        "z": 13.4
+      },
+      {
+        "colour": null,
+        "dx": 0.4,
+        "dy": 1.1,
+        "dz": 0.4,
+        "id": "PLANT--1300-6000",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landscape",
+        "level": "gf",
+        "name": "Plant  1300 6000",
+        "parts": [
+          {
+            "colour": "#b28d68",
+            "dx": 0.38,
+            "dy": 0.4,
+            "dz": 0.38,
+            "x": -1.3,
+            "y": 0.81,
+            "z": 8.4
+          },
+          {
+            "colour": "#6f8c63",
+            "dx": 0.5,
+            "dy": 0.65,
+            "dz": 0.5,
+            "x": -1.3,
+            "y": 1.335,
+            "z": 8.4
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "PLANT--1300-6000"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": -1.3,
+        "y": 1.16,
+        "z": 8.4
+      },
+      {
+        "colour": null,
+        "dx": 0.4,
+        "dy": 1.1,
+        "dz": 0.4,
+        "id": "PLANT--1300-11500",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landscape",
+        "level": "gf",
+        "name": "Plant  1300 11500",
+        "parts": [
+          {
+            "colour": "#b28d68",
+            "dx": 0.38,
+            "dy": 0.4,
+            "dz": 0.38,
+            "x": -1.3,
+            "y": 0.81,
+            "z": 2.9
+          },
+          {
+            "colour": "#6f8c63",
+            "dx": 0.5,
+            "dy": 0.65,
+            "dz": 0.5,
+            "x": -1.3,
+            "y": 1.335,
+            "z": 2.9
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "PLANT--1300-11500"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": -1.3,
+        "y": 1.16,
+        "z": 2.9
+      },
+      {
+        "colour": null,
+        "dx": 0.4,
+        "dy": 1.1,
+        "dz": 0.4,
+        "id": "PLANT-6600-1300",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landscape",
+        "level": "gf",
+        "name": "Plant 6600 1300",
+        "parts": [
+          {
+            "colour": "#b28d68",
+            "dx": 0.38,
+            "dy": 0.4,
+            "dz": 0.38,
+            "x": 6.6,
+            "y": 0.81,
+            "z": 13.1
+          },
+          {
+            "colour": "#6f8c63",
+            "dx": 0.5,
+            "dy": 0.65,
+            "dz": 0.5,
+            "x": 6.6,
+            "y": 1.335,
+            "z": 13.1
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "PLANT-6600-1300"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SCHEMATIC_FURNITURE",
+        "x": 6.6,
+        "y": 1.16,
+        "z": 13.1
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 0.1,
+        "dy": 2.4,
+        "dz": 1.4,
+        "id": "EXT-WC-L",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc L",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-L"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_SERVICE_WC_CLEAR_SIZE__MUNICIPAL_REVIEW_PENDING",
+        "x": -1.767,
+        "y": 1.35,
+        "z": -1.163
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 0.1,
+        "dy": 2.4,
+        "dz": 1.4,
+        "id": "EXT-WC-R",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc R",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-R"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_SERVICE_WC_CLEAR_SIZE__MUNICIPAL_REVIEW_PENDING",
+        "x": -0.667,
+        "y": 1.35,
+        "z": -1.163
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 1.0,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "EXT-WC-B",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc B",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-B"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_SERVICE_WC_CLEAR_SIZE__MUNICIPAL_REVIEW_PENDING",
+        "x": -1.217,
+        "y": 1.35,
+        "z": -1.813
+      },
+      {
+        "colour": null,
+        "dx": 0.58,
+        "dy": 0.18,
+        "dz": 0.45,
+        "id": "FIX-GF-EXT-PAN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "fixture",
+        "level": "gf",
+        "name": "Fix Gf Ext Pan",
+        "parts": [
+          {
+            "colour": "#d5e0db",
+            "dx": 0.58,
+            "dy": 0.12,
+            "dz": 0.45,
+            "x": -1.217,
+            "y": 0.21,
+            "z": -1.163
+          }
+        ],
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "FIX-GF-EXT-PAN"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_FIXTURE_ENVELOPE_COORDINATED",
+        "x": -1.217,
+        "y": 0.24,
+        "z": -1.163
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 0.219,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "EXT-WC-FRONT-L",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Front L",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-FRONT-L"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "762MM_SERVICE_WC_DOOR_JAMB",
+        "x": -1.7075,
+        "y": 1.35,
+        "z": -0.513
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 0.219,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "EXT-WC-FRONT-R",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Front R",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-FRONT-R"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "762MM_SERVICE_WC_DOOR_JAMB",
+        "x": -0.7265,
+        "y": 1.35,
+        "z": -0.513
+      },
+      {
+        "colour": "#d5c8af",
+        "dx": 0.762,
+        "dy": 0.419,
+        "dz": 0.1,
+        "id": "EXT-WC-DOOR-HEADER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Door Header",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-DOOR-HEADER"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SERVICE_WC_HEADER_DISPLAY",
+        "x": -1.217,
+        "y": 2.3405,
+        "z": -0.513
+      },
+      {
+        "colour": "#ac8964",
+        "dx": 0.762,
+        "dy": 1.981,
+        "dz": 0.035,
+        "id": "EXT-WC-DOOR",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Door",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-DOOR"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_762_X_1981_SERVICE_WC_DOOR",
+        "x": -1.217,
+        "y": 1.1405,
+        "z": -0.513
+      },
+      {
+        "colour": "#c8d9d4",
+        "dx": 1.0,
+        "dy": 0.1,
+        "dz": 1.2,
+        "id": "EXT-WC-FLOOR",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "floor",
+        "level": "gf",
+        "name": "Ext Wc Floor",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-FLOOR"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SOURCE_CLEAR_SERVICE_WC_AREA",
+        "x": -1.217,
+        "y": 0.1,
+        "z": -1.163
+      },
+      {
+        "colour": "#c1c3b4",
+        "dx": 1.2,
+        "dy": 0.1,
+        "dz": 1.4,
+        "id": "EXT-WC-ROOF",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Roof",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-ROOF"
+        },
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "SERVICE_WC_ROOF_DISPLAY",
+        "x": -1.217,
+        "y": 2.6,
+        "z": -1.163
+      },
+      {
+        "colour": "#c2b89f",
+        "dx": 0.9,
+        "dy": 0.15,
+        "dz": 0.3,
+        "id": "EXT-WC-STEP",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Ext Wc Step",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "EXT-WC-STEP"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ONE_150MM_SERVICE_WC_ACCESS_STEP",
+        "x": -1.217,
+        "y": 0.075,
+        "z": -0.313
+      }
+    ],
+    "floorToFloor": 3.048,
+    "frontCaption": "SE / ROAD FRONT",
+    "grid": {
+      "major": 1,
+      "margin": 2,
+      "medium": 0.5,
+      "minor": 0.1
+    },
+    "northRotationDeg": 45,
+    "outerBounds": [
+      0,
+      0,
+      7.2,
+      14.4
+    ],
+    "plinth": 0.61,
+    "plotBounds": [
+      -1.944,
+      -1.888,
+      7.2,
+      16.4
+    ],
+    "rearCaption": "NW rear ↑",
+    "roomEnvelopes": {
+      "FF": [
+        {
+          "bbox": [
+            0,
+            9600,
+            7200,
+            14400
+          ],
+          "fill": "#e3e9fb",
+          "id": "FF-MAIN",
+          "name": "MAIN BEDROOM"
+        },
+        {
+          "bbox": [
+            0,
+            7400,
+            1650,
+            9600
+          ],
+          "fill": "#d9f4f6",
+          "id": "FF-ENS",
+          "name": "ENSUITE"
+        },
+        {
+          "bbox": [
+            1650,
+            7400,
+            3300,
+            9600
+          ],
+          "fill": "#ece6ff",
+          "id": "FF-WIR",
+          "name": "WALK-IN ROBE"
+        },
+        {
+          "bbox": [
+            0,
+            5650,
+            3300,
+            7400
+          ],
+          "fill": "#d9f4f6",
+          "id": "FF-BATH",
+          "name": "MAIN BATHROOM"
+        },
+        {
+          "bbox": [
+            0,
+            2200,
+            3300,
+            5650
+          ],
+          "fill": "#e9edf9",
+          "id": "FF-BED2",
+          "name": "BED 2"
+        },
+        {
+          "bbox": [
+            3300,
+            2200,
+            7200,
+            9600
+          ],
+          "fill": "#fff0c9",
+          "id": "FF-LOUNGE",
+          "name": "LOUNGE"
+        },
+        {
+          "bbox": [
+            0,
+            0,
+            4290,
+            2200
+          ],
+          "fill": "#ffe1bd",
+          "id": "FF-STAIR",
+          "name": "U-STAIR"
+        },
+        {
+          "bbox": [
+            4290,
+            0,
+            7200,
+            2200
+          ],
+          "fill": "#e6f4d8",
+          "id": "FF-BALC",
+          "name": "BALCONY"
+        }
+      ],
+      "GF": [
+        {
+          "bbox": [
+            0,
+            9400,
+            3600,
+            14400
+          ],
+          "fill": "#e9edf9",
+          "id": "GF-BED1",
+          "name": "BEDROOM 1"
+        },
+        {
+          "bbox": [
+            3600,
+            9400,
+            7200,
+            14400
+          ],
+          "fill": "#f4ead7",
+          "id": "GF-KITCHEN",
+          "name": "KITCHEN"
+        },
+        {
+          "authority_note": "USER_DIRECTED_X_WIDTH_REDUCTION_914MM",
+          "bbox": [
+            0,
+            5600,
+            2112,
+            9400
+          ],
+          "fill": "#d9f4f6",
+          "id": "GF-BATH",
+          "name": "COMMON MAIN BATHROOM"
+        },
+        {
+          "bbox": [
+            0,
+            2200,
+            3300,
+            5600
+          ],
+          "fill": "#eef0fa",
+          "id": "GF-BED2",
+          "name": "BEDROOM 2 / GUEST"
+        },
+        {
+          "bbox": [
+            3300,
+            2200,
+            7200,
+            9400
+          ],
+          "fill": "#fff0c9",
+          "id": "GF-LOUNGE",
+          "name": "LIVING / LOUNGE"
+        },
+        {
+          "bbox": [
+            0,
+            0,
+            4290,
+            2200
+          ],
+          "fill": "#ffe1bd",
+          "id": "GF-STAIR",
+          "name": "U-STAIR"
+        },
+        {
+          "bbox": [
+            4290,
+            0,
+            7200,
+            2200
+          ],
+          "fill": "#e7eaec",
+          "id": "GF-PARK",
+          "name": "CAR PORCH / INTERNAL FRONT-RIGHT DOMAIN"
+        },
+        {
+          "authority_note": "DERIVED_FROM_USER_3FT_BATHROOM_REDUCTION_FOR_BEDROOM_ACCESS",
+          "bbox": [
+            2112,
+            5600,
+            3300,
+            9400
+          ],
+          "fill": "#f6f2e8",
+          "id": "GF-HALL-REV04-001",
+          "name": "HALL / ACCESS"
+        }
+      ]
+    },
+    "schema": "jp-cad://architectural-presentation/1",
+    "sourceGeometryHash": "6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e",
+    "sourceYLength": 14.4,
+    "stairBay": [
+      4.29,
+      2.2
+    ],
+    "wallColour": "#e6dfcb",
+    "wallHeight": 2.876,
+    "wallLegend": "230 mm external · 100 mm internal walls"
+  },
+  "projectId": "ashok-adhikari",
+  "representation": "ARCHITECTURAL_REVIEW_ONLY",
+  "restrictions": {
+    "engineeringApproval": "HOLD",
+    "issueForConstruction": false,
+    "stage": "SOURCE_CONSTRAINED_ARCHITECTURAL_SCHEME"
+  },
+  "reviewHolds": [
+    {
+      "code": "ENGINEERING_DESIGN",
+      "message": "Amber columns are proposed location markers, not designed sections. No foundation/rebar/capacity certification."
+    },
+    {
+      "code": "MUNICIPAL",
+      "message": "Zero-right setback and external WC location remain unverified for municipal submission."
+    },
+    {
+      "code": "STAIR_DETAIL",
+      "message": "18 risers, tread/landing dimensions and a real slab void coordinated; structural waist/beam/guard details and finished headroom need professional checking."
+    },
+    {
+      "code": "PARKING",
+      "message": "Static vehicle fits with a clear right approach. Driving/turning/gate operation still unverified."
+    },
+    {
+      "code": "SOURCE_CUSTODY",
+      "message": "Historical M08 native bytes remain unavailable. Current derivative uses live REV04 JSON, REV02 DXF and user sketch; originals preserved."
+    }
+  ],
+  "revision": "M10-REV04-QA02-20261027",
+  "schema": "jp-cad://aad-building/1",
+  "sourceLedger": "coordination-ledger-qa02.json"
+}

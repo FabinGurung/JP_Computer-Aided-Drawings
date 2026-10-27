@@ -5,6 +5,7 @@
  * IFC export maps these to IFC X,Y,Z respectively.
  */
 import {auditAADStructuralRegistration} from "./aad-structural-registration-audit.mjs";
+import {presentationElements} from "./aad-presentation-assembly.mjs";
 const finite=(v,label)=>{if(typeof v!=="number"||!Number.isFinite(v))throw Error(label+" must be finite");return v;};
 const positive=(v,label)=>{finite(v,label);if(v<=0)throw Error(label+" must be positive");return v;};
 const round=n=>Math.round(n*1e6)/1e6;
@@ -86,7 +87,7 @@ export function assembleBuilding(manifest,models,options={}){
   for(const w of g.walls){
    const a=localToWorld(nodes.get(w.a),level.transform),b=localToWorld(nodes.get(w.b),level.transform);
    const length=dist(a,b),angle=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
-   const p=midpoint(a,b),h=architecturalOnly?level.height:level.height-(manifest.structural.slabs.thickness||.18);
+   const p=midpoint(a,b),h=architecturalOnly?(manifest.presentation?.wallHeight||level.height):level.height-(manifest.structural.slabs.thickness||.18);
    const e=addBox(elements,projectId+":"+level.id+":"+w.id,"wall","IfcWall",level.id,p.x,level.elevation+h/2,p.z,length,h,w.thickness,{
     source:w.source||source,status:w.status||"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null,provenance:w.provenance||null
    });put(e);
@@ -132,7 +133,8 @@ export function assembleBuilding(manifest,models,options={}){
  }
  if(architecturalOnly){
   if(options.reviewStructure||manifest.stairs?.opening)throw Error("Architectural-only admission must not include structural or stair solids");
-  diagnostics.push({severity:"WARNING",code:"ARCHITECTURE_ONLY_NO_STRUCTURE",level:null,message:"Architectural review only. No columns, beams, slabs, roof, foundations or stair solids admitted. Storey extrusion is a visualization envelope, not a verified wall height."});
+  for(const e of presentationElements(manifest,levels)){elements.push(e);put(e);}
+  diagnostics.push({severity:"WARNING",code:"ARCHITECTURE_ONLY_NO_STRUCTURE",level:null,message:manifest.presentation?'Architectural coordination with explicit furniture, surface, stair and column display proxies. Structural member sizes and capacity are NOT designed.':'Architectural review only. No columns, beams, slabs, roof, foundations or stair solids admitted. Storey extrusion is a visualization envelope, not a verified wall height.'});
   diagnostics.push(...(manifest.reviewHolds||[]).map(h=>({severity:"WARNING",code:h.code,level:null,message:h.message})));
   const counts={};for(const e of elements)counts[e.kind]=(counts[e.kind]||0)+1;
   return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,levels:placements,elements,diagnostics,
