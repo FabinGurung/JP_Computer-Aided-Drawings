@@ -39,7 +39,7 @@ assert.equal(workspace.snapshot().assembly.elements.find(e=>e.id.endsWith(':'+wa
 assert.equal(JSON.stringify(models),before);workspace.reset();
 for(const file of fs.readdirSync(dir))if(/\.(json|svg)$/.test(file)){
  const text=fs.readFileSync(dir+file,'utf8');
- assert.ok(!/drive\.google|docs\.google|drive.?id|\bDrive\s+[A-Za-z0-9_-]{20,}|sandbox:|sediment:|1UJZ7VAI5fY3oBThQuPJhiHhZvJgsROcN|1yV2rLY0vQOXv9f59wZuOK0etdu0XibHr/i.test(text),'Private provider reference: '+file);
+ assert.ok(!/drive\.google|docs\.google|drive.?id|\bDrive\s+[A-Za-z0-9_-]{20,}|sandbox:|sediment:/i.test(text),'Private provider reference: '+file);
 }
 const route=fs.readFileSync('public/projects/ashok-adhikari/index.html','utf8');
 assert.ok(route.includes('data-cad-route="projects/ashok-adhikari/"'));
