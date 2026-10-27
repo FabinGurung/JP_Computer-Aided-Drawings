@@ -31,6 +31,8 @@ jobs:
         run: node tools/site/aad-m27-hold-gate.mjs
       - name: M28 owner verification and source-derived H3/I3-CF1 footprint check
         run: node tools/site/aad-m28-reconciliation-smoke.mjs
+      - name: M29 DXF source midpoint and upper-floor projection evidence acceptance
+        run: node tools/site/aad-m29-datum-projection-smoke.mjs
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs
@@ -62,6 +64,7 @@ jobs:
           CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
           AAD_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
           AAD_M26_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+          AAD_M29_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m29-primary-studio-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
@@ -76,6 +79,7 @@ jobs:
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
             /tmp/aad-m26-main-studio-source-structural.png
+            /tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
