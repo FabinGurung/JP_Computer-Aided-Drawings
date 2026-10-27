@@ -9,11 +9,13 @@ const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
 const {loadAADReviewedStructure}=await import(/* @vite-ignore */moduleURL("aad-reviewed-structural-intake.mjs"));
+const {deriveM29DatumEvidence}=await import(/* @vite-ignore */moduleURL("aad-m29-source-datum.mjs"));
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
+let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
@@ -403,6 +405,13 @@ function drawPlan(){
  if(building.sourceStructuralReview){
   pts.push(...building.elements.filter(e=>e.previewOnly&&e.level==="gf").map(e=>({x:e.x,z:e.z})));
  }
+ if(m29Evidence&&showM29SourceEdges&&(activeLevel==="all"||activeLevel==="gf")){
+  for(const s of m29Evidence.sourceSegments)pts.push(s.a,s.b);
+ }
+ if(m29Evidence&&showM29UpperProjection&&activeLevel!=="all"&&activeLevel!=="gf"){
+  for(const c of m29Evidence.upperFloorProjections.find(p=>p.level===activeLevel)?.elements||[])
+   pts.push({x:c.x,z:c.z});
+ }
  const minX=Math.min(...pts.map(p=>p.x))-1.1,minZ=Math.min(...pts.map(p=>p.z))-1.1,
        maxX=Math.max(...pts.map(p=>p.x))+1.1,maxZ=Math.max(...pts.map(p=>p.z))+1.1;
  doc.setAttribute("viewBox",[minX,minZ,maxX-minX,maxZ-minZ].join(" "));
@@ -411,6 +420,19 @@ function drawPlan(){
   for(const [k,v] of Object.entries(attrs))node.setAttribute(k,String(v));
   return node;
  };
+ // DXF source architectural edge layer is read-only and belongs in this same SVG.
+ // It cannot become editable floor-wall topology or IFC without separate evidence.
+ if(m29Evidence&&showM29SourceEdges&&(activeLevel==="all"||activeLevel==="gf")){
+  for(const s of m29Evidence.sourceSegments){
+   const line=el("line",{x1:s.a.x,y1:s.a.z,x2:s.b.x,y2:s.b.z,
+     class:"aad-m29-original-dxf-edge","data-dxf-handle":s.handle,
+     "aria-label":"Source DXF architectural edge "+s.id+" (read-only)"});
+   const desc=el("title");desc.textContent=s.id+" · nearest GF model wall "+
+    s.nearestModeledWallId+" · source edge midpoint to model centreline "+
+    s.midpointToWallCenterlineM+" m (not survey residual)";
+   line.append(desc);doc.append(line);
+  }
+ }
  for(const {l,g,nodeMap,color} of outlines){
   const faded=activeLevel==="all"?.64:1;
   if(activeLevel===l.id){
@@ -475,6 +497,23 @@ function drawPlan(){
      "data-element-id":b.id,"data-world-x":b.x,"data-world-z":b.z,
      role:"button",tabindex:"0","aria-label":b.name+" · M70 frozen source"});
     line.addEventListener("click",ev=>{ev.stopPropagation();selectElement(b);});doc.append(line);
+   }
+  }
+  // Source-ground-floor column centres projected onto architectural FF/SF plans.
+  // These ghost locations NEVER enter building.elements / structural IFC exports.
+  if(m29Evidence&&showM29UpperProjection&&activeLevel===l.id&&l.id!=="gf"){
+   for(const col of m29Evidence.upperFloorProjections.find(p=>p.level===l.id)?.elements||[]){
+    const circle=el("circle",{cx:col.x,cy:col.z,r:.28,
+     class:"aad-m29-upper-projection",
+     stroke:col.insideArchitecturalEnvelope?"#238f96":"#bd654e",
+     "data-source-column":col.sourceElementId,
+     "data-plan-level":l.id,"data-inside-envelope":String(col.insideArchitecturalEnvelope),
+     "aria-label":"Reference-only GF "+col.grid+" projected onto "+l.id+"; not a structural member"});
+    const desc=el("title");
+    desc.textContent="GF "+col.grid+" projected at ("+col.x.toFixed(3)+", "+col.z.toFixed(3)+
+      ") · "+(col.insideArchitecturalEnvelope?"inside":"outside")+" assumed "+l.id+
+      " architectural envelope · NOT a structural column";
+    circle.append(desc);doc.append(circle);
    }
   }
   if(activeLevel===l.id){
@@ -720,6 +759,35 @@ async function main(){
    return result.json();
   });
  }
+ if(reviewStructure&&manifest.structuralReview?.datumEvidence){
+  const auditPath=new URL(manifest.structuralReview.datumEvidence,prefix);
+  const sourcePath=new URL(manifest.structuralReview.sourceLedger,prefix);
+  if(auditPath.origin!==location.origin||!auditPath.pathname.startsWith(prefix.pathname)||
+     sourcePath.origin!==location.origin||!sourcePath.pathname.startsWith(prefix.pathname))
+   throw Error("M29 source audit path not owned by this project");
+  const [controlResp,sourceResp]=await Promise.all([
+   fetch(auditPath.href,{cache:"no-store"}),fetch(sourcePath.href,{cache:"no-store"})]);
+  if(!controlResp.ok||!sourceResp.ok)throw Error("M29 source audit HTTP failure");
+  const [control,sourceRaw]=await Promise.all([controlResp.json(),sourceResp.json()]);
+  if(control.schema!=="jp-cad://aad-m29-partial-dxf-audit-summary/1"||
+     control.projectId!==manifest.projectId||control.constructionApproval!==false)
+   throw Error("M29 source audit version or approval invalid");
+  m29Evidence=deriveM29DatumEvidence(sourceRaw,manifest,models,reviewStructure);
+  if(m29Evidence.summary.sourceEdgeCount!==control.sourceEdgeEvidence.edgeSegments)
+   throw Error("M29 source audit counts drift");
+  const layers=$("aad-m29-controls");layers.hidden=false;
+  $("aad-m29-register-link").href=auditPath.href;
+  const stats=m29Evidence.summary,by=stats.nearestWallMidpointDistanceM;
+  $("aad-m29-summary").textContent=stats.sourceEdgeCount+" direct extracted DXF wall edges · "+
+   stats.modeledGFWallCenterlines+" GF modeled wall centre-lines · median edge→wall "+
+   by.p50.toFixed(3)+"m, P90 "+by.p90.toFixed(3)+"m. "+
+   stats.upperFloorProjections.map(p=>p.level.toUpperCase()+": "+p.withinFootprint+
+   "/23 GF column centres within current floor envelope").join(" · ");
+  $("aad-m29-source-toggle").addEventListener("change",e=>{
+   showM29SourceEdges=e.target.checked;drawPlan();});
+  $("aad-m29-projection-toggle").addEventListener("change",e=>{
+   showM29UpperProjection=e.target.checked;drawPlan();});
+ }
  workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey="aad:unified:draft:"+manifest.projectId;
  try{
@@ -870,6 +938,14 @@ window.AADStudio=Object.freeze({
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
+ getM29DatumEvidence:()=>m29Evidence?{
+  schema:m29Evidence.schema,summary:m29Evidence.summary,
+  sourceEdgeCount:m29Evidence.sourceSegments.length,
+  upperProjectionCounts:m29Evidence.upperFloorProjections.map(p=>({
+   level:p.level,count:p.projectedCount,inside:p.withinFootprint,outside:p.outsideFootprint
+  })),
+  issuedForConstruction:false,sourceMode:"PARTIAL_DXF_GEOMETRY_NOT_SURVEY_REGISTRATION"
+ }:null,
  getSnapshot:()=>workspace?workspace.snapshot():null,
  getDraft:()=>workspace?workspace.bundle():null
 });
