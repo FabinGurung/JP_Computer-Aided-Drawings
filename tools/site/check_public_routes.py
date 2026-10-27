@@ -14,6 +14,7 @@ required=[
 "research/open-architecture-engine-v0.2/dimensions.json","research/open-architecture-engine-v0.1/index.html",
 "projects/index.html","projects/narayani-parajuli/index.html","projects/ramachandra-devkota/index.html","projects/ashok-adhikari/index.html",
 "releases/index.html","guide/index.html","source/index.html",
+"memory-wall/index.html","codes/pokhara/index.html","data/codes/nepal-pokhara.json","data/document-control.json",
 "data/projects.json","data/navigation.json","stages/m80/index.html",".nojekyll"]
 missing=[x for x in required if not (root/x).is_file()]
 guide=(root/"guide/index.html").read_text() if (root/"guide/index.html").exists() else ""

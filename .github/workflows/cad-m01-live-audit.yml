@@ -172,6 +172,11 @@ jobs:
         env:
           ASHOK_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/ashok-adhikari/
         run: node tools/site/ashok-rev04-browser.mjs
+      - name: Verify live Code Library and CAD Memory Wall
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        env:
+          CAD_REFERENCE_BASE: https://fabingurung.github.io/JP_Computer-Aided-Drawings/
+        run: node tools/site/aad-code-library-browser.mjs
       - name: Archive live Ashok working studio QA
         if: always() && github.event_name == 'workflow_run'
         uses: actions/upload-artifact@v4
@@ -180,4 +185,8 @@ jobs:
           path: |
             /tmp/ashok-rev04-*.png
             /tmp/ashok-qa02-*.png
+            /tmp/ashok-roof-access-*.png
+            /tmp/ashok-headroom-*.json
+            /tmp/cad-code-library-*.png
+            /tmp/cad-memory-wall-*.png
           if-no-files-found: ignore

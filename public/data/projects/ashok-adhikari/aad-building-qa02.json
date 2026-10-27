@@ -1,10 +1,29 @@
 {
+  "codeRegister": "../../codes/nepal-pokhara.json",
   "coordinateSystem": {
     "axes": "X page-right NE; Z page-down SE; Y elevation",
     "sourceOrigin": "Front-left outer building corner",
     "sourceXY": "x=1000X; y=14400-1000Z",
     "surveyAlignment": "NOT_VERIFIED",
     "units": "m"
+  },
+  "engineeringEvidence": {
+    "currentMunicipalClausesVerified": null,
+    "finishedMeasurementsVerified": false,
+    "percolationLPerM2Day": null,
+    "permit": null,
+    "structuralRoute": "SITE_SPECIFIC_NBC105"
+  },
+  "engineeringRecordLogicalId": "AAD-ASHOK-ENG-001",
+  "excludedHistoricalInputs": [
+    "M08_MISSING_NATIVE_FILES"
+  ],
+  "jurisdiction": {
+    "country": "Nepal",
+    "municipality": "Pokhara Metropolitan City",
+    "parcelVerified": false,
+    "source": "USER_20261028",
+    "ward": 14
   },
   "levels": [
     {
@@ -2105,150 +2124,170 @@
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 0.169333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 3.025,
-            "y": 0.694667,
+            "y": 0.704333,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 1.693333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.275,
-            "y": 1.456667,
+            "y": 2.228333,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 0.338667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.775,
-            "y": 0.779333,
+            "y": 0.873667,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 1.862667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.525,
-            "y": 1.541333,
+            "y": 2.397667,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 0.508,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.525,
-            "y": 0.864,
+            "y": 1.043,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.032,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.775,
-            "y": 1.626,
+            "y": 2.567,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 0.677333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.275,
-            "y": 0.948667,
+            "y": 1.212333,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.201333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.025,
-            "y": 1.710667,
+            "y": 2.736333,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 0.846667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.025,
-            "y": 1.033333,
+            "y": 1.381667,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.370667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.275,
-            "y": 1.795333,
+            "y": 2.905667,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 1.016,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.775,
-            "y": 1.118,
+            "y": 1.551,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.54,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.525,
-            "y": 1.88,
+            "y": 3.075,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 1.185333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.525,
-            "y": 1.202667,
+            "y": 1.720333,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.709333,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 2.775,
-            "y": 1.964667,
+            "y": 3.244333,
             "z": 12.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 1.354667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 1.275,
-            "y": 1.287333,
+            "y": 1.889667,
             "z": 13.7
           },
           {
             "colour": "#c2ad8c",
             "dx": 0.25,
-            "dy": 2.878667,
+            "dy": 0.15,
             "dz": 0.9,
             "x": 3.025,
-            "y": 2.049333,
+            "y": 3.413667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 2.4156,
+            "dy": 0.15,
+            "dz": 0.9,
+            "rotationZ": -34.11109445725549,
+            "x": 2.15,
+            "y": 1.222,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 2.4156,
+            "dy": 0.15,
+            "dz": 0.9,
+            "rotationZ": 34.11109445725549,
+            "x": 2.15,
+            "y": 2.746,
             "z": 12.7
           }
         ],
         "provenance": {
-          "basis": "18 risers / 169.333 mm, two 8-tread runs at 250 mm; direction reverses around a 900 mm landing",
+          "basis": "18 risers / 169.333 mm, two 8-tread runs at 250 mm; direction reverses around a 900 mm landing; thin treads and 150 mm display waist replace solid-to-floor blocks, preserving the headroom volume between stacked stairs. RC size/rebar remain unissued.",
           "sourceId": "GF-STAIR-FLIGHTS"
         },
         "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
@@ -2298,10 +2337,10 @@
         "parts": [
           {
             "colour": "#806c4d",
-            "dx": 2.514473,
+            "dx": 2.4156,
             "dy": 0.04,
             "dz": 0.04,
-            "rotationZ": -37.30740066286194,
+            "rotationZ": -34.11109445725549,
             "x": 2.15,
             "y": 2.272,
             "z": 13.23
@@ -2312,7 +2351,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 3.15,
-            "y": 1.06,
+            "y": 1.144667,
             "z": 13.23
           },
           {
@@ -2321,7 +2360,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.9,
-            "y": 1.229333,
+            "y": 1.314,
             "z": 13.23
           },
           {
@@ -2330,7 +2369,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.65,
-            "y": 1.398667,
+            "y": 1.483333,
             "z": 13.23
           },
           {
@@ -2339,7 +2378,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.4,
-            "y": 1.568,
+            "y": 1.652667,
             "z": 13.23
           },
           {
@@ -2348,7 +2387,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.15,
-            "y": 1.737333,
+            "y": 1.822,
             "z": 13.23
           },
           {
@@ -2357,7 +2396,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.9,
-            "y": 1.906667,
+            "y": 1.991333,
             "z": 13.23
           },
           {
@@ -2366,7 +2405,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.65,
-            "y": 2.076,
+            "y": 2.160667,
             "z": 13.23
           },
           {
@@ -2375,7 +2414,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.4,
-            "y": 2.245333,
+            "y": 2.33,
             "z": 13.23
           },
           {
@@ -2384,15 +2423,15 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.15,
-            "y": 2.414667,
+            "y": 2.499333,
             "z": 13.23
           },
           {
             "colour": "#806c4d",
-            "dx": 2.514473,
+            "dx": 2.4156,
             "dy": 0.04,
             "dz": 0.04,
-            "rotationZ": 37.30740066286194,
+            "rotationZ": 34.11109445725549,
             "x": 2.15,
             "y": 3.796,
             "z": 13.17
@@ -2403,7 +2442,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.15,
-            "y": 2.584,
+            "y": 2.668667,
             "z": 13.17
           },
           {
@@ -2412,7 +2451,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.4,
-            "y": 2.753333,
+            "y": 2.838,
             "z": 13.17
           },
           {
@@ -2421,7 +2460,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.65,
-            "y": 2.922667,
+            "y": 3.007333,
             "z": 13.17
           },
           {
@@ -2430,7 +2469,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 1.9,
-            "y": 3.092,
+            "y": 3.176667,
             "z": 13.17
           },
           {
@@ -2439,7 +2478,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.15,
-            "y": 3.261333,
+            "y": 3.346,
             "z": 13.17
           },
           {
@@ -2448,7 +2487,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.4,
-            "y": 3.430667,
+            "y": 3.515333,
             "z": 13.17
           },
           {
@@ -2457,7 +2496,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.65,
-            "y": 3.6,
+            "y": 3.684667,
             "z": 13.17
           },
           {
@@ -2466,7 +2505,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 2.9,
-            "y": 3.769333,
+            "y": 3.854,
             "z": 13.17
           },
           {
@@ -2475,7 +2514,7 @@
             "dy": 0.9,
             "dz": 0.03,
             "x": 3.15,
-            "y": 3.938667,
+            "y": 4.023333,
             "z": 13.17
           },
           {
@@ -3237,7 +3276,26 @@
         "dx": 7.2,
         "dy": 0.172,
         "dz": 14.4,
-        "holes": [],
+        "holes": [
+          [
+            {
+              "x": 0.25,
+              "z": 14.15
+            },
+            {
+              "x": 3.15,
+              "z": 14.15
+            },
+            {
+              "x": 3.15,
+              "z": 12.25
+            },
+            {
+              "x": 0.25,
+              "z": 12.25
+            }
+          ]
+        ],
         "id": "FF-ROOF-TERRACE",
         "ifcType": "IfcSlab",
         "kind": "roof",
@@ -3270,14 +3328,684 @@
           }
         ],
         "provenance": {
-          "basis": "Candidate roof above admitted GF+FF only; historic M08 top floor is not silently imported",
+          "basis": "Current GF+FF geometry and user instruction; missing M08 is excluded from active design inputs",
           "sourceId": "FF-ROOF-TERRACE"
         },
+        "roofAccess": true,
         "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
-        "status": "TWO_STOREY_TERRACE_CONCEPT__TOP_STOREY_NOT_ADMITTED",
+        "status": "TWO_STOREY_ROOF_WITH_SPECIFIED_ACCESS_VOID",
         "x": 3.6,
         "y": 6.62,
         "z": 7.2
+      },
+      {
+        "colour": null,
+        "contextLevels": [],
+        "dx": 2.0,
+        "dy": 3.048,
+        "dz": 1.9,
+        "id": "FF-ROOF-STAIR-FLIGHTS",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "stair",
+        "level": "ff",
+        "name": "Roof access Gf Stair Flights",
+        "parts": [
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 3.025,
+            "y": 3.752333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.275,
+            "y": 5.276333,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.775,
+            "y": 3.921667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.525,
+            "y": 5.445667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.525,
+            "y": 4.091,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.775,
+            "y": 5.615,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.275,
+            "y": 4.260333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.025,
+            "y": 5.784333,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.025,
+            "y": 4.429667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.275,
+            "y": 5.953667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.775,
+            "y": 4.599,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.525,
+            "y": 6.123,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.525,
+            "y": 4.768333,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 2.775,
+            "y": 6.292333,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 1.275,
+            "y": 4.937667,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 0.25,
+            "dy": 0.15,
+            "dz": 0.9,
+            "x": 3.025,
+            "y": 6.461667,
+            "z": 12.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 2.4156,
+            "dy": 0.15,
+            "dz": 0.9,
+            "rotationZ": -34.11109445725549,
+            "x": 2.15,
+            "y": 4.27,
+            "z": 13.7
+          },
+          {
+            "colour": "#c2ad8c",
+            "dx": 2.4156,
+            "dy": 0.15,
+            "dz": 0.9,
+            "rotationZ": 34.11109445725549,
+            "x": 2.15,
+            "y": 5.794,
+            "z": 12.7
+          }
+        ],
+        "provenance": {
+          "basis": "NBC 206:2024 Tables 3/4: 900 mm flight, 250 mm tread, 169.333 mm riser; actual structural detail and finished obstruction evidence still required"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "DIMENSIONAL_COORDINATION_NOT_STRUCTURAL_DESIGN",
+        "x": 2.15,
+        "y": 5.182,
+        "z": 13.2
+      },
+      {
+        "colour": "#c2ad8c",
+        "contextLevels": [],
+        "dx": 0.9,
+        "dy": 0.15,
+        "dz": 1.9,
+        "id": "FF-ROOF-STAIR-MID-LANDING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landing",
+        "level": "ff",
+        "name": "Roof access Gf Stair Mid Landing",
+        "provenance": {
+          "basis": "NBC 206:2024 Tables 3/4: 900 mm flight, 250 mm tread, 169.333 mm riser; actual structural detail and finished obstruction evidence still required"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "LANDING_COORDINATION",
+        "x": 0.7,
+        "y": 5.107,
+        "z": 13.2
+      },
+      {
+        "colour": null,
+        "contextLevels": [],
+        "dx": 2.1,
+        "dy": 4.0,
+        "dz": 0.2,
+        "id": "FF-ROOF-STAIR-HANDRAILS",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "guard",
+        "level": "ff",
+        "name": "Roof access Gf Stair Handrails",
+        "parts": [
+          {
+            "colour": "#806c4d",
+            "dx": 2.4156,
+            "dy": 0.04,
+            "dz": 0.04,
+            "rotationZ": -34.11109445725549,
+            "x": 2.15,
+            "y": 5.32,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 3.15,
+            "y": 4.192667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.9,
+            "y": 4.362,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.65,
+            "y": 4.531333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.4,
+            "y": 4.700667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.15,
+            "y": 4.87,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.9,
+            "y": 5.039333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.65,
+            "y": 5.208667,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.4,
+            "y": 5.378,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.15,
+            "y": 5.547333,
+            "z": 13.23
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 2.4156,
+            "dy": 0.04,
+            "dz": 0.04,
+            "rotationZ": 34.11109445725549,
+            "x": 2.15,
+            "y": 6.844,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.15,
+            "y": 5.716667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.4,
+            "y": 5.886,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.65,
+            "y": 6.055333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 1.9,
+            "y": 6.224667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.15,
+            "y": 6.394,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.4,
+            "y": 6.563333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.65,
+            "y": 6.732667,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 2.9,
+            "y": 6.902,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.03,
+            "dy": 0.9,
+            "dz": 0.03,
+            "x": 3.15,
+            "y": 7.071333,
+            "z": 13.17
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.04,
+            "dz": 1.9,
+            "x": 0.235,
+            "y": 6.082,
+            "z": 13.2
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 5.632,
+            "z": 14.1
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 5.632,
+            "z": 13.65
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 5.632,
+            "z": 13.2
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 5.632,
+            "z": 12.75
+          },
+          {
+            "colour": "#806c4d",
+            "dx": 0.02,
+            "dy": 0.9,
+            "dz": 0.02,
+            "x": 0.235,
+            "y": 5.632,
+            "z": 12.3
+          }
+        ],
+        "provenance": {
+          "basis": "NBC 206:2024 Tables 3/4: 900 mm flight, 250 mm tread, 169.333 mm riser; actual structural detail and finished obstruction evidence still required"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "900MM_STAIR_GUARD_COORDINATION_NOT_FIXING_DESIGN",
+        "x": 2.15,
+        "y": 5.658,
+        "z": 13.2
+      },
+      {
+        "colour": "#d4c8b1",
+        "dx": 0.9,
+        "dy": 0.1,
+        "dz": 1.9,
+        "id": "ROOF-ARRIVAL-LANDING",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "landing",
+        "level": "ff",
+        "name": "Roof Arrival Landing",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "ROOF-ARRIVAL-LANDING"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ROOF_900MM_ARRIVAL_LANDING",
+        "x": 3.6,
+        "y": 6.656,
+        "z": 13.2
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 4.29,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "ROOF-ACCESS-ENCLOSURE-FRONT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Front",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-FRONT"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 2.145,
+        "y": 7.906,
+        "z": 14.35
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 0.1,
+        "dy": 2.4,
+        "dz": 2.2,
+        "id": "ROOF-ACCESS-ENCLOSURE-LEFT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Left",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-LEFT"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 0.05,
+        "y": 7.906,
+        "z": 13.2
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 0.1,
+        "dy": 2.4,
+        "dz": 2.2,
+        "id": "ROOF-ACCESS-ENCLOSURE-RIGHT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Right",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-RIGHT"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 4.24,
+        "y": 7.906,
+        "z": 13.2
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 3.1,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "ROOF-ACCESS-ENCLOSURE-REAR-L",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Rear L",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-REAR-L"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 1.55,
+        "y": 7.906,
+        "z": 12.05
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 0.19,
+        "dy": 2.4,
+        "dz": 0.1,
+        "id": "ROOF-ACCESS-ENCLOSURE-REAR-R",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Rear R",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-REAR-R"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 4.195,
+        "y": 7.906,
+        "z": 12.05
+      },
+      {
+        "colour": "#d8d2be",
+        "dx": 1.0,
+        "dy": 0.266,
+        "dz": 0.1,
+        "id": "ROOF-ACCESS-ENCLOSURE-HEADER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Enclosure Header",
+        "provenance": {
+          "basis": "2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design",
+          "sourceId": "ROOF-ACCESS-ENCLOSURE-HEADER"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION",
+        "x": 3.6,
+        "y": 8.973,
+        "z": 12.05
+      },
+      {
+        "colour": "#ab8057",
+        "dx": 0.04,
+        "dy": 2.134,
+        "dz": 0.92,
+        "id": "ROOF-ACCESS-DOOR",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Door",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "ROOF-ACCESS-DOOR"
+        },
+        "roofAccess": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "ROOF_EXIT_1000MM_NOMINAL_OPENING_920MM_CLEAR_LEAF_ENVELOPE",
+        "x": 3.12,
+        "y": 7.773,
+        "z": 11.615
+      },
+      {
+        "colour": "#c4c7b7",
+        "dx": 4.29,
+        "dy": 0.15,
+        "dz": 2.4,
+        "id": "ROOF-ACCESS-COVER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "ff",
+        "name": "Roof Access Cover",
+        "provenance": {
+          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "sourceId": "ROOF-ACCESS-COVER"
+        },
+        "roofAccess": true,
+        "roofCover": true,
+        "roofPart": true,
+        "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
+        "status": "DISPLAY_THICKNESS_NOT_STRUCTURAL_DESIGN",
+        "x": 2.145,
+        "y": 9.181,
+        "z": 13.2
       },
       {
         "colour": "#ddd7c8",
@@ -3446,14 +4174,32 @@
             "x": 3.412,
             "y": 0.25,
             "z": 14.62
+          },
+          {
+            "colour": "#9b6653",
+            "dx": 0.18,
+            "dy": 0.18,
+            "dz": 0.152,
+            "x": 3.012,
+            "y": 0.94,
+            "z": 16.33
+          },
+          {
+            "colour": "#9b6653",
+            "dx": 0.18,
+            "dy": 0.18,
+            "dz": 0.152,
+            "x": 3.012,
+            "y": 0.94,
+            "z": 14.47
           }
         ],
         "provenance": {
-          "basis": "Illustrative fit envelope within source-constrained room; product choice unverified",
+          "basis": "Source body 4290x1770x1570 retained; BYD UK July 2024 specifies 2012 mm extended-mirror width and 5.25 m minimum tyre turning radius. No operational parking acceptance.",
           "sourceId": "SITE-CAR-DOLPHIN"
         },
         "source": "QA02_SOURCE_CONSTRAINED_PRESENTATION",
-        "status": "EXACT_VEHICLE_SIZE__PROPOSED_STATIC_PARKING__DRIVING_QA_PENDING",
+        "status": "REFERENCE_VEHICLE__EXTENDED_MIRROR_ENVELOPE_FAILS_2000MM_STRIP",
         "x": 2.112,
         "y": 0.785,
         "z": 15.4
@@ -3859,6 +4605,272 @@
       "medium": 0.5,
       "minor": 0.1
     },
+    "headroomSamples": [
+      {
+        "id": "gf-flight-1-tread-1",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 0.779333,
+        "x": 3.025,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-2",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 0.948667,
+        "x": 2.775,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-3",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.118,
+        "x": 2.525,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-4",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.287333,
+        "x": 2.275,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-5",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.456667,
+        "x": 2.025,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-6",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.626,
+        "x": 1.775,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-7",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.795333,
+        "x": 1.525,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-1-tread-8",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 1.964667,
+        "x": 1.275,
+        "z": 13.7
+      },
+      {
+        "id": "gf-flight-2-tread-1",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 2.303333,
+        "x": 1.275,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-2",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 2.472667,
+        "x": 1.525,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-3",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 2.642,
+        "x": 1.775,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-4",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 2.811333,
+        "x": 2.025,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-5",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 2.980667,
+        "x": 2.275,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-6",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 3.15,
+        "x": 2.525,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-7",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 3.319333,
+        "x": 2.775,
+        "z": 12.7
+      },
+      {
+        "id": "gf-flight-2-tread-8",
+        "ignoreId": "GF-STAIR-FLIGHTS",
+        "level": "gf",
+        "surfaceY": 3.488667,
+        "x": 3.025,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-1-tread-1",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 3.827333,
+        "x": 3.025,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-2",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 3.996667,
+        "x": 2.775,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-3",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 4.166,
+        "x": 2.525,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-4",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 4.335333,
+        "x": 2.275,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-5",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 4.504667,
+        "x": 2.025,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-6",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 4.674,
+        "x": 1.775,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-7",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 4.843333,
+        "x": 1.525,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-1-tread-8",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 5.012667,
+        "x": 1.275,
+        "z": 13.7
+      },
+      {
+        "id": "ff-flight-2-tread-1",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 5.351333,
+        "x": 1.275,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-2",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 5.520667,
+        "x": 1.525,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-3",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 5.69,
+        "x": 1.775,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-4",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 5.859333,
+        "x": 2.025,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-5",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 6.028667,
+        "x": 2.275,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-6",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 6.198,
+        "x": 2.525,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-7",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 6.367333,
+        "x": 2.775,
+        "z": 12.7
+      },
+      {
+        "id": "ff-flight-2-tread-8",
+        "ignoreId": "FF-ROOF-STAIR-FLIGHTS",
+        "level": "ff",
+        "surfaceY": 6.536667,
+        "x": 3.025,
+        "z": 12.7
+      },
+      {
+        "id": "roof-exit-threshold",
+        "ignoreId": "ROOF-ARRIVAL-LANDING",
+        "level": "ff",
+        "surfaceY": 6.706,
+        "x": 3.6,
+        "z": 12.05
+      }
+    ],
     "northRotationDeg": 45,
     "outerBounds": [
       0,
@@ -3874,6 +4886,17 @@
       16.4
     ],
     "rearCaption": "NW rear ↑",
+    "roofAccess": {
+      "enclosureClearHeightM": 2.4,
+      "exitClearLeafEnvelopeM": 0.92,
+      "exitNominalWidthM": 1,
+      "finishedBeamHeadroomVerified": false,
+      "flightWidthM": 0.9,
+      "riseM": 3.048,
+      "risers": 18,
+      "source": "NBC206 Table3/Table4; user instruction 20261028",
+      "treadM": 0.25
+    },
     "roomEnvelopes": {
       "FF": [
         {
@@ -4065,6 +5088,14 @@
       4.29,
       2.2
     ],
+    "vehicleEnvelope": {
+      "bodyWidthM": 1.77,
+      "extendedMirrorWidthM": 2.012,
+      "minimumTyreTurningRadiusM": 5.25,
+      "stripDepthM": 2,
+      "sweptPathVerified": false,
+      "transverseExtendedMirrorFit": false
+    },
     "wallColour": "#e6dfcb",
     "wallHeight": 2.876,
     "wallLegend": "230 mm external · 100 mm internal walls"
@@ -4094,11 +5125,11 @@
       "message": "Static vehicle fits with a clear right approach. Driving/turning/gate operation still unverified."
     },
     {
-      "code": "SOURCE_CUSTODY",
-      "message": "Historical M08 native bytes remain unavailable. Current derivative uses live REV04 JSON, REV02 DXF and user sketch; originals preserved."
+      "code": "PRESCRIPTIVE_SCOPE",
+      "message": "NBC 205 coverage cap 92.90304 m2 is exceeded; use project-specific NBC 105 engineering. Missing M08 is excluded, not an active dependency."
     }
   ],
-  "revision": "M10-REV04-QA02-20261027",
+  "revision": "AAD-ASHOK-MODEL-001-R000003",
   "schema": "jp-cad://aad-building/1",
   "sourceLedger": "coordination-ledger-qa02.json"
 }

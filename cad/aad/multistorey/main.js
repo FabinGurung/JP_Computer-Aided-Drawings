@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261027-qa02');return u.href;};
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261028-r03');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
@@ -21,7 +21,7 @@ let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
-let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true;
+let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
@@ -56,8 +56,8 @@ function coordinatedMaterial(e,colour){
  const p=building?.manifest.presentation;
  const mat=new THREE.MeshStandardMaterial({color:colour||e.colour||(e.kind==='wall'&&p?p.wallColour:palettes[e.kind])||0x647b8a,roughness:e.kind==='window'?.22:.84,metalness:0,
   transparent:e.kind==='guard'&&e.colour==='#91b4b7',opacity:e.kind==='guard'&&e.colour==='#91b4b7'?.48:1,side:THREE.DoubleSide});
- if(p&&cutaway&&['wall','door','window','column'].includes(e.kind)){
-  const l=building.levels.find(l=>l.id===e.level);mat.clippingPlanes=[new THREE.Plane(new THREE.Vector3(0,-1,0),l.elevation+1.3)];
+ if(p&&cutaway&&(['wall','door','window','column'].includes(e.kind)||roofAccessMode&&e.roofAccess&&e.kind==='auxiliary')){
+  const l=building.levels.find(l=>l.id===e.level);mat.clippingPlanes=[new THREE.Plane(new THREE.Vector3(0,-1,0),l.elevation+(roofAccessMode&&e.roofAccess?p.floorToFloor:0)+1.3)];
  }
  return mat;
 }
@@ -124,6 +124,7 @@ function applyVisible(){
  for(const m of hitMeshes){
   const e=m.userData.element;
   m.visible=Boolean((floorFlags.get(e.level)!==false||e.contextLevels?.includes(activeLevel))&&(kindFlags.get(e.kind)!==false)&&(!e.roofPart||kindFlags.get('roof')!==false)&&(!['furniture','fixture'].includes(e.kind)||showFurniture));
+  if(roofAccessMode)m.visible=m.visible&&Boolean(e.roofPart||e.kind==='roof')&&!e.roofCover;
  }
  paintSelection();
 }
@@ -154,7 +155,7 @@ function paintSelection(){
   m.userData.isSelected=on;
  }
  if(selectionOverlay){scene.remove(selectionOverlay);selectionOverlay.traverse?.(n=>{n.geometry?.dispose?.();n.material?.dispose?.();});selectionOverlay=null;}
- if(scene&&selectedId){
+ if(scene&&selectedId&&(activeLevel==='all'||picked?.level===activeLevel||picked?.contextLevels?.includes(activeLevel)||activeEdit?.level===activeLevel)){
   selectionOverlay=new THREE.Group();
   for(const m of hitMeshes.filter(m=>m.visible&&m.userData.isSelected)){
    const line=new THREE.BoxHelper(m,0xff9c28);selectionOverlay.add(line);
@@ -498,6 +499,7 @@ function drawPlan(){
   }
  }
  for(const {l,g,nodeMap,color} of outlines){
+  if(roofAccessMode)continue;
   const faded=activeLevel==="all"?.64:1;
   if(activeLevel===l.id&&!building.manifest.presentation){
    try{for(const room of workspace.rooms(l.id)){
@@ -621,7 +623,7 @@ function drawPlan(){
    }
   }
  }
- if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,selectedId,onSelect:selectElement});
+ if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,selectedId,onSelect:selectElement,roofOnly:roofAccessMode});
  if(drawMode&&drawFirst&&activeLevel!=="all"){
   const l=state.manifest.levels.find(x=>x.id===activeLevel);
   const p=projectToWorld(drawFirst,l.transform);
@@ -895,6 +897,7 @@ async function main(){
   $("building-subtitle").textContent+=" · USER-APPROVED GF SOURCE / UPPER STOREYS NOT STRUCTURALLY VERIFIED";
  }
  if(manifest.presentation){
+  $('aad-preset-roof').hidden=!Boolean(manifest.presentation.roofAccess);
   cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
   setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
  }
@@ -904,8 +907,9 @@ for(const [id,stateKey]of [['aad-cutaway','cutaway'],['aad-dimensions','dimensio
 }
 function setKindVisibility(kind,visible){kindFlags.set(kind,visible);const box=document.querySelector(`#component-types input[data-kind="${kind}"]`);if(box)box.checked=visible;}
 for(const[id,level]of [['aad-preset-gf','gf'],['aad-preset-ff','ff'],['aad-preset-exterior','all']])$(id).addEventListener('click',()=>{
- if(!building)return;cutaway=level!=='all';$('aad-cutaway').checked=cutaway;setKindVisibility('roof',level==='all');setLevel(level);renderModel();drawPlan();centerView();
+ if(!building)return;roofAccessMode=false;cutaway=level!=='all';$('aad-cutaway').checked=cutaway;setKindVisibility('roof',level==='all');setLevel(level);renderModel();drawPlan();centerView();
 });
+$('aad-preset-roof').addEventListener('click',()=>{if(!building?.manifest.presentation?.roofAccess)return;roofAccessMode=true;cutaway=true;$('aad-cutaway').checked=true;setKindVisibility('roof',true);setLevel('ff');setViewMode('building');renderModel();drawPlan();centerView();});
 for(const[id,mode]of [['aad-view-3d','building'],['aad-view-plan','plan'],['aad-view-both','split']])$(id).addEventListener('click',()=>{if(building)setViewMode(mode);});
 for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEventListener('click',()=>{
  const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
@@ -988,12 +992,21 @@ $("aad-import-file").addEventListener("change",async e=>{
 // An AI decides/constructs the action; the shared engine validates and commits
 // it to the local working model. No raw-language interpreter is claimed here.
 window.AADStudio=Object.freeze({
+ getModelledHeadroomProof:()=>{
+  const samples=building?.manifest.presentation?.headroomSamples||[];
+  for(const m of hitMeshes)m.updateMatrixWorld(true);
+  const rows=samples.map(s=>{const ignore=building.projectId+':'+s.level+':'+s.ignoreId;
+   const candidates=hitMeshes.filter(m=>m.userData.element.id!==ignore&&['wall','floor','roof','stair','landing','auxiliary'].includes(m.userData.element.kind));
+   const ray=new THREE.Raycaster(new THREE.Vector3(s.x,s.surfaceY+.001,s.z),new THREE.Vector3(0,1,0),0,12),hit=ray.intersectObjects(candidates,false)[0];
+   return{id:s.id,clearanceM:hit?hit.distance+.001:null,obstructionId:hit?.object.userData.element.id||null};});
+  return{scope:'MODELLED_ARCHITECTURAL_GEOMETRY_ONLY',finishedEngineeringVerified:false,samples:rows,minimumM:Math.min(...rows.filter(x=>x.clearanceM!==null).map(x=>x.clearanceM))};
+ },
  getViewportProof:()=>{
   // Complete the current WebGL frame before a screenshot/export reads pixels.
   // This also prevents headless software rendering from capturing a prior preset.
   renderer.render(scene,camera);renderer.getContext().finish();
   const visible=[...new Map(hitMeshes.filter(m=>m.visible!==false).map(m=>[m.userData.element.id,m.userData.element])).values()];
-  return{activeLevel,cutaway,visibleWalls:visible.filter(e=>e.kind==='wall').length,
+  return{activeLevel,cutaway,roofAccessMode,visibleRoofAccess:visible.filter(e=>e.roofAccess).length,visibleWalls:visible.filter(e=>e.kind==='wall').length,
    visibleRoof:visible.some(e=>e.kind==='roof'),visibleFurniture:visible.filter(e=>e.kind==='furniture').length};
  },
  getOpeningVoidProof:(id)=>{

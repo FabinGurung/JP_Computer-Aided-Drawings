@@ -3,7 +3,7 @@
  * component tables and exports. No parallel iframe message protocol.
  * Changes are local working drafts; canonical GitHub/Drive evidence is read-only.
  */
-import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs?aad=20261027-qa02";
+import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs?aad=20261028-r03";
 import {addConnectedWall,splitConnectedWall,joinConnectedWalls,removeConnectedWall,
  addHostedOpening,removeHostedOpening,derivePlanRooms} from "./aad-topology.mjs";
 const clone=v=>JSON.parse(JSON.stringify(v));

@@ -1,7 +1,7 @@
 /* Reusable architectural plan presentation, in the SAME world X/Z as the
  * editable floor graph. Dimensions are derived from project-owned bounds. */
 const NS='http://www.w3.org/2000/svg';
-export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=true,furniture=true,selectedId=null,onSelect=()=>{}}={}){
+export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=true,furniture=true,selectedId=null,onSelect=()=>{},roofOnly=false}={}){
  const p=building.manifest.presentation;if(!p)return;
  const [x0,z0,x1,z1]=p.outerBounds,W=x1-x0,D=z1-z0,sourceDepth=p.sourceYLength||D;
  const [px0,pz0,px1,pz1]=p.plotBounds||p.outerBounds;
@@ -26,7 +26,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
   for(let x=0;x<=W;x+=(p.grid?.major||1))front.append(make('text',{x:x0+x,y:z0-.28,'text-anchor':'middle',class:'aad-grid-label'},Math.round(x*1000)));
   for(let y=0;y<=D;y+=(p.grid?.major||1))front.append(make('text',{x:x0-.25,y:sourceDepth-y+.05,'text-anchor':'end',class:'aad-grid-label'},Math.round(y*1000)));
  }
- const levels=levelId==='all'?['GF','FF']:[levelId.toUpperCase()];
+ const levels=roofOnly?[]:levelId==='all'?['GF','FF']:[levelId.toUpperCase()];
  for(const floor of levels){
   const rooms=p.roomEnvelopes[floor]||[];
   for(const r of rooms){
@@ -40,7 +40,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
    }
   }
  }
- if(furniture&&levelId!=='all')for(const e of building.elements.filter(e=>(e.level===levelId||e.contextLevels?.includes(levelId))&&!e.roofPart&&['furniture','fixture','stair','landing','auxiliary'].includes(e.kind))){
+ if((furniture||roofOnly)&&levelId!=='all')for(const e of building.elements.filter(e=>(e.level===levelId||e.contextLevels?.includes(levelId))&&(roofOnly?e.roofAccess&&!e.roofCover:!e.roofPart)&&['furniture','fixture','stair','landing','auxiliary'].includes(e.kind))){
   const group=make('g',{'data-presentation-id':e.id,class:'aad-furnishing'+(e.id===selectedId?' is-selected':''),tabindex:0,role:'button','aria-label':e.name||e.id});
   group.addEventListener('click',event=>{event.stopPropagation();onSelect(e);});
   group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onSelect(e);}});
@@ -50,6 +50,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
   back.append(group);
  }
  const north=make('g',{transform:`translate(${x1+1.15} ${z0-.55}) rotate(${(p.northRotationDeg||0)-45})`});north.append(make('path',{d:'M-.35 .35L.35 -.35M.35 -.35L.07 -.27M.35 -.35L.27 -.07',fill:'none',stroke:'#a56e43','stroke-width':.065}));north.append(make('text',{x:.5,y:-.45,class:'aad-space-title'},'N'));front.append(north);
+ if(roofOnly)front.append(make('text',{x:x0+W/2,y:z0+3.1,'text-anchor':'middle',class:'aad-space-title'},'ROOF ACCESS · 18 RISERS · 2400 mm ENCLOSURE CLEAR HEIGHT'));
  front.append(make('text',{x:x1+.9,y:z0+.35,class:'aad-grid-label'},p.rearCaption||''));
  front.append(make('text',{x:x0+W/2,y:z1+2.55,'text-anchor':'middle',class:'aad-space-size'},(p.frontCaption||'FRONT')+' · dimensions in mm'));
  if(dimensions){

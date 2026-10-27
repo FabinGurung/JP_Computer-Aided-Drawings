@@ -1,4 +1,10 @@
-# AAD domain guide template v0.1 — CAD-owned
+# AAD domain guide template — CAD-owned
+
+Current implementation version: **0.2.0**, at the same canonical template path
+and template ID. The added code register and archive-before-update document
+control are reusable capabilities within the existing CAD boundary. Human pages:
+`/memory-wall/` and `/codes/pokhara/`. Private engineering working records stay in
+their one canonical Google Doc; this repo does not mirror their private IDs.
 
 **Canonical writer and version history:** this repository, `FabinGurung/JP_Computer-Aided-Drawings`. The machine contract is [aad-domain-template.v0.1.json](aad-domain-template.v0.1.json). The public-facing guide is [../../public/guide/index.html](../../public/guide/index.html).
 

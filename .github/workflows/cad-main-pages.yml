@@ -26,6 +26,9 @@ jobs:
       - name: Ashok REV04 source admission and architecture-only template QA
         run: |
           node tools/site/ashok-rev04-smoke.mjs
+          python tools/site/aad-build-code-register.py
+          git diff --exit-code -- public/data/codes/nepal-pokhara.json
+          node tools/site/aad-code-document-smoke.mjs
           python tools/site/ashok-build-coordinated.py
           git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
           node tools/site/ashok-qa02-smoke.mjs
@@ -75,6 +78,7 @@ jobs:
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
+          node tools/site/aad-code-library-browser.mjs
       - name: Save render verification screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -91,6 +95,10 @@ jobs:
             /tmp/cad-aad-ai-new-project.png
             /tmp/ashok-rev04-*.png
             /tmp/ashok-qa02-*.png
+            /tmp/ashok-roof-access-*.png
+            /tmp/ashok-headroom-*.json
+            /tmp/cad-code-library-*.png
+            /tmp/cad-memory-wall-*.png
           if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
