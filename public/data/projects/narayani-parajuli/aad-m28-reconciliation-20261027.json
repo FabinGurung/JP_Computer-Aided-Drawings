@@ -1,0 +1,70 @@
+{
+  "schema": "jp-cad://aad-m28-derived-reconciliation/1",
+  "projectId": "PRJ-000007",
+  "milestone": "M28",
+  "ownerVerificationEventId": "PRJ-000007-M28-USER-VERIFICATION-20261027",
+  "workingApproval": "OWNER_VERIFIED_NO_REAPPROVAL_REQUEST",
+  "sourcePolicy": "READ_ONLY_DXF_M70_M60_M40_V03",
+  "i3": {
+    "columnId": "PRJ-000007:gf:QA-COL:I3",
+    "centerXM": 21.000162,
+    "centerZM": 6.12504,
+    "section": "Ø350",
+    "replacesOriginal": "SC-I4",
+    "relocationM": 0.655
+  },
+  "cf1": {
+    "originalFootingId": "SF-AD0BC",
+    "centerXM": 20.250161,
+    "centerZM": 6.15304,
+    "planLengthM": 4,
+    "planWidthM": 1.5,
+    "frozenSourceSupportIds": [
+      "SC-I4",
+      "SC-H3"
+    ],
+    "derivedWorkingGrids": [
+      "H3",
+      "I3"
+    ],
+    "I3CenterInside": true,
+    "H3CenterInside": true,
+    "status": "DERIVED_GEOMETRIC_CENTRE_CONTAINMENT_ONLY",
+    "structuralLoadCapacityAssumed": false
+  },
+  "g1": {
+    "sourceFootingId": "SF-ACE9E",
+    "workingSizeM": [
+      1.8,
+      1.8
+    ],
+    "frozenComparisonM": [
+      2.1,
+      2.1
+    ],
+    "planAreaDeltaM2": 1.17,
+    "overallDimensionsDeltaM": [
+      0.3,
+      0.3
+    ],
+    "excavationDimensions": null,
+    "perSideClearance": null
+  },
+  "f3": {
+    "workingSource": "ORIGINAL_DXF",
+    "ownerDisposition": "CONFIRMED",
+    "originalDropdown": "propose-stage",
+    "originalWrittenNote": "recorded in dxf is right.",
+    "preserveSourceConflict": true
+  },
+  "upperStoreyStructuralMembers": "NO_ADDITIONAL_APPROVED_SOURCE_MEMBERS; DO_NOT_INVENT",
+  "sourceRegistration": "PROVISIONAL_DATUM; NO_AUTOMATIC_SNAPPING",
+  "independentlyVerifiedDesignCapacity": false,
+  "issueForConstruction": false,
+  "nextEngineeringInputs": [
+    "I3/CF1 loads, support geometry and footing design calculation",
+    "G1 concrete/rebar and excavation dimension schedule",
+    "Common architectural/structural survey control points",
+    "Upper-floor structural drawings/load path and real founding levels"
+  ]
+}
