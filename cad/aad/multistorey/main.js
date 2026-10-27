@@ -179,10 +179,15 @@ function centerView(){
  for(const m of hitMeshes)if(m.visible)box.expandByObject(m);
  if(box.isEmpty())return;
  const center=box.getCenter(new THREE.Vector3()),span=box.getSize(new THREE.Vector3());
- const radius=Math.max(span.x,span.z,span.y,6);
+ // Fit the whole building even in the narrow half-width split viewport.
+ const radius=Math.max(span.length()/2,3),node=$("viewer3d");
+ camera.aspect=Math.max(1,node.clientWidth)/Math.max(1,node.clientHeight);
+ const halfVertical=THREE.MathUtils.degToRad(camera.fov/2);
+ const halfHorizontal=Math.atan(Math.tan(halfVertical)*camera.aspect);
+ const distance=radius/Math.sin(Math.min(halfVertical,halfHorizontal))*1.12;
  orbit.target.copy(center);
- camera.position.set(center.x+radius*.8,center.y+radius*.95,center.z+radius*1.05);
- camera.near=.05;camera.far=Math.max(200,radius*12);camera.updateProjectionMatrix();orbit.update();
+ camera.position.copy(center).add(new THREE.Vector3(.8,.95,1.05).normalize().multiplyScalar(distance));
+ camera.near=.05;camera.far=Math.max(200,distance*4);camera.updateProjectionMatrix();orbit.update();
 }
 function initRenderer(){
  const node=$("viewer3d");
@@ -693,7 +698,7 @@ function setViewMode(mode){
  document.body.dataset.viewMode=mode;$("aad-view-mode").value=mode;
  try{localStorage.setItem("aad:unified:view-mode",mode);}catch(_){}
  if(renderer){const node=$("viewer3d");renderer.setSize(node.clientWidth,Math.max(200,node.clientHeight));
-  camera.aspect=node.clientWidth/Math.max(200,node.clientHeight);camera.updateProjectionMatrix();}
+  camera.aspect=node.clientWidth/Math.max(200,node.clientHeight);camera.updateProjectionMatrix();centerView();}
 }
 
 async function main(){
