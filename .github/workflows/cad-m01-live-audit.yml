@@ -163,7 +163,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: m27-live-primary-aad-2d-3d-ifc-parity
-          path: /tmp/aad-m26-main-studio-source-structural.png
+          path: |
+            /tmp/aad-m26-main-studio-source-structural.png
+            /tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png
           if-no-files-found: ignore
       - name: Verify live Ashok route and shared model on phone tablet and desktop
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
