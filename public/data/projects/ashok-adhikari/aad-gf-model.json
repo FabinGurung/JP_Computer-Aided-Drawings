@@ -1,0 +1,377 @@
+{
+  "floorGraph": {
+    "labels": {
+      "GF-BATH": "COMMON MAIN BATHROOM",
+      "GF-BED1": "BEDROOM 1",
+      "GF-BED2": "BEDROOM 2 / GUEST",
+      "GF-HALL-REV04-001": "HALL / ACCESS",
+      "GF-KITCHEN": "KITCHEN",
+      "GF-LOUNGE": "LIVING / LOUNGE",
+      "GF-PARK": "CAR PORCH / INTERNAL FRONT-RIGHT DOMAIN",
+      "GF-STAIR": "U-STAIR"
+    },
+    "nodes": [
+      {
+        "id": "GF-N001",
+        "x": 0.0,
+        "z": 0.0
+      },
+      {
+        "id": "GF-N002",
+        "x": 7.2,
+        "z": 0.0
+      },
+      {
+        "id": "GF-N003",
+        "x": 7.2,
+        "z": 14.4
+      },
+      {
+        "id": "GF-N004",
+        "x": 0.0,
+        "z": 14.4
+      },
+      {
+        "id": "GF-N005",
+        "x": 0.0,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N006",
+        "x": 7.2,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N007",
+        "x": 3.6,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N008",
+        "x": 3.6,
+        "z": 0.0
+      },
+      {
+        "id": "GF-N009",
+        "x": 0.0,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N010",
+        "x": 3.3,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N011",
+        "x": 3.3,
+        "z": 12.4
+      },
+      {
+        "id": "GF-N012",
+        "x": 3.3,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N013",
+        "x": 0.0,
+        "z": 12.4
+      },
+      {
+        "id": "GF-N014",
+        "x": 7.2,
+        "z": 12.4
+      },
+      {
+        "id": "GF-N015",
+        "x": 3.3,
+        "z": 14.4
+      },
+      {
+        "id": "GF-N016",
+        "x": 2.386,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N017",
+        "x": 2.386,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N018",
+        "x": 3.267,
+        "z": 8.734
+      },
+      {
+        "id": "GF-N019",
+        "x": 3.255,
+        "z": 7.567
+      },
+      {
+        "id": "GF-N020",
+        "x": 3.297,
+        "z": 5.006
+      },
+      {
+        "id": "GF-N021",
+        "x": 3.261,
+        "z": 5.656
+      }
+    ],
+    "openings": [
+      {
+        "height": 2.134,
+        "id": "GF-D-MAIN",
+        "kind": "door",
+        "offset": 3.3055,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "GF-D-MAIN"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "GF-INT-005",
+        "width": 1.067
+      },
+      {
+        "height": 2.134,
+        "id": "GF-D-REAR",
+        "kind": "door",
+        "offset": 3.6,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "GF-D-REAR"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "GF-EXT-1",
+        "width": 0.914
+      },
+      {
+        "height": 2.134,
+        "id": "GF-D-BED1-HALL",
+        "kind": "door",
+        "offset": 2.386,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "GF-D-BED1-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "GF-INT-001",
+        "width": 0.914
+      },
+      {
+        "height": 2.134,
+        "id": "GF-D-BED2-HALL",
+        "kind": "door",
+        "offset": 2.386,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "GF-D-BED2-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "GF-INT-003",
+        "width": 0.914
+      },
+      {
+        "height": 1.981,
+        "id": "GF-D-BATH-HALL",
+        "kind": "door",
+        "offset": 0.119,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "GF-D-BATH-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "GF-INT-007",
+        "width": 0.762
+      }
+    ],
+    "perimeter": [
+      "GF-EXT-1",
+      "GF-EXT-2",
+      "GF-EXT-3",
+      "GF-EXT-4"
+    ],
+    "walls": [
+      {
+        "a": "GF-N001",
+        "b": "GF-N002",
+        "id": "GF-EXT-1",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "GF-EXT-1"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N002",
+        "b": "GF-N003",
+        "id": "GF-EXT-2",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "GF-EXT-2"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N003",
+        "b": "GF-N004",
+        "id": "GF-EXT-3",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "GF-EXT-3"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N004",
+        "b": "GF-N001",
+        "id": "GF-EXT-4",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "GF-EXT-4"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N005",
+        "b": "GF-N006",
+        "id": "GF-INT-001",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 1",
+          "sourceId": "GF-INT-001"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N007",
+        "b": "GF-N008",
+        "id": "GF-INT-002",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 2",
+          "sourceId": "GF-INT-002"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N009",
+        "b": "GF-N010",
+        "id": "GF-INT-003",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 3",
+          "sourceId": "GF-INT-003"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N011",
+        "b": "GF-N012",
+        "id": "GF-INT-004",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 4",
+          "sourceId": "GF-INT-004"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N013",
+        "b": "GF-N014",
+        "id": "GF-INT-005",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 5",
+          "sourceId": "GF-INT-005"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N015",
+        "b": "GF-N011",
+        "id": "GF-INT-006",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 6",
+          "sourceId": "GF-INT-006"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N016",
+        "b": "GF-N017",
+        "id": "GF-INT-007",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 7",
+          "sourceId": "GF-INT-007"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N018",
+        "b": "GF-N019",
+        "id": "GF-INT-008",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 8",
+          "sourceId": "GF-INT-008"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N020",
+        "b": "GF-N021",
+        "id": "GF-INT-009",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 9",
+          "sourceId": "GF-INT-009"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      }
+    ]
+  },
+  "height": 3.048,
+  "schema": "jp-cad://aad-floor/1"
+}

@@ -35,7 +35,7 @@ function normalizeManifest(manifest){
  for(let i=1;i<levels.length;i++){
   if(levels[i].elevation<levels[i-1].elevation+levels[i-1].height-0.005)throw Error("Overlapping storey heights");
  }
- if(!manifest.structural||!manifest.structural.columns||!manifest.structural.beams||!manifest.structural.slabs)throw Error("Missing structural assumptions");
+ if(manifest.representation!=="ARCHITECTURAL_REVIEW_ONLY"&&(!manifest.structural||!manifest.structural.columns||!manifest.structural.beams||!manifest.structural.slabs))throw Error("Missing structural assumptions");
  return levels;
 }
 const localToWorld=(p,t)=>{
@@ -66,6 +66,7 @@ function addBox(elements,id,kind,ifcType,level,x,y,z,dx,dy,dz,opts={}){
 }
 export function assembleBuilding(manifest,models,options={}){
  const levels=normalizeManifest(manifest),elements=[],diagnostics=[],placements=[],projectId=manifest.projectId;
+ const architecturalOnly=manifest.representation==="ARCHITECTURAL_REVIEW_ONLY";
  const seen=new Set();
  const put=e=>{if(seen.has(e.id))throw Error("Nonunique building element ID "+e.id);seen.add(e.id);};
  const byLevel=new Map(),areaSum={source:0,model:0};
@@ -85,7 +86,7 @@ export function assembleBuilding(manifest,models,options={}){
   for(const w of g.walls){
    const a=localToWorld(nodes.get(w.a),level.transform),b=localToWorld(nodes.get(w.b),level.transform);
    const length=dist(a,b),angle=Math.atan2(b.z-a.z,b.x-a.x)*180/Math.PI;
-   const p=midpoint(a,b),h=level.height-(manifest.structural.slabs.thickness||.18);
+   const p=midpoint(a,b),h=architecturalOnly?level.height:level.height-(manifest.structural.slabs.thickness||.18);
    const e=addBox(elements,projectId+":"+level.id+":"+w.id,"wall","IfcWall",level.id,p.x,level.elevation+h/2,p.z,length,h,w.thickness,{
     source:w.source||source,status:w.status||"AREA_CALIBRATED",rotationDeg:angle,name:w.id,host:null,provenance:w.provenance||null
    });put(e);
@@ -107,6 +108,10 @@ export function assembleBuilding(manifest,models,options={}){
     source:"SEMANTIC_LABEL_NO_VERIFIED_BOUNDARY",status:"NOT_IFC_SPACE",name};
    elements.push(e);put(e);
   }
+  if(architecturalOnly){
+   placements.push({id:level.id,name:level.name,elevation:level.elevation,transform:level.transform,area:round(square),sourceArea:level.sourceArea});
+   continue;
+  }
   const slabT=positive(manifest.structural.slabs.thickness,"slab thickness");
   const isGround=level===levels[0];
   const slab={id:projectId+":"+level.id+":SLAB",kind:"slab",ifcType:"IfcSlab",level:level.id,
@@ -124,6 +129,16 @@ export function assembleBuilding(manifest,models,options={}){
   placements.push({id:level.id,name:level.name,elevation:level.elevation,transform:level.transform,area:round(square),sourceArea:level.sourceArea});
   if(Math.abs(level.transform.x)>0||Math.abs(level.transform.z)>0||level.transform.rotationDeg!==0)
    diagnostics.push({severity:"WARNING",code:"ASSUMED_LEVEL_REGISTRATION",level:level.id,message:"Local floor origin/rotation inferred; requires common grid or survey QA"});
+ }
+ if(architecturalOnly){
+  if(options.reviewStructure||manifest.stairs?.opening)throw Error("Architectural-only admission must not include structural or stair solids");
+  diagnostics.push({severity:"WARNING",code:"ARCHITECTURE_ONLY_NO_STRUCTURE",level:null,message:"Architectural review only. No columns, beams, slabs, roof, foundations or stair solids admitted. Storey extrusion is a visualization envelope, not a verified wall height."});
+  diagnostics.push(...(manifest.reviewHolds||[]).map(h=>({severity:"WARNING",code:h.code,level:null,message:h.message})));
+  const counts={};for(const e of elements)counts[e.kind]=(counts[e.kind]||0)+1;
+  return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,levels:placements,elements,diagnostics,
+   structuralAlignment:{levels:[],columns:[],beams:[],approval:"NOT_ADMITTED",diagnostics:[]},counts,
+   area:{source:round(areaSum.source),model:round(areaSum.model)},reviewStatus:"DRAFT_ENGINEERING_HOLD",sourceStructuralReview:null,
+   manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
  }
  const structure=manifest.structural,col=structure.columns,beam=structure.beams,slab=structure.slabs;
  const pointInLevel=(x,z,id)=>inside({x,z},byLevel.get(id).perimeter);

@@ -1,0 +1,1469 @@
+{
+  "FF": {
+    "fixtures": [
+      {
+        "center_xy_mm": [
+          450,
+          8600
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-ENS-WC",
+        "item": "Commode",
+        "material": "Ceramic",
+        "representation": "Compact floor WC envelope",
+        "room": "ENSUITE",
+        "size_mm": [
+          520,
+          360,
+          390
+        ],
+        "source": "https://www.cera-india.com/cera/sanitaryware-ewcs-floor-mounting-ewcs/conventional-p-trap",
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "SEMI_WET"
+      },
+      {
+        "center_xy_mm": [
+          1300,
+          9150
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-ENS-BASIN",
+        "item": "Wash basin",
+        "material": "Vitreous China",
+        "representation": "Jaquar under-counter",
+        "room": "ENSUITE",
+        "size_mm": [
+          485,
+          370,
+          205
+        ],
+        "source": "https://nepal.jaquar.com/en/rectangular-washbasin-under-counter-continental",
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "DRY"
+      },
+      {
+        "center_xy_mm": [
+          1225,
+          7850
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-ENS-SHOWER",
+        "item": "Shower zone",
+        "material": "Mixed",
+        "representation": "Generic clear shower zone",
+        "room": "ENSUITE",
+        "size_mm": [
+          800,
+          800
+        ],
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "WET"
+      },
+      {
+        "center_xy_mm": [
+          2850,
+          6500
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-MB-BASIN",
+        "item": "Wash basin",
+        "material": "Vitreous China",
+        "representation": "Generic compact basin",
+        "room": "MAIN BATHROOM",
+        "size_mm": [
+          600,
+          400,
+          200
+        ],
+        "status": "REPRESENTATIVE_POSITION_FROZEN_v0.8",
+        "zone": "DRY"
+      },
+      {
+        "center_xy_mm": [
+          1850,
+          6500
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-MB-WC",
+        "item": "Commode",
+        "material": "Ceramic",
+        "representation": "Compact floor WC envelope",
+        "room": "MAIN BATHROOM",
+        "size_mm": [
+          520,
+          360,
+          390
+        ],
+        "status": "REPRESENTATIVE_POSITION_FROZEN_v0.8",
+        "zone": "SEMI_WET"
+      },
+      {
+        "center_xy_mm": [
+          650,
+          6525
+        ],
+        "floor": "FF",
+        "id": "FIX-FF-MB-SHOWER",
+        "item": "Shower zone",
+        "material": "Mixed",
+        "representation": "Generic clear shower zone",
+        "room": "MAIN BATHROOM",
+        "size_mm": [
+          900,
+          900
+        ],
+        "status": "REPRESENTATIVE_POSITION_FROZEN_v0.8",
+        "zone": "WET"
+      }
+    ],
+    "openings": [
+      {
+        "action": "KEEP",
+        "anchor": [
+          3839,
+          2000
+        ],
+        "domain": "PRIMARY FLOOR ENTRY",
+        "id": "FF-D-MAIN",
+        "imperial": "3.5'×7'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          1067,
+          2134
+        ],
+        "supplied_anchor": [
+          3839,
+          2000
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "REMOVE",
+        "anchor": [
+          2960,
+          1726
+        ],
+        "domain": "STAIR → BEDROOM 2",
+        "id": "FF-D-RM-STAIR-BED2",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": [
+          2960,
+          1726
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "REMOVE",
+        "anchor": [
+          1095,
+          7432
+        ],
+        "domain": "MAIN BATH → ENSUITE",
+        "id": "FF-D-RM-BATH-ENS",
+        "imperial": "2.5'×6.5'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "supplied_anchor": [
+          1095,
+          7432
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          4212,
+          9600
+        ],
+        "domain": "LOUNGE → MAIN BEDROOM",
+        "id": "FF-D-LOUNGE-MAIN",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "resolved_host": "LOUNGE_MAINBED_BOUNDARY",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": [
+          4212,
+          9502
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          1800,
+          14400
+        ],
+        "domain": "MAIN BEDROOM · REAR",
+        "id": "FF-W001",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "MAINBED_REAR_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          1913,
+          14305
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          5400,
+          14400
+        ],
+        "domain": "MAIN BEDROOM · REAR",
+        "id": "FF-W002",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "MAINBED_REAR_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          5187,
+          14233
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          12000
+        ],
+        "domain": "MAIN BEDROOM · LEFT",
+        "id": "FF-W003",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "MAINBED_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          71,
+          12162
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          8500
+        ],
+        "domain": "ENSUITE · LEFT",
+        "id": "FF-V001",
+        "imperial": "2'×1.5'",
+        "material": "uPVC",
+        "resolved_host": "ENSUITE_LEFT_WALL",
+        "size_mm": [
+          610,
+          457
+        ],
+        "supplied_anchor": [
+          -109,
+          8884
+        ],
+        "type": "VENTILATOR"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          6525
+        ],
+        "domain": "MAIN BATH · LEFT",
+        "id": "FF-V002",
+        "imperial": "2'×1.5'",
+        "material": "uPVC",
+        "resolved_host": "MAINBATH_LEFT_WALL",
+        "size_mm": [
+          610,
+          457
+        ],
+        "supplied_anchor": [
+          130,
+          6667
+        ],
+        "type": "VENTILATOR"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          3625
+        ],
+        "domain": "BEDROOM 2 · LEFT",
+        "id": "FF-W004",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "BED2_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          156,
+          3676
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          5250,
+          1700
+        ],
+        "domain": "LOUNGE · FRONT",
+        "id": "FF-W005",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "LOUNGE_BALCONY_BOUNDARY",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          5211,
+          1738
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          1650,
+          0
+        ],
+        "domain": "STAIR · FRONT",
+        "id": "FF-W006",
+        "imperial": "3.5'×6'",
+        "material": "uPVC",
+        "resolved_host": "STAIR_FRONT_WALL",
+        "size_mm": [
+          1067,
+          1829
+        ],
+        "supplied_anchor": [
+          1695,
+          126
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          850
+        ],
+        "domain": "STAIR · LEFT",
+        "id": "FF-W007",
+        "imperial": "5'×4.5'",
+        "material": "uPVC",
+        "resolved_host": "STAIR_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          82,
+          1029
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          825,
+          9600
+        ],
+        "authority_state": "DERIVED_REQUIRED_BY_ENSUITE_SEMANTICS",
+        "domain": "MAIN BEDROOM → ENSUITE",
+        "id": "FF-D-MAIN-ENS",
+        "imperial": "2.5'×6.5'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "supplied_anchor": null,
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          3300,
+          6500
+        ],
+        "authority_state": "DERIVED_REQUIRED_FOR_FUNCTIONAL_ACCESS",
+        "domain": "LOUNGE → MAIN BATHROOM",
+        "id": "FF-D-MAINBATH-LOUNGE",
+        "imperial": "2.5'×6.5'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "supplied_anchor": null,
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          3300,
+          4500
+        ],
+        "authority_state": "DERIVED_REQUIRED_AFTER_STAIR_DOOR_REMOVAL",
+        "domain": "LOUNGE → BEDROOM 2",
+        "id": "FF-D-BED2-LOUNGE",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": null,
+        "type": "DOOR"
+      }
+    ],
+    "rooms": [
+      {
+        "bbox": [
+          0,
+          9600,
+          7200,
+          14400
+        ],
+        "fill": "#e3e9fb",
+        "id": "FF-MAIN",
+        "name": "MAIN BEDROOM"
+      },
+      {
+        "bbox": [
+          0,
+          7400,
+          1650,
+          9600
+        ],
+        "fill": "#d9f4f6",
+        "id": "FF-ENS",
+        "name": "ENSUITE"
+      },
+      {
+        "bbox": [
+          1650,
+          7400,
+          3300,
+          9600
+        ],
+        "fill": "#ece6ff",
+        "id": "FF-WIR",
+        "name": "WALK-IN ROBE"
+      },
+      {
+        "bbox": [
+          0,
+          5650,
+          3300,
+          7400
+        ],
+        "fill": "#d9f4f6",
+        "id": "FF-BATH",
+        "name": "MAIN BATHROOM"
+      },
+      {
+        "bbox": [
+          0,
+          1700,
+          3300,
+          5650
+        ],
+        "fill": "#e9edf9",
+        "id": "FF-BED2",
+        "name": "BED 2"
+      },
+      {
+        "bbox": [
+          3300,
+          1700,
+          7200,
+          9600
+        ],
+        "fill": "#fff0c9",
+        "id": "FF-LOUNGE",
+        "name": "LOUNGE"
+      },
+      {
+        "bbox": [
+          0,
+          0,
+          3300,
+          1700
+        ],
+        "fill": "#ffe1bd",
+        "id": "FF-STAIR",
+        "name": "U-STAIR"
+      },
+      {
+        "bbox": [
+          3300,
+          0,
+          7200,
+          1700
+        ],
+        "fill": "#e6f4d8",
+        "id": "FF-BALC",
+        "name": "BALCONY"
+      }
+    ]
+  },
+  "GF": {
+    "external_toilet": {
+      "anchor_building_local_mm": [
+        -1217,
+        15563
+      ],
+      "anchor_site_mm": [
+        727,
+        17563
+      ],
+      "candidate_area_m2": 1.2,
+      "candidate_building_local_bbox_mm": [
+        -1717,
+        14963,
+        -717,
+        16163
+      ],
+      "candidate_clear_inside_mm": [
+        1000,
+        1200
+      ],
+      "candidate_site_bbox_mm": [
+        227,
+        16963,
+        1227,
+        18163
+      ],
+      "door": {
+        "center_xy_mm": [
+          -1217,
+          14963
+        ],
+        "id": "GF-EXT-WC-D01",
+        "material": "SAL WOOD",
+        "orientation": "SOUTH_EDGE",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "status": "DERIVED_REQUIRED"
+      },
+      "fixture": "INDIAN_PAN",
+      "id": "GF-EXT-WC-001",
+      "nbc_min_area_m2": 1.2,
+      "nbc_min_dimension_mm": 900,
+      "pan": {
+        "center_xy_mm": [
+          -1217,
+          15563
+        ],
+        "fixture_id": "FIX-GF-EXT-PAN",
+        "user_facing": "NORTH"
+      },
+      "status": "PASS_MIN_SIZE_CANDIDATE",
+      "vastu_advisory": "orient user facing North or South; candidate selects North"
+    },
+    "fixtures": [
+      {
+        "center_xy_mm": [
+          1900,
+          6900
+        ],
+        "floor": "GF",
+        "id": "FIX-GF-BASIN",
+        "item": "Wash basin",
+        "material": "Vitreous China",
+        "orientation": "ROOM_ALIGNED",
+        "representation": "Jaquar Solo counter-top",
+        "room": "COMMON MAIN BATH",
+        "size_mm": [
+          600,
+          400,
+          185
+        ],
+        "source": "https://nepal.jaquar.com/en/washbasin-counter-top-solo",
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "DRY"
+      },
+      {
+        "center_xy_mm": [
+          650,
+          7200
+        ],
+        "floor": "GF",
+        "id": "FIX-GF-WC",
+        "item": "Commode / coupled WC",
+        "material": "Vitreous China",
+        "orientation": "NEAREST_FAVORABLE_VASTU_ROOM_ALIGNED",
+        "representation": "Jaquar Continental coupled WC",
+        "room": "COMMON MAIN BATH",
+        "size_mm": [
+          410,
+          695,
+          785
+        ],
+        "source": "https://nepal.jaquar.com/en/bowl-with-cistern-3",
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "SEMI_WET"
+      },
+      {
+        "center_xy_mm": [
+          750,
+          7975
+        ],
+        "floor": "GF",
+        "id": "FIX-GF-TUB",
+        "item": "Bathtub",
+        "material": "Acrylic PMMA",
+        "orientation": "ROOM_ALIGNED",
+        "representation": "Jaquar Fonte built-in",
+        "room": "COMMON MAIN BATH",
+        "size_mm": [
+          1500,
+          750,
+          420
+        ],
+        "source": "https://nepal.jaquar.com/en/built-in-bathtub-fonte150x?Id=2126",
+        "status": "POSITION_FROZEN_v0.8_FIT_REVIEW",
+        "zone": "WET"
+      },
+      {
+        "center_xy_mm": [
+          1886,
+          8850
+        ],
+        "floor": "GF",
+        "id": "FIX-GF-SHOWER",
+        "item": "Shower zone",
+        "material": "Mixed",
+        "orientation": "ROOM_ALIGNED",
+        "representation": "Generic clear shower zone",
+        "room": "COMMON MAIN BATH",
+        "size_mm": [
+          900,
+          900
+        ],
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "WET"
+      },
+      {
+        "center_xy_mm": [
+          -1217,
+          15563
+        ],
+        "floor": "GF",
+        "id": "FIX-GF-EXT-PAN",
+        "item": "Indian pan",
+        "material": "Ceramic",
+        "orientation": "USER_FACING_NORTH",
+        "representation": "Generic ceramic squatting pan",
+        "room": "EXTERNAL REAR-LEFT WC",
+        "size_mm": [
+          580,
+          450
+        ],
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "SANITARY"
+      },
+      {
+        "center_xy_mm": [
+          5400,
+          13900
+        ],
+        "floor": "GF",
+        "id": "FIX-KITCHEN-SINK",
+        "item": "Kitchen sink / tassi",
+        "material": "Stainless steel",
+        "orientation": "UNDER_REAR_WINDOW",
+        "representation": "Generic SS sink envelope",
+        "room": "KITCHEN",
+        "size_mm": [
+          900,
+          500,
+          200
+        ],
+        "status": "POSITION_FROZEN_v0.8",
+        "zone": "KITCHEN_WET"
+      }
+    ],
+    "openings": [
+      {
+        "action": "KEEP",
+        "anchor": [
+          3839,
+          2000
+        ],
+        "domain": "MAIN ENTRY",
+        "id": "GF-D-MAIN",
+        "imperial": "3.5'×7'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          1067,
+          2134
+        ],
+        "supplied_anchor": [
+          3839,
+          2000
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          4057,
+          14400
+        ],
+        "domain": "KITCHEN → REAR YARD",
+        "id": "GF-D-REAR",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "resolved_host": "KITCHEN_REAR_WALL",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": [
+          3911,
+          13980
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "REMOVE",
+        "anchor": [
+          1901,
+          5458
+        ],
+        "domain": "BEDROOM 2 → COMMON BATH",
+        "id": "GF-D-RM-BED2-BATH",
+        "imperial": "2.5'×6.5'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "supplied_anchor": [
+          1901,
+          5458
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "REMOVE",
+        "anchor": [
+          2960,
+          2015
+        ],
+        "domain": "STAIR → BEDROOM 2",
+        "id": "GF-D-RM-STAIR-BED2",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": [
+          2960,
+          2015
+        ],
+        "type": "DOOR"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          1800,
+          14400
+        ],
+        "domain": "BEDROOM 1 · REAR",
+        "id": "GF-W001",
+        "imperial": "5'×4.5'",
+        "material": "SAL WOOD",
+        "resolved_host": "BEDROOM1_REAR_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          1913,
+          14305
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          11900
+        ],
+        "domain": "BEDROOM 1 · LEFT",
+        "id": "GF-W002",
+        "imperial": "5'×4.5'",
+        "material": "SAL WOOD",
+        "resolved_host": "BEDROOM1_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          71,
+          12162
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          5400,
+          14400
+        ],
+        "domain": "KITCHEN · REAR / ABOVE SINK",
+        "id": "GF-W003",
+        "imperial": "4'×3'",
+        "material": "SAL WOOD",
+        "resolved_host": "KITCHEN_REAR_WALL",
+        "sill": "COORDINATE_WITH_COUNTER",
+        "size_mm": [
+          1219,
+          914
+        ],
+        "supplied_anchor": [
+          5187,
+          14233
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          7500
+        ],
+        "domain": "COMMON MAIN BATH · LEFT",
+        "id": "GF-V001",
+        "imperial": "2'×1.5'",
+        "material": "uPVC",
+        "resolved_host": "GF_BATH_LEFT_WALL",
+        "size_mm": [
+          610,
+          457
+        ],
+        "supplied_anchor": [
+          130,
+          6667
+        ],
+        "type": "VENTILATOR"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          3800
+        ],
+        "domain": "BEDROOM 2 · LEFT",
+        "id": "GF-W004",
+        "imperial": "5'×4.5'",
+        "material": "SAL WOOD",
+        "resolved_host": "BEDROOM2_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          156,
+          3676
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          5250,
+          2000
+        ],
+        "domain": "LOUNGE · FRONT",
+        "id": "GF-W005",
+        "imperial": "5'×4.5'",
+        "material": "SAL WOOD",
+        "provenance_alias_anchor": [
+          5163,
+          1991
+        ],
+        "resolution": "RESOLVED_DUPLICATE_INTENT_FROM_5211_1738_AND_5163_1991",
+        "resolved_host": "LOUNGE_FRONT_CARPORT_BOUNDARY",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          5211,
+          1738
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          1650,
+          0
+        ],
+        "domain": "STAIR · FRONT",
+        "id": "GF-W006",
+        "imperial": "3.5'×6'",
+        "material": "SAL WOOD",
+        "resolved_host": "STAIR_FRONT_WALL",
+        "size_mm": [
+          1067,
+          1829
+        ],
+        "supplied_anchor": [
+          1695,
+          126
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "KEEP",
+        "anchor": [
+          0,
+          1000
+        ],
+        "domain": "STAIR · LEFT",
+        "id": "GF-W007",
+        "imperial": "5'×4.5'",
+        "material": "SAL WOOD",
+        "resolved_host": "STAIR_LEFT_WALL",
+        "size_mm": [
+          1524,
+          1372
+        ],
+        "supplied_anchor": [
+          82,
+          1029
+        ],
+        "type": "WINDOW"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          6421,
+          14400
+        ],
+        "domain": "KITCHEN · HIGH-LEVEL REAR/RIGHT ZONE",
+        "id": "GF-V002",
+        "imperial": "8\"×8\"",
+        "material": "uPVC",
+        "resolved_host": "KITCHEN_REAR_WALL_NEAR_RIGHT_SIDE",
+        "size_mm": [
+          203,
+          203
+        ],
+        "supplied_anchor": [
+          6421,
+          14344
+        ],
+        "type": "VENTILATOR",
+        "vertical_datum": "VENT_TOP_FACE_TO_SLAB_UNDERSIDE",
+        "vertical_offset_mm": 914,
+        "vertical_requirement": "TOP_FACE of ventilator = 914 mm below UNDERSIDE of slab",
+        "vertical_status": "RELATIVE_DATUM_RESOLVED_ABSOLUTE_Z_PENDING_SLAB_UNDERSIDE_LEVEL"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          2843,
+          9400
+        ],
+        "authority_state": "DERIVED_REQUIRED_FOR_FUNCTIONAL_ACCESS",
+        "domain": "HALL → BEDROOM 1",
+        "id": "GF-D-BED1-HALL",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "resolved_host": "BEDROOM1_HALL_BOUNDARY",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": null,
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          2843,
+          5600
+        ],
+        "authority_state": "DERIVED_REQUIRED_FOR_FUNCTIONAL_ACCESS",
+        "domain": "HALL → BEDROOM 2",
+        "id": "GF-D-BED2-HALL",
+        "imperial": "3'×7'",
+        "material": "SAL WOOD",
+        "resolved_host": "BEDROOM2_HALL_BOUNDARY",
+        "size_mm": [
+          914,
+          2134
+        ],
+        "supplied_anchor": null,
+        "type": "DOOR"
+      },
+      {
+        "action": "ADD",
+        "anchor": [
+          2386,
+          6100
+        ],
+        "authority_state": "DERIVED_REQUIRED_FOR_FUNCTIONAL_ACCESS",
+        "domain": "HALL → COMMON MAIN BATHROOM",
+        "id": "GF-D-BATH-HALL",
+        "imperial": "2.5'×6.5'",
+        "material": "SAL WOOD",
+        "resolved_host": "GF_BATH_RIGHT_WALL",
+        "size_mm": [
+          762,
+          1981
+        ],
+        "supplied_anchor": null,
+        "swing": "OUTWARD_TO_HALL",
+        "type": "DOOR"
+      },
+      {
+        "action": "KEEP_OPEN",
+        "anchor": [
+          3265,
+          7788
+        ],
+        "authority_state": "DERIVED_FROM_EXACT_USER_PARTITION_ENDPOINTS",
+        "domain": "HALL ↔ LIVING / LOUNGE",
+        "id": "GF-OPEN-HALL-LOUNGE-001",
+        "imperial": null,
+        "material": "OPEN",
+        "resolved_host": "GAP_BETWEEN_USER_PARTITION_SEGMENTS",
+        "size_mm": [
+          1911,
+          null
+        ],
+        "supplied_anchor": null,
+        "type": "OPEN_PASSAGE"
+      }
+    ],
+    "partitions": [
+      {
+        "id": "GF-PART-REV04-001",
+        "relationship": "GF-HALL-REV04-001 ↔ GF-LOUNGE",
+        "state": "ADD_EXACT_SEGMENT",
+        "thickness_mm": 100,
+        "x1": 3267,
+        "x2": 3255,
+        "y1": 5666,
+        "y2": 6833
+      },
+      {
+        "id": "GF-PART-REV04-002",
+        "relationship": "GF-HALL-REV04-001 ↔ GF-LOUNGE",
+        "state": "ADD_EXACT_SEGMENT",
+        "thickness_mm": 100,
+        "x1": 3297,
+        "x2": 3261,
+        "y1": 9394,
+        "y2": 8744
+      },
+      {
+        "door_opening_id": "GF-D-BATH-HALL",
+        "id": "GF-PART-BATH-HALL-001",
+        "relationship": "GF-BATH ↔ GF-HALL-REV04-001",
+        "state": "ADD_DERIVED_REQUIRED",
+        "thickness_mm": 100,
+        "x1": 2386,
+        "x2": 2386,
+        "y1": 5600,
+        "y2": 9400
+      }
+    ],
+    "rooms": [
+      {
+        "bbox": [
+          0,
+          9400,
+          3600,
+          14400
+        ],
+        "fill": "#e9edf9",
+        "id": "GF-BED1",
+        "name": "BEDROOM 1"
+      },
+      {
+        "bbox": [
+          3600,
+          9400,
+          7200,
+          14400
+        ],
+        "fill": "#f4ead7",
+        "id": "GF-KITCHEN",
+        "name": "KITCHEN"
+      },
+      {
+        "authority_note": "USER_DIRECTED_X_WIDTH_REDUCTION_914MM",
+        "bbox": [
+          0,
+          5600,
+          2386,
+          9400
+        ],
+        "fill": "#d9f4f6",
+        "id": "GF-BATH",
+        "name": "COMMON MAIN BATHROOM"
+      },
+      {
+        "bbox": [
+          0,
+          2000,
+          3300,
+          5600
+        ],
+        "fill": "#eef0fa",
+        "id": "GF-BED2",
+        "name": "BEDROOM 2 / GUEST"
+      },
+      {
+        "bbox": [
+          3300,
+          2000,
+          7200,
+          9400
+        ],
+        "fill": "#fff0c9",
+        "id": "GF-LOUNGE",
+        "name": "LIVING / LOUNGE"
+      },
+      {
+        "bbox": [
+          0,
+          0,
+          3300,
+          2000
+        ],
+        "fill": "#ffe1bd",
+        "id": "GF-STAIR",
+        "name": "U-STAIR"
+      },
+      {
+        "bbox": [
+          3300,
+          0,
+          7200,
+          2000
+        ],
+        "fill": "#e7eaec",
+        "id": "GF-PARK",
+        "name": "CAR PORCH / INTERNAL FRONT-RIGHT DOMAIN"
+      },
+      {
+        "authority_note": "DERIVED_FROM_USER_3FT_BATHROOM_REDUCTION_FOR_BEDROOM_ACCESS",
+        "bbox": [
+          2386,
+          5600,
+          3300,
+          9400
+        ],
+        "fill": "#f6f2e8",
+        "id": "GF-HALL-REV04-001",
+        "name": "HALL / ACCESS"
+      }
+    ]
+  },
+  "company": "Rohini Engineering and Builders",
+  "controls": {
+    "grid": {
+      "cell_mm": 100,
+      "external_margin_mm": 2000,
+      "major_mm": 1000,
+      "medium_mm": 500
+    },
+    "north": {
+      "arrow_on_page": "upper-right, 45° clockwise/right of page-up",
+      "page_right_bearing_deg": 45,
+      "page_up_bearing_deg": 315,
+      "true_north_deg": 0
+    },
+    "walls": {
+      "external_mm": 230,
+      "internal_mm": 100
+    }
+  },
+  "cross_storey_domains": {
+    "clarification": "GF parking/carport and FF balcony do not need identical footprints. The enclosed main building footprint remains governed separately.",
+    "ff_balcony_object": "FF-BALC",
+    "gf_carport_object": "GF-PARK",
+    "must_match_plan_extents": false,
+    "relationship": "INDEPENDENT_PROJECTED_DOMAINS",
+    "truss_concept": "EXTEND_FORWARD_FROM_FRONT/BALCONY_ZONE_TO_COVER_PARKING; STRUCTURAL_GEOMETRY_AND_MEMBER_SIZES_PENDING"
+  },
+  "execution_mode": "EDIT_EXISTING_APPLICATION_CODEBASE_PHASE_A_NO_AI_ENHANCED_RENDER",
+  "hard_gates": {
+    "M10_construction_freeze": "NOT_PASSED",
+    "kitchen_high_vent_vertical_datum": "RESOLVED_RELATIVE_DATUM_TOP_FACE_914_BELOW_SLAB_UNDERSIDE",
+    "parking_selection": "TRANSVERSE_90_DEG_PHYSICAL_FIT_TIGHT; OPERATIONAL_CLEARANCE_PENDING",
+    "right_external_wall_openings_zero": "PASS_EXPECTED_v0.8",
+    "zero_right_setback_local_compliance": "USER_CONFIRMED_ACCEPTED_FOR_DESIGN_REVIEW; REVERIFY_BEFORE_MUNICIPAL_SUBMISSION"
+  },
+  "parking": {
+    "building_footprint_rule": "DO_NOT_EXPAND_OR_DISTORT_7200x14400_ENCLOSED_FOOTPRINT_TO_MATCH_PARKING_OR_BALCONY",
+    "final_operational_fit": "PENDING_SITE_LEVEL_ANGLE_TURNING_CLEARANCE_QA",
+    "front_setback_depth_mm": 2000,
+    "front_setback_operational_use": "VEHICLE_APPROACH_AND_PARKING_EXTENT_STUDY_WITHIN_PROPERTY",
+    "general_vehicle_basis": {
+      "planning_benchmark_mm": [
+        2500,
+        4500
+      ],
+      "status": "GENERAL_CIVILIAN_CAR_PLANNING_BENCHMARK_NOT_SINGLE_MODEL_LOCK"
+    },
+    "gf_ff_balcony_link": "INDEPENDENT_DOMAINS_NO_FORCED_MATCH",
+    "gf_internal_carport_bbox_building_local_mm": [
+      3300,
+      0,
+      7200,
+      2000
+    ],
+    "gf_internal_carport_mm": [
+      3900,
+      2000
+    ],
+    "lounge_rule": "RESTORE_LOUNGE; NO_REARWARD_PARKING_INTRUSION",
+    "main_building_footprint_mm": [
+      7200,
+      14400
+    ],
+    "reference_vehicle": {
+      "height_mm": 1570,
+      "length_mm": 4290,
+      "model": "BYD Dolphin",
+      "status": "EXACT_REFERENCE_VEHICLE",
+      "width_mm": 1770
+    },
+    "row_use": "APPROACH_TURNING_MANOEUVRING_ONLY; NO PERMANENT_PRIVATE_CARPORT_OR_TRUSS_IN_ROW",
+    "straight_composite_envelope_mm": [
+      3900,
+      4000
+    ],
+    "straight_fit_of_byd_dolphin": "FAIL_BY_290_MM_IN_LENGTH_IF_TREATED_AS_A_SIMPLE_RECTANGLE",
+    "v0_7_decision_basis": "USER_MCQS_1A_2A_3A_4B_5A_6A_7A_8A_WITH_Q6_CLARIFIED",
+    "v0_8_transverse_option": {
+      "building_front_clearance_mm": 115,
+      "fit_classification": "PHYSICAL_FIT_TIGHT_NOT_OPERATIONAL_CLEARANCE_PASS",
+      "front_property_clearance_mm": 115,
+      "inside_front_setback": true,
+      "inside_plot": true,
+      "orientation_deg_from_building_long_axis": 90,
+      "outside_enclosed_building_footprint": true,
+      "right_property_clearance_mm": 200,
+      "row_role": "APPROACH_TURNING_ONLY",
+      "site_bbox_mm": [
+        4654,
+        115,
+        8944,
+        1885
+      ],
+      "site_center_xy_mm": [
+        6799,
+        1000
+      ],
+      "status": "USER_REQUESTED_FOR_v0.8",
+      "vehicle": "BYD Dolphin",
+      "vehicle_size_mm": [
+        4290,
+        1770
+      ]
+    },
+    "vehicle_extent_rule": "PARKED_VEHICLE MAY PROJECT OUTSIDE ENCLOSED_BUILDING_FOOTPRINT INTO FRONT_SETBACK; FINAL OPERATIONAL FIT REMAINS QA"
+  },
+  "predecessor": {
+    "name": "Ashok_M10_REV04_CLIENT_REVIEW_CANDIDATE_MultiTab_v0.7.html",
+    "sha256": "7d50ef371ccb3d685f805dfa8815bb1bc9270a7c95cabc68cef412505992fe0a",
+    "status": "REV04_v0.7_PHASE_A_CLOSED_PASS_REVIEW_CANDIDATE_NOT_PROMOTED"
+  },
+  "project": "Ashok Adhikari Residence",
+  "rendering_policy": {
+    "ai_enhanced_render_allowed": false,
+    "deterministic_render_allowed": true,
+    "enhanced_render_slot_state": "PENDING_SEPARATE_RENDER_RUN",
+    "enhanced_render_tab": "DEDICATED_SEPARATE_TAB",
+    "phase": "A_HTML_SPATIAL_ONLY",
+    "phase_b_requires": "EXPLICIT_HUMAN_APPROVAL_OF_v0.8_HTML",
+    "phase_c_requires": "EXPLICIT_HUMAN_APPROVAL_OF_PHASE_B_RENDER"
+  },
+  "research": {
+    "nbc_206_2024": {
+      "facts": [
+        "Residential stair: min tread 250 mm, max riser 190 mm, max 15 risers/flight, min 2 m headroom, handrail 900 mm.",
+        "Common parking: not less than 2.5 m × 4.5 m; indoor parking headroom not less than 2.2 m in cited signed copy.",
+        "Toilet cubicle: minimum dimension 0.9 m and minimum area 1.2 m²."
+      ],
+      "official_index": "https://dudbc.gov.np/pages/building-code/",
+      "parking_source": "https://giwmscdntwo.gov.np/media/pdf_upload/NBC_206_ARCHITECTURAL_DESIGN_REQUIREMENTS-signed.pdf",
+      "stair_source": "https://www.iibh.org/kijun/pdf/Nepal_25_NBC_206_Architectural_Design.pdf",
+      "toilet_source": "https://www.iibh.org/kijun/pdf/Nepal_25_NBC_206_Architectural_Design.pdf"
+    },
+    "pokhara": {
+      "current_standard_index": "https://pokharamun.gov.np/act-law-directives",
+      "current_standard_page": "https://pokharamun.gov.np/node/2227",
+      "status": "ZERO_RIGHT_SETBACK_CONFLICTS_WITH_EXISTING_PROJECT_CONTROL_MIN_SIDE_914MM; local exception/party-wall permission NOT YET PROVEN."
+    }
+  },
+  "schema": "aec.semantic-spatial-model/1.2",
+  "site": {
+    "building": {
+      "length_mm": 14400,
+      "width_mm": 7200
+    },
+    "building_origin_site_mm": [
+      1944,
+      2000
+    ],
+    "plot": {
+      "length_mm": 18288,
+      "width_mm": 9144
+    },
+    "right_wall_openings_allowed": false,
+    "row_model": {
+      "front_property_boundary_site_y_mm": 0,
+      "permanent_private_structure_in_row": false,
+      "road_centerline_offset_from_property_boundary_mm": 3000,
+      "road_centerline_site_y_mm": -3000,
+      "role": "PUBLIC_ROW_APPROACH_TURNING_ONLY"
+    },
+    "setbacks_mm": {
+      "front": 2000,
+      "left": 1944,
+      "rear": 1888,
+      "right": 0
+    },
+    "zero_right_setback_design_basis": {
+      "authority": "USER_CONFIRMED_PROJECT_RULE_INTERPRETATION",
+      "client_review_status": "ACCEPTED_FOR_DESIGN_REVIEW",
+      "municipal_submission_status": "VERIFY_AGAINST_APPLICABLE_LIVE_AUTHORITY_BEFORE_SUBMISSION",
+      "statement": "0 mm side setback is accepted for this design provided the zero-side wall has no openings."
+    }
+  },
+  "stair": {
+    "clear_width_mm": 900,
+    "flight_run_mm": 2000,
+    "flights": 2,
+    "floor_to_floor_mm": 3048,
+    "handrail_height_mm": 900,
+    "headroom_requirement_mm": 2000,
+    "intermediate_landing_count": 1,
+    "landing_mm": [
+      1900,
+      900
+    ],
+    "nbc_check": {
+      "clear_width_min_general_residential_mm": 900,
+      "max_risers_per_flight": 15,
+      "result": "PASS_DIMENSIONAL_CANDIDATE_SECTION_HEADROOM_TO_VERIFY",
+      "riser_max_residential_mm": 190,
+      "tread_min_residential_mm": 250
+    },
+    "overall_candidate_envelope_mm": [
+      2900,
+      1900
+    ],
+    "riser_count": 18,
+    "riser_mm": 169.333,
+    "risers_per_flight": [
+      9,
+      9
+    ],
+    "total_treads": 16,
+    "tread_mm": 250,
+    "treads_per_flight": [
+      8,
+      8
+    ],
+    "type": "U_SHAPED_DOGLEG"
+  },
+  "target": "M10 REV04 / Client Application v0.8 / Phase A Review Candidate",
+  "ui_semantic_labels": {
+    "default": "HUMAN",
+    "individual_toggles": {
+      "action_state": false,
+      "coordinates_cell": false,
+      "fk_relations": false,
+      "human_labels": true,
+      "object_id_pk": false
+    },
+    "machine_identity_policy": "RETAIN_IN_DOM_JSON_SVG_WHEN_VISUALLY_HIDDEN",
+    "presets": [
+      "HUMAN",
+      "DATA",
+      "FULL"
+    ],
+    "selection_detail_card": [
+      "Object_ID/PK",
+      "FK relations",
+      "floor",
+      "type",
+      "human label",
+      "X/Y",
+      "cell",
+      "size",
+      "material",
+      "action/state",
+      "source",
+      "authority",
+      "QA"
+    ]
+  },
+  "vastu": {
+    "application_policy": "ROOM_ALIGNED_FURNITURE_WITH_NEAREST_FAVORABLE_VASTU_ORIENTATION; exact advisory relation retained in metadata.",
+    "authority": "ADVISORY_TRADITIONAL_NOT_STATUTORY",
+    "rules": [
+      {
+        "applied": "North where geometry permits",
+        "element": "WC / commode / Indian pan",
+        "id": "VASTU-WC-01",
+        "rule": "user faces North or South",
+        "source": "https://www.architecturaldigest.in/content/vastu-shastra-10-tips-to-make-bathroom-sanctuary/"
+      },
+      {
+        "applied": "Project walls are rotated 45° to cardinal axes; exact cardinal alignment requires diagonal furniture. Marked advisory for client confirmation.",
+        "element": "Bed",
+        "id": "VASTU-BED-01",
+        "rule": "head toward South preferred; East acceptable; avoid North",
+        "source": "https://www.architecturaldigest.in/content/top-5-vastu-questions-answered-by-our-expert-vastukar/"
+      }
+    ]
+  },
+  "version_lineage": {
+    "candidate": "REV04 v0.8",
+    "current_client_baseline": "REV03 v0.4 [private source reference]",
+    "predecessor_review": "REV04 v0.7 [private source reference]",
+    "promotion": "NOT_PROMOTED"
+  }
+}

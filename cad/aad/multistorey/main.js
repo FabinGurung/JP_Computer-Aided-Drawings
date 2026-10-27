@@ -179,10 +179,15 @@ function centerView(){
  for(const m of hitMeshes)if(m.visible)box.expandByObject(m);
  if(box.isEmpty())return;
  const center=box.getCenter(new THREE.Vector3()),span=box.getSize(new THREE.Vector3());
- const radius=Math.max(span.x,span.z,span.y,6);
+ // Fit the whole building even in the narrow half-width split viewport.
+ const radius=Math.max(span.length()/2,3),node=$("viewer3d");
+ camera.aspect=Math.max(1,node.clientWidth)/Math.max(1,node.clientHeight);
+ const halfVertical=THREE.MathUtils.degToRad(camera.fov/2);
+ const halfHorizontal=Math.atan(Math.tan(halfVertical)*camera.aspect);
+ const distance=radius/Math.sin(Math.min(halfVertical,halfHorizontal))*1.12;
  orbit.target.copy(center);
- camera.position.set(center.x+radius*.8,center.y+radius*.95,center.z+radius*1.05);
- camera.near=.05;camera.far=Math.max(200,radius*12);camera.updateProjectionMatrix();orbit.update();
+ camera.position.copy(center).add(new THREE.Vector3(.8,.95,1.05).normalize().multiplyScalar(distance));
+ camera.near=.05;camera.far=Math.max(200,distance*4);camera.updateProjectionMatrix();orbit.update();
 }
 function initRenderer(){
  const node=$("viewer3d");
@@ -691,7 +696,7 @@ function setViewMode(mode){
  document.body.dataset.viewMode=mode;$("aad-view-mode").value=mode;
  try{localStorage.setItem("aad:unified:view-mode",mode);}catch(_){}
  if(renderer){const node=$("viewer3d");renderer.setSize(node.clientWidth,Math.max(200,node.clientHeight));
-  camera.aspect=node.clientWidth/Math.max(200,node.clientHeight);camera.updateProjectionMatrix();}
+  camera.aspect=node.clientWidth/Math.max(200,node.clientHeight);camera.updateProjectionMatrix();centerView();}
 }
 
 async function main(){
@@ -729,7 +734,7 @@ async function main(){
  $("building-name").textContent=building.name;
  initAADRegister();
  $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
- const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
+ const link=$("source-ledger");link.href=new URL(manifest.sourceLedger||"MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
  $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";
@@ -844,7 +849,8 @@ window.AADStudio=Object.freeze({
   const e=building?.elements.find(x=>x.id===id);
   if(!e)throw Error("Unknown AAD component "+id);
   const mesh=hitMeshes.find(m=>m.userData.element.id===id);
-  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id);
+  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id)||
+   [...document.querySelectorAll("#viewer2d [data-part]")].find(n=>building.projectId+":"+n.dataset.part===id);
   const pointFromPlan=plan?plan.tagName.toLowerCase()==="circle"?
    {x:Number(plan.getAttribute("cx")),z:Number(plan.getAttribute("cy")),
     dx:2*Number(plan.getAttribute("r")),dz:2*Number(plan.getAttribute("r"))}:

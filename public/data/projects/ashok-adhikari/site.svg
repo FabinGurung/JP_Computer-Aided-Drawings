@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" class="site-v08" viewBox="-800 -200 11000 23800">
+<style>
+.site-v08 .site-title{font:150px Arial;fill:#17384b} .site-v08 .site-small{font:110px Arial;fill:#526874} .plot{fill:#eef6e9;stroke:#2c5535;stroke-width:45}
+.bld{fill:#f3ede0;stroke:#17384b;stroke-width:55} .setback{fill:#dceef7;opacity:.6} .row{fill:#d9d9d9}
+.car{fill:#b9c4ca;stroke:#4f5d64;stroke-width:30} .ext{fill:#fbe8d5;stroke:#7b4a23;stroke-width:28}
+</style>
+<rect x="-400" y="18850" width="9944" height="3000" class="row"/>
+<line x1="-400" y1="21850" x2="9544" y2="21850" stroke="#555" stroke-width="24" stroke-dasharray="80 50"/>
+<text x="4572" y="21770" text-anchor="middle" class="site-title">ROAD CENTERLINE · 3000 mm FROM FRONT PROPERTY BOUNDARY</text>
+<rect x="0" y="562" width="9144" height="18288" class="plot"/>
+<rect x="0" y="16850" width="9144" height="2000" class="setback"/>
+<rect x="1944" y="2450" width="7200" height="14400" class="bld"/>
+<rect x="227" y="687" width="1000" height="1200" class="ext"/>
+<text x="727.0" y="1287.0" text-anchor="middle" class="site-small">EXT WC</text>
+<rect x="4654" y="16965" width="4290" height="1770" rx="120" class="car"/>
+<text x="6799.0" y="17850.0" text-anchor="middle" class="site-small">BYD DOLPHIN · 90° TRANSVERSE · TIGHT PHYSICAL FIT</text>
+<text x="5544" y="9650" text-anchor="middle" class="site-title">MAIN ENCLOSED BUILDING 7200 × 14400</text>
+<text x="4572.0" y="17850" text-anchor="middle" class="site-small">FRONT SETBACK = 2000 mm · PARKING / APPROACH SITE DOMAIN</text>
+<text x="972" y="9850" text-anchor="middle" class="site-small">LEFT = 1944</text>
+<text x="9094" y="9850" text-anchor="end" class="site-small">RIGHT = 0 · NO OPENINGS</text>
+<text x="4572.0" y="1506" text-anchor="middle" class="site-small">REAR = 1888</text>
+<g transform="translate(8400 1762) rotate(45)"><line x1="0" y1="250" x2="0" y2="-300" stroke="#c5312b" stroke-width="50"/><path d="M0 -450L-150 -220L150 -220Z" fill="#c5312b"/></g><text x="8400" y="1242" text-anchor="middle" class="site-title">N</text>
+</svg>

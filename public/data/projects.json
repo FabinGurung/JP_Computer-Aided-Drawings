@@ -1,6 +1,6 @@
 {
   "schema": "a9-project-drawings://public-project-registry/0.2",
-  "generated_at_npt": "2026-09-26",
+  "generated_at_npt": "2026-10-27",
   "policy": "Public-safe project metadata only. A9-governed Google Drive remains engineering/project authority. Private Drive IDs, private source URLs, internal checkpoint links and unapproved contact details are excluded.",
   "projects": [
     {
@@ -27,6 +27,18 @@
       "summary": "Governed CAD revisions, architectural visualization, native preliminary estimate workspace and current project-state controls are enough to support a useful portal now, with future WBS, reports and field modules reserved.",
       "href": "projects/ramachandra-devkota/",
       "modules": ["Drawings & Models","Visualization","Estimate / BOQ","Project State","WBS / Gantt","Reports","Site & Media","Release History"]
+    },
+    {
+      "project_id": "ashok-adhikari",
+      "slug": "ashok-adhikari",
+      "name": "14 Ashok Adhikari Residence",
+      "organization": "Rohini Engineering and Builders",
+      "location": "Nepal",
+      "project_status": "OPEN / NOT FROZEN / NOT FOR CONSTRUCTION",
+      "portal_status": "REV04 WORKING QA",
+      "summary": "Source-backed REV04 v0.8 wall geometry in the shared AAD template, exact deterministic SVGs and approved v0.9 GF c016 / FF c012 visual bookmarks. REV03 remains the recorded client baseline.",
+      "href": "projects/ashok-adhikari/",
+      "modules": ["Shared AAD Studio","Exact Source Plans","Approved Visuals","QA and Source Trail"]
     }
   ]
 }
