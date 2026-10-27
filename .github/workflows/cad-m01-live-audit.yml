@@ -155,7 +155,9 @@ jobs:
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
           AAD_M26_PROJECT_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/
-        run: node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+        run: |
+          node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+          AAD_M29_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m29-primary-studio-browser-smoke.mjs
       - name: Archive evidence screenshot of live M26 primary studio
         if: always() && github.event_name == 'workflow_run'
         uses: actions/upload-artifact@v4
