@@ -8,7 +8,7 @@
   ],
   "authority": {
     "approvedVisuals": "v0.9 GF c016 / FF c012 preserved",
-    "candidate": "QA02 unpromoted architectural scheme",
+    "candidate": "Current architecture; structural sections not issued",
     "clientBaseline": "REV03 v0.4 preserved",
     "sourceGeometry": "REV04 v0.8 preserved"
   },
@@ -99,7 +99,7 @@
       "source": "U-stair; start/arrival route unresolved in REV04 structured model"
     }
   ],
-  "dateNpt": "2026-10-27",
+  "dateNpt": "2026-10-28",
   "inputs": [
     {
       "name": "REV04 semantic model",
@@ -823,11 +823,11 @@
       "message": "Static vehicle fits with a clear right approach. Driving/turning/gate operation still unverified."
     },
     {
-      "code": "SOURCE_CUSTODY",
-      "message": "Historical M08 native bytes remain unavailable. Current derivative uses live REV04 JSON, REV02 DXF and user sketch; originals preserved."
+      "code": "PRESCRIPTIVE_SCOPE",
+      "message": "NBC 205 coverage cap 92.90304 m2 is exceeded; use project-specific NBC 105 engineering. Missing M08 is excluded, not an active dependency."
     }
   ],
-  "revision": "M10-REV04-QA02-20261027",
+  "revision": "AAD-ASHOK-MODEL-001-R000003",
   "schema": "jp-cad://coordination-ledger/1",
   "sourceRemovedOrPassage": [
     {

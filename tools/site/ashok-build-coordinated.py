@@ -221,17 +221,20 @@ for n in range(1,9):
     h=3048/18*n;parts.append((3150-(n-.5)*250,700,h/2,250,900,h,'#c2ad8c'))
     h=3048/18*(9+n);parts.append((1150+(n-.5)*250,1700,h/2,250,900,h,'#c2ad8c'))
 # item() accepts relative parts; these parts already use building coordinates.
-stair_parts=[(x-2150,y-1200,0,w,d,h,c) for x,y,_,w,d,h,c in parts]
-item('gf','GF-STAIR-FLIGHTS','stair',2150,1200,2000,1900,3048,parts=stair_parts,status='DIMENSIONAL_COORDINATION_NOT_STRUCTURAL_DESIGN',
+stair_parts=[(x-2150,y-1200,h-150,w,d,150,c) for x,y,_,w,d,h,c in parts]
+stair=item('gf','GF-STAIR-FLIGHTS','stair',2150,1200,2000,1900,3048,parts=stair_parts,status='DIMENSIONAL_COORDINATION_NOT_STRUCTURAL_DESIGN',
      basis='18 risers / 169.333 mm, two 8-tread runs at 250 mm; direction reverses around a 900 mm landing')
+for plan_y,centre_height,sign in [(700,762,-1),(1700,2286,1)]:
+    stair['parts'].append({'x':2.15,'z':Z(plan_y),'y':M(610+centre_height-150),'dx':M(math.hypot(2000,8*3048/18)), 'dy':.15,'dz':.9,'colour':'#c2ad8c','rotationZ':math.degrees(math.atan2(sign*8*3048/18,2000))})
+stair['provenance']['basis']+='; thin treads and 150 mm display waist replace solid-to-floor blocks, preserving the headroom volume between stacked stairs. RC size/rebar remain unissued.'
 item('gf','GF-STAIR-MID-LANDING','landing',700,1200,900,1900,150,base=1524-150,colour='#c2ad8c',status='LANDING_COORDINATION')
 rail=item('gf','GF-STAIR-HANDRAILS','guard',2150,1200,2100,200,4000,status='900MM_STAIR_GUARD_COORDINATION_NOT_FIXING_DESIGN',basis='900 mm above the two source stair flight pitch lines; posts and rail sizing are illustrative')
 rail['parts']=[]
 for flight,plan_y,centre_height,slope in [(0,1170,762,-1),(1,1230,2286,1)]:
-    rail['parts'].append({'x':2.15,'z':Z(plan_y),'y':M(610+centre_height+900),'dx':M(math.hypot(2000,1524)), 'dy':.04,'dz':.04,'colour':'#806c4d','rotationZ':math.degrees(math.atan2(slope*1524,2000))})
+    rail['parts'].append({'x':2.15,'z':Z(plan_y),'y':M(610+centre_height+900),'dx':M(math.hypot(2000,8*3048/18)), 'dy':.04,'dz':.04,'colour':'#806c4d','rotationZ':math.degrees(math.atan2(slope*8*3048/18,2000))})
     for n in range(9):
         x=3150-n*250 if flight==0 else 1150+n*250
-        y=3048/18*(n+(9 if flight else 0))
+        y=centre_height+slope*(x-2150)*8*3048/18/2000
         rail['parts'].append({'x':M(x),'z':Z(plan_y),'y':M(610+y+450),'dx':.03,'dy':.9,'dz':.03,'colour':'#806c4d'})
 rail['parts'].append({'x':.235,'z':Z(1200),'y':3.034,'dx':.02,'dy':.04,'dz':1.9,'colour':'#806c4d'})
 for y in [300,750,1200,1650,2100]:rail['parts'].append({'x':.235,'z':Z(y),'y':2.584,'dx':.02,'dy':.9,'dz':.02,'colour':'#806c4d'})
@@ -256,8 +259,27 @@ for f in ('gf','ff'):
 for id,x,y,w,d in [('FRONT',5745,35,2910,50),('RIGHT',7165,1100,50,2200)]:
     item('ff','FF-BALCONY-GUARD-'+id,'guard',x,y,w,d,1100,colour='#91b4b7',status='PROPOSED_GUARD_NOT_ENGINEERING_DESIGNED')
 roof=item('ff','FF-ROOF-TERRACE','roof',3600,7200,7200,14400,172,base=2876,
-          profile=[(0,0),(4290,0),(4290,2200),(7200,2200),(7200,14400),(0,14400)],colour='#c6c8bc',ifc='IfcSlab',
-          status='TWO_STOREY_TERRACE_CONCEPT__TOP_STOREY_NOT_ADMITTED',basis='Candidate roof above admitted GF+FF only; historic M08 top floor is not silently imported')
+          profile=[(0,0),(4290,0),(4290,2200),(7200,2200),(7200,14400),(0,14400)],holes=[[(250,250),(3150,250),(3150,2150),(250,2150)]],colour='#c6c8bc',ifc='IfcSlab',
+          status='TWO_STOREY_ROOF_WITH_SPECIFIED_ACCESS_VOID',basis='Current GF+FF geometry and user instruction; missing M08 is excluded from active design inputs')
+roof['roofAccess']=True
+# Continue the same dimensional stair to the roof. This specifies architecture,
+# not RC waist-slab/rebar or footing design. Every physical thickness remains labelled.
+for original in list(ELEMENTS):
+    if original['id'] not in ('GF-STAIR-FLIGHTS','GF-STAIR-MID-LANDING','GF-STAIR-HANDRAILS'):continue
+    e=copy.deepcopy(original);e['id']=e['id'].replace('GF-STAIR','FF-ROOF-STAIR');e['level']='ff';e['name']='Roof access '+e['name'];e['y']=round(e['y']+3.048,6)
+    for part in e.get('parts',[]):part['y']=round(part['y']+3.048,6)
+    e['contextLevels']=[];e['roofPart']=True;e['roofAccess']=True
+    e['provenance']={'basis':'NBC 206:2024 Tables 3/4: 900 mm flight, 250 mm tread, 169.333 mm riser; actual structural detail and finished obstruction evidence still required'}
+    ELEMENTS.append(e)
+item('ff','ROOF-ARRIVAL-LANDING','landing',3600,1200,900,1900,100,base=3048-100,colour='#d4c8b1',status='ROOF_900MM_ARRIVAL_LANDING');ELEMENTS[-1].update(roofPart=True,roofAccess=True)
+# Lightweight enclosure extends to y=2400; rear exit opens onto the actual L-shaped
+# terrace, rather than onto the unroofed balcony corner. Nominal door 1000x2134.
+for id,x,y,w,d,h,b in [('FRONT',2145,50,4290,100,2400,3048),('LEFT',50,1200,100,2200,2400,3048),('RIGHT',4240,1200,100,2200,2400,3048),
+ ('REAR-L',1550,2350,3100,100,2400,3048),('REAR-R',4195,2350,190,100,2400,3048),('HEADER',3600,2350,1000,100,266,3048+2134)]:
+    item('ff','ROOF-ACCESS-ENCLOSURE-'+id,'auxiliary',x,y,w,d,h,base=b,colour='#d8d2be',status='ARCHITECTURAL_ENCLOSURE_NOT_STRUCTURAL_SECTION',basis='2400 mm clear enclosure height; 100 mm display envelope, material and supporting structure require design')
+    ELEMENTS[-1].update(roofPart=True,roofAccess=True)
+item('ff','ROOF-ACCESS-DOOR','auxiliary',3120,2785,40,920,2134,base=3048,colour='#ab8057',status='ROOF_EXIT_1000MM_NOMINAL_OPENING_920MM_CLEAR_LEAF_ENVELOPE');ELEMENTS[-1].update(roofPart=True,roofAccess=True)
+item('ff','ROOF-ACCESS-COVER','auxiliary',2145,1200,4290,2400,150,base=3048+2400,colour='#c4c7b7',status='DISPLAY_THICKNESS_NOT_STRUCTURAL_DESIGN');ELEMENTS[-1].update(roofPart=True,roofAccess=True,roofCover=True)
 for id,x,y,w,d in [('REAR',3600,14340,7200,120),('LEFT',60,7200,120,14400),('RIGHT',7140,8300,120,12200)]:
     item('ff','FF-ROOF-PARAPET-'+id,'guard',x,y,w,d,1066.8,base=3048,colour='#ddd7c8',status='HISTORIC_PARAPET_HEIGHT_REUSED_FOR_TERRACE_CONCEPT')
     ELEMENTS[-1]['roofPart']=True
@@ -268,7 +290,8 @@ item('gf','SITE-PATH','site',2628,-1000,9144,2000,30,base=-640,colour='#c3bcaa',
 # Proposed parked vehicle moved left to clear the entry, with exact source size.
 cx=4056-1944;cy=1000-2000
 car_parts=[(0,0,180,4290,1770,700,'#e4e8dd'),(0,0,880,2500,1550,690,'#709798'),(-1300,-780,0,650,180,500,'#333f3d'),(1300,-780,0,650,180,500,'#333f3d'),(-1300,780,0,650,180,500,'#333f3d'),(1300,780,0,650,180,500,'#333f3d')]
-item('gf','SITE-CAR-DOLPHIN','site',cx,cy,4290,1770,1570,base=-610,parts=car_parts,status='EXACT_VEHICLE_SIZE__PROPOSED_STATIC_PARKING__DRIVING_QA_PENDING')
+car_parts.extend([(900,-930,850,180,152,180,'#9b6653'),(900,930,850,180,152,180,'#9b6653')])
+item('gf','SITE-CAR-DOLPHIN','site',cx,cy,4290,1770,1570,base=-610,parts=car_parts,status='REFERENCE_VEHICLE__EXTENDED_MIRROR_ENVELOPE_FAILS_2000MM_STRIP',basis='Source body 4290x1770x1570 retained; BYD UK July 2024 specifies 2012 mm extended-mirror width and 5.25 m minimum tyre turning radius. No operational parking acceptance.')
 for x,y in [(-1300,1000),(-1300,6000),(-1300,11500),(6600,1300)]:
     item('gf',f'PLANT-{x}-{y}','landscape',x,y,400,400,1100,parts=[(0,0,0,380,380,400,'#b28d68'),(0,0,400,500,500,650,'#6f8c63')])
 
@@ -292,14 +315,18 @@ for e in ELEMENTS:
         for part in e.get('parts',[]):part['y']=round(part['y']-.46,6)
 
 manifest={'schema':'jp-cad://aad-building/1','projectId':'ashok-adhikari','name':'Ashok Adhikari · furnished coordination model',
- 'revision':'M10-REV04-QA02-20261027','representation':'ARCHITECTURAL_REVIEW_ONLY','sourceLedger':'coordination-ledger-qa02.json',
+ 'revision':'AAD-ASHOK-MODEL-001-R000003','representation':'ARCHITECTURAL_REVIEW_ONLY','sourceLedger':'coordination-ledger-qa02.json',
+ 'jurisdiction':{'country':'Nepal','municipality':'Pokhara Metropolitan City','ward':14,'source':'USER_20261028','parcelVerified':False},
+ 'codeRegister':'../../codes/nepal-pokhara.json','engineeringRecordLogicalId':'AAD-ASHOK-ENG-001',
+ 'excludedHistoricalInputs':['M08_MISSING_NATIVE_FILES'],
+ 'engineeringEvidence':{'structuralRoute':'SITE_SPECIFIC_NBC105','finishedMeasurementsVerified':False,'currentMunicipalClausesVerified':None,'percolationLPerM2Day':None,'permit':None},
  'coordinateSystem':{'units':'m','axes':'X page-right NE; Z page-down SE; Y elevation','sourceOrigin':'Front-left outer building corner','sourceXY':'x=1000X; y=14400-1000Z','surveyAlignment':'NOT_VERIFIED'},
  'levels':[],'reviewHolds':[
  {'code':'ENGINEERING_DESIGN','message':'Amber columns are proposed location markers, not designed sections. No foundation/rebar/capacity certification.'},
  {'code':'MUNICIPAL','message':'Zero-right setback and external WC location remain unverified for municipal submission.'},
  {'code':'STAIR_DETAIL','message':'18 risers, tread/landing dimensions and a real slab void coordinated; structural waist/beam/guard details and finished headroom need professional checking.'},
  {'code':'PARKING','message':'Static vehicle fits with a clear right approach. Driving/turning/gate operation still unverified.'},
- {'code':'SOURCE_CUSTODY','message':'Historical M08 native bytes remain unavailable. Current derivative uses live REV04 JSON, REV02 DXF and user sketch; originals preserved.'}],
+ {'code':'PRESCRIPTIVE_SCOPE','message':'NBC 205 coverage cap 92.90304 m2 is exceeded; use project-specific NBC 105 engineering. Missing M08 is excluded, not an active dependency.'}],
  'restrictions':{'issueForConstruction':False,'engineeringApproval':'HOLD','stage':'SOURCE_CONSTRAINED_ARCHITECTURAL_SCHEME'},
  'presentation':{'schema':'jp-cad://architectural-presentation/1','wallHeight':2.876,'defaultLevel':'gf','defaultView':'building','defaultCutaway':True,'cleanPlan':True,
   'outerBounds':[0,0,7.2,14.4],'sourceYLength':14.4,'grid':{'minor':.1,'medium':.5,'major':1,'margin':2},
@@ -307,7 +334,17 @@ manifest={'schema':'jp-cad://aad-building/1','projectId':'ashok-adhikari','name'
   'rearCaption':'NW rear ↑','frontCaption':'SE / ROAD FRONT','wallLegend':'230 mm external · 100 mm internal walls',
   'wallColour':'#e6dfcb','cameraDirection':[-1,.9,1],'floorToFloor':3.048,'plinth':.61,'roomEnvelopes':ROOMS,'elements':ELEMENTS,
   'columnLegend':'Amber = proposed column positions / display envelopes, NOT designed member sizes',
+  'roofAccess':{'riseM':3.048,'risers':18,'treadM':.25,'flightWidthM':.9,'enclosureClearHeightM':2.4,'exitNominalWidthM':1,'exitClearLeafEnvelopeM':.92,'source':'NBC206 Table3/Table4; user instruction 20261028','finishedBeamHeadroomVerified':False},
+  'vehicleEnvelope':{'bodyWidthM':1.77,'extendedMirrorWidthM':2.012,'stripDepthM':2,'transverseExtendedMirrorFit':False,'minimumTyreTurningRadiusM':5.25,'sweptPathVerified':False},
   'sourceGeometryHash':'6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e'}}
+headroom=[]
+for f,elevation,own in [('gf',.61,'GF-STAIR-FLIGHTS'),('ff',3.658,'FF-ROOF-STAIR-FLIGHTS')]:
+    for flight,plan_y in [(0,700),(1,1700)]:
+        for n in range(1,9):
+            x=3150-(n-.5)*250 if flight==0 else 1150+(n-.5)*250
+            headroom.append({'id':f'{f}-flight-{flight+1}-tread-{n}','level':f,'x':M(x),'z':Z(plan_y),'surfaceY':round(elevation+3.048/18*(n+(9 if flight else 0)),6),'ignoreId':own})
+headroom.append({'id':'roof-exit-threshold','level':'ff','x':3.6,'z':Z(2350),'surfaceY':6.706,'ignoreId':'ROOF-ARRIVAL-LANDING'})
+manifest['presentation']['headroomSamples']=headroom
 for id,name,elevation in [('gf','Ground floor',.61),('ff','First floor',3.658)]:
     # The validator measures wall centre-line polygon area, not gross footprint.
     source_area=round(6.97*14.17-2.91*2.2,6)
@@ -315,10 +352,10 @@ for id,name,elevation in [('gf','Ground floor',.61),('ff','First floor',3.658)]:
                                'sourceArea':source_area,'transform':{'x':0,'z':0,'rotationDeg':0},'status':'QA02_CONNECTED_CENTRELINE_COORDINATION'})
     write('aad-'+id+'-model-qa02.json',MODELS[id])
 write('aad-building-qa02.json',manifest)
-write('coordination-ledger-qa02.json',{'schema':'jp-cad://coordination-ledger/1','revision':manifest['revision'],'dateNpt':'2026-10-27',
+write('coordination-ledger-qa02.json',{'schema':'jp-cad://coordination-ledger/1','revision':manifest['revision'],'dateNpt':'2026-10-28',
  'authorization':'User requested practical aesthetic completion with up to 30% schematic allowance and no further approval pause.',
  'tolerancePolicy':'Known outer plot, footprint, wall thickness, source room rear boundaries and storey rise remain exact. Listed interior coordination changes are proposals, not a claim of quantified 30% engineering accuracy.',
- 'authority':{'clientBaseline':'REV03 v0.4 preserved','sourceGeometry':'REV04 v0.8 preserved','approvedVisuals':'v0.9 GF c016 / FF c012 preserved','candidate':'QA02 unpromoted architectural scheme'},
+ 'authority':{'clientBaseline':'REV03 v0.4 preserved','sourceGeometry':'REV04 v0.8 preserved','approvedVisuals':'v0.9 GF c016 / FF c012 preserved','candidate':'Current architecture; structural sections not issued'},
  'inputs':[{'name':'REV04 semantic model','sha256':'6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e'},
            {'name':'REV02 native DXF','sha256':'475f3dd8c06a927443319bd72741e501a75dbaf1d205ce2e1e53daba5921cd41','finding':'10 LINE entities, no column or furniture objects'},
            {'name':'REV02 user sketch','sha256':'4714929bdfe2d7b2ac04475944eec100c94c885688fbbcd6caf0008ca2be7789'},

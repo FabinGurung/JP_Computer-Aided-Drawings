@@ -2,7 +2,7 @@
   "schema": "jp-cad://aad-domain-template/0.1",
   "template_id": "AAD-CAD-TEMPLATE-001",
   "name": "AI-Aided Design and Drawing — owned CAD domain template",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "status": "ACTIVE_DOMAIN_OWNED_TEMPLATE",
   "owner_repository": "FabinGurung/JP_Computer-Aided-Drawings",
   "owner_module": "CAD",
@@ -91,5 +91,24 @@
     "cad_product": "https://fabingurung.github.io/JP_Computer-Aided-Drawings/",
     "cad_user_guide": "https://fabingurung.github.io/JP_Computer-Aided-Drawings/guide/"
   },
-  "supersedes_external_ownership_assumption": "A7 policy file policies/global/ai-aided-product-guide.v0.1.json is a preexisting historical placement, NOT canonical for AAD domain. Do not mutate or delete it without separate explicit A7 instructions."
+  "supersedes_external_ownership_assumption": "A7 policy file policies/global/ai-aided-product-guide.v0.1.json is a preexisting historical placement, NOT canonical for AAD domain. Do not mutate or delete it without separate explicit A7 instructions.",
+  "jurisdiction_controls": {
+    "register": "public/data/codes/nepal-pokhara.json",
+    "human_page": "/codes/pokhara/",
+    "required_before_new_project": [
+      "country/municipality/ward/occupancy",
+      "source edition and clause",
+      "parcel-specific municipal/ROW applicability",
+      "explicit unknowns; no assumed compliance"
+    ],
+    "prescriptive_limits_are_route_specific": true,
+    "reference_projects_do_not_establish_structural_sections": true
+  },
+  "document_control": {
+    "policy": "governance/aad/document-control.json",
+    "memory_wall": "/memory-wall/",
+    "one_current_provider_id_per_logical_id": true,
+    "archive_verify_before_revision_guarded_in_place_update": true,
+    "private_working_engineering_in_google_doc": true
+  }
 }

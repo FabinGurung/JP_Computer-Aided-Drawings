@@ -10,6 +10,26 @@
 
 ## Authorized CAD work
 
+### Code and document controls (adopted 2026-10-28)
+
+Read `governance/aad/document-control.json` before editing any maintained project
+Google Doc. Resolve its stable logical ID in Drive. Archive and verify the
+complete existing native Doc under its existing revision, then update the SAME
+current provider ID with a revision-guarded write and increment by one. Create a
+current Doc only for first registration. Record verified before/after hashes and
+the archive receipt. Private calculation/audit alternatives stay in that Doc;
+do not create parallel public draft/audit editions or leak private provider IDs.
+The user has authorized this archive-before-update convention; routine compliant
+snapshots do not require repeated approval.
+
+For every new project, resolve jurisdiction, occupancy, parcel/ROW conditions and
+current code editions. Use `public/data/codes/nepal-pokhara.json` only within its
+scope, read the linked original clauses, and record missing/superseded evidence.
+Run `node tools/site/aad-code-document-smoke.mjs`. A code-table eligibility failure
+routes to project-specific engineering; source snippets or neighbouring projects
+cannot establish member/footing sizes. No assumed soil class, permit or percolation
+rate may become a compliance pass. The CAD Memory Wall is `/memory-wall/`.
+
 1. Read `README.md`, `governance/aad/README.md`, this file, and only relevant native CAD controls.
 2. Fetch live CAD branch/commit/source-revision; respect provider authority for private original DWG/DXF and engineering decisions.
 3. Use a bounded **CAD repository** branch, PR, source tests, CI, and native Git readback. Preserve existing project URLs, synthetic/real-data boundaries and A9 obligations when truly applicable.

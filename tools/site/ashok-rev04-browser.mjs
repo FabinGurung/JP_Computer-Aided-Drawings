@@ -45,6 +45,11 @@ try{
   await frame.locator('#aad-view-plan').click();await frame.locator('#viewer2d').screenshot({path:'/tmp/ashok-qa02-dimensioned-plan-'+width+'.png'});await frame.locator('#aad-view-3d').click();
   await frame.locator('#aad-preset-ff').click();const ffProof=await renderProof();assert.equal(ffProof.visibleWalls,24);assert.equal(ffProof.visibleRoof,false);await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-ff-'+width+'.png'});
   await frame.locator('#aad-preset-exterior').click();const exteriorProof=await renderProof();assert.equal(exteriorProof.visibleWalls,49);assert.equal(exteriorProof.visibleRoof,true);await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-exterior-'+width+'.png'});
+  await frame.locator('#aad-preset-roof').click();const roofProof=await renderProof();assert.equal(roofProof.roofAccessMode,true);assert.ok(roofProof.visibleRoofAccess>=10);assert.equal(roofProof.visibleWalls,0);
+  const headroom=await page.locator('#ashok-engine').evaluate(f=>f.contentWindow.AADStudio.getModelledHeadroomProof());
+  assert.equal(headroom.samples.length,33);assert.equal(headroom.finishedEngineeringVerified,false);assert.ok(headroom.samples.every(s=>s.clearanceM===null||s.clearanceM>=1.999),'Modelled staircase/headhouse blocks required headroom');
+  fs.writeFileSync('/tmp/ashok-headroom-'+width+'.json',JSON.stringify(headroom,null,2));console.log('ASHOK_MODELLED_HEADROOM_PASS',headroom.minimumM,'m; actual beam/MEP/finish verification remains separate');
+  await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-roof-access-'+width+'.png'});
   await page.locator('[data-view="plans"]').click();
   assert.ok(await page.locator('#panel-plans').isVisible());
   for(const img of await page.locator('#panel-plans img').all())assert.ok(await img.evaluate(n=>n.complete&&n.naturalWidth>0));

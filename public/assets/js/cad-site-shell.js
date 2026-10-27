@@ -14,7 +14,7 @@
  const skip=document.createElement("a");skip.className="cad-global-skip";skip.href="#cad-main-content";skip.textContent="Skip to content";nav.append(skip);
  const brand=link("◈ CAD · Design Studio","");brand.className="cad-global-brand";nav.append(brand);
  const menu=document.createElement("div");menu.className="cad-global-links";
- for(const [title,slug] of [["Home",""],["Design Studio","cad/aad/"],["Projects","projects/"],["How It Works","guide/"]])menu.append(link(title,slug));
+ for(const [title,slug] of [["Home",""],["Design Studio","cad/aad/"],["Projects","projects/"],["How It Works","guide/"],["Memory Wall","memory-wall/"]])menu.append(link(title,slug));
  const more=document.createElement("details");more.className="cad-global-more";
  const trigger=document.createElement("summary");trigger.textContent="More";more.append(trigger);
  const popup=document.createElement("div");popup.className="cad-global-popover";
@@ -22,7 +22,7 @@
   ["Earlier design tools",[["Previous CAD editor","cad/"],["Words-to-mass prototype","cad/brief/"]]],
   ["Research & prototypes",[["Research catalogue","research/"],["Canonical geometry v0.2","research/open-architecture-engine/v0.2/"],["Original geometry proof","research/open-architecture-engine/"]]],
   ["Projects & history",[["Project library","projects/"],["Release history","releases/"],["Source catalogue","source/"]]],
-  ["Guides & reference",[["How the system works","guide/"],["AI Design Studio","cad/aad/"]]]
+  ["Guides & reference",[["How the system works","guide/"],["Memory Wall","memory-wall/"],["Nepal / Pokhara codes","codes/pokhara/"],["AI Design Studio","cad/aad/"]]]
  ];
  for(const [groupName,entries] of groups){
   const section=document.createElement("details");section.className="cad-more-group";
@@ -32,7 +32,7 @@
   section.append(links);popup.append(section);
  }
  more.append(popup);menu.append(more);nav.append(menu);
- const status=document.createElement("span");status.className="cad-global-tag";status.textContent="ILLUSTRATIVE DRAFT";nav.append(status);
+ const status=document.createElement("span");status.className="cad-global-tag";status.textContent="DESIGN WORKSPACE";nav.append(status);
  document.body.insertBefore(nav,document.body.firstChild);
  const main=document.querySelector("main")||document.querySelector(".app")||document.querySelector(".wrap");
  if(main&&!main.id)main.id="cad-main-content";

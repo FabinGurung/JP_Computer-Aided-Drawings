@@ -90,4 +90,13 @@ All physical assembly elements have stable IDs `projectId:level:elementId`. Clic
 
 ## Governance
 
+The stable template is now v0.2.0, adding jurisdiction/code evidence and native
+document version control without a viewer fork. See
+`governance/aad/document-control.json`, `/memory-wall/` and `/codes/pokhara/`.
+Keep a single current Google Doc/provider ID per logical record; archive and
+verify before a guarded in-place update. Actions tests the transaction contract
+but has no Drive credential. Code checks preserve unknowns and respect occupancy,
+jurisdiction and prescriptive-route scope. Owner acceptance, physical site
+investigation and municipal permission are independent evidence.
+
 Edit **template first**, then add/update only project data and thin project links. GitHub Actions must validate the shared engine, backwards-compatible legacy example, synchronized 2D/3D selection, IFC4 parser readback and real Pages browser interaction before publishing. Leave the previous Pages deployment and frozen structural packages recoverable.

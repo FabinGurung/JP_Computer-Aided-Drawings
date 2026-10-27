@@ -1,0 +1,29 @@
+{
+  "schema": "jp-cad://document-control-policy/1",
+  "id": "AAD-DOC-CONTROL-001",
+  "revision": 1,
+  "adoptedOn": "2026-10-28",
+  "currentIdentityRule": "One logical ID and one native Google Doc ID per maintained document. Revision numbers change; the current URL does not.",
+  "revisionFormat": "<LOGICAL-ID>-R000001",
+  "transaction": [
+    "Resolve the current document by logical ID; read all relevant tabs and current provider revision.",
+    "Copy the complete current native Doc to the verified archive folder, named with its EXISTING revision ID.",
+    "Read the archive back and verify content plus a separate provider ID before changing current.",
+    "Edit the SAME current Google Doc using requiredRevisionId. Increment the logical revision by exactly one.",
+    "Verify content and canonical provider ID; record before/after hashes, archive receipt, date and change reason."
+  ],
+  "firstCreation": "Only when no document exists for that logical ID; register R000001 once. Never create a replacement current Doc for later revisions.",
+  "onFailure": "Stop the mutation on an archive/readback failure or concurrent edit. Keep current intact; reconcile before retrying. An archive is not the new current.",
+  "contentPlacement": "Project engineering working calculations, audits and alternatives belong in the canonical private Google Doc. Public Pages contains verified source references, reusable code rules and selected model geometry; no parallel public draft/audit editions.",
+  "automationBoundary": "Actions validates the code register and transaction/receipt contract. It has no Drive credential and does not itself copy or update Google Docs. An authorized Drive connector or authenticated owner worker performs native operations.",
+  "privacy": "Private provider IDs, URLs and engineering working notes stay outside the public repository. Public records use logical IDs and content hashes only.",
+  "currentDocuments": [
+    {
+      "logicalId": "AAD-ASHOK-ENG-001",
+      "purpose": "Ashok engineering, code applicability, services and decision record",
+      "provider": "Google Docs",
+      "locator": "Resolve by logical ID in the project's Documentation folder",
+      "revisionAuthority": "Read the current revision and archive links from the native Google Doc; do not mirror a stale private revision counter publicly."
+    }
+  ]
+}

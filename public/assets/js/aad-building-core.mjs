@@ -22,6 +22,7 @@ const inside=(p,poly)=>{
 };
 function normalizeManifest(manifest){
  if(manifest?.schema!=="jp-cad://aad-building/1")throw Error("Wrong multistorey AAD manifest schema");
+ if((manifest.issueForConstruction===true||manifest.restrictions?.issueForConstruction===true)&&manifest.representation==='ARCHITECTURAL_REVIEW_ONLY')throw Error('Architectural display geometry cannot be issued as verified structural construction design');
  if(!/^[A-Za-z0-9_-]{3,48}$/.test(manifest.projectId||""))throw Error("Invalid building project ID");
  if(!Array.isArray(manifest.levels)||manifest.levels.length<2||manifest.levels.length>12)throw Error("Building needs 2..12 levels");
  const ids=new Set();
@@ -139,7 +140,7 @@ export function assembleBuilding(manifest,models,options={}){
   const counts={};for(const e of elements)counts[e.kind]=(counts[e.kind]||0)+1;
   return{schema:"jp-cad://aad-building-assembly/1",projectId,name:manifest.name||projectId,levels:placements,elements,diagnostics,
    structuralAlignment:{levels:[],columns:[],beams:[],approval:"NOT_ADMITTED",diagnostics:[]},counts,
-   area:{source:round(areaSum.source),model:round(areaSum.model)},reviewStatus:"DRAFT_ENGINEERING_HOLD",sourceStructuralReview:null,
+   area:{source:round(areaSum.source),model:round(areaSum.model)},reviewStatus:manifest.presentation?"ARCHITECTURAL_MODEL_ENGINEERING_NOT_ISSUED":"DRAFT_ENGINEERING_HOLD",sourceStructuralReview:null,
    manifest,qa:{ifcExportStatus:"NOT_VERIFIED_UNTIL_ROUNDTRIP"}};
  }
  const structure=manifest.structural,col=structure.columns,beam=structure.beams,slab=structure.slabs;
