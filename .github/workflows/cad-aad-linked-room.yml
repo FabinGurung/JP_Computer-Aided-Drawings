@@ -116,6 +116,7 @@ jobs:
           path: |
             /tmp/cad-aad-daylight-*.png
             /tmp/cad-aad-narayani-dxf.png
+            /tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
