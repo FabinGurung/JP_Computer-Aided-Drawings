@@ -1,0 +1,91 @@
+{
+  "schema": "jp-cad://aad-m29-partial-dxf-audit-summary/1",
+  "projectId": "PRJ-000007",
+  "stage": "M29",
+  "authority": "READ_ONLY_ORIGINAL_DXF_EDGE_EXTRACTION_AND_M28_OWNER_VERIFIED_COLUMN_WORKING_LAYOUT",
+  "sourceSources": [
+    "aad-source-gf-review-v1.json",
+    "aad-building-v1.json",
+    "aad-ground-floor-model.json",
+    "aad-first-floor-model.json",
+    "aad-second-floor-model.json",
+    "aad-m28-owner-verification-20261027.json"
+  ],
+  "audited": "Original architectural LINE/LWPOLYLINE partial-source edge midpoints vs current area-calibrated GF wall centrelines; plan-envelope containment of GF source column centres on existing FF/SF drafts",
+  "distanceComparisonNotSurveyRegistration": true,
+  "sourceEdgeEvidence": {
+    "lineEntities": 32,
+    "sourcePolylines": 12,
+    "polylineEdgeSegments": 42,
+    "edgeSegments": 74,
+    "modeledGFWallCenterlines": 24,
+    "nearestWallCentrelineMidpointDistanceM": {
+      "min": 0.02804,
+      "p50": 0.36396,
+      "p90": 0.635338,
+      "max": 2.19004,
+      "within150mm": 7,
+      "within300mm": 13,
+      "over1m": 7
+    }
+  },
+  "upperStoreyProjection": [
+    {
+      "level": "ff",
+      "envelopeTransformM": {
+        "x": -0.267,
+        "z": -0.717,
+        "rotationDeg": 0
+      },
+      "sourceGFColumns": 23,
+      "inside": 11,
+      "outside": 12,
+      "gridsWithin": [
+        "F6",
+        "G6",
+        "H6",
+        "F3",
+        "G3",
+        "H3",
+        "C2",
+        "F2",
+        "H2",
+        "F1",
+        "I3"
+      ]
+    },
+    {
+      "level": "sf",
+      "envelopeTransformM": {
+        "x": -0.447,
+        "z": -0.717,
+        "rotationDeg": 0
+      },
+      "sourceGFColumns": 23,
+      "inside": 9,
+      "outside": 14,
+      "gridsWithin": [
+        "F6",
+        "G6",
+        "H6",
+        "F3",
+        "G3",
+        "H3",
+        "C2",
+        "H2",
+        "I3"
+      ]
+    }
+  ],
+  "approvedWorkingGeometryPreserved": true,
+  "result": "PARTIAL_DATUM_AUDIT_AND_UPPER_ENVELOPE_PROJECTION_READY",
+  "notEvidenced": [
+    "Exact signed surveyed architectural-to-structural control point residuals",
+    "Final original CAD architectural enclosed outer wall polygon and complete room topology",
+    "Upper-floor structural column and beam schedule",
+    "Actual structural continuity and transfer-beam design",
+    "Foundation capacities, founding elevations and reinforcement"
+  ],
+  "noUpperStructureInvented": true,
+  "constructionApproval": false
+}
