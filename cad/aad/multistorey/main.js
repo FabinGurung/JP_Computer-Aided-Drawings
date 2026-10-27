@@ -430,7 +430,6 @@ function drawPlan(){
    if(!a||!b)continue;
    const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(selectedId===building.projectId+":"+l.id+":"+w.id?" is-selected":"")});
    item.dataset.part=l.id+":"+w.id;
-   item.dataset.elementId=building.projectId+":"+l.id+":"+w.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"wall",w.id);});
    doc.append(item);
   }
@@ -443,7 +442,6 @@ function drawPlan(){
     "stroke-width":o.kind==="door"?.21:.28
    });
    item.dataset.part=l.id+":"+o.id;
-   item.dataset.elementId=building.projectId+":"+l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
   }
@@ -851,7 +849,8 @@ window.AADStudio=Object.freeze({
   const e=building?.elements.find(x=>x.id===id);
   if(!e)throw Error("Unknown AAD component "+id);
   const mesh=hitMeshes.find(m=>m.userData.element.id===id);
-  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id);
+  const plan=[...document.querySelectorAll("#viewer2d [data-element-id]")].find(n=>n.dataset.elementId===id)||
+   [...document.querySelectorAll("#viewer2d [data-part]")].find(n=>building.projectId+":"+n.dataset.part===id);
   const pointFromPlan=plan?plan.tagName.toLowerCase()==="circle"?
    {x:Number(plan.getAttribute("cx")),z:Number(plan.getAttribute("cy")),
     dx:2*Number(plan.getAttribute("r")),dz:2*Number(plan.getAttribute("r"))}:
