@@ -23,6 +23,8 @@ jobs:
       - uses: actions/setup-node@v4
         with: {node-version: "22", cache: "npm"}
       - run: npm ci
+      - name: Ashok REV04 source admission and architecture-only template QA
+        run: node tools/site/ashok-rev04-smoke.mjs
       - name: M26 immutable source-backed 2D/3D/table/IFC acceptance
         run: node tools/site/aad-m26-canonical-source-integration-smoke.mjs
       - name: M27 engineering source-preservation and open-HOLD gate
@@ -64,6 +66,7 @@ jobs:
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
+          ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
       - name: Save render verification screenshots
         if: always()
         uses: actions/upload-artifact@v4
@@ -77,6 +80,7 @@ jobs:
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
             /tmp/cad-aad-ai-new-project.png
+            /tmp/ashok-rev04-*.png
           if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}

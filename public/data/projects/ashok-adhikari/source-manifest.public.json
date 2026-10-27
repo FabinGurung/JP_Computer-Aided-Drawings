@@ -1,0 +1,171 @@
+{
+  "admission": "User authorized selection and GitHub working publication on 2026-10-27; QA continues.",
+  "approvedVisuals": [
+    {
+      "authority": "VISUAL_ONLY",
+      "file": "gf-c016.png",
+      "sha256": "2321c29b47bcff440fa015666ba4fafd4827eccbc9a7b6c177e0b3bf5be8e861"
+    },
+    {
+      "authority": "VISUAL_ONLY",
+      "file": "ff-c012.png",
+      "sha256": "e30be57ae3f0c48b2a5eea0d3b29daaf5e76bb6d359041462b4b6889a6b308cf"
+    }
+  ],
+  "authority": {
+    "clientBaseline": "M10_REV03_v0.4",
+    "geometry": "M10_REV04_v0.8",
+    "promoted": false,
+    "reviewPackage": "M10_REV04_v0.9",
+    "status": "NOT_FOR_CONSTRUCTION"
+  },
+  "canonicalSvgHashes": {
+    "FF": "f6610d53dd6deec384b7c02e9ab6a5170541138c97605e251591b487e31e9394",
+    "GF": "9c0b853263411bda5ed035c452c8d66a82f51f6487a7b9b7153f1957035749a4",
+    "site": "1ca2084924b87f7badad5e385f5f74bcd67811851fd96d72fca4863353128665"
+  },
+  "conversion": "Canonical SVG wall lines -> source-indexed floor graph; no raster tracing. Original SVGs and approved PNG bytes unchanged.",
+  "dateNpt": "2026-10-27",
+  "deferredOpenings": {
+    "FF": [
+      {
+        "id": "FF-D-MAIN",
+        "reason": "HOST_OR_JAMB_REVIEW_REQUIRED"
+      },
+      {
+        "id": "FF-D-RM-STAIR-BED2",
+        "reason": "REMOVED_IN_SOURCE"
+      },
+      {
+        "id": "FF-D-RM-BATH-ENS",
+        "reason": "REMOVED_IN_SOURCE"
+      },
+      {
+        "id": "FF-W001",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W002",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W003",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-V001",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-V002",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W004",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W005",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W006",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "FF-W007",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      }
+    ],
+    "GF": [
+      {
+        "id": "GF-D-RM-BED2-BATH",
+        "reason": "REMOVED_IN_SOURCE"
+      },
+      {
+        "id": "GF-D-RM-STAIR-BED2",
+        "reason": "REMOVED_IN_SOURCE"
+      },
+      {
+        "id": "GF-W001",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W002",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W003",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-V001",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W004",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W005",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W006",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-W007",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-V002",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      },
+      {
+        "id": "GF-OPEN-HALL-LOUNGE-001",
+        "reason": "PLAN_ONLY_VERTICAL_DATUM_OR_HOST_UNVERIFIED"
+      }
+    ]
+  },
+  "holds": [
+    {
+      "code": "SOURCE_CUSTODY",
+      "message": "M08 native DXF/PDF/GLB byte custody remains unresolved; this is a REV04 JSON/SVG review migration."
+    },
+    {
+      "code": "SETBACK",
+      "message": "Zero-right setback accepted for design review only; municipal verification pending. No right-wall openings permitted."
+    },
+    {
+      "code": "STAIR",
+      "message": "M10 U-stair section, landing, slab void and headroom require QA; no stair solid invented from earlier M08."
+    },
+    {
+      "code": "PARKING",
+      "message": "Tight transverse fit only; access, turning, carport/truss and structural sizing unresolved."
+    },
+    {
+      "code": "OPENINGS",
+      "message": "Absolute window/vent sills unresolved. Full source schedule and anchors retained; deferred openings are not modeled in 3D."
+    },
+    {
+      "code": "PLAN_WALLS",
+      "message": "Canonical SVG wall centre-lines include unresolved overlaps and front carport enclosure. Jambs, swings and room circulation still need QA."
+    },
+    {
+      "code": "VERTICAL_ENVELOPE",
+      "message": "3048 mm storey rise comes from M10 stair schedule. Wall extrusion uses that display envelope; finished wall heights and absolute survey levels are not verified."
+    }
+  ],
+  "identifierPolicy": "Route slug is the technical namespace; no unverified PRJ number assigned.",
+  "inputHashes": {
+    "html": "b384df3270ac57758d861ff5ccedb114a014f114dfc14cc6732dcaa566b7a515",
+    "model": "6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e",
+    "package": "a66e8b0d1ae8767895ecbb5ada4a66d70ede9dee351ac202b1930cc934d12489"
+  },
+  "schema": "jp-cad://project-publication/1.0",
+  "scope": "GF and FF only. No new top/roof floor, structural members, stair solids or engineering acceptance.",
+  "slug": "ashok-adhikari",
+  "template": "AAD-CAD-TEMPLATE-001 / shared cad/aad/multistorey editor"
+}

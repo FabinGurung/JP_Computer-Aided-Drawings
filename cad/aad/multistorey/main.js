@@ -425,6 +425,7 @@ function drawPlan(){
    if(!a||!b)continue;
    const item=el("line",{x1:a.x,y1:a.z,x2:b.x,y2:b.z,stroke:color,"stroke-width":Math.max(.09,w.thickness),"stroke-linecap":"round",opacity:faded,class:"aad-wall"+(selectedId===building.projectId+":"+l.id+":"+w.id?" is-selected":"")});
    item.dataset.part=l.id+":"+w.id;
+   item.dataset.elementId=building.projectId+":"+l.id+":"+w.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"wall",w.id);});
    doc.append(item);
   }
@@ -437,6 +438,7 @@ function drawPlan(){
     "stroke-width":o.kind==="door"?.21:.28
    });
    item.dataset.part=l.id+":"+o.id;
+   item.dataset.elementId=building.projectId+":"+l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
   }
@@ -729,7 +731,7 @@ async function main(){
  $("building-name").textContent=building.name;
  initAADRegister();
  $("building-subtitle").textContent=building.levels.length+" storeys · one world coordinate frame · "+building.area.model.toFixed(2)+"m² combined floor plates · "+building.elements.filter(e=>e.ifcType).length+" modeled IFC-typed components";
- const link=$("source-ledger");link.href=new URL("MODEL_QA_MANIFEST_v2.json",prefix).href;
+ const link=$("source-ledger");link.href=new URL(manifest.sourceLedger||"MODEL_QA_MANIFEST_v2.json",prefix).href;
  initRenderer();addStoreys();addStats();addRows();renderModel();setLevel("all");refreshRooms();centerView();runQa();
  try{const mode=localStorage.getItem("aad:unified:view-mode");setViewMode(mode||"split");}catch(_){setViewMode("split");}
  $("aad-edit-version").textContent=workspace.snapshot().version?"Recovered working draft v"+workspace.snapshot().version:"Canonical source · no edits";

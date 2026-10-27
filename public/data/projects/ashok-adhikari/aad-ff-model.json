@@ -1,0 +1,311 @@
+{
+  "floorGraph": {
+    "labels": {
+      "FF-BALC": "BALCONY",
+      "FF-BATH": "MAIN BATHROOM",
+      "FF-BED2": "BED 2",
+      "FF-ENS": "ENSUITE",
+      "FF-LOUNGE": "LOUNGE",
+      "FF-MAIN": "MAIN BEDROOM",
+      "FF-STAIR": "U-STAIR",
+      "FF-WIR": "WALK-IN ROBE"
+    },
+    "nodes": [
+      {
+        "id": "FF-N001",
+        "x": 0.0,
+        "z": 0.0
+      },
+      {
+        "id": "FF-N002",
+        "x": 7.2,
+        "z": 0.0
+      },
+      {
+        "id": "FF-N003",
+        "x": 7.2,
+        "z": 14.4
+      },
+      {
+        "id": "FF-N004",
+        "x": 0.0,
+        "z": 14.4
+      },
+      {
+        "id": "FF-N005",
+        "x": 0.0,
+        "z": 4.8
+      },
+      {
+        "id": "FF-N006",
+        "x": 7.2,
+        "z": 4.8
+      },
+      {
+        "id": "FF-N007",
+        "x": 0.0,
+        "z": 7.0
+      },
+      {
+        "id": "FF-N008",
+        "x": 3.3,
+        "z": 7.0
+      },
+      {
+        "id": "FF-N009",
+        "x": 1.65,
+        "z": 7.0
+      },
+      {
+        "id": "FF-N010",
+        "x": 1.65,
+        "z": 4.8
+      },
+      {
+        "id": "FF-N011",
+        "x": 3.3,
+        "z": 12.7
+      },
+      {
+        "id": "FF-N012",
+        "x": 3.3,
+        "z": 4.8
+      },
+      {
+        "id": "FF-N013",
+        "x": 0.0,
+        "z": 8.75
+      },
+      {
+        "id": "FF-N014",
+        "x": 3.3,
+        "z": 8.75
+      },
+      {
+        "id": "FF-N015",
+        "x": 0.0,
+        "z": 12.7
+      },
+      {
+        "id": "FF-N016",
+        "x": 3.3,
+        "z": 14.4
+      }
+    ],
+    "openings": [
+      {
+        "height": 2.134,
+        "id": "FF-D-LOUNGE-MAIN",
+        "kind": "door",
+        "offset": 3.755,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "FF-D-LOUNGE-MAIN"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "FF-INT-001",
+        "width": 0.914
+      },
+      {
+        "height": 1.981,
+        "id": "FF-D-MAIN-ENS",
+        "kind": "door",
+        "offset": 0.444,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "FF-D-MAIN-ENS"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "FF-INT-001",
+        "width": 0.762
+      },
+      {
+        "height": 1.981,
+        "id": "FF-D-MAINBATH-LOUNGE",
+        "kind": "door",
+        "offset": 4.419,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "FF-D-MAINBATH-LOUNGE"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "FF-INT-004",
+        "width": 0.762
+      },
+      {
+        "height": 2.134,
+        "id": "FF-D-BED2-LOUNGE",
+        "kind": "door",
+        "offset": 2.343,
+        "provenance": {
+          "basis": "Source plan centre and scheduled size; jamb/swing QA pending",
+          "sourceId": "FF-D-BED2-LOUNGE"
+        },
+        "sill": 0,
+        "source": "REV04_V08_DOOR_CENTER_AND_SIZE",
+        "status": "PLAN_HOST_CANDIDATE",
+        "wallId": "FF-INT-004",
+        "width": 0.914
+      }
+    ],
+    "perimeter": [
+      "FF-EXT-1",
+      "FF-EXT-2",
+      "FF-EXT-3",
+      "FF-EXT-4"
+    ],
+    "walls": [
+      {
+        "a": "FF-N001",
+        "b": "FF-N002",
+        "id": "FF-EXT-1",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "FF-EXT-1"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "FF-N002",
+        "b": "FF-N003",
+        "id": "FF-EXT-2",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "FF-EXT-2"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "FF-N003",
+        "b": "FF-N004",
+        "id": "FF-EXT-3",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "FF-EXT-3"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "FF-N004",
+        "b": "FF-N001",
+        "id": "FF-EXT-4",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "outerwall path",
+          "sourceId": "FF-EXT-4"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.23
+      },
+      {
+        "a": "FF-N005",
+        "b": "FF-N006",
+        "id": "FF-INT-001",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 1",
+          "sourceId": "FF-INT-001"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N007",
+        "b": "FF-N008",
+        "id": "FF-INT-002",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 2",
+          "sourceId": "FF-INT-002"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N009",
+        "b": "FF-N010",
+        "id": "FF-INT-003",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 3",
+          "sourceId": "FF-INT-003"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N011",
+        "b": "FF-N012",
+        "id": "FF-INT-004",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 4",
+          "sourceId": "FF-INT-004"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N013",
+        "b": "FF-N014",
+        "id": "FF-INT-005",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 5",
+          "sourceId": "FF-INT-005"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N015",
+        "b": "FF-N011",
+        "id": "FF-INT-006",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 6",
+          "sourceId": "FF-INT-006"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      },
+      {
+        "a": "FF-N016",
+        "b": "FF-N011",
+        "id": "FF-INT-007",
+        "provenance": {
+          "basis": "Exact deterministic SVG line; full-storey extrusion is display only",
+          "locator": "iwall line 7",
+          "sourceId": "FF-INT-007"
+        },
+        "source": "REV04_V08_CANONICAL_SVG_CENTERLINE",
+        "status": "SOURCE_PLAN_REVIEW_ONLY",
+        "thickness": 0.1
+      }
+    ]
+  },
+  "height": 3.048,
+  "schema": "jp-cad://aad-floor/1"
+}

@@ -1,0 +1,82 @@
+{
+  "coordinateSystem": {
+    "axes": "X page-right NE; Z page-down SE; Y elevation",
+    "conversion": "source (x,y) mm -> (x/1000,(14400-y)/1000) m",
+    "surveyAlignment": "NOT_VERIFIED",
+    "units": "m"
+  },
+  "levels": [
+    {
+      "elevation": 0,
+      "height": 3.048,
+      "id": "gf",
+      "model": "aad-gf-model.json",
+      "name": "Ground floor",
+      "sourceArea": 103.68,
+      "status": "SOURCE_ENVELOPE_NOT_NET_USABLE_AREA",
+      "transform": {
+        "rotationDeg": 0,
+        "x": 0,
+        "z": 0
+      }
+    },
+    {
+      "elevation": 3.048,
+      "height": 3.048,
+      "id": "ff",
+      "model": "aad-ff-model.json",
+      "name": "First floor",
+      "sourceArea": 103.68,
+      "status": "SOURCE_ENVELOPE_NOT_NET_USABLE_AREA",
+      "transform": {
+        "rotationDeg": 0,
+        "x": 0,
+        "z": 0
+      }
+    }
+  ],
+  "name": "Ashok Adhikari · REV04 working architectural review",
+  "projectId": "ashok-adhikari",
+  "representation": "ARCHITECTURAL_REVIEW_ONLY",
+  "restrictions": {
+    "engineeringApproval": "HOLD",
+    "issueForConstruction": false
+  },
+  "reviewHolds": [
+    {
+      "code": "SOURCE_CUSTODY",
+      "message": "M08 native DXF/PDF/GLB byte custody remains unresolved; this is a REV04 JSON/SVG review migration."
+    },
+    {
+      "code": "SETBACK",
+      "message": "Zero-right setback accepted for design review only; municipal verification pending. No right-wall openings permitted."
+    },
+    {
+      "code": "STAIR",
+      "message": "M10 U-stair section, landing, slab void and headroom require QA; no stair solid invented from earlier M08."
+    },
+    {
+      "code": "PARKING",
+      "message": "Tight transverse fit only; access, turning, carport/truss and structural sizing unresolved."
+    },
+    {
+      "code": "OPENINGS",
+      "message": "Absolute window/vent sills unresolved. Full source schedule and anchors retained; deferred openings are not modeled in 3D."
+    },
+    {
+      "code": "PLAN_WALLS",
+      "message": "Canonical SVG wall centre-lines include unresolved overlaps and front carport enclosure. Jambs, swings and room circulation still need QA."
+    },
+    {
+      "code": "VERTICAL_ENVELOPE",
+      "message": "3048 mm storey rise comes from M10 stair schedule. Wall extrusion uses that display envelope; finished wall heights and absolute survey levels are not verified."
+    }
+  ],
+  "revision": "M10-REV04-v08-QA01",
+  "schema": "jp-cad://aad-building/1",
+  "sourceAuthority": {
+    "geometry": "M10_REV04_v0.8",
+    "modelSha256": "6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e"
+  },
+  "sourceLedger": "source-manifest.public.json"
+}

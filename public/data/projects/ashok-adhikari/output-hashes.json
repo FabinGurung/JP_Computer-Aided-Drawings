@@ -1,0 +1,15 @@
+{
+  "schema": "jp-cad://output-hashes/1",
+  "sha256": {
+    "aad-building-v1.json": "d2131a1f2b67501ff1415931cd42c6c40a40609ab09aa2d93c6a5cfc1d02d938",
+    "aad-ff-model.json": "44a872d9e2560fb933ffb7bc13b40282c9f696324608ef879d599342deb146bd",
+    "aad-gf-model.json": "04d82e46d7f795915d1c4d1fab230590580ada0cb0cd9d1fbc21f90e606219c4",
+    "ff-c012.png": "e30be57ae3f0c48b2a5eea0d3b29daaf5e76bb6d359041462b4b6889a6b308cf",
+    "ff.svg": "f6610d53dd6deec384b7c02e9ab6a5170541138c97605e251591b487e31e9394",
+    "gf-c016.png": "2321c29b47bcff440fa015666ba4fafd4827eccbc9a7b6c177e0b3bf5be8e861",
+    "gf.svg": "9c0b853263411bda5ed035c452c8d66a82f51f6487a7b9b7153f1957035749a4",
+    "model.public.json": "f490f17cc17e3e78211f8e00e1345312ef84c955bf172b23da55739c01cd4de5",
+    "site.svg": "1ca2084924b87f7badad5e385f5f74bcd67811851fd96d72fca4863353128665",
+    "source-manifest.public.json": "34620fbc49e2e1319b4a3d7e0ae2c1f00519a069720cf3d88afca90647e5b674"
+  }
+}

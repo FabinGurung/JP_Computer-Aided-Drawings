@@ -163,3 +163,15 @@ jobs:
           name: m27-live-primary-aad-2d-3d-ifc-parity
           path: /tmp/aad-m26-main-studio-source-structural.png
           if-no-files-found: ignore
+      - name: Verify live Ashok route and shared model on phone tablet and desktop
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        env:
+          ASHOK_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/ashok-adhikari/
+        run: node tools/site/ashok-rev04-browser.mjs
+      - name: Archive live Ashok working studio QA
+        if: always() && github.event_name == 'workflow_run'
+        uses: actions/upload-artifact@v4
+        with:
+          name: ashok-rev04-live-working-studio
+          path: /tmp/ashok-rev04-*.png
+          if-no-files-found: ignore
