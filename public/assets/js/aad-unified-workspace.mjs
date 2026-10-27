@@ -3,7 +3,7 @@
  * component tables and exports. No parallel iframe message protocol.
  * Changes are local working drafts; canonical GitHub/Drive evidence is read-only.
  */
-import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs";
+import {assembleBuilding,verifyAssembly} from "./aad-building-core.mjs?aad=20261027-qa02";
 import {addConnectedWall,splitConnectedWall,joinConnectedWalls,removeConnectedWall,
  addHostedOpening,removeHostedOpening,derivePlanRooms} from "./aad-topology.mjs";
 const clone=v=>JSON.parse(JSON.stringify(v));
@@ -23,12 +23,13 @@ function geometricalIntegrity(models){
   if(g.nodes.length>900||g.walls.length>1200||g.openings.length>750)throw Error("AAD editable graph size exceeded");
   for(const w of g.walls){
    const a=nodes.get(w.a),b=nodes.get(w.b);
-   if(!a||!b||Math.hypot(a.x-b.x,a.z-b.z)<.25)throw Error("Invalid wall segment "+floorId+"/"+w.id);
+   if(!a||!b||Math.hypot(a.x-b.x,a.z-b.z)<(model.allowSourceJunctionSegments?.05:.25))throw Error("Invalid wall segment "+floorId+"/"+w.id);
    bounded(w.thickness,.06,.8,"wall thickness");
   }
   for(const o of g.openings){
    const w=findBy(g.walls,o.wallId,"host wall"),a=nodes.get(w.a),b=nodes.get(w.b);
-   if(o.width<.3||o.height<.3||o.sill<0||o.offset<0||o.offset+o.width>Math.hypot(a.x-b.x,a.z-b.z)+.00001)
+   const apertureMin=o.apertureType==="ventilator"?.15:.3;
+   if(o.width<apertureMin||o.height<apertureMin||o.sill<0||o.offset<0||o.offset+o.width>Math.hypot(a.x-b.x,a.z-b.z)+.00001)
     throw Error("Hosted opening conflicts with wall "+floorId+"/"+o.id);
    if(o.sill+o.height>model.height+.01)throw Error("Opening height exceeds its storey "+floorId+"/"+o.id);
   }

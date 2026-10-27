@@ -24,7 +24,12 @@ jobs:
         with: {node-version: "22", cache: "npm"}
       - run: npm ci
       - name: Ashok REV04 source admission and architecture-only template QA
-        run: node tools/site/ashok-rev04-smoke.mjs
+        run: |
+          node tools/site/ashok-rev04-smoke.mjs
+          python tools/site/ashok-build-coordinated.py
+          git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
+          node tools/site/ashok-qa02-smoke.mjs
+          node tools/site/ashok-qa02-ifc.mjs
       - name: M26 immutable source-backed 2D/3D/table/IFC acceptance
         run: node tools/site/aad-m26-canonical-source-integration-smoke.mjs
       - name: M27 engineering source-preservation and open-HOLD gate
@@ -85,6 +90,7 @@ jobs:
             /tmp/cad-aad-topology-3way-ui.png
             /tmp/cad-aad-ai-new-project.png
             /tmp/ashok-rev04-*.png
+            /tmp/ashok-qa02-*.png
           if-no-files-found: ignore
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}

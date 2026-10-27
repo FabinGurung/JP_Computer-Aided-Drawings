@@ -1,0 +1,817 @@
+{
+  "allowSourceJunctionSegments": true,
+  "floorGraph": {
+    "labels": {
+      "GF-BATH": "COMMON MAIN BATHROOM",
+      "GF-BED1": "BEDROOM 1",
+      "GF-BED2": "BEDROOM 2 / GUEST",
+      "GF-HALL-REV04-001": "HALL / ACCESS",
+      "GF-KITCHEN": "KITCHEN",
+      "GF-LOUNGE": "LIVING / LOUNGE",
+      "GF-PARK": "CAR PORCH / INTERNAL FRONT-RIGHT DOMAIN",
+      "GF-STAIR": "U-STAIR"
+    },
+    "nodes": [
+      {
+        "id": "GF-N001",
+        "x": 0.115,
+        "z": 14.285
+      },
+      {
+        "id": "GF-N002",
+        "x": 4.175,
+        "z": 14.285
+      },
+      {
+        "id": "GF-N003",
+        "x": 4.175,
+        "z": 12.2
+      },
+      {
+        "id": "GF-N004",
+        "x": 4.175,
+        "z": 12.085
+      },
+      {
+        "id": "GF-N005",
+        "x": 7.085,
+        "z": 12.085
+      },
+      {
+        "id": "GF-N006",
+        "x": 7.085,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N007",
+        "x": 7.085,
+        "z": 0.115
+      },
+      {
+        "id": "GF-N008",
+        "x": 3.6,
+        "z": 0.115
+      },
+      {
+        "id": "GF-N009",
+        "x": 0.115,
+        "z": 0.115
+      },
+      {
+        "id": "GF-N010",
+        "x": 0.115,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N011",
+        "x": 0.115,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N012",
+        "x": 0.115,
+        "z": 12.2
+      },
+      {
+        "id": "GF-N013",
+        "x": 2.112,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N014",
+        "x": 3.3,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N015",
+        "x": 3.6,
+        "z": 5.0
+      },
+      {
+        "id": "GF-N016",
+        "x": 2.112,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N017",
+        "x": 3.3,
+        "z": 8.8
+      },
+      {
+        "id": "GF-N018",
+        "x": 3.3,
+        "z": 12.2
+      },
+      {
+        "id": "GF-N019",
+        "x": 3.3,
+        "z": 7.567
+      },
+      {
+        "id": "GF-N020",
+        "x": 3.3,
+        "z": 5.656
+      }
+    ],
+    "openings": [
+      {
+        "apertureType": "door",
+        "height": 2.134,
+        "id": "GF-D-MAIN",
+        "kind": "door",
+        "offset": 0.2665,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-D-MAIN"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "hinged",
+        "swingSign": -1,
+        "wallId": "GF-EXT-03",
+        "width": 1.067
+      },
+      {
+        "apertureType": "door",
+        "height": 2.134,
+        "id": "GF-D-REAR",
+        "kind": "door",
+        "offset": 2.398,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-D-REAR"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "hinged",
+        "swingSign": -1,
+        "wallId": "GF-EXT-05-1",
+        "width": 0.914
+      },
+      {
+        "apertureType": "window",
+        "height": 1.372,
+        "id": "GF-W001",
+        "kind": "window",
+        "offset": 1.038,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W001"
+        },
+        "sill": 0.9,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-05-2",
+        "width": 1.524
+      },
+      {
+        "apertureType": "window",
+        "height": 1.372,
+        "id": "GF-W002",
+        "kind": "window",
+        "offset": 1.623,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W002"
+        },
+        "sill": 0.9,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-06-1",
+        "width": 1.524
+      },
+      {
+        "apertureType": "window",
+        "height": 0.914,
+        "id": "GF-W003",
+        "kind": "window",
+        "offset": 1.0755,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W003"
+        },
+        "sill": 1.1,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-05-1",
+        "width": 1.219
+      },
+      {
+        "apertureType": "ventilator",
+        "height": 0.457,
+        "id": "GF-V001",
+        "kind": "window",
+        "offset": 1.595,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-V001"
+        },
+        "sill": 2.1,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-06-2",
+        "width": 0.61
+      },
+      {
+        "apertureType": "window",
+        "height": 1.372,
+        "id": "GF-W004",
+        "kind": "window",
+        "offset": 1.038,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W004"
+        },
+        "sill": 0.9,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-06-3",
+        "width": 1.524
+      },
+      {
+        "apertureType": "window",
+        "height": 1.372,
+        "id": "GF-W005",
+        "kind": "window",
+        "offset": 1.4655,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W005"
+        },
+        "sill": 0.9,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-03",
+        "width": 1.219
+      },
+      {
+        "apertureType": "window",
+        "height": 1.829,
+        "id": "GF-W006",
+        "kind": "window",
+        "offset": 1.0015,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W006"
+        },
+        "sill": 0.6,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-01",
+        "width": 1.067
+      },
+      {
+        "apertureType": "window",
+        "height": 1.372,
+        "id": "GF-W007",
+        "kind": "window",
+        "offset": 0.438,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-W007"
+        },
+        "sill": 0.9,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-06-4",
+        "width": 1.524
+      },
+      {
+        "apertureType": "ventilator",
+        "height": 0.203,
+        "id": "GF-V002",
+        "kind": "window",
+        "offset": 0.5625,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-V002"
+        },
+        "sill": 1.759,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE__SILLS_PROVISIONAL",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-05-1",
+        "width": 0.203
+      },
+      {
+        "apertureType": "door",
+        "height": 2.134,
+        "id": "GF-D-BED1-HALL",
+        "kind": "door",
+        "offset": 0.137,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-D-BED1-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "hinged",
+        "swingSign": -1,
+        "wallId": "GF-REAR-BAND-2",
+        "width": 0.914
+      },
+      {
+        "apertureType": "door",
+        "height": 2.134,
+        "id": "GF-D-BED2-HALL",
+        "kind": "door",
+        "offset": 0.137,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-D-BED2-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-BED2-HALL-2",
+        "width": 0.914
+      },
+      {
+        "apertureType": "door",
+        "height": 1.981,
+        "id": "GF-D-BATH-HALL",
+        "kind": "door",
+        "offset": 0.175,
+        "provenance": {
+          "basis": "Source opening size/intent with explicit host, jamb and datum coordination",
+          "sourceId": "GF-D-BATH-HALL"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "sliding",
+        "swingSign": 1,
+        "wallId": "GF-BATH-HALL",
+        "width": 0.85
+      },
+      {
+        "apertureType": "door",
+        "height": 2.134,
+        "id": "GF-D-STAIR-PORCH",
+        "kind": "door",
+        "offset": 0.3515,
+        "provenance": {
+          "basis": "Proposed independent porch/balcony access; source stair-to-bedroom removals preserved",
+          "sourceId": "GF-D-STAIR-PORCH"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "hinged",
+        "swingSign": 1,
+        "wallId": "GF-EXT-02-1",
+        "width": 1.067
+      },
+      {
+        "apertureType": "door",
+        "height": 2.3,
+        "id": "GF-OPEN-KITCHEN",
+        "kind": "door",
+        "offset": 1.35,
+        "provenance": {
+          "basis": "Required continuous kitchen access",
+          "sourceId": "GF-OPEN-KITCHEN"
+        },
+        "sill": 0,
+        "source": "REV04_SIZE_WITH_QA02_HOST_COORDINATION",
+        "status": "COORDINATED_CANDIDATE",
+        "style": "passage",
+        "swingSign": 1,
+        "wallId": "GF-REAR-BAND-4",
+        "width": 1.1
+      }
+    ],
+    "perimeter": [
+      "GF-EXT-01",
+      "GF-EXT-02-1",
+      "GF-EXT-02-2",
+      "GF-EXT-03",
+      "GF-EXT-04-1",
+      "GF-EXT-04-2",
+      "GF-EXT-05-1",
+      "GF-EXT-05-2",
+      "GF-EXT-06-1",
+      "GF-EXT-06-2",
+      "GF-EXT-06-3",
+      "GF-EXT-06-4"
+    ],
+    "walls": [
+      {
+        "a": "GF-N001",
+        "b": "GF-N002",
+        "id": "GF-EXT-01",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-01"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N002",
+        "b": "GF-N003",
+        "id": "GF-EXT-02-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-02"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N003",
+        "b": "GF-N004",
+        "id": "GF-EXT-02-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-02"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N004",
+        "b": "GF-N005",
+        "id": "GF-EXT-03",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-03"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N005",
+        "b": "GF-N006",
+        "id": "GF-EXT-04-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-04"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N006",
+        "b": "GF-N007",
+        "id": "GF-EXT-04-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-04"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N007",
+        "b": "GF-N008",
+        "id": "GF-EXT-05-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-05"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N008",
+        "b": "GF-N009",
+        "id": "GF-EXT-05-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-05"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N009",
+        "b": "GF-N010",
+        "id": "GF-EXT-06-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-06"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N010",
+        "b": "GF-N011",
+        "id": "GF-EXT-06-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-06"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N011",
+        "b": "GF-N012",
+        "id": "GF-EXT-06-3",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-06"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N012",
+        "b": "GF-N001",
+        "id": "GF-EXT-06-4",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-EXT-06"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.23
+      },
+      {
+        "a": "GF-N010",
+        "b": "GF-N013",
+        "id": "GF-REAR-BAND-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-REAR-BAND"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N013",
+        "b": "GF-N014",
+        "id": "GF-REAR-BAND-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-REAR-BAND"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N014",
+        "b": "GF-N015",
+        "id": "GF-REAR-BAND-3",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-REAR-BAND"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N015",
+        "b": "GF-N006",
+        "id": "GF-REAR-BAND-4",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-REAR-BAND"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N015",
+        "b": "GF-N008",
+        "id": "GF-BED-KITCHEN",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-BED-KITCHEN"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N011",
+        "b": "GF-N016",
+        "id": "GF-BED2-HALL-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-BED2-HALL"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N016",
+        "b": "GF-N017",
+        "id": "GF-BED2-HALL-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-BED2-HALL"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N018",
+        "b": "GF-N017",
+        "id": "GF-HALL-LOW-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-HALL-LOW"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N017",
+        "b": "GF-N019",
+        "id": "GF-HALL-LOW-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-HALL-LOW"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N020",
+        "b": "GF-N014",
+        "id": "GF-HALL-HIGH",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-HALL-HIGH"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N016",
+        "b": "GF-N013",
+        "id": "GF-BATH-HALL",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-BATH-HALL"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N012",
+        "b": "GF-N018",
+        "id": "GF-STAIR-REAR-1",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-STAIR-REAR"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      },
+      {
+        "a": "GF-N018",
+        "b": "GF-N003",
+        "id": "GF-STAIR-REAR-2",
+        "provenance": {
+          "basis": "REV04 zoning + native REV02 trace; normalized connected wall network; see coordination ledger",
+          "sourceId": "GF-STAIR-REAR"
+        },
+        "source": "QA02_SOURCE_CONSTRAINED_COORDINATION",
+        "status": "PROPOSED_ARCHITECTURAL_CANDIDATE",
+        "thickness": 0.1
+      }
+    ]
+  },
+  "height": 3.048,
+  "roomEnvelopes": [
+    {
+      "bbox": [
+        0,
+        9400,
+        3600,
+        14400
+      ],
+      "fill": "#e9edf9",
+      "id": "GF-BED1",
+      "name": "BEDROOM 1"
+    },
+    {
+      "bbox": [
+        3600,
+        9400,
+        7200,
+        14400
+      ],
+      "fill": "#f4ead7",
+      "id": "GF-KITCHEN",
+      "name": "KITCHEN"
+    },
+    {
+      "authority_note": "USER_DIRECTED_X_WIDTH_REDUCTION_914MM",
+      "bbox": [
+        0,
+        5600,
+        2112,
+        9400
+      ],
+      "fill": "#d9f4f6",
+      "id": "GF-BATH",
+      "name": "COMMON MAIN BATHROOM"
+    },
+    {
+      "bbox": [
+        0,
+        2200,
+        3300,
+        5600
+      ],
+      "fill": "#eef0fa",
+      "id": "GF-BED2",
+      "name": "BEDROOM 2 / GUEST"
+    },
+    {
+      "bbox": [
+        3300,
+        2200,
+        7200,
+        9400
+      ],
+      "fill": "#fff0c9",
+      "id": "GF-LOUNGE",
+      "name": "LIVING / LOUNGE"
+    },
+    {
+      "bbox": [
+        0,
+        0,
+        4290,
+        2200
+      ],
+      "fill": "#ffe1bd",
+      "id": "GF-STAIR",
+      "name": "U-STAIR"
+    },
+    {
+      "bbox": [
+        4290,
+        0,
+        7200,
+        2200
+      ],
+      "fill": "#e7eaec",
+      "id": "GF-PARK",
+      "name": "CAR PORCH / INTERNAL FRONT-RIGHT DOMAIN"
+    },
+    {
+      "authority_note": "DERIVED_FROM_USER_3FT_BATHROOM_REDUCTION_FOR_BEDROOM_ACCESS",
+      "bbox": [
+        2112,
+        5600,
+        3300,
+        9400
+      ],
+      "fill": "#f6f2e8",
+      "id": "GF-HALL-REV04-001",
+      "name": "HALL / ACCESS"
+    }
+  ],
+  "schema": "jp-cad://aad-floor/1"
+}
