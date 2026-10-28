@@ -1,6 +1,7 @@
 import fs from 'node:fs/promises';
 import {Workbook,SpreadsheetFile} from '@oai/artifact-tool';
-// Run with the Codex primary runtime (artifact-tool), not the website Node dependencies.
+// Stage this builder in a temporary directory linked to the Codex primary runtime dependencies.
+// Run with that runtime (artifact-tool), not the website Node dependencies.
 const out=process.argv[3];if(!out||!process.argv[2])throw Error('Usage: primary-node ashok-v2-workbook.mjs MANIFEST_JSON OUTPUT_DIR');
 const model=JSON.parse(await fs.readFile(process.argv[2],'utf8'));
 const w=Workbook.create(),s=w.worksheets.add('Coordination'),r=w.worksheets.add('MEP routes');
@@ -11,7 +12,7 @@ for(const row of [5,6]){
  s.getRange('F'+row).formulas=[['=B'+row+'-1944']];s.getRange('G'+row).formulas=[['=C'+row+'-2000']];
  s.getRange('H'+row).formulas=[['=IF(OR(B'+row+'-D'+row+'/2<0,B'+row+'+D'+row+'/2>9144,C'+row+'-E'+row+'/2<0,C'+row+'+E'+row+'/2>18288),"Outside plot",IF(AND(B'+row+'+D'+row+'/2>1944,C'+row+'+E'+row+'/2>2000,C'+row+'-E'+row+'/2<16400),"House outline clash",IF(AND(B'+row+'+D'+row+'/2>127,B'+row+'-D'+row+'/2<1327,C'+row+'+E'+row+'/2>16863,C'+row+'-E'+row+'/2<18263),"Outside WC clash","No outline clash")))']];
 }
-s.getRange('A9:B19').values=[['Hydraulic planning inputs',null],['Occupants (assumed)',8],['L/person/day',100],['Design flow L/day',null],['Retention days',1],['Retention m3',null],['Digestion m3',null],['Two-year sludge m3',null],['Required liquid m3',null],['Provided liquid m3',2],['Measured infiltration L/m2/day',null]];
+s.getRange('A9:B19').values=[['Hydraulic planning inputs',null],['Occupants (assumed)',8],['L/person/day',100],['Design flow L/day',null],['Retention days',1],['Retention m3',null],['Digestion m3',null],['Two-year sludge m3',null],['Required liquid m3',null],['Net provided liquid m3',null],['Measured infiltration L/m2/day',null]];
 for(const [cell,f] of Object.entries({B12:'=B10*B11',B14:'=B12*B13/1000',B15:'=0.0425*B10',B16:'=0.0708*B10',B17:'=B14+B15+B16'}))s.getRange(cell).formulas=[[f]];
 s.getRange('A20:B22').values=[['Effective soak depth m',1.5],['Hydraulic soak diameter m',null],['Release status','Coordination only; no construction issue']];
 s.getRange('B21').formulas=[['=IF(OR(B19="",B19<=0),"Measure infiltration",B12/(PI()*B20*B19))']];
@@ -26,9 +27,10 @@ s.getRange('H6').formulas=[['=IF(AND(B6+D6/2>1944,C6+E6/2>2000,C6-E6/2<16400),IF
 for(const [row,url,label] of [[12,model.services.sources[0].url,'NBC208 official PDF'],[13,model.services.sources[1].url,'UWSSP official PDF'],[14,model.services.sources[2].url,'Autodesk plumbing reference']])s.getRange('H'+row).formulas=[['=HYPERLINK("'+url+'","'+label+'")']];
 s.getRange('A4:H22').format.verticalAlignment='center';r.getUsedRange().format.verticalAlignment='center';s.getRange('A4:H4').format.horizontalAlignment='center';r.getRange('A2:F2').format.horizontalAlignment='center';s.getRange('B22').format.font={name:'Arial',size:11};
 s.getRange('B10').values=[[10]];console.log('INPUT_CHANGE_TEST', (await w.inspect({kind:'table',range:'Coordination!B17',include:'values',maxChars:500})).ndjson);s.getRange('B10').values=[[8]];
+s.getRange('A24:B25').values=[['Gross liquid envelope m3',2],['Baffle displacement m3',0.09775]];s.getRange('B18').formulas=[['=B24-B25']];s.getRange('B24:B25').setNumberFormat('0.00000');s.getRange('A24:B25').format.rowHeight=28;s.getRange('B24:B25').format.fill='#FFF1BF';
 w.recalculate();
 console.log((await w.inspect({kind:'table',range:'Coordination!A5:H6',include:'values,formulas',tableMaxRows:2,tableMaxCols:8,maxChars:2200})).ndjson);
 console.log((await w.inspect({kind:'match',searchTerm:'#REF!|#DIV/0!|#VALUE!|#NAME\\?|#NUM!',options:{useRegex:true,maxResults:20},maxChars:1000})).ndjson);
 await fs.mkdir(out,{recursive:true});
-for(const [sheetName,range] of [['Coordination','A2:H22'],['MEP routes','A2:F8']]){const b=await w.render({sheetName,range,scale:1.4,format:'png'});await fs.writeFile(out+'/'+sheetName.replaceAll(' ','_')+'.png',new Uint8Array(await b.arrayBuffer()));}
+for(const [sheetName,range] of [['Coordination','A2:H25'],['MEP routes','A2:F8']]){const b=await w.render({sheetName,range,scale:1.4,format:'png'});await fs.writeFile(out+'/'+sheetName.replaceAll(' ','_')+'.png',new Uint8Array(await b.arrayBuffer()));}
 await (await SpreadsheetFile.exportXlsx(w)).save(out+'/Ashok_v2_Coordination_Template.xlsx');

@@ -3,7 +3,7 @@ import math
 
 def add_services(m):
     E=m['presentation']['elements'];P=lambda x,y,h=0:{'x':round(x/1000-1.944,6),'z':round(16.4-y/1000,6),'y':h}
-    assets=[{'id':'SEPTIC','name':'Septic tank - 2 chambers','xMm':1746,'yMm':8281,'widthMm':1300,'lengthMm':2300,'heightMm':2000,'internalLiquidM3':2.0,'requiredLiquidM3':1.7064,'colour':'#b76b32'},
+    assets=[{'id':'SEPTIC','name':'Septic tank - 2 chambers','xMm':1746,'yMm':8281,'widthMm':1300,'lengthMm':2300,'heightMm':2000,'grossLiquidM3':2.0,'baffleDisplacementM3':.09775,'internalLiquidM3':1.90225,'chamberClearLengthsM':[1.2666666667,.6333333333],'requiredLiquidM3':1.7064,'colour':'#b76b32'},
             {'id':'SOAK','name':'Soak pit - indicative 1500 mm internal diameter','xMm':1130,'yMm':17053,'widthMm':1800,'lengthMm':1800,'heightMm':1800,'internalDiameterMm':1500,'requiredInfiltrationLPerM2Day':800/(math.pi*1.5*1.5),'colour':'#8d68b8'}]
     def obj(id,name,parts,system='P - Drainage',colour='#a0673d',**extra):
         lo={k:min(p[k]-p['d'+k]/2 for p in parts) for k in ['x','y','z']};hi={k:max(p[k]+p['d'+k]/2 for p in parts) for k in lo}
@@ -16,8 +16,8 @@ def add_services(m):
         parts=[box(x,-h+.075,z,w,.15,l,c),box(x,-h/2,z-l/2+.075,w,h,.15,c),box(x,-h/2,z+l/2-.075,w,h,.15,c),box(x-w/2+.075,-h/2,z,.15,h,l,c),box(x+w/2-.075,-h/2,z,.15,h,l,c),box(x,.015,z,.6,.03,.6,c)]
         if a['id']=='SEPTIC':
             # Inspection cutaway baffle with a 150 mm transfer opening (detail assumption).
-            for dx in [-1,1]:parts.append(box(x+dx*(w+.15)/4,-h/2,z-l/6,(w-.15)/2,h,.1,c))
-            parts.extend([box(x,-1.575,z-l/6,.15,.85,.1,c),box(x,-.5,z-l/6,.15,1,.1,c)])
+            for dx in [-1,1]:parts.append(box(x+dx*(w+.15)/4,-h/2,z-(2.0-.1)/6,(w-.15)/2,h,.1,c))
+            parts.extend([box(x,-1.575,z-(2.0-.1)/6,.15,.85,.1,c),box(x,-.5,z-(2.0-.1)/6,.15,1,.1,c)])
         e=obj(a['id'],a['name'],parts,assetId=a['id'],shape='circular' if a['id']=='SOAK' else 'rectangular')
         if a['id']=='SOAK':
             e.pop('parts');e.update(x=x,z=z,y=-h/2,dx=w,dz=l,dy=h,clashBasis='Conservative bounding excavation envelope',profile=[{'x':x+.9*math.cos(i*math.tau/48),'z':z+.9*math.sin(i*math.tau/48)} for i in range(48)],holes=[[{'x':x+.75*math.cos(i*math.tau/48),'z':z+.75*math.sin(i*math.tau/48)} for i in range(48)]])
@@ -41,6 +41,7 @@ def add_services(m):
         route('STACK-'+k,k+' soil/waste stack',[{'x':xx,'z':zz,'y':-.4},{'x':xx,'z':zz,'y':6.706}],100,fixtures=fixture_groups[k])
         route('VENT-'+k,k+' full-bore vent to open air',[{'x':xx,'z':zz,'y':6.706},{'x':xx,'z':zz,'y':7.606}],100,'P - Vent','#7464b4')
         start={'x':xx,'z':zz,'y':-.4};bend={'x':sx['x'],'z':zz,'y':-.4-abs(xx-sx['x'])/57};end={**sx,'y':bend['y']-abs(zz-sx['z'])/57};route('DRAIN-'+k,k+' buried gravity drain via inspection/cleanout',[start,bend,end]);route('INLET-'+k,k+' drop at septic inlet',[end,sx])
+    route('VENT-TANK','Septic secondary chamber gas vent to roof vent header',[{'x':sx['x'],'z':outlet['z'],'y':-.3},{'x':-.12,'z':outlet['z'],'y':-.3},{'x':-.12,'z':outlet['z'],'y':7.0},{'x':-.12,'z':7.1,'y':7.0}],100,'P - Vent','#7464b4')
     route('EFFLUENT','Septic treated effluent to soak pit',[outlet,{'x':ox['x'],'z':outlet['z'],'y':-.82},ox],100,'P - Effluent','#397e8b')
     for xx,zz,k in stacks:route('EXTRACT-'+k,k+' mechanical exhaust to outside air',[{'x':max(.1,xx),'z':zz,'y':2.8},{'x':xx-.4 if k=='WEST' else xx,'z':zz if k=='WEST' else -.3,'y':2.8}],150,'M - Exhaust','#598a56')
     route('E-CONDUIT','Electrical distribution conduit - schematic, no cable/breaker sizing',[{'x':4.3,'z':12.1,'y':1.5},{'x':4.3,'z':12.1,'y':2.8},{'x':4.3,'z':7.1,'y':2.8},{'x':.25,'z':7.1,'y':2.8}],25,'E - Electrical','#c39a26')

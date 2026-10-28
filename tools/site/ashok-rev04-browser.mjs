@@ -65,7 +65,7 @@ try{
   await page.locator('[data-view="studio"]').click();await page.waitForTimeout(250);
   assert.equal(await frame.locator('#aad-services-controls').isVisible(),true);
   await frame.locator('#aad-mep-view').click();const mep=await renderProof();assert.ok(mep.mepMode&&mep.visibleMEP>=20);assert.equal(mep.visibleWalls,0);
-  await frame.locator('#aad-audit-discipline').selectOption('MEP');assert.match(await frame.locator('#aad-audit-count').textContent(),/26/);await frame.locator('#aad-audit-clear').click();
+  await frame.locator('#aad-audit-discipline').selectOption('MEP');assert.match(await frame.locator('#aad-audit-count').textContent(),new RegExp(String(result.elements.filter(e=>e.discipline==='MEP').length)));await frame.locator('#aad-audit-clear').click();
   await frame.locator('#aad-pin-mode').check();await frame.locator('#viewer2d').click({position:{x:130,y:150}});assert.ok(await frame.locator('#aad-site-pins li').count()>=1);await frame.locator('#aad-pin-mode').uncheck();
   const pinsDownload=page.waitForEvent('download');await frame.locator('#aad-export-pins').click();const pinsFile=await pinsDownload;const savedPins=JSON.parse(fs.readFileSync(await pinsFile.path(),'utf8'));assert.equal(savedPins.project,'ashok-adhikari');assert.ok(savedPins.pins.length>=1&&savedPins.pins.every(p=>p.xMm>=0&&p.xMm<=9144&&p.yMm>=0&&p.yMm<=18288));
   await frame.locator('#aad-preset-roof').click();assert.ok((await renderProof()).visibleRoofCover);await frame.locator('#aad-roof-cover').uncheck();assert.equal((await renderProof()).visibleRoofCover,false);await frame.locator('#aad-roof-cover').check();

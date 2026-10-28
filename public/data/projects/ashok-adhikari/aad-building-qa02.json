@@ -4710,7 +4710,7 @@
             "dz": 0.1,
             "x": -0.5605,
             "y": -1.0,
-            "z": 7.735666666666667
+            "z": 7.802333333333333
           },
           {
             "colour": "#b76b32",
@@ -4719,7 +4719,7 @@
             "dz": 0.1,
             "x": 0.16449999999999998,
             "y": -1.0,
-            "z": 7.735666666666667
+            "z": 7.802333333333333
           },
           {
             "colour": "#b76b32",
@@ -4728,7 +4728,7 @@
             "dz": 0.1,
             "x": -0.198,
             "y": -1.575,
-            "z": 7.735666666666667
+            "z": 7.802333333333333
           },
           {
             "colour": "#b76b32",
@@ -4737,7 +4737,7 @@
             "dz": 0.1,
             "x": -0.198,
             "y": -0.5,
-            "z": 7.735666666666667
+            "z": 7.802333333333333
           }
         ],
         "provenance": {
@@ -6404,6 +6404,84 @@
         "z": 9.269
       },
       {
+        "colour": "#7464b4",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.139,
+        "dy": 7.3999999999999995,
+        "dz": 0.18099999999999916,
+        "fixtureIds": [],
+        "id": "MEP-VENT-TANK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Septic secondary chamber gas vent to roof vent header",
+        "parts": [
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.159,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 7.3,
+            "dz": 0.1,
+            "x": -0.12,
+            "y": 3.35,
+            "z": 6.969
+          },
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.13099999999999934,
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.0344999999999995
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.198,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Vent",
+        "x": -0.1395,
+        "y": 3.35,
+        "z": 7.0095
+      },
+      {
         "colour": "#397e8b",
         "contextLevels": [
           "gf",
@@ -7198,10 +7276,16 @@
   "services": {
     "assets": [
       {
+        "baffleDisplacementM3": 0.09775,
+        "chamberClearLengthsM": [
+          1.2666666667,
+          0.6333333333
+        ],
         "colour": "#b76b32",
+        "grossLiquidM3": 2.0,
         "heightMm": 2000,
         "id": "SEPTIC",
-        "internalLiquidM3": 2.0,
+        "internalLiquidM3": 1.90225,
         "lengthMm": 2300,
         "name": "Septic tank - 2 chambers",
         "requiredLiquidM3": 1.7064,
@@ -7762,6 +7846,37 @@
         ],
         "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
         "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "VENT-TANK",
+        "name": "Septic secondary chamber gas vent to roof vent header",
+        "points": [
+          {
+            "x": -0.198,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Vent"
       },
       {
         "diameterBasis": "DN100 effluent coordination assumption; UWSSP8.4.4",
