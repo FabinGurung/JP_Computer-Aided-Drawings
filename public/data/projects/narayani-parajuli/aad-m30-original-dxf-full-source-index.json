@@ -1,0 +1,188 @@
+{
+  "schema": "jp-cad://aad-m30-original-dxf-source-index/1",
+  "projectId": "PRJ-000007",
+  "revision": "M30-20261028",
+  "ownerWorkingApproval": "M28_OWNER_VERIFIED_NO_REAPPROVAL_REQUEST",
+  "sourcePolicy": "ORIGINAL_DXF_IN_GOOGLE_DRIVE_IMMUTABLE",
+  "extraction": {
+    "method": "ezdxf 1.4.4 modelspace exhaustive enumeration plus bounded Block B floor-plan source samples",
+    "performed": "2026-10-28",
+    "processing": "local authenticated original Drive downloads; not GitHub Actions Drive synchronization",
+    "fullModelspaceIndexed": true,
+    "fullGeometryReplacedOriginalDXF": false,
+    "linkBackToOriginals": true
+  },
+  "originals": {
+    "architecture": {
+      "driveId": "1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv",
+      "name": "narayni architecture drw revised.dxf",
+      "sizeBytes": 113898026,
+      "sha256": "077e7b4ffd5ce3c5c9789f9d040ef32ee661175aedd5f2d1059dbbe18176e124",
+      "modelspaceEntities": 371930,
+      "layers": 48,
+      "entityTypes": {
+        "LWPOLYLINE": 1972,
+        "MTEXT": 909,
+        "IMAGE": 2,
+        "HATCH": 139,
+        "CIRCLE": 573,
+        "LINE": 366586,
+        "INSERT": 579,
+        "DIMENSION": 991,
+        "TEXT": 110,
+        "ARC": 64,
+        "MLINE": 5
+      }
+    },
+    "structure": {
+      "driveId": "13k901-pejMY7lE_0VepomzxUZFiZyzox",
+      "name": "narayani str drg revised plan.dxf",
+      "sizeBytes": 36050950,
+      "sha256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+      "modelspaceEntities": 13834,
+      "layers": 107,
+      "entityTypes": {
+        "LWPOLYLINE": 1244,
+        "INSERT": 531,
+        "MTEXT": 1210,
+        "LINE": 6051,
+        "ARC": 302,
+        "CIRCLE": 1249,
+        "DIMENSION": 886,
+        "LEADER": 386,
+        "TEXT": 466,
+        "HATCH": 1430,
+        "ELLIPSE": 22,
+        "SOLID": 42,
+        "MULTILEADER": 14,
+        "MLINE": 1
+      }
+    }
+  },
+  "selectedBlockBArchitecture": {
+    "selection": "Block B family anchored by area callouts GF 205.16 m²; FF 200.67 m²; SF 175.62 m²; other model-space sheets not commingled",
+    "anchorHandles": {
+      "gf": "1E8D3A",
+      "ff": "1E8D3C",
+      "sf": "1E8D3E"
+    },
+    "scanWindowsNativeMM": {
+      "gf": [
+        5468500,
+        5515000,
+        -151500,
+        -105000
+      ],
+      "ff": [
+        5515000,
+        5565000,
+        -151500,
+        -105000
+      ],
+      "sf": [
+        5565000,
+        5615000,
+        -151500,
+        -105000
+      ]
+    },
+    "drawnWallSourceEntities": {
+      "gf": 44,
+      "ff": 101,
+      "sf": 142
+    },
+    "allSelectedWindowGeometry": {
+      "gf": 195,
+      "ff": 287,
+      "sf": 4469
+    },
+    "sourceWallLayers": [
+      "wall 2",
+      "walls",
+      "wall"
+    ],
+    "observation": "FF and SF contain original wall-layer entities, not merely the reconstructed editable CAD floor graph. SF window includes thousands of centerline LINE primitives, not presumed structural components.",
+    "geometryCanReplaceAreaCalibratedAadWalls": false,
+    "reason": "Original wall edge extraction is not yet topologically registered to architectural wall-centerline graph and no surveyed common origin/control points supplied."
+  },
+  "upperFloorStructuralSheetEvidence": {
+    "originalSourceSections": [
+      "GROUND FLOOR BEAM LAYOUT PLAN",
+      "FIRST FLOOR BEAM LAYOUT PLAN",
+      "SECOND FLOOR BEAM LAYOUT PLAN",
+      "COLUMN DESIGN SUMMARY"
+    ],
+    "sheetTitleHandles": {
+      "gf": "B000D",
+      "ff": "B0452",
+      "sf": "B084F",
+      "columnDesignSummary": "AE35B"
+    },
+    "areaWindowNativeMM": {
+      "gf": [
+        820000,
+        859000,
+        -135000,
+        -100000
+      ],
+      "ff": [
+        860000,
+        899000,
+        -135000,
+        -100000
+      ],
+      "sf": [
+        899000,
+        938000,
+        -135000,
+        -100000
+      ]
+    },
+    "sourceNativeByFloor": {
+      "gf": {
+        "sheetBeamMTEXT": 34,
+        "wallLines": 113,
+        "centerlineLines": 20
+      },
+      "ff": {
+        "sheetBeamMTEXT": 34,
+        "wallLines": 113,
+        "centerlineLines": 20
+      },
+      "sf": {
+        "sheetBeamMTEXT": 31,
+        "wallLines": 107,
+        "centerlineLines": 20
+      }
+    },
+    "note": "Source MTEXT contains MB 230X405 / MB 230X300 section labels and structural-layout linework; source identity and native handles preserved in complete extracted archive.",
+    "certifiedBeamMemberCount": null,
+    "certifiedMemberCenterlines": false,
+    "verifiedColumnContinuity": false,
+    "cannotTurnLabelsIntoIFC": true,
+    "rationale": "Native sheet layout/annotation positions are NOT automatically world-space beam axes, span boundaries or load reactions; copied base linework must not become fabricated upper-floor members."
+  },
+  "provenance": {
+    "fullSourceIndexArchive": "M30 SOURCE EXTRACTION archive delivered separately in current conversation; not uploaded to GitHub or GitHub Pages",
+    "generationScript": "tools/site/aad-m30-extract-original-dxf.py",
+    "originalDXFDriveUrls": [
+      "https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view",
+      "https://drive.google.com/file/d/13k901-pejMY7lE_0VepomzxUZFiZyzox/view"
+    ]
+  },
+  "sourceToDesignGate": {
+    "ownerLayoutApproval": "SETTLED",
+    "architectureRegistration": "NOT_SURVEYED_OR_TOPOLOGY_RECONCILED",
+    "upperFloorMemberCoordinates": "SOURCE_SHEET_GEOMETRY_AVAILABLE__MEMBER_MAPPING_NOT_VALIDATED",
+    "upperFloorIFCConstructionMembers": 0,
+    "loadPathReactionsCapacity": "NOT_VERIFIED",
+    "issueForConstruction": false,
+    "nextRequiredEvidence": [
+      "Unique beam centreline endpoints with documented sheet-to-building coordinate transform",
+      "Source upper-storey column layout and schedules correlated to grid",
+      "Column-to-footing and transfer-beam load-path and capacity checks",
+      "Architectural DXF building control points/topological closed wall graph verified",
+      "Design engineer-reviewed dimensions, reinforcement, support reactions and signed revisions"
+    ]
+  }
+}
