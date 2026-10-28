@@ -199,12 +199,24 @@
     }
   },
   "provenance": {
-    "fullSourceIndexArchive": "M30 SOURCE EXTRACTION archive delivered separately in current conversation; not uploaded to GitHub or GitHub Pages",
+    "fullSourceIndexArchive": "Project-owned Google Drive M30 archive (source originals remain separate and unchanged)",
     "generationScript": "tools/site/aad-m30-extract-original-dxf.py",
     "originalDXFDriveUrls": [
       "https://drive.google.com/file/d/1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv/view",
       "https://drive.google.com/file/d/13k901-pejMY7lE_0VepomzxUZFiZyzox/view"
-    ]
+    ],
+    "persistedExtractionArchive": {
+      "driveFileId": "1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF",
+      "driveFolderId": "1QcWjfHEu008pePmzZVg3U4qkAVHSAuMm",
+      "driveUrl": "https://drive.google.com/file/d/1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF/view",
+      "fileName": "Narayani_M30_Full_DXF_Extraction.zip",
+      "fileSizeBytes": 9272240,
+      "sha256": "c89a0d54cda341794ebb0db750cd153f8a68febc39f63fcfac4477209d57d9b6",
+      "uploadReadback": "GOOGLE_DRIVE_METADATA_FILE_NAME_SIZE_AND_PARENT_CONFIRMED",
+      "driveByteDigestRecomputed": false,
+      "containingFolder": "Narayani_Parajuli_Residence/03 Extracted Drawing Measurements/M30__Original_DXF_Extraction_Archive__20261028",
+      "originalSourceDXFUnchanged": true
+    }
   },
   "sourceToDesignGate": {
     "ownerLayoutApproval": "SETTLED",
