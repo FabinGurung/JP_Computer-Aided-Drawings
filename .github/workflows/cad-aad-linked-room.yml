@@ -89,6 +89,7 @@ jobs:
           node tools/site/aad-m28-reconciliation-smoke.mjs
           node tools/site/aad-m29-datum-projection-smoke.mjs
           node tools/site/aad-m30-source-evidence-smoke.mjs
+          node tools/site/aad-m31-current-debt-gate.mjs
           node tools/site/aad-topology-smoke.mjs # project viewer asset test; browser route exercised against built Pages base
           echo CAD_AAD_BROWSER_LINKED_MODEL_PASS
       - name: Verify visible models at built GitHub Pages base path
