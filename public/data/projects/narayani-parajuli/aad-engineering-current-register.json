@@ -32,7 +32,7 @@
     "duplicateHandles": 0,
     "sourceOriginalsRehashed": true,
     "remoteCIRecomputedArchive": false,
-    "archiveCentralDriveStorage": "VERIFIED_UPLOADED",
+    "archiveCentralDriveStorage": "VERIFIED_UPLOAD_AND_REDOWLOAD_BYTE_HASH_MATCH",
     "delivery": "PROJECT_GOOGLE_DRIVE_ARCHIVED_AND_CONVERSATION_ARTIFACT",
     "limitations": "Archive includes model-space index records; original DXF remains authoritative for full semantics (e.g., HATCH/DIMENSION/IMAGE).",
     "driveArchive": {
@@ -42,8 +42,8 @@
       "fileName": "Narayani_M30_Full_DXF_Extraction.zip",
       "fileSizeBytes": 9272240,
       "sha256": "c89a0d54cda341794ebb0db750cd153f8a68febc39f63fcfac4477209d57d9b6",
-      "uploadReadback": "GOOGLE_DRIVE_METADATA_FILE_NAME_SIZE_AND_PARENT_CONFIRMED",
-      "driveByteDigestRecomputed": false
+      "uploadReadback": "REDOWNLOADED_FROM_GOOGLE_DRIVE_SHA256_AND_ZIP_CRC_CONFIRMED",
+      "driveByteDigestRecomputed": true
     }
   },
   "sourceStatus": {
