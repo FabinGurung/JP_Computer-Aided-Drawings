@@ -142,6 +142,16 @@ body[data-aad-embed] #aad-selected-details{display:none}
 body[data-aad-embed] .head h1{font-size:22px}
 body[data-aad-embed] .actions{margin-top:5px}
 
+/* Readable controls and scrollable registers at narrow widths. */
+#aad-audit-filters select{min-width:0;width:100%}
+header nav{flex-wrap:wrap}header>div,.head>div,.unified-toolbar>*,.panel-title>*,.viewport-title>*{min-width:0}
+.unified-toolbar label{flex:1 1 180px;display:flex;flex-direction:column;gap:4px}.unified-toolbar select{width:100%;max-width:100%;min-width:0}
+.unified-toolbar button,.actions button{white-space:normal;overflow-wrap:anywhere;min-height:44px}
+.viewhud{max-width:calc(100% - 24px);overflow-wrap:anywhere}
+.aad-audit-type td:first-child{white-space:normal;overflow-wrap:anywhere;min-width:180px;max-width:260px}
+.aad-audit-type td:nth-last-child(-n+2){white-space:normal;overflow-wrap:anywhere;min-width:200px;max-width:320px}
+.table-wrap:focus-visible{outline:3px solid #138579;outline-offset:-3px}
+@media(max-width:660px){.unified-toolbar label{flex:1 1 160px}.unified-toolbar button{flex:1 1 125px}.view-foot,.head p,#edit-notice,.legend{font-size:12px}table{font-size:12px}}
 </style>
 </head>
 <body>

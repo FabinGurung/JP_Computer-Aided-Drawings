@@ -58,6 +58,10 @@ try{
   await page.locator('[data-view="qa"]').click();await page.locator('#qa-notes').fill('GF-D-MAIN — test review note');
   const downloaded=page.waitForEvent('download');await page.locator('#export-qa').click();
   assert.equal((await downloaded).suggestedFilename(),'Ashok_REV04_QA_Notes.json');
+  await page.waitForTimeout(300);
+  assert.equal(await frame.locator('.unified-toolbar label,#aad-audit-filters label').evaluateAll(es=>es.filter(e=>e.clientWidth>0&&e.scrollWidth>e.clientWidth+2).length),0,'A studio control label overflows');
+  assert.ok(await page.locator('#ashok-engine').evaluate(e=>e.clientHeight>=e.contentDocument.querySelector('main').getBoundingClientRect().height),'Embedded studio content must fit without a capped internal page');
+  const register=frame.locator('.table-wrap[role=region]').first();assert.equal(await register.getAttribute('tabindex'),'0','Component register must accept keyboard focus');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Horizontal page overflow');
   await page.screenshot({path:'/tmp/ashok-rev04-qa-'+width+'.png',fullPage:false});
   await page.locator('[data-view="studio"]').click();await page.screenshot({path:'/tmp/ashok-rev04-studio-'+width+'.png',fullPage:false});

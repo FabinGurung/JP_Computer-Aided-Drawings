@@ -379,7 +379,7 @@ function addRows(){
     kindEl.dataset.groupKey="T:"+l.level+":"+d.name+":"+t.kind;kindEl.dataset.kind=t.kind;
     kindEl.open=openRule(kindEl.dataset.groupKey,t.kind==="wall"||t.kind==="column");
     captioned(kindEl,"summary",t.name+" · "+t.items.length+" items");
-    const wrap=document.createElement("div");wrap.className="table-wrap";
+    const wrap=document.createElement("div");wrap.className="table-wrap";wrap.tabIndex=0;wrap.setAttribute("role","region");wrap.setAttribute("aria-label",t.name+" component table; scroll horizontally for more columns");
     const table=document.createElement("table");
     const head=document.createElement("thead");
     const heads=document.createElement("tr");
