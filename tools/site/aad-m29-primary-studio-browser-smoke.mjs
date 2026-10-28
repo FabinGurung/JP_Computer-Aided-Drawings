@@ -41,7 +41,7 @@ try{
  assert.deepEqual([state.counts.column,state.counts.footing,state.counts.beam],[23,21,16]);
  assert.equal(state.elements.filter(e=>["ff","sf"].includes(e.level)&&
   ["column","beam","footing"].includes(e.kind)).length,0);
- assert.ok(state.diagnostics.some(d=>d.code==="NO_UPPER_FLOOR_STRUCTURAL_SOURCE"));
+ assert.ok(state.diagnostics.some(d=>d.code==="UPPER_STOREY_SOURCE_BEAM_SHEETS_PRESENT_MEMBERS_UNVERIFIED"));
  assert.equal(errors.length,0,"Browser exception: "+errors.join(" | "));
  await page.screenshot({path:"/tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png",fullPage:false});
  console.log("AAD_M29_PRIMARY_STUDIO_DXF_EDGE_AND_UPPER_PROJECTION_BROWSER_PASS",
