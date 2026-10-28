@@ -193,10 +193,17 @@ export function assembleBuilding(manifest,models,options={}){
    message:"23 owner-reviewed DXF column candidates, 21 footing footprints, 16 M70 beams assembled into the common BIM state; coordinate registration with area-adjusted architectural walls is provisional."});
   diagnostics.push({severity:"WARNING",code:"SOURCE_REVIEW_VERTICAL_SCHEMATIC",level:"gf",
    message:"Column heights, footing founding depths/thickness and plinth beam elevation are schematic; not a construction detail."});
-  diagnostics.push({severity:"WARNING",code:"NO_UPPER_FLOOR_STRUCTURAL_SOURCE",level:null,
-   message:"Upper-storey source columns/beams were NOT inferred from the ground-floor M70 stage; vertical load path not certified."});
-  diagnostics.push({severity:"WARNING",code:"I3_CF1_G1_STILL_UNRESOLVED",level:"gf",
-   message:"I3 foundation not verified; DXF CF1 still names original I4 support; G1 concrete size and reinforcement versus excavation working area unresolved."});
+  const fullDxfsIndexed=Boolean(manifest.structuralReview?.fullSourceIndex);
+  diagnostics.push(fullDxfsIndexed?
+   {severity:"WARNING",code:"UPPER_STOREY_SOURCE_BEAM_SHEETS_PRESENT_MEMBERS_UNVERIFIED",level:null,
+    message:"M30 indexed original GF/FF/SF beam-plan source drawings. Individual FF/SF beam axes, support connectivity, loads and upper-column schedule remain unverified; zero source upper structural IFC members have been admitted."}:
+   {severity:"WARNING",code:"NO_UPPER_FLOOR_STRUCTURAL_SOURCE",level:null,
+    message:"No original upper-storey member source mapped for this building; vertical load path not certified."});
+  diagnostics.push(review.ownerVerificationEventId?
+   {severity:"WARNING",code:"I3_CF1_G1_OWNER_SELECTED_GEOMETRY_CAPACITY_UNVERIFIED",level:"gf",
+    message:"Owner-approved Ø350 I3 and CF1 H3/I3 working-centre containment recorded; original CF1 H3/I4 source reference preserved. G1 uses native 1.80×1.80m DXF working outline. Actual footing/rebar/excavation dimensions and independent support capacities remain unverified."}:
+   {severity:"WARNING",code:"I3_CF1_G1_STILL_UNRESOLVED",level:"gf",
+    message:"I3 foundation and footing capacity not verified; original CF1 support reference, G1 sizing and excavation unverified."});
  }
  if(manifest.stairs?.opening){
   const op=manifest.stairs.opening,steps=manifest.stairs.risers||18;

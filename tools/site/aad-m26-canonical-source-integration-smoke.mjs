@@ -41,7 +41,7 @@ assert.equal(model.counts.column,23);
 assert.equal(model.counts.footing,21);
 assert.equal(model.counts.beam,16);
 assert.equal(model.diagnostics.some(d=>d.code==="STRUCTURAL_GRID_PROVENANCE_REVIEW"),false);
-assert.equal(model.diagnostics.some(d=>d.code==="NO_UPPER_FLOOR_STRUCTURAL_SOURCE"),true);
+assert.equal(model.diagnostics.some(d=>d.code==="UPPER_STOREY_SOURCE_BEAM_SHEETS_PRESENT_MEMBERS_UNVERIFIED"),true);
 assert.ok(model.elements.every(e=>!/:gf:COL:G[0-9]+-[0-9]+$/.test(e.id)&&!e.id.includes(":BEAM-X:")&&!e.id.includes(":BEAM-Z:")));
 assert.ok(verifyAssembly(model).valid);
 const register=buildAADComponentGroups(model,{level:"gf",discipline:"Structure"});
