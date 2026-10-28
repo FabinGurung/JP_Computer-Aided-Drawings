@@ -66,10 +66,11 @@ try{
   assert.equal(await frame.locator('#aad-services-controls').isVisible(),true);
   await frame.locator('#aad-mep-view').click();const mep=await renderProof();assert.ok(mep.mepMode&&mep.visibleMEP>=20);assert.equal(mep.visibleWalls,0);
   await frame.locator('#aad-audit-discipline').selectOption('MEP');assert.match(await frame.locator('#aad-audit-count').textContent(),/26/);await frame.locator('#aad-audit-clear').click();
-  await frame.locator('#aad-pin-mode').check();await frame.locator('#viewer2d').click({position:{x:130,y:150}});await frame.locator('#aad-pin-mode').uncheck();
+  await frame.locator('#aad-pin-mode').check();await frame.locator('#viewer2d').click({position:{x:130,y:150}});assert.ok(await frame.locator('#aad-site-pins li').count()>=1);await frame.locator('#aad-pin-mode').uncheck();
+  const pinsDownload=page.waitForEvent('download');await frame.locator('#aad-export-pins').click();const pinsFile=await pinsDownload;const savedPins=JSON.parse(fs.readFileSync(await pinsFile.path(),'utf8'));assert.equal(savedPins.project,'ashok-adhikari');assert.ok(savedPins.pins.length>=1&&savedPins.pins.every(p=>p.xMm>=0&&p.xMm<=9144&&p.yMm>=0&&p.yMm<=18288));
   await frame.locator('#aad-preset-roof').click();assert.ok((await renderProof()).visibleRoofCover);await frame.locator('#aad-roof-cover').uncheck();assert.equal((await renderProof()).visibleRoofCover,false);await frame.locator('#aad-roof-cover').check();
-  await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-v2-roof-cover-'+width+'.png'});
-  await frame.locator('#aad-mep-view').click();await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-v2-mep-'+width+'.png'});
+  await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-roof-access-v2-cover-'+width+'.png'});
+  await frame.locator('#aad-mep-view').click();await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-v2-mep-'+width+'.png'});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Horizontal page overflow');
   await page.screenshot({path:'/tmp/ashok-rev04-qa-'+width+'.png',fullPage:false});
   await page.locator('[data-view="studio"]').click();await page.screenshot({path:'/tmp/ashok-rev04-studio-'+width+'.png',fullPage:false});
