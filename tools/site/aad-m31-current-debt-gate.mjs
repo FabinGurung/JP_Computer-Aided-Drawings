@@ -41,7 +41,12 @@ assert.equal(live.issues.find(x=>x.id==="DOCUMENTARY_ENGINEERING_APPROVAL").work
 assert.equal(m30.sourceToDesignGate.issueForConstruction,false);
 assert.equal(m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor.ff.sheetBeamMTEXT,34);
 assert.equal(m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor.sf.sheetBeamMTEXT,31);
-assert.deepEqual(m30.provenance.persistedExtractionArchive,live.extractionAudit.driveArchive);
+// The source index additionally records its human-readable folder and original-DXF
+// preservation flag; compare the shared immutable Drive-file identity fields.
+for(const [key,value] of Object.entries(live.extractionAudit.driveArchive))
+ assert.deepEqual(m30.provenance.persistedExtractionArchive[key],value,
+   "Drive archive provenance mismatch: "+key);
+assert.equal(m30.provenance.persistedExtractionArchive.originalSourceDXFUnchanged,true);
 assert.deepEqual(read("archive/m31/M31_POST_M30-source-index-with-archive-link.json"),m30);
 const originalSourceIndex=read("archive/m31/M31_PRE_M30-source-index-before-archive-link.json");
 assert.equal(originalSourceIndex.provenance.persistedExtractionArchive,undefined);
