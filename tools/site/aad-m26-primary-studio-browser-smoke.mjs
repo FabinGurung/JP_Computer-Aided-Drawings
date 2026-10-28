@@ -22,7 +22,7 @@ try{
  assert.equal(core.assembly.counts.beam,16);
  assert.ok(core.assembly.sourceStructuralReview);
  assert.equal(core.caps.sourceReviewedStructure,true);
- assert.ok(core.assembly.diagnostics.some(x=>x.code==="I3_CF1_G1_STILL_UNRESOLVED"));
+ assert.ok(core.assembly.diagnostics.some(x=>x.code==="I3_CF1_G1_OWNER_SELECTED_GEOMETRY_CAPACITY_UNVERIFIED"));
  assert.equal(core.assembly.elements.filter(x=>x.kind==="column"&&x.level==="ff").length,0);
  assert.ok(!core.assembly.elements.some(e=>e.id.includes(":COL:G1-1")));
  assert.ok(core.assembly.elements.some(e=>e.id==="PRJ-000007:gf:QA-COL:I3"));
