@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261028-r03');return u.href;};
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
@@ -14,6 +14,7 @@ const {deriveM29DatumEvidence}=await import(/* @vite-ignore */moduleURL("aad-m29
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const {wallSolidCells}=await import(/* @vite-ignore */moduleURL("aad-wall-voids.mjs"));
 const {drawPresentationPlan}=await import(/* @vite-ignore */moduleURL("aad-dimensioned-plan.mjs"));
+const {drawServicesPlan,installSitePicker,siteConflicts}=await import(/* @vite-ignore */moduleURL("aad-services-plan.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 if(params.get('embed')==='1')document.body.dataset.aadEmbed='true';
@@ -22,7 +23,7 @@ let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let m30Evidence=null;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
-let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false;
+let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
@@ -57,7 +58,7 @@ function coordinatedMaterial(e,colour){
  const p=building?.manifest.presentation;
  const mat=new THREE.MeshStandardMaterial({color:colour||e.colour||(e.kind==='wall'&&p?p.wallColour:palettes[e.kind])||0x647b8a,roughness:e.kind==='window'?.22:.84,metalness:0,
   transparent:e.kind==='guard'&&e.colour==='#91b4b7',opacity:e.kind==='guard'&&e.colour==='#91b4b7'?.48:1,side:THREE.DoubleSide});
- if(p&&cutaway&&(['wall','door','window','column'].includes(e.kind)||roofAccessMode&&e.roofAccess&&e.kind==='auxiliary')){
+ if(p&&cutaway&&(['wall','door','window','column'].includes(e.kind)||roofAccessMode&&e.roofAccess&&!e.roofCover&&e.kind==='auxiliary')){
   const l=building.levels.find(l=>l.id===e.level);mat.clippingPlanes=[new THREE.Plane(new THREE.Vector3(0,-1,0),l.elevation+(roofAccessMode&&e.roofAccess?p.floorToFloor:0)+1.3)];
  }
  return mat;
@@ -88,6 +89,8 @@ function openingMesh(e){
  return meshes;
 }
 function boxes(e){
+ if(e.pipeRoute){return e.pipeRoute.slice(1).map((p,i)=>{const a=e.pipeRoute[i],v=new THREE.Vector3(p.x-a.x,p.y-a.y,p.z-a.z),len=v.length();const mesh=new THREE.Mesh(new THREE.CylinderGeometry(e.diameterMm/2000,e.diameterMm/2000,len,12),coordinatedMaterial(e));mesh.position.set((a.x+p.x)/2,(a.y+p.y)/2,(a.z+p.z)/2);mesh.quaternion.setFromUnitVectors(new THREE.Vector3(0,1,0),v.normalize());return mesh;});}
+
  if(e.kind==='wall'){
   const proof=wallSolidCells(e,building.elements),geometry=mergedBoxes(proof.cells);
   const m=new THREE.Mesh(geometry,coordinatedMaterial(e));m.position.set(e.x,e.y,e.z);m.rotation.y=-(e.rotationDeg||0)*Math.PI/180;
@@ -125,7 +128,10 @@ function applyVisible(){
  for(const m of hitMeshes){
   const e=m.userData.element;
   m.visible=Boolean((floorFlags.get(e.level)!==false||e.contextLevels?.includes(activeLevel))&&(kindFlags.get(e.kind)!==false)&&(!e.roofPart||kindFlags.get('roof')!==false)&&(!['furniture','fixture'].includes(e.kind)||showFurniture));
-  if(roofAccessMode)m.visible=m.visible&&Boolean(e.roofPart||e.kind==='roof')&&!e.roofCover;
+  if(roofAccessMode)m.visible=m.visible&&Boolean(e.roofPart||e.kind==='roof')&&(!e.roofCover||showRoofCover);
+  if(e.discipline==='MEP')m.visible=showMEP&&(mepMode||!roofAccessMode);
+  if(mepMode)m.visible=m.visible&&e.discipline==='MEP';
+  if(e.roofCover&&!showRoofCover)m.visible=false;
  }
  paintSelection();
 }
@@ -625,6 +631,7 @@ function drawPlan(){
   }
  }
  if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,selectedId,onSelect:selectElement,roofOnly:roofAccessMode});
+ if(showMEP&&!roofAccessMode)drawServicesPlan(doc,building);
  if(drawMode&&drawFirst&&activeLevel!=="all"){
   const l=state.manifest.levels.find(x=>x.id===activeLevel);
   const p=projectToWorld(drawFirst,l.transform);
@@ -937,6 +944,8 @@ async function main(){
  }
  if(manifest.presentation){
   $('aad-preset-roof').hidden=!Boolean(manifest.presentation.roofAccess);
+  $('aad-services-controls').hidden=!Boolean(manifest.services);
+  if(manifest.services){$('aad-mep-summary').textContent=manifest.services.notes.join(' ');$('aad-mep-conflicts').textContent=siteConflicts(manifest.services.assets,manifest.services.siteFrame).map(a=>a.id+': '+(a.outsidePlot?'outside plot; ':'')+(a.plinthOverlap?'excavation envelope crosses house outline; ':'')+(a.wcOverlap?'overlaps outside WC; ':'')).join(' | ');}
   cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
   setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
  }
@@ -946,9 +955,9 @@ for(const [id,stateKey]of [['aad-cutaway','cutaway'],['aad-dimensions','dimensio
 }
 function setKindVisibility(kind,visible){kindFlags.set(kind,visible);const box=document.querySelector(`#component-types input[data-kind="${kind}"]`);if(box)box.checked=visible;}
 for(const[id,level]of [['aad-preset-gf','gf'],['aad-preset-ff','ff'],['aad-preset-exterior','all']])$(id).addEventListener('click',()=>{
- if(!building)return;roofAccessMode=false;cutaway=level!=='all';$('aad-cutaway').checked=cutaway;setKindVisibility('roof',level==='all');setLevel(level);renderModel();drawPlan();centerView();
+ if(!building)return;roofAccessMode=false;mepMode=false;cutaway=level!=='all';$('aad-cutaway').checked=cutaway;setKindVisibility('roof',level==='all');setLevel(level);renderModel();drawPlan();centerView();
 });
-$('aad-preset-roof').addEventListener('click',()=>{if(!building?.manifest.presentation?.roofAccess)return;roofAccessMode=true;cutaway=true;$('aad-cutaway').checked=true;setKindVisibility('roof',true);setLevel('ff');setViewMode('building');renderModel();drawPlan();centerView();});
+$('aad-preset-roof').addEventListener('click',()=>{if(!building?.manifest.presentation?.roofAccess)return;roofAccessMode=true;mepMode=false;cutaway=true;$('aad-cutaway').checked=true;setKindVisibility('roof',true);setLevel('ff');setViewMode('building');renderModel();drawPlan();centerView();});
 for(const[id,mode]of [['aad-view-3d','building'],['aad-view-plan','plan'],['aad-view-both','split']])$(id).addEventListener('click',()=>{if(building)setViewMode(mode);});
 for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEventListener('click',()=>{
  const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
@@ -956,7 +965,7 @@ for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEven
 $('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg=$('viewer2d').cloneNode(true);svg.setAttribute('xmlns',svgNS);download(building.projectId+'_'+activeLevel+'_DIMENSIONED_PLAN.svg',new XMLSerializer().serializeToString(svg),'image/svg+xml');});
 $('viewer2d').addEventListener('pointermove',ev=>{
  if(!building?.manifest.presentation)return;const svg=$('viewer2d'),p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
- const x=Math.round(q.x*1000),y=Math.round((building.manifest.presentation.sourceYLength-q.y)*1000),cell=(building.manifest.presentation.grid?.minor||.1)*1000;$('aad-coordinate-readout').textContent=`${activeLevel.toUpperCase()} · X ${x} mm · Y ${y} mm · cell ${Math.floor(x/cell)},${Math.floor(y/cell)}`;
+ const x=Math.round(q.x*1000),y=Math.round((building.manifest.presentation.sourceYLength-q.y)*1000),cell=(building.manifest.presentation.grid?.minor||.1)*1000;$('aad-coordinate-readout').textContent=`Building ${activeLevel.toUpperCase()} · X ${x} mm · Y ${y} mm · cell ${Math.floor(x/cell)},${Math.floor(y/cell)}`;
 });
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
@@ -1045,7 +1054,7 @@ window.AADStudio=Object.freeze({
   // This also prevents headless software rendering from capturing a prior preset.
   renderer.render(scene,camera);renderer.getContext().finish();
   const visible=[...new Map(hitMeshes.filter(m=>m.visible!==false).map(m=>[m.userData.element.id,m.userData.element])).values()];
-  return{activeLevel,cutaway,roofAccessMode,visibleRoofAccess:visible.filter(e=>e.roofAccess).length,visibleWalls:visible.filter(e=>e.kind==='wall').length,
+  return{activeLevel,cutaway,roofAccessMode,mepMode,visibleMEP:visible.filter(e=>e.discipline==='MEP').length,visibleRoofCover:visible.some(e=>e.roofCover),visibleRoofAccess:visible.filter(e=>e.roofAccess).length,visibleWalls:visible.filter(e=>e.kind==='wall').length,
    visibleRoof:visible.some(e=>e.kind==='roof'),visibleFurniture:visible.filter(e=>e.kind==='furniture').length};
  },
  getOpeningVoidProof:(id)=>{
@@ -1129,3 +1138,8 @@ window.AADStudio=Object.freeze({
  getDraft:()=>workspace?workspace.bundle():null
 });
 main().catch(e=>{status("Unable to assemble this project: "+e.message);$("qa-result").textContent="ERROR: "+e.message;});
+
+installSitePicker(()=>building);
+$('aad-mep-view').addEventListener('click',()=>{if(!building?.manifest.services)return;mepMode=true;roofAccessMode=false;showMEP=true;$('aad-mep-visible').checked=true;setLevel('all');setViewMode('split');renderModel();drawPlan();centerView();});
+$('aad-mep-visible').addEventListener('change',e=>{showMEP=e.target.checked;applyVisible();drawPlan();});
+$('aad-roof-cover').addEventListener('change',e=>{showRoofCover=e.target.checked;applyVisible();});

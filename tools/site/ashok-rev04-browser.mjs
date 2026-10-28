@@ -62,6 +62,14 @@ try{
   assert.equal(await frame.locator('.unified-toolbar label,#aad-audit-filters label').evaluateAll(es=>es.filter(e=>e.clientWidth>0&&e.scrollWidth>e.clientWidth+2).length),0,'A studio control label overflows');
   assert.ok(await page.locator('#ashok-engine').evaluate(e=>e.clientHeight>=e.contentDocument.querySelector('main').getBoundingClientRect().height),'Embedded studio content must fit without a capped internal page');
   const register=frame.locator('.table-wrap[role=region]').first();assert.equal(await register.getAttribute('tabindex'),'0','Component register must accept keyboard focus');
+  await page.locator('[data-view="studio"]').click();await page.waitForTimeout(250);
+  assert.equal(await frame.locator('#aad-services-controls').isVisible(),true);
+  await frame.locator('#aad-mep-view').click();const mep=await renderProof();assert.ok(mep.mepMode&&mep.visibleMEP>=20);assert.equal(mep.visibleWalls,0);
+  await frame.locator('#aad-audit-discipline').selectOption('MEP');assert.match(await frame.locator('#aad-audit-count').textContent(),/26/);await frame.locator('#aad-audit-clear').click();
+  await frame.locator('#aad-pin-mode').check();await frame.locator('#viewer2d').click({position:{x:130,y:150}});await frame.locator('#aad-pin-mode').uncheck();
+  await frame.locator('#aad-preset-roof').click();assert.ok((await renderProof()).visibleRoofCover);await frame.locator('#aad-roof-cover').uncheck();assert.equal((await renderProof()).visibleRoofCover,false);await frame.locator('#aad-roof-cover').check();
+  await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-v2-roof-cover-'+width+'.png'});
+  await frame.locator('#aad-mep-view').click();await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-v2-mep-'+width+'.png'});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Horizontal page overflow');
   await page.screenshot({path:'/tmp/ashok-rev04-qa-'+width+'.png',fullPage:false});
   await page.locator('[data-view="studio"]').click();await page.screenshot({path:'/tmp/ashok-rev04-studio-'+width+'.png',fullPage:false});

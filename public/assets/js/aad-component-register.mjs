@@ -22,9 +22,10 @@ const CATEGORIES={
  roof:["Structure","Roofs","Conceptual roof plate; engineering design not certified"]
 };
 const PLAN_SHAPES=new Set(["wall","door","window","column","footing"]);
-const CLASS_ORDER=["Architecture","Structure","Other"];
+const CLASS_ORDER=["Architecture","Structure","MEP","Other"];
 const numeric=(n)=>Number.isFinite(n)?n:Infinity;
 export function classifyAADComponent(e){
+ if(e.discipline==="MEP")return{discipline:"MEP",type:"MEP systems",meaning:(e.system||"MEP")+" coordination geometry; see source notes and siting clashes"};
  const [discipline,type,meaning]=CATEGORIES[e.kind]||["Other","Other components","Conceptual model element"];
  return{discipline,type,meaning};
 }
@@ -69,7 +70,7 @@ export function buildAADComponentGroups(building,filters={}){
    const types=[...new Set(its.map(e=>e.kind))].sort((a,b)=>
     (classifyAADComponent({kind:a}).type.localeCompare(classifyAADComponent({kind:b}).type)));
    return{name:d,count:its.length,types:types.map(kind=>({
-    kind,name:classifyAADComponent({kind}).type,
+    kind,name:classifyAADComponent(its.find(e=>e.kind===kind)).type,
     items:its.filter(e=>e.kind===kind).sort(cmp)
    }))};
   }).filter(d=>d.count);

@@ -827,7 +827,7 @@
       "message": "NBC 205 coverage cap 92.90304 m2 is exceeded; use project-specific NBC 105 engineering. Missing M08 is excluded, not an active dependency."
     }
   ],
-  "revision": "AAD-ASHOK-MODEL-001-R000003",
+  "revision": "AAD-ASHOK-MODEL-001-R000004",
   "schema": "jp-cad://coordination-ledger/1",
   "sourceRemovedOrPassage": [
     {

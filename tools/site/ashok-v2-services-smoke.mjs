@@ -1,0 +1,10 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {plotToWorld,worldToPlot,siteConflicts} from '../../public/assets/js/aad-services-plan.mjs';import {createAADWorkspace} from '../../public/assets/js/aad-unified-workspace.mjs';import {buildAADComponentGroups} from '../../public/assets/js/aad-component-register.mjs';
+const dir='public/data/projects/ashok-adhikari/',m=JSON.parse(fs.readFileSync(dir+'aad-building-qa02.json')),models=Object.fromEntries(m.levels.map(l=>[l.id,JSON.parse(fs.readFileSync(dir+l.model))]));const b=createAADWorkspace(m,models).snapshot().assembly;
+assert.equal(m.release.version,'v2');assert.equal(m.services.assets.find(a=>a.id==='SOAK').xMm,1130);assert.equal(m.services.assets.find(a=>a.id==='SOAK').yMm,17053);assert.equal(m.services.assets.find(a=>a.id==='SEPTIC').xMm,1746);
+for(const a of m.services.assets)assert.deepEqual(worldToPlot(...Object.values(plotToWorld(a.xMm,a.yMm,m.services.siteFrame)),m.services.siteFrame),{xMm:a.xMm,yMm:a.yMm});
+const clashes=siteConflicts(m.services.assets,m.services.siteFrame);assert.ok(clashes.find(x=>x.id==='SEPTIC').plinthOverlap);assert.ok(clashes.find(x=>x.id==='SOAK').wcOverlap);
+const fixtures=b.elements.filter(e=>e.kind==='fixture');for(const f of fixtures)assert.ok(m.services.routes.some(r=>r.fixtureIds.includes(f.id.split(':').at(-1))),'Unconnected fixture '+f.id);
+for(const r of m.services.routes.filter(x=>/DRAIN-|EFFLUENT|INLET-/.test(x.id)))for(let i=1;i<r.points.length;i++)assert.ok(r.points[i].y<=r.points[i-1].y,'Uphill gravity route '+r.id);
+assert.ok(m.services.routes.filter(x=>x.system==='P - Vent').every(x=>x.diameterMm===100&&x.points.at(-1).y>6.706));assert.ok(buildAADComponentGroups(b,{discipline:'MEP'}).matching>=20);assert.equal(m.restrictions.issueForConstruction,false);
+const cover=b.elements.find(e=>e.roofCover);assert.ok(2.261>=cover.x-cover.dx/2&&2.261<=cover.x+cover.dx/2&&14.4-1.316>=cover.z-cover.dz/2&&14.4-1.316<=cover.z+cover.dz/2);
+console.log('ASHOK_V2_MEP_COORDINATE_SOURCE_PASS',{fixtures:fixtures.length,MEP:b.elements.filter(e=>e.discipline==='MEP').length,clashes});

@@ -351,6 +351,9 @@ for id,name,elevation in [('gf','Ground floor',.61),('ff','First floor',3.658)]:
     manifest['levels'].append({'id':id,'name':name,'elevation':elevation,'height':3.048,'model':'aad-'+id+'-model-qa02.json',
                                'sourceArea':source_area,'transform':{'x':0,'z':0,'rotationDeg':0},'status':'QA02_CONNECTED_CENTRELINE_COORDINATION'})
     write('aad-'+id+'-model-qa02.json',MODELS[id])
+import importlib.util
+_spec=importlib.util.spec_from_file_location('ashok_v2_services',Path(__file__).with_name('ashok-v2-services.py'))
+_mod=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(_mod);_mod.add_services(manifest)
 write('aad-building-qa02.json',manifest)
 write('coordination-ledger-qa02.json',{'schema':'jp-cad://coordination-ledger/1','revision':manifest['revision'],'dateNpt':'2026-10-28',
  'authorization':'User requested practical aesthetic completion with up to 30% schematic allowance and no further approval pause.',
