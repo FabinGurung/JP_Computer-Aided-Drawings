@@ -18,7 +18,7 @@ const history=fs.readFileSync(dir+"aad-engineering-current-register-history.json
  .trim().split("\n").map(s=>JSON.parse(s));
 assert.deepEqual(pre,old,"M27 original eight-open historical source must remain exact");
 assert.deepEqual(post,live,"M31 POST snapshot must match living register");
-assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST"]);
+assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED"]);
 assert.equal(live.schema,"jp-cad://aad-current-engineering-debt-register/1");
 assert.equal(live.projectId,"PRJ-000007");
 assert.equal(live.noFurtherOwnerLayoutApprovalRequired,true);
@@ -41,9 +41,20 @@ assert.equal(live.issues.find(x=>x.id==="DOCUMENTARY_ENGINEERING_APPROVAL").work
 assert.equal(m30.sourceToDesignGate.issueForConstruction,false);
 assert.equal(m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor.ff.sheetBeamMTEXT,34);
 assert.equal(m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor.sf.sheetBeamMTEXT,31);
+assert.deepEqual(m30.provenance.persistedExtractionArchive,live.extractionAudit.driveArchive);
+assert.deepEqual(read("archive/m31/M31_POST_M30-source-index-with-archive-link.json"),m30);
+const originalSourceIndex=read("archive/m31/M31_PRE_M30-source-index-before-archive-link.json");
+assert.equal(originalSourceIndex.provenance.persistedExtractionArchive,undefined);
+assert.equal(originalSourceIndex.originals.architecture.sha256,m30.originals.architecture.sha256);
+assert.equal(originalSourceIndex.originals.structure.sha256,m30.originals.structure.sha256);
 assert.equal(live.extractionAudit.uniqueHandles,385764);
 assert.equal(live.extractionAudit.duplicateHandles,0);
 assert.equal(live.extractionAudit.archiveIntegrity,"LOCAL_VERIFIED_ZIP_CRC_OK");
+assert.equal(live.extractionAudit.archiveCentralDriveStorage,"VERIFIED_UPLOADED");
+assert.equal(live.extractionAudit.driveArchive.driveFileId,
+ "1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF");
+assert.equal(live.extractionAudit.driveArchive.fileSizeBytes,9272240);
+assert.equal(live.extractionAudit.driveArchive.driveByteDigestRecomputed,false);
 assert.equal(live.extractionAudit.remoteCIRecomputedArchive,false,
  "GitHub CI cannot assert it downloaded a private raw archive");
 assert.equal(live.extractionAudit.archiveSha256,
@@ -72,4 +83,4 @@ console.log("AAD_M31_OWNER_DECISION_CLOSED_7_ENGINEERING_GATES_OPEN_PASS",
  JSON.stringify({closedOwnerDecisions:1,remainingIndependentTechnicalGates:7,
  originalIndexedSourceHandles:385764,structuralGF:[23,21,16],
  upperFloorDrawingSheetsLocated:true,upperFloorIFCMembersInvented:0,
- archiveVerifiedLocallyNotCI:true,constructionApproved:false}));
+ archiveVerifiedLocallyNotCI:true,googleDriveArchiveMetadataReadback:true,constructionApproved:false}));
