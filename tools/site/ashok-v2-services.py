@@ -4,7 +4,7 @@ import math
 def add_services(m):
     E=m['presentation']['elements'];P=lambda x,y,h=0:{'x':round(x/1000-1.944,6),'z':round(16.4-y/1000,6),'y':h}
     assets=[{'id':'SEPTIC','name':'Septic tank - 2 chambers','xMm':1746,'yMm':8281,'widthMm':1300,'lengthMm':2300,'heightMm':2000,'grossLiquidM3':2.0,'baffleDisplacementM3':.09775,'internalLiquidM3':1.90225,'chamberClearLengthsM':[1.2666666667,.6333333333],'requiredLiquidM3':1.7064,'colour':'#b76b32'},
-            {'id':'SOAK','name':'Soak pit - indicative 1500 mm internal diameter','xMm':1130,'yMm':17053,'widthMm':1800,'lengthMm':1800,'heightMm':1800,'internalDiameterMm':1500,'requiredInfiltrationLPerM2Day':800/(math.pi*1.5*1.5),'colour':'#8d68b8'}]
+            {'id':'SOAK','name':'Soak pit - indicative 1500 mm internal diameter','xMm':1130,'yMm':17053,'widthMm':1800,'lengthMm':1800,'heightMm':2550,'effectiveDepthM':1.5,'inletDepthM':1.05,'internalDiameterMm':1500,'requiredInfiltrationLPerM2Day':800/(math.pi*1.5*1.5),'colour':'#8d68b8'}]
     def obj(id,name,parts,system='P - Drainage',colour='#a0673d',**extra):
         lo={k:min(p[k]-p['d'+k]/2 for p in parts) for k in ['x','y','z']};hi={k:max(p[k]+p['d'+k]/2 for p in parts) for k in lo}
         e={'id':'MEP-'+id,'name':name,'kind':'auxiliary','level':'gf','contextLevels':['gf','ff'],'ifcType':'IfcBuildingElementProxy','source':'USER_V2_COORDINATES_AND_NBC208','status':'MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED','discipline':'MEP','system':system,'colour':colour,'provenance':{'basis':'User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained'},'parts':parts,**extra}

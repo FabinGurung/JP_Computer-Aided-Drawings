@@ -4761,7 +4761,7 @@
         ],
         "discipline": "MEP",
         "dx": 1.8,
-        "dy": 1.8,
+        "dy": 2.55,
         "dz": 1.8,
         "holes": [
           [
@@ -5166,7 +5166,7 @@
         "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
         "system": "P - Drainage",
         "x": -0.814,
-        "y": -0.9,
+        "y": -1.275,
         "z": -0.653
       },
       {
@@ -7295,8 +7295,10 @@
       },
       {
         "colour": "#8d68b8",
-        "heightMm": 1800,
+        "effectiveDepthM": 1.5,
+        "heightMm": 2550,
         "id": "SOAK",
+        "inletDepthM": 1.05,
         "internalDiameterMm": 1500,
         "lengthMm": 1800,
         "name": "Soak pit - indicative 1500 mm internal diameter",
