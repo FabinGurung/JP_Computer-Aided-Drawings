@@ -160,7 +160,43 @@
     "certifiedMemberCenterlines": false,
     "verifiedColumnContinuity": false,
     "cannotTurnLabelsIntoIFC": true,
-    "rationale": "Native sheet layout/annotation positions are NOT automatically world-space beam axes, span boundaries or load reactions; copied base linework must not become fabricated upper-floor members."
+    "rationale": "Native sheet layout/annotation positions are NOT automatically world-space beam axes, span boundaries or load reactions; copied base linework must not become fabricated upper-floor members.",
+    "nativeSheetTranslationComparison": {
+      "status": "EXACT_TRANSLATION_IN_NATIVE_DXF_SHEET_LINES__NOT_ENGINEERING_CAPACITY",
+      "comparisonMethod": "Match identical native LINE endpoint pairs and identical st-beam MTEXT content/positions after subtracting each sheet's first beam label x-coordinate; use 0.001 mm matching in this source analysis.",
+      "sheetXAnchorNativeMM": {
+        "gf": 832998.5,
+        "ff": 869172.5,
+        "sf": 907281.5
+      },
+      "translationRelativeToGroundFloorMM": {
+        "gf": 0,
+        "ff": 36174,
+        "sf": 74283
+      },
+      "gfVsFf": {
+        "wallLineSourceGeometryIdentical": 113,
+        "wallLineGfCount": 113,
+        "wallLineFfCount": 113,
+        "sourceBeamAnnotationIdentical": 34,
+        "sourceBeamAnnotationGFCount": 34,
+        "sourceBeamAnnotationFFCount": 34
+      },
+      "ffVsSf": {
+        "sharedWallLinesAfterNativeTranslation": 104,
+        "ffWallLines": 113,
+        "sfWallLines": 107,
+        "ffOnlyWallLines": 9,
+        "sfOnlyWallLines": 3,
+        "sharedBeamAnnotations": 31,
+        "ffBeamAnnotations": 34,
+        "sfBeamAnnotations": 31,
+        "ffOnlyBeamAnnotations": 3,
+        "sfOnlyBeamAnnotations": 0,
+        "sharedCenterlines": 20
+      },
+      "warning": "The first-floor beam sheet is an exact horizontal translation of GF source lines and beam annotations; this could be intentional copy/reuse, but cannot by itself establish independent FF load paths, sections or design approval."
+    }
   },
   "provenance": {
     "fullSourceIndexArchive": "M30 SOURCE EXTRACTION archive delivered separately in current conversation; not uploaded to GitHub or GitHub Pages",
