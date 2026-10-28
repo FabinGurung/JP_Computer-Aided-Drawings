@@ -39,6 +39,14 @@ assert.equal(inventory.sourceToDesignGate.issueForConstruction,false);
 assert.equal(inventory.sourceToDesignGate.upperFloorIFCConstructionMembers,0);
 assert.equal(plans.certifiedBeamMemberCount,null);
 assert.equal(plans.verifiedColumnContinuity,false);
+const cmp=plans.nativeSheetTranslationComparison;
+assert.equal(cmp.translationRelativeToGroundFloorMM.ff,36174);
+assert.equal(cmp.gfVsFf.wallLineSourceGeometryIdentical,113);
+assert.equal(cmp.gfVsFf.sourceBeamAnnotationIdentical,34);
+assert.equal(cmp.ffVsSf.sharedWallLinesAfterNativeTranslation,104);
+assert.equal(cmp.ffVsSf.ffOnlyWallLines,9);
+assert.equal(cmp.ffVsSf.sfOnlyWallLines,3);
+assert.equal(cmp.ffVsSf.sharedBeamAnnotations,31);
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,read(l.model)]));
 const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,root,async u=>
