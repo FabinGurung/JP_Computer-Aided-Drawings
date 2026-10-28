@@ -6525,9 +6525,9 @@
         ],
         "diameterMm": 150,
         "discipline": "MEP",
-        "dx": 0.40000000000000036,
+        "dx": 0.15000000000000036,
         "dy": 0.15000000000000036,
-        "dz": 0.15000000000000002,
+        "dz": 0.6499999999999999,
         "fixtureIds": [],
         "id": "MEP-EXTRACT-KITCHEN",
         "ifcType": "IfcBuildingElementProxy",
@@ -6537,12 +6537,12 @@
         "parts": [
           {
             "colour": "#598a56",
-            "dx": 0.40000000000000036,
+            "dx": 0.15,
             "dy": 0.15,
-            "dz": 0.15,
-            "x": 6.6,
+            "dz": 0.6499999999999999,
+            "x": 6.8,
             "y": 2.8,
-            "z": 0.35
+            "z": 0.024999999999999994
           }
         ],
         "pipeRoute": [
@@ -6552,9 +6552,9 @@
             "z": 0.35
           },
           {
-            "x": 6.3999999999999995,
+            "x": 6.8,
             "y": 2.8,
-            "z": 0.35
+            "z": -0.3
           }
         ],
         "provenance": {
@@ -6563,9 +6563,9 @@
         "source": "USER_V2_COORDINATES_AND_NBC208",
         "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
         "system": "M - Exhaust",
-        "x": 6.6,
+        "x": 6.8,
         "y": 2.8,
-        "z": 0.35
+        "z": 0.025000000000000022
       },
       {
         "colour": "#c39a26",
@@ -7823,9 +7823,9 @@
             "z": 0.35
           },
           {
-            "x": 6.3999999999999995,
+            "x": 6.8,
             "y": 2.8,
-            "z": 0.35
+            "z": -0.3
           }
         ],
         "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
