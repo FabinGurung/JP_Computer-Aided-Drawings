@@ -18,7 +18,7 @@ const history=fs.readFileSync(dir+"aad-engineering-current-register-history.json
  .trim().split("\n").map(s=>JSON.parse(s));
 assert.deepEqual(pre,old,"M27 original eight-open historical source must remain exact");
 assert.deepEqual(post,live,"M31 POST snapshot must match living register");
-assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED"]);
+assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED","M31_ARCHIVE_BINARY_VERIFIED"]);
 assert.equal(live.schema,"jp-cad://aad-current-engineering-debt-register/1");
 assert.equal(live.projectId,"PRJ-000007");
 assert.equal(live.noFurtherOwnerLayoutApprovalRequired,true);
@@ -50,11 +50,13 @@ assert.equal(originalSourceIndex.originals.structure.sha256,m30.originals.struct
 assert.equal(live.extractionAudit.uniqueHandles,385764);
 assert.equal(live.extractionAudit.duplicateHandles,0);
 assert.equal(live.extractionAudit.archiveIntegrity,"LOCAL_VERIFIED_ZIP_CRC_OK");
-assert.equal(live.extractionAudit.archiveCentralDriveStorage,"VERIFIED_UPLOADED");
+assert.equal(live.extractionAudit.archiveCentralDriveStorage,"VERIFIED_UPLOAD_AND_REDOWLOAD_BYTE_HASH_MATCH");
 assert.equal(live.extractionAudit.driveArchive.driveFileId,
  "1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF");
 assert.equal(live.extractionAudit.driveArchive.fileSizeBytes,9272240);
-assert.equal(live.extractionAudit.driveArchive.driveByteDigestRecomputed,false);
+assert.equal(live.extractionAudit.driveArchive.driveByteDigestRecomputed,true);
+assert.equal(live.extractionAudit.driveArchive.uploadReadback,
+ "REDOWNLOADED_FROM_GOOGLE_DRIVE_SHA256_AND_ZIP_CRC_CONFIRMED");
 assert.equal(live.extractionAudit.remoteCIRecomputedArchive,false,
  "GitHub CI cannot assert it downloaded a private raw archive");
 assert.equal(live.extractionAudit.archiveSha256,
@@ -83,4 +85,4 @@ console.log("AAD_M31_OWNER_DECISION_CLOSED_7_ENGINEERING_GATES_OPEN_PASS",
  JSON.stringify({closedOwnerDecisions:1,remainingIndependentTechnicalGates:7,
  originalIndexedSourceHandles:385764,structuralGF:[23,21,16],
  upperFloorDrawingSheetsLocated:true,upperFloorIFCMembersInvented:0,
- archiveVerifiedLocallyNotCI:true,googleDriveArchiveMetadataReadback:true,constructionApproved:false}));
+ archiveVerifiedLocallyNotCI:true,googleDriveArchiveFullReDownloadSHA256AndCRC:true,constructionApproved:false}));
