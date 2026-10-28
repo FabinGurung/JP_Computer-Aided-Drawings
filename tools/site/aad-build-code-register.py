@@ -84,6 +84,7 @@ data={'schema':'jp-cad://jurisdiction-code-register/1','id':'AAD-NP-PKR-CODES-00
  'vehicle':{'source':'BYD','lengthM':4.29,'bodyWidthM':1.77,'extendedMirrorWidthM':2.012,'heightM':1.57,'wheelbaseM':2.7,'minimumTyreTurningRadiusM':5.25,'bodySweptPathVerified':False}},
  'comparators':[dict(id=f'NP-RES-{i:02}',name=a,publisher=b,url=c,location=d,comparison=e,sourceSha256=PROJECT_RETRIEVAL_SHA256.get(f'NP-RES-{i:02}'),checkedOn='2026-10-28',engineeringTransfer='No published verified soil, footing/rebar schedule, MEP calculation or permit evidence adopted') for i,(a,b,c,d,e) in enumerate(refs,1)],
  'excludedAuthority':{'M08':'Excluded from active design inputs by user instruction; no dependency on missing native bytes. Retained history is not an active design basis.'}}
+data['revision']=2;data['checkedOn']='2026-10-29'
 data['mepInterpretations']={'source':'NBC208','clauses':{'B1.3':{'wcTrapSealMinMm':50,'floorTrapSealMinMm':50},'B1.4':{'wcBranchStackMinDiameterMm':100,'floorTrapOutletReferenceMm':75},'B1.7':{'ventDiameterReductionAllowed':False}},'workflowReference':{'publisher':'Autodesk','url':'https://www.autodesk.com/learn/ondemand/module/build-plumbing-systems-in-revit','meaning':'Separate sanitary, vent and other systems; model gravity falls and roof penetrations; not a Nepal code.'}}
 OUT.parent.mkdir(parents=True,exist_ok=True);OUT.write_text(json.dumps(data,ensure_ascii=False,indent=2)+'\n')
 print('CODE_REGISTER_BUILT',len(rules),'rules;',len(refs),'local residential references')

@@ -1,8 +1,8 @@
 {
   "schema": "jp-cad://jurisdiction-code-register/1",
   "id": "AAD-NP-PKR-CODES-001",
-  "revision": 1,
-  "checkedOn": "2026-10-28",
+  "revision": 2,
+  "checkedOn": "2026-10-29",
   "jurisdiction": {
     "country": "Nepal",
     "municipality": "Pokhara Metropolitan City",
