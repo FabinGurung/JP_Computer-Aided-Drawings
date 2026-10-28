@@ -32,9 +32,19 @@
     "duplicateHandles": 0,
     "sourceOriginalsRehashed": true,
     "remoteCIRecomputedArchive": false,
-    "archiveCentralDriveStorage": "NOT_CONFIRMED",
-    "delivery": "USER_CONVERSATION_ARTIFACT_LOCAL_COPY",
-    "limitations": "Archive includes model-space index records; original DXF remains authoritative for full semantics (e.g., HATCH/DIMENSION/IMAGE)."
+    "archiveCentralDriveStorage": "VERIFIED_UPLOADED",
+    "delivery": "PROJECT_GOOGLE_DRIVE_ARCHIVED_AND_CONVERSATION_ARTIFACT",
+    "limitations": "Archive includes model-space index records; original DXF remains authoritative for full semantics (e.g., HATCH/DIMENSION/IMAGE).",
+    "driveArchive": {
+      "driveFileId": "1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF",
+      "driveFolderId": "1QcWjfHEu008pePmzZVg3U4qkAVHSAuMm",
+      "driveUrl": "https://drive.google.com/file/d/1t8rcWF4wW7dyO8fr4Pi58QAWJq3A4TiF/view",
+      "fileName": "Narayani_M30_Full_DXF_Extraction.zip",
+      "fileSizeBytes": 9272240,
+      "sha256": "c89a0d54cda341794ebb0db750cd153f8a68febc39f63fcfac4477209d57d9b6",
+      "uploadReadback": "GOOGLE_DRIVE_METADATA_FILE_NAME_SIZE_AND_PARENT_CONFIRMED",
+      "driveByteDigestRecomputed": false
+    }
   },
   "sourceStatus": {
     "architecturalSource": "COMPLETE_DXF_INDEX_LOCAL_AND_SELECTED_BLOCK_B_SOURCE_FOUND",
