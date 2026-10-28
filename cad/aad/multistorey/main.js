@@ -20,6 +20,7 @@ if(params.get('embed')==='1')document.body.dataset.aadEmbed='true';
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
+let m30Evidence=null;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
@@ -869,6 +870,44 @@ async function main(){
   $("aad-m29-projection-toggle").addEventListener("change",e=>{
    showM29UpperProjection=e.target.checked;drawPlan();});
  }
+ if(reviewStructure&&manifest.structuralReview?.fullSourceIndex){
+  const indexURL=new URL(manifest.structuralReview.fullSourceIndex,prefix);
+  if(indexURL.origin!==location.origin||!indexURL.pathname.startsWith(prefix.pathname))
+   throw Error("M30 source index must reside in the same project directory");
+  const r=await fetch(indexURL.href,{cache:"no-store"});
+  if(!r.ok)throw Error("M30 source inventory HTTP "+r.status);
+  const index=await r.json();
+  if(index.schema!=="jp-cad://aad-m30-original-dxf-source-index/1"||
+     index.projectId!==manifest.projectId||
+     index.sourceToDesignGate.issueForConstruction!==false||
+     index.sourceToDesignGate.upperFloorIFCConstructionMembers!==0||
+     index.originals.architecture.modelspaceEntities!==371930||
+     index.originals.structure.modelspaceEntities!==13834)
+   throw Error("M30 source inventory is invalid or unsafe");
+  m30Evidence=index;
+  $("aad-m30-source").hidden=false;
+  $("aad-m30-evidence-link").href=indexURL.href;
+  $("aad-m30-summary").textContent=index.originals.architecture.modelspaceEntities.toLocaleString()+
+   " architectural and "+index.originals.structure.modelspaceEntities.toLocaleString()+
+   " structural model-space entities indexed from unchanged original DXFs. "+
+   "GF/FF/SF source beam-plan sheets verified; model remains conceptual.";
+  const select=$("aad-m30-floor"),detail=$("aad-m30-floor-evidence");
+  const update=()=>{
+   const floor=select.value;
+   const item=index.upperFloorStructuralSheetEvidence.sourceNativeByFloor[floor];
+   const name=floor==="gf"?"Ground":floor==="ff"?"First":"Second";
+   detail.textContent=name+" floor original structural sheet\n"+
+    "Plan-title native DXF handle: "+index.upperFloorStructuralSheetEvidence.sheetTitleHandles[floor]+"\n"+
+    "Beam-section MTEXT source annotations: "+item.sheetBeamMTEXT+"\n"+
+    "Native architectural/structural wall-layer lines in this sheet: "+item.wallLines+"\n"+
+    "Native centerline layer lines: "+item.centerlineLines+"\n"+
+    "Supported structural beams derived for IFC: NOT DETERMINED\n"+
+    "Load-path / capacity: NOT VERIFIED\n"+
+    "GF and FF beam sheet linework: 113 matching lines after 36,174 mm source-sheet translation\n"+
+    "Second-floor relative to first: 104 matching lines, 9 FF-only and 3 SF-only.";
+  };
+  select.addEventListener("change",update);update();
+ }
  workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey=draftStorageKey(manifest);
  try{
@@ -1069,6 +1108,15 @@ window.AADStudio=Object.freeze({
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
+ getM30SourceEvidence:()=>m30Evidence?{
+  schema:m30Evidence.schema,architectureIndexed:m30Evidence.originals.architecture.modelspaceEntities,
+  structureIndexed:m30Evidence.originals.structure.modelspaceEntities,
+  floorSheets:m30Evidence.upperFloorStructuralSheetEvidence.sourceNativeByFloor,
+  upperFloorIFCMembersAdded:m30Evidence.sourceToDesignGate.upperFloorIFCConstructionMembers,
+  constructionApproval:false,
+  originalSHA256:{architecture:m30Evidence.originals.architecture.sha256,
+   structure:m30Evidence.originals.structure.sha256}
+ }:null,
  getM29DatumEvidence:()=>m29Evidence?{
   schema:m29Evidence.schema,summary:m29Evidence.summary,
   sourceEdgeCount:m29Evidence.sourceSegments.length,

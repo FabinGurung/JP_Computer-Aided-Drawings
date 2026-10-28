@@ -1,0 +1,27 @@
+{
+  "schema": "jp-cad://aad-source-index-history/1",
+  "projectId": "PRJ-000007",
+  "subject": "Narayani full-original-DXF model-space indexing",
+  "events": [
+    {
+      "version": "M30_PRE",
+      "timestamp": "2026-10-28",
+      "source": "M29 source-ledger and original Drive DXF links",
+      "note": "Prior M29 partial GF architectural edge extraction and projection-only upper floor model; no full-file index available in GitHub."
+    },
+    {
+      "version": "M30_POST",
+      "timestamp": "2026-10-28",
+      "source": "Both same original Drive file IDs (no changes), exact SHA256 checks",
+      "note": "Read-only complete indexed model space in local extraction archive, compact source evidence manifest now in GitHub; upper source beam plans discovered, but NOT converted to IFC or capacity verified",
+      "validation": [
+        "371930 architecture source handles indexed",
+        "13834 structural source handles indexed",
+        "GF/FF/SF original beam-plan title handles discovered",
+        "GF FF SF native beam source annotation counts 34 34 31",
+        "Original structure member counts 23+21+16 retained"
+      ],
+      "restore": "Revert M30 Git commit to M29 to remove new source index UI; original DXF/file IDs and frozen M70/M60/M40/V03 never altered."
+    }
+  ]
+}
