@@ -50,7 +50,7 @@ const building=assembleBuilding(m,models,{reviewStructure:review});
 assert.equal(building.sourceStructuralReview.ownerVerificationEventId,ev.eventId);
 assert.deepEqual([building.counts.column,building.counts.footing,building.counts.beam],[23,21,16]);
 assert.equal(building.reviewStatus,"DRAFT_ENGINEERING_HOLD");
-assert.ok(building.diagnostics.some(d=>d.code==="NO_UPPER_FLOOR_STRUCTURAL_SOURCE"));
+assert.ok(building.diagnostics.some(d=>d.code==="UPPER_STOREY_SOURCE_BEAM_SHEETS_PRESENT_MEMBERS_UNVERIFIED"));
 console.log("AAD_M28_OWNER_APPROVED_CF1_GEOMETRIC_RECONCILIATION_PASS",
  JSON.stringify({verificationId:ev.eventId,workingSupports:link.workingIds,CF1:[cf.x,cf.z,cf.dx,cf.dz],
  G1:[g1.dx,g1.dz],F3:"ORIGINAL_DXF",sourcePreserved:true}));
