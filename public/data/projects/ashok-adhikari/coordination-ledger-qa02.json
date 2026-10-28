@@ -97,9 +97,37 @@
       "item": "Stair handedness and access",
       "reason": "Avoid circulation through Bedroom 2 and provide complete 900 mm start/arrival landings.",
       "source": "U-stair; start/arrival route unresolved in REV04 structured model"
+    },
+    {
+      "candidate_mm": {
+        "septic": [
+          1746,
+          8281
+        ],
+        "soak": [
+          1130,
+          17053
+        ]
+      },
+      "item": "v2 requested wastewater plot centres",
+      "reason": "Owner-specified centres retained; conservative excavation/plinth and outside-WC collisions are exposed, not accepted or silently relocated.",
+      "source_mm": {
+        "septic": [
+          1746,
+          8281
+        ],
+        "soak": [
+          1130,
+          17053
+        ]
+      }
+    },
+    {
+      "item": "v2 MEP routes and roof cover",
+      "reason": "Twelve fixture branches, soil/waste stacks, full-bore roof vents, effluent transfer, separate fan exhaust and electrical conduit. Existing stair cover becomes visible with a toggle. Kitchen-stack display penetrations added; detailed sections remain assumptions."
     }
   ],
-  "dateNpt": "2026-10-28",
+  "dateNpt": "2026-10-29",
   "inputs": [
     {
       "name": "REV04 semantic model",
