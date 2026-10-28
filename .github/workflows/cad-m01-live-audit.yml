@@ -158,6 +158,7 @@ jobs:
         run: |
           node tools/site/aad-m26-primary-studio-browser-smoke.mjs
           AAD_M29_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m29-primary-studio-browser-smoke.mjs
+          AAD_M30_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m30-source-browser-smoke.mjs
       - name: Archive evidence screenshot of live M26 primary studio
         if: always() && github.event_name == 'workflow_run'
         uses: actions/upload-artifact@v4
@@ -166,6 +167,7 @@ jobs:
           path: |
             /tmp/aad-m26-main-studio-source-structural.png
             /tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png
+            /tmp/aad-m30-source-native-upper-floors.png
           if-no-files-found: ignore
       - name: Verify live Ashok route and shared model on phone tablet and desktop
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
