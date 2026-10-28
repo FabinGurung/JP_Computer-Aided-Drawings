@@ -2,10 +2,13 @@ import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
 const base=process.env.CAD_REFERENCE_BASE||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
-try{for(const width of [390,1440]){
+try{for(const width of [360,390,768,1440]){
  const page=await browser.newPage({viewport:{width,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  assert.equal((await page.goto(base+'codes/pokhara/',{waitUntil:'networkidle'})).status(),200);
- await page.locator('#rule-body tr').first().waitFor();assert.equal(await page.locator('#rule-body tr').count(),39);assert.equal(await page.locator('[data-reference-id]').count(),10);
+ await page.locator('#rule-body tr').first().waitFor();
+ assert.equal(await page.locator('.card h3').evaluateAll(es=>es.filter(e=>e.scrollWidth>e.clientWidth+2).length),0,'Source title overflows its card');
+ const table=page.locator('.tablewrap');await table.focus();if(width<768){await page.keyboard.press('ArrowRight');await page.waitForTimeout(200);assert.ok(await table.evaluate(e=>e.scrollLeft>0),'Code table must be keyboard-scrollable');}
+assert.equal(await page.locator('#rule-body tr').count(),39);assert.equal(await page.locator('[data-reference-id]').count(),10);
  assert.match(await page.locator('#sizing-result').textContent(),/1\.7064/);assert.match(await page.locator('#sizing-result').textContent(),/requires measured infiltration/);
  await page.locator('#infiltration').fill('100');await page.locator('#wastewater-form button').click();assert.match(await page.locator('#sizing-result').textContent(),/1\.698 m internal/);
  await page.locator('#rule-search').fill('head');assert.ok(await page.locator('#rule-body tr').count()<39);await page.locator('#rule-search').fill('');await page.locator('#source-filter').selectOption('NBC208');assert.ok(await page.locator('#rule-body tr').count()>=6);
