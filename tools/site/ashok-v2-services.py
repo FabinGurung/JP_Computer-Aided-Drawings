@@ -27,7 +27,7 @@ def add_services(m):
         parts=[]
         for a,b in zip(points,points[1:]):parts.append(box((a['x']+b['x'])/2,(a['y']+b['y'])/2,(a['z']+b['z'])/2,max(abs(a['x']-b['x']),diameter/1000),max(abs(a['y']-b['y']),diameter/1000),max(abs(a['z']-b['z']),diameter/1000),colour))
         obj(id,name,parts,system,colour,pipeRoute=points,diameterMm=diameter,fixtureIds=fixtures or [])
-        routes.append({'id':id,'name':name,'system':system,'diameterMm':diameter,'points':points,'fixtureIds':fixtures or [],'diameterBasis':'NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions','slopeBasis':'Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain'})
+        routes.append({'id':id,'name':name,'system':system,'diameterMm':diameter,'points':points,'fixtureIds':fixtures or [],'diameterBasis':('Mechanical duct routing assumption; fan airflow not sized' if system.startswith('M') else 'Electrical conduit routing assumption; cables/protection not sized' if system.startswith('E') else 'NBC208 B1.7 full-bore stack continuation' if system=='P - Vent' else 'DN100 effluent coordination assumption; UWSSP8.4.4' if system=='P - Effluent' else 'NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions'),'slopeBasis':'Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain'})
     sx=P(1746,7131,-.75);outlet=P(1746,9431,-.8);ox=P(1130,17053,-1.05)
     # Outside wet stacks, continuous DN100 to roof without diameter reduction.
     stacks=[(-.12,7.1,'WEST'),(6.8,.35,'KITCHEN')]

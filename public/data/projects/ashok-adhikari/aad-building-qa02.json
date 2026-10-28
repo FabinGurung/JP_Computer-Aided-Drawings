@@ -7604,7 +7604,7 @@
         "system": "P - Sanitary"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
         "diameterMm": 100,
         "fixtureIds": [],
         "id": "VENT-WEST",
@@ -7695,7 +7695,7 @@
         "system": "P - Sanitary"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
         "diameterMm": 100,
         "fixtureIds": [],
         "id": "VENT-KITCHEN",
@@ -7763,7 +7763,7 @@
         "system": "P - Sanitary"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "DN100 effluent coordination assumption; UWSSP8.4.4",
         "diameterMm": 100,
         "fixtureIds": [],
         "id": "EFFLUENT",
@@ -7789,7 +7789,7 @@
         "system": "P - Effluent"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "Mechanical duct routing assumption; fan airflow not sized",
         "diameterMm": 150,
         "fixtureIds": [],
         "id": "EXTRACT-WEST",
@@ -7810,7 +7810,7 @@
         "system": "M - Exhaust"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "Mechanical duct routing assumption; fan airflow not sized",
         "diameterMm": 150,
         "fixtureIds": [],
         "id": "EXTRACT-KITCHEN",
@@ -7831,7 +7831,7 @@
         "system": "M - Exhaust"
       },
       {
-        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterBasis": "Electrical conduit routing assumption; cables/protection not sized",
         "diameterMm": 25,
         "fixtureIds": [],
         "id": "E-CONDUIT",
