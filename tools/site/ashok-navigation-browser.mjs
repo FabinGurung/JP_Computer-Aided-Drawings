@@ -12,7 +12,11 @@ try{for(const [width,height]of [[320,740],[390,844],[844,390],[768,1024],[1440,9
  assert.match(await page.locator('#version-v2').textContent(),/Current coordination edition/);
  assert.match(await page.locator('#project-versions').textContent(),/separate sequence/);
  for(const link of await page.locator('.ashok-contents a[data-section]').all()){
-  await link.click();const section=await link.getAttribute('data-section');assert.equal(await page.locator('#panel-'+section).isVisible(),true);
+  const section=await link.getAttribute('data-section'),href=await link.getAttribute('href');
+  if(width<1000)await link.tap();else await link.click();
+  assert.equal(await page.locator('#panel-'+section).isVisible(),true,width+'px contents '+href);
+  assert.equal(await page.locator('#tab-'+section).getAttribute('aria-selected'),'true');
+  assert.equal(new URL(page.url()).hash,href);
  }
  await page.locator('a[data-engine-target="aad-audit-register"]').click();
  await page.waitForFunction(()=>{const frame=document.getElementById('ashok-engine'),node=frame.contentDocument?.getElementById('aad-audit-register');if(!node)return false;const top=frame.getBoundingClientRect().top+node.getBoundingClientRect().top;const tabs=document.querySelector('.ashok-tabs').getBoundingClientRect().height;return top>=tabs&&top<=tabs+40;},null,{timeout:10000});
