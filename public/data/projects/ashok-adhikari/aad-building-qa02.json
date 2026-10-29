@@ -2071,6 +2071,24 @@
               "x": 0.25,
               "z": 12.25
             }
+          ],
+          [
+            {
+              "x": 6.7,
+              "z": 0.25
+            },
+            {
+              "x": 6.9,
+              "z": 0.25
+            },
+            {
+              "x": 6.9,
+              "z": 0.45
+            },
+            {
+              "x": 6.7,
+              "z": 0.45
+            }
           ]
         ],
         "id": "FF-FLOOR-PLATE",
@@ -3293,6 +3311,24 @@
             {
               "x": 0.25,
               "z": 12.25
+            }
+          ],
+          [
+            {
+              "x": 6.7,
+              "z": 0.25
+            },
+            {
+              "x": 6.9,
+              "z": 0.25
+            },
+            {
+              "x": 6.9,
+              "z": 0.45
+            },
+            {
+              "x": 6.7,
+              "z": 0.45
             }
           ]
         ],
@@ -4595,6 +4631,2097 @@
         "x": -1.217,
         "y": 0.075,
         "z": -0.313
+      },
+      {
+        "assetId": "SEPTIC",
+        "colour": "#a0673d",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "discipline": "MEP",
+        "dx": 1.3,
+        "dy": 2.03,
+        "dz": 2.3000000000000007,
+        "id": "MEP-SEPTIC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Septic tank - 2 chambers",
+        "parts": [
+          {
+            "colour": "#b76b32",
+            "dx": 1.3,
+            "dy": 0.15,
+            "dz": 2.3,
+            "x": -0.198,
+            "y": -1.925,
+            "z": 8.119
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 1.3,
+            "dy": 2.0,
+            "dz": 0.15,
+            "x": -0.198,
+            "y": -1.0,
+            "z": 7.044
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 1.3,
+            "dy": 2.0,
+            "dz": 0.15,
+            "x": -0.198,
+            "y": -1.0,
+            "z": 9.194
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.15,
+            "dy": 2.0,
+            "dz": 2.3,
+            "x": -0.7730000000000001,
+            "y": -1.0,
+            "z": 8.119
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.15,
+            "dy": 2.0,
+            "dz": 2.3,
+            "x": 0.377,
+            "y": -1.0,
+            "z": 8.119
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.6,
+            "dy": 0.03,
+            "dz": 0.6,
+            "x": -0.198,
+            "y": 0.015,
+            "z": 8.119
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.5750000000000001,
+            "dy": 2.0,
+            "dz": 0.1,
+            "x": -0.5605,
+            "y": -1.0,
+            "z": 7.802333333333333
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.5750000000000001,
+            "dy": 2.0,
+            "dz": 0.1,
+            "x": 0.16449999999999998,
+            "y": -1.0,
+            "z": 7.802333333333333
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.15,
+            "dy": 0.85,
+            "dz": 0.1,
+            "x": -0.198,
+            "y": -1.575,
+            "z": 7.802333333333333
+          },
+          {
+            "colour": "#b76b32",
+            "dx": 0.15,
+            "dy": 1,
+            "dz": 0.1,
+            "x": -0.198,
+            "y": -0.5,
+            "z": 7.802333333333333
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "shape": "rectangular",
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Drainage",
+        "x": -0.19800000000000004,
+        "y": -0.985,
+        "z": 8.119
+      },
+      {
+        "assetId": "SOAK",
+        "clashBasis": "Conservative bounding excavation envelope",
+        "colour": "#a0673d",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "discipline": "MEP",
+        "dx": 1.8,
+        "dy": 2.55,
+        "dz": 1.8,
+        "holes": [
+          [
+            {
+              "x": -0.06399999999999995,
+              "z": -0.653
+            },
+            {
+              "x": -0.07041635396964219,
+              "z": -0.5551053558349613
+            },
+            {
+              "x": -0.08955563028319868,
+              "z": -0.45888571617310947
+            },
+            {
+              "x": -0.12109035061653495,
+              "z": -0.3659874257261827
+            },
+            {
+              "x": -0.16448094716167094,
+              "z": -0.2780000000000001
+            },
+            {
+              "x": -0.21898499478157352,
+              "z": -0.19642892824345953
+            },
+            {
+              "x": -0.28366991411008924,
+              "z": -0.12266991411008943
+            },
+            {
+              "x": -0.35742892824345945,
+              "z": -0.057984994781573596
+            },
+            {
+              "x": -0.43899999999999983,
+              "z": -0.003480947161671022
+            },
+            {
+              "x": -0.5269874257261826,
+              "z": 0.039909649383464973
+            },
+            {
+              "x": -0.6198857161731094,
+              "z": 0.07144436971680124
+            },
+            {
+              "x": -0.7161053558349612,
+              "z": 0.09058364603035773
+            },
+            {
+              "x": -0.814,
+              "z": 0.09699999999999998
+            },
+            {
+              "x": -0.9118946441650386,
+              "z": 0.09058364603035773
+            },
+            {
+              "x": -1.0081142838268904,
+              "z": 0.07144436971680124
+            },
+            {
+              "x": -1.101012574273817,
+              "z": 0.039909649383465085
+            },
+            {
+              "x": -1.1889999999999998,
+              "z": -0.003480947161671022
+            },
+            {
+              "x": -1.2705710717565404,
+              "z": -0.057984994781573596
+            },
+            {
+              "x": -1.3443300858899105,
+              "z": -0.12266991411008932
+            },
+            {
+              "x": -1.4090150052184263,
+              "z": -0.19642892824345937
+            },
+            {
+              "x": -1.463519052838329,
+              "z": -0.2780000000000001
+            },
+            {
+              "x": -1.506909649383465,
+              "z": -0.3659874257261826
+            },
+            {
+              "x": -1.538444369716801,
+              "z": -0.45888571617310925
+            },
+            {
+              "x": -1.5575836460303578,
+              "z": -0.555105355834961
+            },
+            {
+              "x": -1.564,
+              "z": -0.6529999999999999
+            },
+            {
+              "x": -1.5575836460303578,
+              "z": -0.7508946441650388
+            },
+            {
+              "x": -1.5384443697168013,
+              "z": -0.8471142838268906
+            },
+            {
+              "x": -1.506909649383465,
+              "z": -0.9400125742738172
+            },
+            {
+              "x": -1.463519052838329,
+              "z": -1.0279999999999998
+            },
+            {
+              "x": -1.4090150052184263,
+              "z": -1.1095710717565406
+            },
+            {
+              "x": -1.344330085889911,
+              "z": -1.1833300858899105
+            },
+            {
+              "x": -1.2705710717565406,
+              "z": -1.2480150052184262
+            },
+            {
+              "x": -1.1890000000000003,
+              "z": -1.3025190528383288
+            },
+            {
+              "x": -1.101012574273817,
+              "z": -1.345909649383465
+            },
+            {
+              "x": -1.0081142838268904,
+              "z": -1.3774443697168013
+            },
+            {
+              "x": -0.9118946441650386,
+              "z": -1.3965836460303578
+            },
+            {
+              "x": -0.8140000000000001,
+              "z": -1.403
+            },
+            {
+              "x": -0.7161053558349615,
+              "z": -1.3965836460303578
+            },
+            {
+              "x": -0.6198857161731097,
+              "z": -1.3774443697168013
+            },
+            {
+              "x": -0.5269874257261831,
+              "z": -1.3459096493834652
+            },
+            {
+              "x": -0.43899999999999983,
+              "z": -1.302519052838329
+            },
+            {
+              "x": -0.35742892824346006,
+              "z": -1.2480150052184267
+            },
+            {
+              "x": -0.28366991411008946,
+              "z": -1.1833300858899107
+            },
+            {
+              "x": -0.21898499478157374,
+              "z": -1.1095710717565406
+            },
+            {
+              "x": -0.16448094716167116,
+              "z": -1.0280000000000005
+            },
+            {
+              "x": -0.12109035061653484,
+              "z": -0.9400125742738172
+            },
+            {
+              "x": -0.0895556302831989,
+              "z": -0.8471142838268912
+            },
+            {
+              "x": -0.07041635396964219,
+              "z": -0.7508946441650388
+            }
+          ]
+        ],
+        "id": "MEP-SOAK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Soak pit - indicative 1500 mm internal diameter",
+        "profile": [
+          {
+            "x": 0.08600000000000008,
+            "z": -0.653
+          },
+          {
+            "x": 0.07830037523642941,
+            "z": -0.5355264270019536
+          },
+          {
+            "x": 0.05533324366016157,
+            "z": -0.42006285940773136
+          },
+          {
+            "x": 0.017491579260158097,
+            "z": -0.3085849108714192
+          },
+          {
+            "x": -0.034577136594005076,
+            "z": -0.20300000000000007
+          },
+          {
+            "x": -0.0999819937378883,
+            "z": -0.10511471389215143
+          },
+          {
+            "x": -0.1776038969321071,
+            "z": -0.016603896932107287
+          },
+          {
+            "x": -0.26611471389215136,
+            "z": 0.061018006262111624
+          },
+          {
+            "x": -0.3639999999999998,
+            "z": 0.12642286340599473
+          },
+          {
+            "x": -0.46958491087141907,
+            "z": 0.17849157926015802
+          },
+          {
+            "x": -0.5810628594077313,
+            "z": 0.2163332436601615
+          },
+          {
+            "x": -0.6965264270019534,
+            "z": 0.23930037523642933
+          },
+          {
+            "x": -0.814,
+            "z": 0.247
+          },
+          {
+            "x": -0.9314735729980463,
+            "z": 0.23930037523642933
+          },
+          {
+            "x": -1.0469371405922685,
+            "z": 0.2163332436601615
+          },
+          {
+            "x": -1.1584150891285805,
+            "z": 0.17849157926015813
+          },
+          {
+            "x": -1.2639999999999998,
+            "z": 0.12642286340599485
+          },
+          {
+            "x": -1.3618852861078485,
+            "z": 0.061018006262111624
+          },
+          {
+            "x": -1.4503961030678927,
+            "z": -0.016603896932107176
+          },
+          {
+            "x": -1.5280180062621116,
+            "z": -0.10511471389215121
+          },
+          {
+            "x": -1.5934228634059948,
+            "z": -0.20300000000000007
+          },
+          {
+            "x": -1.6454915792601579,
+            "z": -0.3085849108714191
+          },
+          {
+            "x": -1.6833332436601613,
+            "z": -0.42006285940773114
+          },
+          {
+            "x": -1.7063003752364292,
+            "z": -0.5355264270019532
+          },
+          {
+            "x": -1.714,
+            "z": -0.6529999999999999
+          },
+          {
+            "x": -1.7063003752364292,
+            "z": -0.7704735729980466
+          },
+          {
+            "x": -1.6833332436601616,
+            "z": -0.8859371405922687
+          },
+          {
+            "x": -1.645491579260158,
+            "z": -0.9974150891285807
+          },
+          {
+            "x": -1.593422863405995,
+            "z": -1.1029999999999998
+          },
+          {
+            "x": -1.5280180062621116,
+            "z": -1.2008852861078485
+          },
+          {
+            "x": -1.4503961030678931,
+            "z": -1.2893961030678924
+          },
+          {
+            "x": -1.3618852861078488,
+            "z": -1.3670180062621116
+          },
+          {
+            "x": -1.2640000000000002,
+            "z": -1.4324228634059946
+          },
+          {
+            "x": -1.1584150891285805,
+            "z": -1.4844915792601583
+          },
+          {
+            "x": -1.0469371405922685,
+            "z": -1.5223332436601615
+          },
+          {
+            "x": -0.9314735729980465,
+            "z": -1.5453003752364294
+          },
+          {
+            "x": -0.8140000000000001,
+            "z": -1.553
+          },
+          {
+            "x": -0.6965264270019538,
+            "z": -1.5453003752364296
+          },
+          {
+            "x": -0.5810628594077316,
+            "z": -1.5223332436601615
+          },
+          {
+            "x": -0.4695849108714197,
+            "z": -1.4844915792601583
+          },
+          {
+            "x": -0.3639999999999998,
+            "z": -1.4324228634059948
+          },
+          {
+            "x": -0.266114713892152,
+            "z": -1.3670180062621122
+          },
+          {
+            "x": -0.17760389693210732,
+            "z": -1.2893961030678929
+          },
+          {
+            "x": -0.09998199373788852,
+            "z": -1.200885286107849
+          },
+          {
+            "x": -0.03457713659400541,
+            "z": -1.1030000000000004
+          },
+          {
+            "x": 0.017491579260158208,
+            "z": -0.9974150891285807
+          },
+          {
+            "x": 0.055333243660161346,
+            "z": -0.8859371405922695
+          },
+          {
+            "x": 0.07830037523642941,
+            "z": -0.7704735729980465
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "shape": "circular",
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Drainage",
+        "x": -0.814,
+        "y": -1.275,
+        "z": -0.653
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 1.8875,
+        "dy": 0.106578947368421,
+        "dz": 0.7874999999999996,
+        "fixtureIds": [
+          "FIX-GF-BASIN"
+        ],
+        "id": "MEP-BRANCH-FIX-GF-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Gf Basin trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.85,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.8049999999999999,
+            "y": 0.6899999999999998,
+            "z": 7.85
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 0.75,
+            "x": -0.12,
+            "y": 0.6584210526315788,
+            "z": 7.475
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 1.73,
+            "y": 0.7149999999999999,
+            "z": 7.85
+          },
+          {
+            "x": -0.12,
+            "y": 0.6649999999999998,
+            "z": 7.85
+          },
+          {
+            "x": -0.12,
+            "y": 0.6518421052631577,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.78625,
+        "y": 0.6742105263157894,
+        "z": 7.4937499999999995
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.8200000000000001,
+        "dy": 0.12587719298245625,
+        "dz": 0.15000000000000036,
+        "fixtureIds": [
+          "FIX-GF-WC"
+        ],
+        "id": "MEP-BRANCH-FIX-GF-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Gf Wc trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.77,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": 0.265,
+            "y": 0.7074999999999999,
+            "z": 7.2
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.10000000000000053,
+            "x": -0.12,
+            "y": 0.6816228070175437,
+            "z": 7.15
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 0.65,
+            "y": 0.7324999999999999,
+            "z": 7.2
+          },
+          {
+            "x": -0.12,
+            "y": 0.6824999999999999,
+            "z": 7.2
+          },
+          {
+            "x": -0.12,
+            "y": 0.6807456140350876,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.24000000000000002,
+        "y": 0.6945614035087718,
+        "z": 7.175
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 0.8075,
+        "dy": 0.10921052631578942,
+        "dz": 1.0874999999999995,
+        "fixtureIds": [
+          "FIX-GF-TUB"
+        ],
+        "id": "MEP-BRANCH-FIX-GF-TUB",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Gf Tub trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.77,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.265,
+            "y": 0.525,
+            "z": 6.05
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 1.0499999999999998,
+            "x": -0.12,
+            "y": 0.49078947368421055,
+            "z": 6.574999999999999
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 0.65,
+            "y": 0.55,
+            "z": 6.05
+          },
+          {
+            "x": -0.12,
+            "y": 0.5,
+            "z": 6.05
+          },
+          {
+            "x": -0.12,
+            "y": 0.48157894736842105,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.24625000000000002,
+        "y": 0.5078947368421053,
+        "z": 6.55625
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 1.7695,
+        "dy": 0.11359649122807047,
+        "dz": 1.5874999999999995,
+        "fixtureIds": [
+          "FIX-GF-SHOWER"
+        ],
+        "id": "MEP-BRANCH-FIX-GF-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Gf Shower trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.7320000000000002,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.746,
+            "y": 1.185,
+            "z": 5.55
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 1.5499999999999998,
+            "x": -0.12,
+            "y": 1.1464035087719298,
+            "z": 6.324999999999999
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 1.612,
+            "y": 1.21,
+            "z": 5.55
+          },
+          {
+            "x": -0.12,
+            "y": 1.16,
+            "z": 5.55
+          },
+          {
+            "x": -0.12,
+            "y": 1.1328070175438596,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.7272500000000001,
+        "y": 1.165701754385965,
+        "z": 6.30625
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 1.4374999999999991,
+        "dy": 0.10131578947368414,
+        "dz": 0.1875,
+        "fixtureIds": [
+          "FIX-KITCHEN-SINK"
+        ],
+        "id": "MEP-BRANCH-FIX-KITCHEN-SINK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Kitchen Sink trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.3999999999999995,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 6.1,
+            "y": 0.7724999999999999,
+            "z": 0.5
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 0.15000000000000002,
+            "x": 6.8,
+            "y": 0.7461842105263157,
+            "z": 0.425
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 5.4,
+            "y": 0.7974999999999999,
+            "z": 0.5
+          },
+          {
+            "x": 6.8,
+            "y": 0.7474999999999998,
+            "z": 0.5
+          },
+          {
+            "x": 6.8,
+            "y": 0.7448684210526314,
+            "z": 0.35
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 6.11875,
+        "y": 0.7593421052631577,
+        "z": 0.44375
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.6699999999999999,
+        "dy": 0.13640350877192953,
+        "dz": 1.3499999999999996,
+        "fixtureIds": [
+          "FIX-FF-ENS-WC"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-ENS-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Ens Wc trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.62,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": 0.19,
+            "y": 3.5580000000000003,
+            "z": 5.8
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 1.2999999999999998,
+            "x": -0.12,
+            "y": 3.5215964912280704,
+            "z": 6.449999999999999
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 0.5,
+            "y": 3.583,
+            "z": 5.8
+          },
+          {
+            "x": -0.12,
+            "y": 3.5330000000000004,
+            "z": 5.8
+          },
+          {
+            "x": -0.12,
+            "y": 3.510192982456141,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.165,
+        "y": 3.539798245614035,
+        "z": 6.425
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 1.56,
+        "dy": 0.11622807017543879,
+        "dz": 1.8874999999999993,
+        "fixtureIds": [
+          "FIX-FF-ENS-BASIN"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-ENS-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Ens Basin trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.5225,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.6412500000000001,
+            "y": 3.738,
+            "z": 5.25
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 1.8499999999999996,
+            "x": -0.12,
+            "y": 3.6967719298245614,
+            "z": 6.175
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 1.4025,
+            "y": 3.763,
+            "z": 5.25
+          },
+          {
+            "x": -0.12,
+            "y": 3.713,
+            "z": 5.25
+          },
+          {
+            "x": -0.12,
+            "y": 3.6805438596491227,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.6225,
+        "y": 3.717385964912281,
+        "z": 6.15625
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 1.2825,
+        "dy": 0.10482456140350838,
+        "dz": 0.5874999999999995,
+        "fixtureIds": [
+          "FIX-FF-ENS-SHOWER"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-ENS-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Ens Shower trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.245,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.5025,
+            "y": 4.2330000000000005,
+            "z": 6.55
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 0.5499999999999998,
+            "x": -0.12,
+            "y": 4.2031754385964915,
+            "z": 6.824999999999999
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 1.125,
+            "y": 4.258,
+            "z": 6.55
+          },
+          {
+            "x": -0.12,
+            "y": 4.208,
+            "z": 6.55
+          },
+          {
+            "x": -0.12,
+            "y": 4.198350877192983,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.48375,
+        "y": 4.218087719298246,
+        "z": 6.80625
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 3.0075000000000003,
+        "dy": 0.11228070175438587,
+        "dz": 1.4375,
+        "fixtureIds": [
+          "FIX-FF-MB-BASIN"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-MB-BASIN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Mb Basin trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 2.97,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 1.365,
+            "y": 3.738,
+            "z": 8.5
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 1.4000000000000004,
+            "x": -0.12,
+            "y": 3.7007192982456143,
+            "z": 7.8
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 2.85,
+            "y": 3.763,
+            "z": 8.5
+          },
+          {
+            "x": -0.12,
+            "y": 3.713,
+            "z": 8.5
+          },
+          {
+            "x": -0.12,
+            "y": 3.688438596491228,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 1.34625,
+        "y": 3.719359649122807,
+        "z": 7.81875
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 2.62,
+        "dy": 0.1270175438596488,
+        "dz": 0.28000000000000025,
+        "fixtureIds": [
+          "FIX-FF-MB-WC"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-MB-WC",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Mb Wc trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 2.5700000000000003,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": 1.165,
+            "y": 3.5580000000000003,
+            "z": 7.33
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.23000000000000043,
+            "x": -0.12,
+            "y": 3.530982456140351,
+            "z": 7.215
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 2.45,
+            "y": 3.583,
+            "z": 7.33
+          },
+          {
+            "x": -0.12,
+            "y": 3.5330000000000004,
+            "z": 7.33
+          },
+          {
+            "x": -0.12,
+            "y": 3.5289649122807023,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 1.1400000000000001,
+        "y": 3.544491228070176,
+        "z": 7.24
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 75,
+        "discipline": "MEP",
+        "dx": 0.8574999999999999,
+        "dy": 0.10679824561403528,
+        "dz": 0.8125,
+        "fixtureIds": [
+          "FIX-FF-MB-SHOWER"
+        ],
+        "id": "MEP-BRANCH-FIX-FF-MB-SHOWER",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Ff Mb Shower trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.82,
+            "dy": 0.075,
+            "dz": 0.075,
+            "x": 0.29,
+            "y": 4.2330000000000005,
+            "z": 7.875
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.075,
+            "dy": 0.075,
+            "dz": 0.7750000000000004,
+            "x": -0.12,
+            "y": 4.2012017543859645,
+            "z": 7.4875
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 0.7,
+            "y": 4.258,
+            "z": 7.875
+          },
+          {
+            "x": -0.12,
+            "y": 4.208,
+            "z": 7.875
+          },
+          {
+            "x": -0.12,
+            "y": 4.19440350877193,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 0.27125,
+        "y": 4.2171008771929825,
+        "z": 7.50625
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 1.147,
+        "dy": 0.21996491228070175,
+        "dz": 8.312999999999999,
+        "fixtureIds": [
+          "FIX-GF-EXT-PAN"
+        ],
+        "id": "MEP-BRANCH-FIX-GF-EXT-PAN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Fix Gf Ext Pan trapped waste branch",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 1.097,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.6685000000000001,
+            "y": -0.08499999999999999,
+            "z": -1.163
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.14496491228070174,
+            "dz": 8.263,
+            "x": -0.12,
+            "y": -0.18248245614035086,
+            "z": 2.9684999999999997
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -1.217,
+            "y": -0.06,
+            "z": -1.163
+          },
+          {
+            "x": -0.12,
+            "y": -0.11,
+            "z": -1.163
+          },
+          {
+            "x": -0.12,
+            "y": -0.2549649122807017,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": -0.6435000000000001,
+        "y": -0.14498245614035085,
+        "z": 2.9435
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999999,
+        "dy": 7.106000000000001,
+        "dz": 0.09999999999999964,
+        "fixtureIds": [
+          "FIX-GF-BASIN",
+          "FIX-GF-WC",
+          "FIX-GF-TUB",
+          "FIX-GF-SHOWER",
+          "FIX-FF-ENS-WC",
+          "FIX-FF-ENS-BASIN",
+          "FIX-FF-ENS-SHOWER",
+          "FIX-FF-MB-BASIN",
+          "FIX-FF-MB-WC",
+          "FIX-FF-MB-SHOWER",
+          "FIX-GF-EXT-PAN"
+        ],
+        "id": "MEP-STACK-WEST",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "WEST soil/waste stack",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 7.106000000000001,
+            "dz": 0.1,
+            "x": -0.12,
+            "y": 3.153,
+            "z": 7.1
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.12,
+            "y": -0.4,
+            "z": 7.1
+          },
+          {
+            "x": -0.12,
+            "y": 6.706,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": -0.12,
+        "y": 3.153,
+        "z": 7.1
+      },
+      {
+        "colour": "#7464b4",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999999,
+        "dy": 0.8999999999999986,
+        "dz": 0.09999999999999964,
+        "fixtureIds": [],
+        "id": "MEP-VENT-WEST",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "WEST full-bore vent to open air",
+        "parts": [
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.8999999999999995,
+            "dz": 0.1,
+            "x": -0.12,
+            "y": 7.156000000000001,
+            "z": 7.1
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.12,
+            "y": 6.706,
+            "z": 7.1
+          },
+          {
+            "x": -0.12,
+            "y": 7.606,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Vent",
+        "x": -0.12,
+        "y": 7.156000000000001,
+        "z": 7.1
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.139,
+        "dy": 0.11971052631578943,
+        "dz": 2.2190000000000003,
+        "fixtureIds": [],
+        "id": "MEP-DRAIN-WEST",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "WEST buried gravity drain via inspection/cleanout",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.159,
+            "y": -0.4006842105263158,
+            "z": 7.1
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 2.1690000000000005,
+            "x": -0.198,
+            "y": -0.42039473684210527,
+            "z": 8.1845
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.12,
+            "y": -0.4,
+            "z": 7.1
+          },
+          {
+            "x": -0.198,
+            "y": -0.4013684210526316,
+            "z": 7.1
+          },
+          {
+            "x": -0.198,
+            "y": -0.439421052631579,
+            "z": 9.269
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": -0.1785,
+        "y": -0.4105394736842105,
+        "z": 8.1595
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999998,
+        "dy": 0.31057894736842107,
+        "dz": 0.10000000000000142,
+        "fixtureIds": [],
+        "id": "MEP-INLET-WEST",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "WEST drop at septic inlet",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.310578947368421,
+            "dz": 0.1,
+            "x": -0.198,
+            "y": -0.5947105263157895,
+            "z": 9.269
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.198,
+            "y": -0.439421052631579,
+            "z": 9.269
+          },
+          {
+            "x": -0.198,
+            "y": -0.75,
+            "z": 9.269
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": -0.198,
+        "y": -0.5947105263157895,
+        "z": 9.269
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999964,
+        "dy": 7.106000000000001,
+        "dz": 0.09999999999999998,
+        "fixtureIds": [
+          "FIX-KITCHEN-SINK"
+        ],
+        "id": "MEP-STACK-KITCHEN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "KITCHEN soil/waste stack",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 7.106000000000001,
+            "dz": 0.1,
+            "x": 6.8,
+            "y": 3.153,
+            "z": 0.35
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 6.8,
+            "y": -0.4,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 6.706,
+            "z": 0.35
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 6.8,
+        "y": 3.153,
+        "z": 0.35
+      },
+      {
+        "colour": "#7464b4",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999964,
+        "dy": 0.8999999999999986,
+        "dz": 0.09999999999999998,
+        "fixtureIds": [],
+        "id": "MEP-VENT-KITCHEN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "KITCHEN full-bore vent to open air",
+        "parts": [
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.8999999999999995,
+            "dz": 0.1,
+            "x": 6.8,
+            "y": 7.156000000000001,
+            "z": 0.35
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 6.8,
+            "y": 6.706,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 7.606,
+            "z": 0.35
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Vent",
+        "x": 6.8,
+        "y": 7.156000000000001,
+        "z": 0.35
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 7.048,
+        "dy": 0.27924561403508774,
+        "dz": 8.969,
+        "fixtureIds": [],
+        "id": "MEP-DRAIN-KITCHEN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "KITCHEN buried gravity drain via inspection/cleanout",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 6.998,
+            "dy": 0.12277192982456142,
+            "dz": 0.1,
+            "x": 3.3009999999999997,
+            "y": -0.46138596491228073,
+            "z": 0.35
+          },
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.15647368421052632,
+            "dz": 8.919,
+            "x": -0.198,
+            "y": -0.6010087719298246,
+            "z": 4.8095
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 6.8,
+            "y": -0.4,
+            "z": 0.35
+          },
+          {
+            "x": -0.198,
+            "y": -0.5227719298245614,
+            "z": 0.35
+          },
+          {
+            "x": -0.198,
+            "y": -0.6792456140350878,
+            "z": 9.269
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": 3.276,
+        "y": -0.539622807017544,
+        "z": 4.7845
+      },
+      {
+        "colour": "#b35c37",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.09999999999999998,
+        "dy": 0.10000000000000009,
+        "dz": 0.10000000000000142,
+        "fixtureIds": [],
+        "id": "MEP-INLET-KITCHEN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "KITCHEN drop at septic inlet",
+        "parts": [
+          {
+            "colour": "#b35c37",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.198,
+            "y": -0.7146228070175439,
+            "z": 9.269
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.198,
+            "y": -0.6792456140350878,
+            "z": 9.269
+          },
+          {
+            "x": -0.198,
+            "y": -0.75,
+            "z": 9.269
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Sanitary",
+        "x": -0.198,
+        "y": -0.7146228070175439,
+        "z": 9.269
+      },
+      {
+        "colour": "#7464b4",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.139,
+        "dy": 7.3999999999999995,
+        "dz": 0.18099999999999916,
+        "fixtureIds": [],
+        "id": "MEP-VENT-TANK",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Septic secondary chamber gas vent to roof vent header",
+        "parts": [
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.159,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 7.3,
+            "dz": 0.1,
+            "x": -0.12,
+            "y": 3.35,
+            "z": 6.969
+          },
+          {
+            "colour": "#7464b4",
+            "dx": 0.1,
+            "dy": 0.1,
+            "dz": 0.13099999999999934,
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.0344999999999995
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.198,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Vent",
+        "x": -0.1395,
+        "y": 3.35,
+        "z": 7.0095
+      },
+      {
+        "colour": "#397e8b",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 100,
+        "discipline": "MEP",
+        "dx": 0.6659999999999999,
+        "dy": 0.29000000000000004,
+        "dz": 7.672,
+        "fixtureIds": [],
+        "id": "MEP-EFFLUENT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Septic treated effluent to soak pit",
+        "parts": [
+          {
+            "colour": "#397e8b",
+            "dx": 0.6159999999999999,
+            "dy": 0.1,
+            "dz": 0.1,
+            "x": -0.506,
+            "y": -0.81,
+            "z": 6.969
+          },
+          {
+            "colour": "#397e8b",
+            "dx": 0.1,
+            "dy": 0.2300000000000001,
+            "dz": 7.622,
+            "x": -0.814,
+            "y": -0.935,
+            "z": 3.1580000000000004
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": -0.198,
+            "y": -0.8,
+            "z": 6.969
+          },
+          {
+            "x": -0.814,
+            "y": -0.82,
+            "z": 6.969
+          },
+          {
+            "x": -0.814,
+            "y": -1.05,
+            "z": -0.653
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "P - Effluent",
+        "x": -0.531,
+        "y": -0.905,
+        "z": 3.1830000000000003
+      },
+      {
+        "colour": "#598a56",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 150,
+        "discipline": "MEP",
+        "dx": 0.62,
+        "dy": 0.15000000000000036,
+        "dz": 0.15000000000000036,
+        "fixtureIds": [],
+        "id": "MEP-EXTRACT-WEST",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "WEST mechanical exhaust to outside air",
+        "parts": [
+          {
+            "colour": "#598a56",
+            "dx": 0.62,
+            "dy": 0.15,
+            "dz": 0.15,
+            "x": -0.21000000000000002,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 0.1,
+            "y": 2.8,
+            "z": 7.1
+          },
+          {
+            "x": -0.52,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "M - Exhaust",
+        "x": -0.21000000000000002,
+        "y": 2.8,
+        "z": 7.1
+      },
+      {
+        "colour": "#598a56",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 150,
+        "discipline": "MEP",
+        "dx": 0.15000000000000036,
+        "dy": 0.15000000000000036,
+        "dz": 0.6499999999999999,
+        "fixtureIds": [],
+        "id": "MEP-EXTRACT-KITCHEN",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "KITCHEN mechanical exhaust to outside air",
+        "parts": [
+          {
+            "colour": "#598a56",
+            "dx": 0.15,
+            "dy": 0.15,
+            "dz": 0.6499999999999999,
+            "x": 6.8,
+            "y": 2.8,
+            "z": 0.024999999999999994
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 6.8,
+            "y": 2.8,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 2.8,
+            "z": -0.3
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "M - Exhaust",
+        "x": 6.8,
+        "y": 2.8,
+        "z": 0.025000000000000022
+      },
+      {
+        "colour": "#c39a26",
+        "contextLevels": [
+          "gf",
+          "ff"
+        ],
+        "diameterMm": 25,
+        "discipline": "MEP",
+        "dx": 4.0625,
+        "dy": 1.3125,
+        "dz": 5.0249999999999995,
+        "fixtureIds": [],
+        "id": "MEP-E-CONDUIT",
+        "ifcType": "IfcBuildingElementProxy",
+        "kind": "auxiliary",
+        "level": "gf",
+        "name": "Electrical distribution conduit - schematic, no cable/breaker sizing",
+        "parts": [
+          {
+            "colour": "#c39a26",
+            "dx": 0.025,
+            "dy": 1.2999999999999998,
+            "dz": 0.025,
+            "x": 4.3,
+            "y": 2.15,
+            "z": 12.1
+          },
+          {
+            "colour": "#c39a26",
+            "dx": 0.025,
+            "dy": 0.025,
+            "dz": 5.0,
+            "x": 4.3,
+            "y": 2.8,
+            "z": 9.6
+          },
+          {
+            "colour": "#c39a26",
+            "dx": 4.05,
+            "dy": 0.025,
+            "dz": 0.025,
+            "x": 2.275,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "pipeRoute": [
+          {
+            "x": 4.3,
+            "y": 1.5,
+            "z": 12.1
+          },
+          {
+            "x": 4.3,
+            "y": 2.8,
+            "z": 12.1
+          },
+          {
+            "x": 4.3,
+            "y": 2.8,
+            "z": 7.1
+          },
+          {
+            "x": 0.25,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "provenance": {
+          "basis": "User v2 siting; NBC208 B1.3-B1.8, B14 and UWSSP8.4.4; display envelope, physical clashes retained"
+        },
+        "source": "USER_V2_COORDINATES_AND_NBC208",
+        "status": "MEP_COORDINATION_NOT_CONSTRUCTION_ISSUED",
+        "system": "E - Electrical",
+        "x": 2.28125,
+        "y": 2.15625,
+        "z": 9.6
       }
     ],
     "floorToFloor": 3.048,
@@ -4897,6 +7024,7 @@
       "source": "NBC206 Table3/Table4; user instruction 20261028",
       "treadM": 0.25
     },
+    "roofCoverDefault": true,
     "roomEnvelopes": {
       "FF": [
         {
@@ -5082,6 +7210,13 @@
       ]
     },
     "schema": "jp-cad://architectural-presentation/1",
+    "sitePicker": {
+      "basis": "plot",
+      "lengthMm": 18288,
+      "originX": -1.944,
+      "originZ": 16.4,
+      "widthMm": 9144
+    },
     "sourceGeometryHash": "6c204ffd644585c391b3bfbc2b553402b52b0657c16eca3d46dc70162105305e",
     "sourceYLength": 14.4,
     "stairBay": [
@@ -5101,6 +7236,13 @@
     "wallLegend": "230 mm external · 100 mm internal walls"
   },
   "projectId": "ashok-adhikari",
+  "release": {
+    "branch": "feat/ashok-v2-mep-site-coordinates",
+    "previous": "v1",
+    "project": "Ashok Adhikari",
+    "updatedOn": "2026-10-29",
+    "version": "v2"
+  },
   "representation": "ARCHITECTURAL_REVIEW_ONLY",
   "restrictions": {
     "engineeringApproval": "HOLD",
@@ -5129,7 +7271,753 @@
       "message": "NBC 205 coverage cap 92.90304 m2 is exceeded; use project-specific NBC 105 engineering. Missing M08 is excluded, not an active dependency."
     }
   ],
-  "revision": "AAD-ASHOK-MODEL-001-R000003",
+  "revision": "AAD-ASHOK-MODEL-001-R000004",
   "schema": "jp-cad://aad-building/1",
+  "services": {
+    "assets": [
+      {
+        "baffleDisplacementM3": 0.09775,
+        "chamberClearLengthsM": [
+          1.2666666667,
+          0.6333333333
+        ],
+        "colour": "#b76b32",
+        "grossLiquidM3": 2.0,
+        "heightMm": 2000,
+        "id": "SEPTIC",
+        "internalLiquidM3": 1.90225,
+        "lengthMm": 2300,
+        "name": "Septic tank - 2 chambers",
+        "requiredLiquidM3": 1.7064,
+        "widthMm": 1300,
+        "xMm": 1746,
+        "yMm": 8281
+      },
+      {
+        "colour": "#8d68b8",
+        "effectiveDepthM": 1.5,
+        "heightMm": 2550,
+        "id": "SOAK",
+        "inletDepthM": 1.05,
+        "internalDiameterMm": 1500,
+        "lengthMm": 1800,
+        "name": "Soak pit - indicative 1500 mm internal diameter",
+        "requiredInfiltrationLPerM2Day": 113.17684842090335,
+        "widthMm": 1800,
+        "xMm": 1130,
+        "yMm": 17053
+      }
+    ],
+    "constructionIssued": false,
+    "coordinateBasis": "Plot front-left corner; X page-right, Y toward rear, mm. Building source X=plotX-1944; Y=plotY-2000. Not surveyed coordinates.",
+    "dailyFlowL": 800,
+    "notes": [
+      "Selected soak point overlaps existing outside WC; retain exact owner pin and flag collision.",
+      "Septic outer envelope crosses plinth by 452 mm at the selected centre; do not silently move it.",
+      "Mechanical exhaust discharges to outside air, never into a sewage vent.",
+      "No supply-water/drain cross-connections. Rainwater stays independent.",
+      "Vent extension 900 mm above terrace is a coordination assumption; termination separation from openings remains to be resolved.",
+      "E conduit illustrates distribution only; earthing, circuit protection and cable sizes are not designed."
+    ],
+    "occupantsAssumed": 8,
+    "routes": [
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-GF-BASIN"
+        ],
+        "id": "BRANCH-FIX-GF-BASIN",
+        "name": "Fix Gf Basin trapped waste branch",
+        "points": [
+          {
+            "x": 1.73,
+            "y": 0.7149999999999999,
+            "z": 7.85
+          },
+          {
+            "x": -0.12,
+            "y": 0.6649999999999998,
+            "z": 7.85
+          },
+          {
+            "x": -0.12,
+            "y": 0.6518421052631577,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-GF-WC"
+        ],
+        "id": "BRANCH-FIX-GF-WC",
+        "name": "Fix Gf Wc trapped waste branch",
+        "points": [
+          {
+            "x": 0.65,
+            "y": 0.7324999999999999,
+            "z": 7.2
+          },
+          {
+            "x": -0.12,
+            "y": 0.6824999999999999,
+            "z": 7.2
+          },
+          {
+            "x": -0.12,
+            "y": 0.6807456140350876,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-GF-TUB"
+        ],
+        "id": "BRANCH-FIX-GF-TUB",
+        "name": "Fix Gf Tub trapped waste branch",
+        "points": [
+          {
+            "x": 0.65,
+            "y": 0.55,
+            "z": 6.05
+          },
+          {
+            "x": -0.12,
+            "y": 0.5,
+            "z": 6.05
+          },
+          {
+            "x": -0.12,
+            "y": 0.48157894736842105,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-GF-SHOWER"
+        ],
+        "id": "BRANCH-FIX-GF-SHOWER",
+        "name": "Fix Gf Shower trapped waste branch",
+        "points": [
+          {
+            "x": 1.612,
+            "y": 1.21,
+            "z": 5.55
+          },
+          {
+            "x": -0.12,
+            "y": 1.16,
+            "z": 5.55
+          },
+          {
+            "x": -0.12,
+            "y": 1.1328070175438596,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-KITCHEN-SINK"
+        ],
+        "id": "BRANCH-FIX-KITCHEN-SINK",
+        "name": "Fix Kitchen Sink trapped waste branch",
+        "points": [
+          {
+            "x": 5.4,
+            "y": 0.7974999999999999,
+            "z": 0.5
+          },
+          {
+            "x": 6.8,
+            "y": 0.7474999999999998,
+            "z": 0.5
+          },
+          {
+            "x": 6.8,
+            "y": 0.7448684210526314,
+            "z": 0.35
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-FF-ENS-WC"
+        ],
+        "id": "BRANCH-FIX-FF-ENS-WC",
+        "name": "Fix Ff Ens Wc trapped waste branch",
+        "points": [
+          {
+            "x": 0.5,
+            "y": 3.583,
+            "z": 5.8
+          },
+          {
+            "x": -0.12,
+            "y": 3.5330000000000004,
+            "z": 5.8
+          },
+          {
+            "x": -0.12,
+            "y": 3.510192982456141,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-FF-ENS-BASIN"
+        ],
+        "id": "BRANCH-FIX-FF-ENS-BASIN",
+        "name": "Fix Ff Ens Basin trapped waste branch",
+        "points": [
+          {
+            "x": 1.4025,
+            "y": 3.763,
+            "z": 5.25
+          },
+          {
+            "x": -0.12,
+            "y": 3.713,
+            "z": 5.25
+          },
+          {
+            "x": -0.12,
+            "y": 3.6805438596491227,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-FF-ENS-SHOWER"
+        ],
+        "id": "BRANCH-FIX-FF-ENS-SHOWER",
+        "name": "Fix Ff Ens Shower trapped waste branch",
+        "points": [
+          {
+            "x": 1.125,
+            "y": 4.258,
+            "z": 6.55
+          },
+          {
+            "x": -0.12,
+            "y": 4.208,
+            "z": 6.55
+          },
+          {
+            "x": -0.12,
+            "y": 4.198350877192983,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-FF-MB-BASIN"
+        ],
+        "id": "BRANCH-FIX-FF-MB-BASIN",
+        "name": "Fix Ff Mb Basin trapped waste branch",
+        "points": [
+          {
+            "x": 2.85,
+            "y": 3.763,
+            "z": 8.5
+          },
+          {
+            "x": -0.12,
+            "y": 3.713,
+            "z": 8.5
+          },
+          {
+            "x": -0.12,
+            "y": 3.688438596491228,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-FF-MB-WC"
+        ],
+        "id": "BRANCH-FIX-FF-MB-WC",
+        "name": "Fix Ff Mb Wc trapped waste branch",
+        "points": [
+          {
+            "x": 2.45,
+            "y": 3.583,
+            "z": 7.33
+          },
+          {
+            "x": -0.12,
+            "y": 3.5330000000000004,
+            "z": 7.33
+          },
+          {
+            "x": -0.12,
+            "y": 3.5289649122807023,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 75,
+        "fixtureIds": [
+          "FIX-FF-MB-SHOWER"
+        ],
+        "id": "BRANCH-FIX-FF-MB-SHOWER",
+        "name": "Fix Ff Mb Shower trapped waste branch",
+        "points": [
+          {
+            "x": 0.7,
+            "y": 4.258,
+            "z": 7.875
+          },
+          {
+            "x": -0.12,
+            "y": 4.208,
+            "z": 7.875
+          },
+          {
+            "x": -0.12,
+            "y": 4.19440350877193,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-GF-EXT-PAN"
+        ],
+        "id": "BRANCH-FIX-GF-EXT-PAN",
+        "name": "Fix Gf Ext Pan trapped waste branch",
+        "points": [
+          {
+            "x": -1.217,
+            "y": -0.06,
+            "z": -1.163
+          },
+          {
+            "x": -0.12,
+            "y": -0.11,
+            "z": -1.163
+          },
+          {
+            "x": -0.12,
+            "y": -0.2549649122807017,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-GF-BASIN",
+          "FIX-GF-WC",
+          "FIX-GF-TUB",
+          "FIX-GF-SHOWER",
+          "FIX-FF-ENS-WC",
+          "FIX-FF-ENS-BASIN",
+          "FIX-FF-ENS-SHOWER",
+          "FIX-FF-MB-BASIN",
+          "FIX-FF-MB-WC",
+          "FIX-FF-MB-SHOWER",
+          "FIX-GF-EXT-PAN"
+        ],
+        "id": "STACK-WEST",
+        "name": "WEST soil/waste stack",
+        "points": [
+          {
+            "x": -0.12,
+            "y": -0.4,
+            "z": 7.1
+          },
+          {
+            "x": -0.12,
+            "y": 6.706,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "VENT-WEST",
+        "name": "WEST full-bore vent to open air",
+        "points": [
+          {
+            "x": -0.12,
+            "y": 6.706,
+            "z": 7.1
+          },
+          {
+            "x": -0.12,
+            "y": 7.606,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Vent"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "DRAIN-WEST",
+        "name": "WEST buried gravity drain via inspection/cleanout",
+        "points": [
+          {
+            "x": -0.12,
+            "y": -0.4,
+            "z": 7.1
+          },
+          {
+            "x": -0.198,
+            "y": -0.4013684210526316,
+            "z": 7.1
+          },
+          {
+            "x": -0.198,
+            "y": -0.439421052631579,
+            "z": 9.269
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "INLET-WEST",
+        "name": "WEST drop at septic inlet",
+        "points": [
+          {
+            "x": -0.198,
+            "y": -0.439421052631579,
+            "z": 9.269
+          },
+          {
+            "x": -0.198,
+            "y": -0.75,
+            "z": 9.269
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [
+          "FIX-KITCHEN-SINK"
+        ],
+        "id": "STACK-KITCHEN",
+        "name": "KITCHEN soil/waste stack",
+        "points": [
+          {
+            "x": 6.8,
+            "y": -0.4,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 6.706,
+            "z": 0.35
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "VENT-KITCHEN",
+        "name": "KITCHEN full-bore vent to open air",
+        "points": [
+          {
+            "x": 6.8,
+            "y": 6.706,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 7.606,
+            "z": 0.35
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Vent"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "DRAIN-KITCHEN",
+        "name": "KITCHEN buried gravity drain via inspection/cleanout",
+        "points": [
+          {
+            "x": 6.8,
+            "y": -0.4,
+            "z": 0.35
+          },
+          {
+            "x": -0.198,
+            "y": -0.5227719298245614,
+            "z": 0.35
+          },
+          {
+            "x": -0.198,
+            "y": -0.6792456140350878,
+            "z": 9.269
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.4 WC minimum DN100; other branch values coordination assumptions",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "INLET-KITCHEN",
+        "name": "KITCHEN drop at septic inlet",
+        "points": [
+          {
+            "x": -0.198,
+            "y": -0.6792456140350878,
+            "z": 9.269
+          },
+          {
+            "x": -0.198,
+            "y": -0.75,
+            "z": 9.269
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Sanitary"
+      },
+      {
+        "diameterBasis": "NBC208 B1.7 full-bore stack continuation",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "VENT-TANK",
+        "name": "Septic secondary chamber gas vent to roof vent header",
+        "points": [
+          {
+            "x": -0.198,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": -0.3,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 6.969
+          },
+          {
+            "x": -0.12,
+            "y": 7.0,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Vent"
+      },
+      {
+        "diameterBasis": "DN100 effluent coordination assumption; UWSSP8.4.4",
+        "diameterMm": 100,
+        "fixtureIds": [],
+        "id": "EFFLUENT",
+        "name": "Septic treated effluent to soak pit",
+        "points": [
+          {
+            "x": -0.198,
+            "y": -0.8,
+            "z": 6.969
+          },
+          {
+            "x": -0.814,
+            "y": -0.82,
+            "z": 6.969
+          },
+          {
+            "x": -0.814,
+            "y": -1.05,
+            "z": -0.653
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "P - Effluent"
+      },
+      {
+        "diameterBasis": "Mechanical duct routing assumption; fan airflow not sized",
+        "diameterMm": 150,
+        "fixtureIds": [],
+        "id": "EXTRACT-WEST",
+        "name": "WEST mechanical exhaust to outside air",
+        "points": [
+          {
+            "x": 0.1,
+            "y": 2.8,
+            "z": 7.1
+          },
+          {
+            "x": -0.52,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "M - Exhaust"
+      },
+      {
+        "diameterBasis": "Mechanical duct routing assumption; fan airflow not sized",
+        "diameterMm": 150,
+        "fixtureIds": [],
+        "id": "EXTRACT-KITCHEN",
+        "name": "KITCHEN mechanical exhaust to outside air",
+        "points": [
+          {
+            "x": 6.8,
+            "y": 2.8,
+            "z": 0.35
+          },
+          {
+            "x": 6.8,
+            "y": 2.8,
+            "z": -0.3
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "M - Exhaust"
+      },
+      {
+        "diameterBasis": "Electrical conduit routing assumption; cables/protection not sized",
+        "diameterMm": 25,
+        "fixtureIds": [],
+        "id": "E-CONDUIT",
+        "name": "Electrical distribution conduit - schematic, no cable/breaker sizing",
+        "points": [
+          {
+            "x": 4.3,
+            "y": 1.5,
+            "z": 12.1
+          },
+          {
+            "x": 4.3,
+            "y": 2.8,
+            "z": 12.1
+          },
+          {
+            "x": 4.3,
+            "y": 2.8,
+            "z": 7.1
+          },
+          {
+            "x": 0.25,
+            "y": 2.8,
+            "z": 7.1
+          }
+        ],
+        "slopeBasis": "Underground gravity DN100 nominal 1:57; falls encoded in endpoints; vent/duct/conduit not gravity drain",
+        "system": "E - Electrical"
+      }
+    ],
+    "schema": "jp-cad://mep-coordination/1",
+    "siteFrame": {
+      "buildingOffsetX": 1944,
+      "buildingOffsetY": 2000,
+      "lengthMm": 18288,
+      "originX": -1.944,
+      "originZ": 16.4,
+      "outsideWCRect": [
+        127,
+        16863,
+        1327,
+        18263
+      ],
+      "plinthRect": [
+        1944,
+        2000,
+        9144,
+        16400
+      ],
+      "widthMm": 9144
+    },
+    "sources": [
+      {
+        "clauses": "B1.3-B1.8, B14; vents continue at stack diameter; trapped fixtures; sloped drainage",
+        "id": "NBC208",
+        "url": "https://giwmscdnone.gov.np/media/app/public/54/posts/1679824552_72.pdf"
+      },
+      {
+        "clauses": "8.4.4 septic volume, two chambers, 2:1 lengths, soak infiltration",
+        "id": "UWSSP",
+        "url": "https://giwmscdnone.gov.np/media/pdf_upload/Design%20Guidelines_iwb2hdn.pdf"
+      },
+      {
+        "clauses": "Separate sanitary and vent system classifications; gravity slope and roof penetrations. Workflow reference, not Nepal code.",
+        "id": "REVIT",
+        "url": "https://www.autodesk.com/learn/ondemand/module/build-plumbing-systems-in-revit"
+      }
+    ]
+  },
   "sourceLedger": "coordination-ledger-qa02.json"
 }

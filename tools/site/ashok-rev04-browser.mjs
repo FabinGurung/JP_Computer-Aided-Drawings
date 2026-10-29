@@ -62,6 +62,15 @@ try{
   assert.equal(await frame.locator('.unified-toolbar label,#aad-audit-filters label').evaluateAll(es=>es.filter(e=>e.clientWidth>0&&e.scrollWidth>e.clientWidth+2).length),0,'A studio control label overflows');
   assert.ok(await page.locator('#ashok-engine').evaluate(e=>e.clientHeight>=e.contentDocument.querySelector('main').getBoundingClientRect().height),'Embedded studio content must fit without a capped internal page');
   const register=frame.locator('.table-wrap[role=region]').first();assert.equal(await register.getAttribute('tabindex'),'0','Component register must accept keyboard focus');
+  await page.locator('[data-view="studio"]').click();await page.waitForTimeout(250);
+  assert.equal(await frame.locator('#aad-services-controls').isVisible(),true);
+  await frame.locator('#aad-mep-view').click();const mep=await renderProof();assert.ok(mep.mepMode&&mep.visibleMEP>=20);assert.equal(mep.visibleWalls,0);
+  await frame.locator('#aad-audit-discipline').selectOption('MEP');assert.match(await frame.locator('#aad-audit-count').textContent(),new RegExp(String(result.elements.filter(e=>e.discipline==='MEP').length)));await frame.locator('#aad-audit-clear').click();
+  await frame.locator('#aad-pin-mode').check();const pinPosition=await frame.locator('#viewer2d').evaluate(svg=>{const p=svg.createSVGPoint();p.x=-.814;p.y=-.653;const q=p.matrixTransform(svg.getScreenCTM()),r=svg.getBoundingClientRect();return{x:q.x-r.left,y:q.y-r.top};});await frame.locator('#viewer2d').click({position:pinPosition});assert.ok(await frame.locator('#aad-site-pins li').count()>=1);await frame.locator('#aad-pin-mode').uncheck();
+  const pinsDownload=page.waitForEvent('download');await frame.locator('#aad-export-pins').click();const pinsFile=await pinsDownload;const savedPins=JSON.parse(fs.readFileSync(await pinsFile.path(),'utf8'));assert.equal(savedPins.project,'ashok-adhikari');assert.ok(Math.abs(savedPins.pins.at(-1).xMm-1130)<=60&&Math.abs(savedPins.pins.at(-1).yMm-17053)<=60,'Tap must resolve the intended plot location within pixel precision');assert.ok(savedPins.pins.length>=1&&savedPins.pins.every(p=>p.xMm>=0&&p.xMm<=9144&&p.yMm>=0&&p.yMm<=18288));
+  await frame.locator('#aad-preset-roof').click();assert.ok((await renderProof()).visibleRoofCover);await frame.locator('#aad-roof-cover').uncheck();assert.equal((await renderProof()).visibleRoofCover,false);await frame.locator('#aad-roof-cover').check();
+  await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-roof-access-v2-cover-'+width+'.png'});
+  await frame.locator('#aad-mep-view').click();await frame.locator('#viewer3d').screenshot({path:'/tmp/ashok-qa02-v2-mep-'+width+'.png'});
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'Horizontal page overflow');
   await page.screenshot({path:'/tmp/ashok-rev04-qa-'+width+'.png',fullPage:false});
   await page.locator('[data-view="studio"]').click();await page.screenshot({path:'/tmp/ashok-rev04-studio-'+width+'.png',fullPage:false});

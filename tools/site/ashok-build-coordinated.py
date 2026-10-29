@@ -351,8 +351,13 @@ for id,name,elevation in [('gf','Ground floor',.61),('ff','First floor',3.658)]:
     manifest['levels'].append({'id':id,'name':name,'elevation':elevation,'height':3.048,'model':'aad-'+id+'-model-qa02.json',
                                'sourceArea':source_area,'transform':{'x':0,'z':0,'rotationDeg':0},'status':'QA02_CONNECTED_CENTRELINE_COORDINATION'})
     write('aad-'+id+'-model-qa02.json',MODELS[id])
+import importlib.util
+_spec=importlib.util.spec_from_file_location('ashok_v2_services',Path(__file__).with_name('ashok-v2-services.py'))
+_mod=importlib.util.module_from_spec(_spec);_spec.loader.exec_module(_mod);_mod.add_services(manifest)
+manifest['release']['updatedOn']='2026-10-29'
+CHANGES.extend([{'item':'v2 requested wastewater plot centres','source_mm':{'soak':[1130,17053],'septic':[1746,8281]},'candidate_mm':{'soak':[1130,17053],'septic':[1746,8281]},'reason':'Owner-specified centres retained; conservative excavation/plinth and outside-WC collisions are exposed, not accepted or silently relocated.'},{'item':'v2 MEP routes and roof cover','reason':'Twelve fixture branches, soil/waste stacks, full-bore roof vents, effluent transfer, separate fan exhaust and electrical conduit. Existing stair cover becomes visible with a toggle. Kitchen-stack display penetrations added; detailed sections remain assumptions.'}])
 write('aad-building-qa02.json',manifest)
-write('coordination-ledger-qa02.json',{'schema':'jp-cad://coordination-ledger/1','revision':manifest['revision'],'dateNpt':'2026-10-28',
+write('coordination-ledger-qa02.json',{'schema':'jp-cad://coordination-ledger/1','revision':manifest['revision'],'dateNpt':'2026-10-29',
  'authorization':'User requested practical aesthetic completion with up to 30% schematic allowance and no further approval pause.',
  'tolerancePolicy':'Known outer plot, footprint, wall thickness, source room rear boundaries and storey rise remain exact. Listed interior coordination changes are proposals, not a claim of quantified 30% engineering accuracy.',
  'authority':{'clientBaseline':'REV03 v0.4 preserved','sourceGeometry':'REV04 v0.8 preserved','approvedVisuals':'v0.9 GF c016 / FF c012 preserved','candidate':'Current architecture; structural sections not issued'},

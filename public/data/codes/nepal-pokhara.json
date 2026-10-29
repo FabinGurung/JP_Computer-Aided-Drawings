@@ -1,8 +1,8 @@
 {
   "schema": "jp-cad://jurisdiction-code-register/1",
   "id": "AAD-NP-PKR-CODES-001",
-  "revision": 1,
-  "checkedOn": "2026-10-28",
+  "revision": 2,
+  "checkedOn": "2026-10-29",
   "jurisdiction": {
     "country": "Nepal",
     "municipality": "Pokhara Metropolitan City",
@@ -666,5 +666,26 @@
   ],
   "excludedAuthority": {
     "M08": "Excluded from active design inputs by user instruction; no dependency on missing native bytes. Retained history is not an active design basis."
+  },
+  "mepInterpretations": {
+    "source": "NBC208",
+    "clauses": {
+      "B1.3": {
+        "wcTrapSealMinMm": 50,
+        "floorTrapSealMinMm": 50
+      },
+      "B1.4": {
+        "wcBranchStackMinDiameterMm": 100,
+        "floorTrapOutletReferenceMm": 75
+      },
+      "B1.7": {
+        "ventDiameterReductionAllowed": false
+      }
+    },
+    "workflowReference": {
+      "publisher": "Autodesk",
+      "url": "https://www.autodesk.com/learn/ondemand/module/build-plumbing-systems-in-revit",
+      "meaning": "Separate sanitary, vent and other systems; model gravity falls and roof penetrations; not a Nepal code."
+    }
   }
 }

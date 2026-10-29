@@ -32,6 +32,7 @@ jobs:
           python tools/site/ashok-build-coordinated.py
           git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
           node tools/site/ashok-qa02-smoke.mjs
+          node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs

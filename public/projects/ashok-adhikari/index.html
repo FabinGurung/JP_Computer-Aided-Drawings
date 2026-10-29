@@ -10,7 +10,7 @@
 <body data-cad-route="projects/ashok-adhikari/"><div class="shell">
 <nav class="topnav" aria-label="Primary navigation"><a class="brand" href="../../">Project Drawings</a><a href="../">Projects</a><a href="../../cad/aad/">Design Studio</a><a href="../../guide/">How It Works</a></nav>
 <main><section class="hero"><div class="eyebrow">Rohini Engineering and Builders · Residence 14 · A9</div>
-<div class="ashok-head"><div><h1>Ashok Adhikari</h1><p>Furnished architectural scheme · coordination edition 02</p></div><span class="ashok-tag">DESIGN STUDY · NOT FOR CONSTRUCTION</span></div>
+<div class="ashok-head"><div><h1>Ashok Adhikari</h1><p>Furnished architectural scheme · v2 · MEP and site coordination</p></div><span class="ashok-tag">DESIGN STUDY · NOT FOR CONSTRUCTION</span></div>
 <p class="ashok-sub">An exact 7.20 × 14.40 m outer envelope, real door and window apertures, a coordinated stair, furnished rooms and dimensioned plans. Built from the Drive REV04 record, native trace and original sketch. Selected interior changes use the authorized 30% allowance and are recorded under QA &amp; sources.</p>
 <div class="ashok-tabs" role="tablist" aria-label="Project review views">
 <button id="tab-studio" role="tab" aria-controls="panel-studio" aria-selected="true" data-view="studio">3D + 2D studio</button>
@@ -20,7 +20,7 @@
 </div>
 <section class="ashok-panel" id="panel-studio" role="tabpanel" aria-labelledby="tab-studio">
 <div class="ashok-head"><div><h2>Explore the furnished house</h2><p class="ashok-sub">Start with the ground floor. Switch to First floor, Exterior or Dimensioned plan; toggle cutaway walls, furniture and the callable grid.</p></div><a class="action" id="open-full" href="../../cad/aad/multistorey/">Open full screen ↗</a></div>
-<p class="ashok-north">32 hosted apertures · 230 / 100 mm walls · 610 mm plinth · 3048 mm storeys. Amber columns show proposed coordination positions, not designed structural sections. North points upper-right in the plans.</p>
+<p class="ashok-north"><strong>v2:</strong> Use “MEP / underground view” for the septic tank, soak pit, pipework and coordinate pins. The tank envelope at the requested centre crosses the house outline and the soak point overlaps the outside WC; the selected pins are retained. 32 hosted apertures · 230 / 100 mm walls · 610 mm plinth · 3048 mm storeys. Amber columns show proposed coordination positions, not designed structural sections. North points upper-right in the plans.</p>
 <iframe id="ashok-engine" title="Ashok shared AAD 2D and 3D architectural review" loading="eager" allow="fullscreen"></iframe>
 <p class="ashok-sub">If 3D is unavailable, use <button type="button" data-show="plans">Exact source plans</button>. Browser edits stay in your browser until exported and reviewed.</p>
 </section>
@@ -49,7 +49,7 @@
  document.querySelectorAll('[data-show]').forEach(b=>b.addEventListener('click',()=>show(b.dataset.show)));
  const notes=document.getElementById('qa-notes'),key='ashok:rev04:qa-notes:v1';try{notes.value=localStorage.getItem(key)||'';}catch(_){}
  notes.addEventListener('input',()=>{try{localStorage.setItem(key,notes.value);document.getElementById('qa-note-status').textContent=' Saved on this device';}catch(_){document.getElementById('qa-note-status').textContent=' Storage unavailable; download notes to keep them';}});
- document.getElementById('export-qa').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({schema:'jp-cad://project-qa-notes/1',project:'ashok-adhikari',baseline:'AAD-ASHOK-MODEL-001-R000003',status:'PROPOSED_NOT_APPROVED',notes:notes.value},null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download='Ashok_REV04_QA_Notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+ document.getElementById('export-qa').addEventListener('click',()=>{const blob=new Blob([JSON.stringify({schema:'jp-cad://project-qa-notes/1',project:'ashok-adhikari',baseline:'AAD-ASHOK-MODEL-001-R000004',status:'PROPOSED_NOT_APPROVED',notes:notes.value},null,2)],{type:'application/json'}),a=document.createElement('a'),u=URL.createObjectURL(blob);a.href=u;a.download='Ashok_REV04_QA_Notes.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
  document.getElementById('ashok-engine').addEventListener('load',function(){try{const main=this.contentDocument.querySelector("main");const resize=()=>{if(!main||!main.getBoundingClientRect().width)return;const h=Math.max(900,Math.ceil(main.getBoundingClientRect().height+16));if(Math.abs(this.clientHeight-h)>2)this.style.height=h+"px";};new ResizeObserver(resize).observe(main);resize();}catch(_){}});
 })();
 </script></body></html>

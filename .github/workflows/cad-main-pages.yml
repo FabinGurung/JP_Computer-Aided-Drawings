@@ -32,6 +32,7 @@ jobs:
           python tools/site/ashok-build-coordinated.py
           git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
           node tools/site/ashok-qa02-smoke.mjs
+          node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
       - name: M26 immutable source-backed 2D/3D/table/IFC acceptance
         run: node tools/site/aad-m26-canonical-source-integration-smoke.mjs

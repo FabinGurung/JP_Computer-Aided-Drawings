@@ -2,7 +2,7 @@
   "schema": "jp-cad://aad-domain-template/0.1",
   "template_id": "AAD-CAD-TEMPLATE-001",
   "name": "AI-Aided Design and Drawing — owned CAD domain template",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "status": "ACTIVE_DOMAIN_OWNED_TEMPLATE",
   "owner_repository": "FabinGurung/JP_Computer-Aided-Drawings",
   "owner_module": "CAD",
@@ -110,5 +110,23 @@
     "one_current_provider_id_per_logical_id": true,
     "archive_verify_before_revision_guarded_in_place_update": true,
     "private_working_engineering_in_google_doc": true
+  },
+  "mep_coordination": {
+    "classification": [
+      "M - Exhaust",
+      "E - Electrical",
+      "P - Sanitary",
+      "P - Vent",
+      "P - Effluent"
+    ],
+    "coordinateContract": "Explicit plot and building origins; pin annotations exported separately from design changes",
+    "requiredEvidence": [
+      "fixture association",
+      "route endpoints and falls",
+      "source clauses",
+      "unknown soil values preserved",
+      "geometric overlap checks"
+    ],
+    "nativeRevit": "No native RVT file is claimed by a Revit-workflow reference"
   }
 }
