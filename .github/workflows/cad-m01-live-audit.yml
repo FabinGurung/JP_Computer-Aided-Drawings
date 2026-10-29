@@ -176,6 +176,7 @@ jobs:
         run: |
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
+          node tools/site/ashok-navigation-browser.mjs
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
@@ -191,6 +192,7 @@ jobs:
             /tmp/ashok-qa02-*.png
             /tmp/ashok-roof-access-*.png
             /tmp/ashok-headroom-*.json
+            /tmp/ashok-navigation-*.png
             /tmp/cad-code-library-*.png
             /tmp/cad-memory-wall-*.png
           if-no-files-found: ignore

@@ -10,6 +10,7 @@ on:
       - "src/main.ts"
       - "vite.config.ts"
       - "public/**"
+      - "cad/aad/multistorey/**"
       - "tools/site/**"
       - ".github/workflows/cad-unified-website-qa.yml"
 permissions:
@@ -32,6 +33,7 @@ jobs:
           python tools/site/ashok-build-coordinated.py
           git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
           node tools/site/ashok-qa02-smoke.mjs
+          node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
@@ -48,6 +50,7 @@ jobs:
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
+          node tools/site/ashok-navigation-browser.mjs
           node tools/site/aad-code-library-browser.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}

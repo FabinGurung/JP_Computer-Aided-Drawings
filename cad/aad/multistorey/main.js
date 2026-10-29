@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2-qa');return u.href;};
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2-navigation');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
@@ -232,7 +232,7 @@ function showAADSelectionDetails(picked){
  line("meaning","Choose an object, editable node or schedule row to see what it means, where it is and whether the highlight represents actual geometry or a locator.");
 }
 function centerView(){
- if(!geometryGroup)return;
+ if(!geometryGroup||!orbit)return;
  const box=new THREE.Box3();
  for(const m of hitMeshes)if(m.visible){
   const b=new THREE.Box3().setFromObject(m);
@@ -263,7 +263,13 @@ function initRenderer(){
  const node=$("viewer3d");
  scene=new THREE.Scene();scene.background=new THREE.Color(0xeaf2f4);
  camera=new THREE.PerspectiveCamera(48,node.clientWidth/Math.max(100,node.clientHeight),.05,500);
- renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});
+ try{renderer=new THREE.WebGLRenderer({antialias:true,alpha:false,powerPreference:"high-performance"});}
+ catch(_){
+  renderer=null;$("aad-renderer-status").hidden=false;$("aad-renderer-status").textContent="3D is unavailable in this browser. 2D plans, component filters, location pins and downloads remain available.";
+  for(const id of ["aad-view-3d","aad-view-both"])$(id).disabled=true;
+  for(const opt of $("aad-view-mode").options)if(opt.value!=="plan")opt.disabled=true;
+  return;
+ }
  renderer.localClippingEnabled=true;
  if(building?.manifest.presentation){renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;scene.background=new THREE.Color('#ecece2');}
  renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));renderer.setSize(node.clientWidth,node.clientHeight);
@@ -345,32 +351,48 @@ function initAADRegister(){
   opt.value=l.id;opt.textContent=l.name+" ("+l.id.toUpperCase()+")";
   levels.append(opt);
  }
- for(const name of ["storey","discipline","kind","sort"]){
-  $("aad-audit-"+name).addEventListener("change",addRows);
+ for(const name of ["storey","discipline","kind","sort","direction"]){
+  $("aad-audit-"+name).addEventListener("change",()=>addRows(true));
  }
- $("aad-audit-search").addEventListener("input",addRows);
+ $("aad-audit-search").addEventListener("input",()=>addRows(true));
+ for(const [id,open]of [["aad-audit-expand",true],["aad-audit-collapse",false]])$(id).addEventListener("click",()=>{$("elements").querySelectorAll("details").forEach(d=>d.open=open);});
  $("aad-audit-clear").addEventListener("click",()=>{
   for(const key of ["storey","discipline","kind"])$("aad-audit-"+key).value="all";
-  $("aad-audit-sort").value="id";$("aad-audit-search").value="";addRows();
+  $("aad-audit-sort").value="id";$("aad-audit-direction").value="asc";$("aad-audit-search").value="";addRows();
  });
+}
+function updateRegisterChoices(){
+ const select=$("aad-audit-kind"),chosen=select.value||"all";
+ const scoped=buildAADComponentGroups(building,{level:$("aad-audit-storey").value,discipline:$("aad-audit-discipline").value,search:$("aad-audit-search").value}).groups.flatMap(l=>l.disciplines.flatMap(d=>d.types.flatMap(t=>t.items)));
+ const kinds=[...new Set(building.elements.filter(e=>e.ifcType).map(e=>e.kind))].sort((a,b)=>classifyAADComponent({kind:a}).type.localeCompare(classifyAADComponent({kind:b}).type));
+ select.replaceChildren(new Option("All element types","all"));
+ for(const kind of kinds){const matches=scoped.filter(e=>e.kind===kind);select.add(new Option((kind==="auxiliary"?"Service objects":classifyAADComponent({kind}).type)+" · "+matches.length,kind));}
+ select.value=kinds.includes(chosen)?chosen:"all";
+}
+function updateFilterSummary(){
+ const root=$("aad-active-filters");root.replaceChildren();
+ const names={storey:"Storey",discipline:"Discipline",kind:"Type",search:"Search"};
+ for(const [key,label] of Object.entries(names)){const el=$("aad-audit-"+key),value=el.value.trim();if(!value||value==="all")continue;const button=document.createElement("button");button.type="button";const text=key==="search"?value:el.selectedOptions[0].textContent;button.textContent=label+": "+text+" ×";button.setAttribute("aria-label","Remove "+label.toLowerCase()+" filter: "+text);button.addEventListener("click",()=>{el.value=key==="search"?"":"all";addRows(true);el.focus();});root.append(button);}
+ if(!root.children.length)root.textContent="All components · no table filters applied";
 }
 function auditFilters(){
  return{level:$("aad-audit-storey").value,discipline:$("aad-audit-discipline").value,
-  kind:$("aad-audit-kind").value,sort:$("aad-audit-sort").value,search:$("aad-audit-search").value};
+  kind:$("aad-audit-kind").value,sort:$("aad-audit-sort").value,direction:$("aad-audit-direction").value,search:$("aad-audit-search").value};
 }
-function addRows(){
+function addRows(revealMatches=false){
+ updateRegisterChoices();updateFilterSummary();
  const root=$("elements"),openBefore=new Set([...root.querySelectorAll("details[open][data-group-key]")]
    .map(node=>node.dataset.groupKey));
  const hadOldGroups=Boolean(root.querySelector("details[data-group-key]"));
  root.replaceChildren();rowsById.clear();
  const grouped=buildAADComponentGroups(building,auditFilters());
  $("aad-audit-count").textContent="Showing "+grouped.matching+" / "+grouped.total+" BIM components · "+
-  grouped.groups.length+" storey groups. Storeys always follow building elevation; rows sort inside their element type.";
+  grouped.groups.length+(grouped.groups.length===1?" storey group. Row order: ":" storey groups. Row order: ")+$("aad-audit-sort").selectedOptions[0].textContent+" · "+$("aad-audit-direction").value+". Drawing visibility is unchanged.";
  if(!grouped.groups.length){
   const empty=document.createElement("p");empty.id="aad-audit-empty";empty.textContent="No components match these filters. Clear filters to restore the full register.";root.append(empty);return;
  }
  const captioned=(parent,tag,value)=>{const el=document.createElement(tag);el.textContent=value;parent.append(el);return el;};
- const openRule=(key,defaultOpen)=>hadOldGroups?openBefore.has(key):defaultOpen;
+ const openRule=(key,defaultOpen)=>revealMatches?true:hadOldGroups?openBefore.has(key):defaultOpen;
  for(const [li,l] of grouped.groups.entries()){
   const levelEl=document.createElement("details");levelEl.className="aad-audit-level";levelEl.dataset.groupKey="L:"+l.level;
   levelEl.dataset.level=l.level;levelEl.open=openRule(levelEl.dataset.groupKey,li===0);
@@ -384,7 +406,7 @@ function addRows(){
     const kindEl=document.createElement("details");kindEl.className="aad-audit-type";
     kindEl.dataset.groupKey="T:"+l.level+":"+d.name+":"+t.kind;kindEl.dataset.kind=t.kind;
     kindEl.open=openRule(kindEl.dataset.groupKey,t.kind==="wall"||t.kind==="column");
-    captioned(kindEl,"summary",t.name+" · "+t.items.length+" items");
+    captioned(kindEl,"summary",t.name+(d.name==="MEP"?" · "+classifyAADComponent({kind:t.kind}).type:"")+" · "+t.items.length+" items");
     const wrap=document.createElement("div");wrap.className="table-wrap";wrap.tabIndex=0;wrap.setAttribute("role","region");wrap.setAttribute("aria-label",t.name+" component table; scroll horizontally for more columns");
     const table=document.createElement("table");
     const head=document.createElement("thead");
@@ -821,6 +843,7 @@ function setLevel(level){
  $("aad-storey").value=level;applyVisible();drawPlan();
 }
 function setViewMode(mode){
+ if(!renderer)mode="plan";
  if(!["split","plan","building"].includes(mode))mode="split";
  document.body.dataset.viewMode=mode;$("aad-view-mode").value=mode;
  try{localStorage.setItem("aad:unified:view-mode",mode);}catch(_){}
@@ -945,11 +968,12 @@ async function main(){
  }
  if(manifest.presentation){
   $('aad-preset-roof').hidden=!Boolean(manifest.presentation.roofAccess);
-  $('aad-services-controls').hidden=!Boolean(manifest.services);
+  $('aad-services-controls').hidden=!Boolean(manifest.services);$('aad-services-link').hidden=!Boolean(manifest.services);
   if(manifest.services){$('aad-mep-summary').textContent=manifest.services.notes.join(' ');$('aad-mep-conflicts').textContent=siteConflicts(manifest.services.assets,manifest.services.siteFrame).map(a=>a.id+': '+(a.outsidePlot?'outside plot; ':'')+(a.plinthOverlap?'excavation envelope crosses house outline; ':'')+(a.wcOverlap?'overlaps outside WC; ':'')).join(' | ');}
   cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
   setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
  }
+ document.dispatchEvent(new Event("aad-studio-ready"));
 }
 for(const [id,stateKey]of [['aad-cutaway','cutaway'],['aad-dimensions','dimensions'],['aad-plan-grid','grid'],['aad-furniture','furniture']]){
  $(id).addEventListener('change',e=>{if(!building)return;const on=e.target.checked;if(stateKey==='cutaway')cutaway=on;if(stateKey==='dimensions')showDimensions=on;if(stateKey==='grid')showPlanGrid=on;if(stateKey==='furniture')showFurniture=on;renderModel();drawPlan();});
@@ -1053,7 +1077,7 @@ window.AADStudio=Object.freeze({
  getViewportProof:()=>{
   // Complete the current WebGL frame before a screenshot/export reads pixels.
   // This also prevents headless software rendering from capturing a prior preset.
-  renderer.render(scene,camera);renderer.getContext().finish();
+  if(renderer){renderer.render(scene,camera);renderer.getContext().finish();}
   const visible=[...new Map(hitMeshes.filter(m=>m.visible!==false).map(m=>[m.userData.element.id,m.userData.element])).values()];
   return{activeLevel,cutaway,roofAccessMode,mepMode,visibleMEP:visible.filter(e=>e.discipline==='MEP').length,visibleRoofCover:visible.some(e=>e.roofCover),visibleRoofAccess:visible.filter(e=>e.roofAccess).length,visibleWalls:visible.filter(e=>e.kind==='wall').length,
    visibleRoof:visible.some(e=>e.kind==='roof'),visibleFurniture:visible.filter(e=>e.kind==='furniture').length};
