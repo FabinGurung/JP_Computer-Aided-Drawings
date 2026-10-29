@@ -47,6 +47,7 @@ jobs:
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/ashok-preview.log 2>&1 &)
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/ashok-rev04-browser.mjs
+          node tools/site/ashok-usability-browser.mjs
           node tools/site/aad-code-library-browser.mjs
       - uses: actions/setup-python@v5
         with: {python-version: "3.12"}

@@ -1,6 +1,10 @@
 const NS='http://www.w3.org/2000/svg';
 export const plotToWorld=(x,y,f)=>({x:x/1000+f.originX,z:f.originZ-y/1000});
 export const worldToPlot=(x,z,f)=>({xMm:Math.round((x-f.originX)*1000),yMm:Math.round((f.originZ-z)*1000)});
+export function normalizeSitePins(value,frame){
+ if(!Array.isArray(value))return [];
+ return value.filter(p=>p&&typeof p.xMm==='number'&&typeof p.yMm==='number'&&Number.isFinite(p.xMm)&&Number.isFinite(p.yMm)&&p.xMm>=0&&p.yMm>=0&&p.xMm<=frame.widthMm&&p.yMm<=frame.lengthMm).map(p=>({xMm:Math.round(p.xMm),yMm:Math.round(p.yMm),label:typeof p.label==='string'&&p.label.trim()?p.label.trim().slice(0,80):'Other correction'}));
+}
 export function siteConflicts(assets,f){return assets.map(a=>{const r=[a.xMm-a.widthMm/2,a.yMm-a.lengthMm/2,a.xMm+a.widthMm/2,a.yMm+a.lengthMm/2],overlap=b=>Array.isArray(b)&&r[2]>b[0]&&r[0]<b[2]&&r[3]>b[1]&&r[1]<b[3];return{id:a.id,outsidePlot:r[0]<0||r[1]<0||r[2]>f.widthMm||r[3]>f.lengthMm,plinthOverlap:overlap(f.plinthRect),wcOverlap:overlap(f.outsideWCRect)};});}
 export function drawServicesPlan(svg,building){
  const s=building.manifest.services;if(!s)return;const old=svg.querySelector('[data-mep-overlay]');old?.remove();const g=document.createElementNS(NS,'g');g.dataset.mepOverlay='true';
@@ -10,12 +14,42 @@ export function drawServicesPlan(svg,building){
  svg.append(g);
 }
 export function installSitePicker(getBuilding){
- const svg=document.getElementById('viewer2d'),read=document.getElementById('aad-site-readout'),list=document.getElementById('aad-site-pins');let pins=[];let loadedProject=null;const key=()=> 'aad-site-pins-v2:'+getBuilding()?.projectId;
- const draw=()=>{list.replaceChildren();for(const p of pins){const li=document.createElement('li');li.textContent=p.label+': plot X '+p.xMm+', Y '+p.yMm+' mm';list.append(li);}};draw();
- const restore=()=>{const id=getBuilding()?.projectId;if(id&&id!==loadedProject){loadedProject=id;try{pins=JSON.parse(localStorage.getItem(key())||'[]');}catch{pins=[];}draw();}};
- const loc=ev=>{restore();const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());return worldToPlot(q.x,q.y,getBuilding().manifest.services.siteFrame);};
- svg.addEventListener('pointermove',ev=>{if(!getBuilding()?.manifest.services)return;const p=loc(ev);read.textContent=`Plot X ${p.xMm} · Y ${p.yMm} mm · building X ${p.xMm-getBuilding().manifest.services.siteFrame.buildingOffsetX} · Y ${p.yMm-getBuilding().manifest.services.siteFrame.buildingOffsetY} mm`;});
- svg.addEventListener('click',ev=>{if(!document.getElementById('aad-pin-mode').checked||!getBuilding()?.manifest.services)return;ev.stopImmediatePropagation();const p=loc(ev);if(p.xMm<0||p.yMm<0||p.xMm>getBuilding().manifest.services.siteFrame.widthMm||p.yMm>getBuilding().manifest.services.siteFrame.lengthMm){read.textContent='Outside plot — choose a point inside the boundary.';return;}pins.push({...p,label:document.getElementById('aad-pin-label').value});try{localStorage.setItem(key(),JSON.stringify(pins));}catch{}draw();let mark=svg.querySelector('[data-site-feedback]');if(!mark){mark=document.createElementNS(NS,'circle');mark.dataset.siteFeedback='true';svg.append(mark);}const q=plotToWorld(p.xMm,p.yMm,getBuilding().manifest.services.siteFrame);for(const[k,v]of Object.entries({cx:q.x,cy:q.z,r:.13,fill:'#e85138',stroke:'white','stroke-width':.04,'pointer-events':'none'}))mark.setAttribute(k,v);},true);
- document.getElementById('aad-export-pins').addEventListener('click',()=>{const u=URL.createObjectURL(new Blob([JSON.stringify({project:getBuilding()?.projectId,version:'v2',coordinateBasis:'plot front-left mm',pins},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download='Ashok_v2_Location_Pins.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
- document.getElementById('aad-clear-pins').addEventListener('click',()=>{pins=[];try{localStorage.removeItem(key());}catch{}svg.querySelector('[data-site-feedback]')?.remove();draw();});
+ const svg=document.getElementById('viewer2d'),read=document.getElementById('aad-site-readout'),list=document.getElementById('aad-site-pins'),notice=document.getElementById('aad-pin-status');let pins=[],loadedProject=null,down=null;
+ const key=()=> 'aad-site-pins-v2:'+getBuilding()?.projectId;
+ const say=text=>{if(notice)notice.textContent=text;};
+ const draw=()=>{
+  list.replaceChildren();svg.querySelector('[data-site-feedback]')?.remove();
+  const frame=getBuilding()?.manifest.services?.siteFrame;if(!frame)return;
+  const marks=document.createElementNS(NS,'g');marks.dataset.siteFeedback='true';marks.setAttribute('pointer-events','none');
+  for(const [i,p]of pins.entries()){
+   const li=document.createElement('li');li.textContent=p.label+': plot X '+p.xMm+', Y '+p.yMm+' mm';list.append(li);
+   const q=plotToWorld(p.xMm,p.yMm,frame),mark=document.createElementNS(NS,'circle');
+   for(const[k,v]of Object.entries({cx:q.x,cy:q.z,r:.13,fill:'#e85138',stroke:'white','stroke-width':.04,'data-feedback-pin':i}))mark.setAttribute(k,v);
+   const title=document.createElementNS(NS,'title');title.textContent='Feedback '+(i+1)+' · '+li.textContent;mark.append(title);marks.append(mark);
+  }svg.append(marks);
+ };
+ const sync=()=>{
+  const b=getBuilding(),frame=b?.manifest.services?.siteFrame;read.hidden=!frame;if(!frame)return;
+  if(b.projectId!==loadedProject){
+   loadedProject=b.projectId;try{pins=normalizeSitePins(JSON.parse(localStorage.getItem(key())||'[]'),frame);}catch{pins=[];say('Saved pins could not be read. You can still add and download pins.');}
+  }draw();
+ };
+ const loc=ev=>{const matrix=svg.getScreenCTM();if(!matrix||!getBuilding()?.manifest.services)return null;const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(matrix.inverse());return worldToPlot(q.x,q.y,getBuilding().manifest.services.siteFrame);};
+ const report=p=>{if(!p)return;const f=getBuilding().manifest.services.siteFrame;read.textContent=`Plot X ${p.xMm} · Y ${p.yMm} mm · building X ${p.xMm-f.buildingOffsetX} · Y ${p.yMm-f.buildingOffsetY} mm`;};
+ svg.addEventListener('pointermove',ev=>report(loc(ev)));
+ svg.addEventListener('pointerdown',ev=>{
+  const point=loc(ev);report(point);if(document.getElementById('aad-pin-mode').checked&&getBuilding()?.manifest.services){down={x:ev.clientX,y:ev.clientY,point};ev.stopImmediatePropagation();}
+ },true);
+ svg.addEventListener('click',ev=>{
+  if(!document.getElementById('aad-pin-mode').checked||!getBuilding()?.manifest.services)return;
+  ev.stopImmediatePropagation();sync();
+  if(down&&Math.hypot(ev.clientX-down.x,ev.clientY-down.y)>8){down=null;say('Drag ignored. Tap or click once to place a feedback pin.');return;}
+  const p=down?.point||loc(ev);down=null;if(!p)return;report(p);const f=getBuilding().manifest.services.siteFrame;
+  if(p.xMm<0||p.yMm<0||p.xMm>f.widthMm||p.yMm>f.lengthMm){read.textContent='Outside plot — choose a point inside the boundary.';return;}
+  pins=normalizeSitePins([...pins,{...p,label:document.getElementById('aad-pin-label').value}],f);
+  try{localStorage.setItem(key(),JSON.stringify(pins));say('Feedback pin saved on this device. Download it to share a requested change.');}catch{say('Device storage is unavailable. Download pins before leaving this page.');}draw();
+ },true);
+ document.getElementById('aad-export-pins').addEventListener('click',()=>{sync();const u=URL.createObjectURL(new Blob([JSON.stringify({project:getBuilding()?.projectId,version:'v2',coordinateBasis:'plot front-left mm',pins},null,2)],{type:'application/json'}));const a=document.createElement('a');a.href=u;a.download=(getBuilding()?.projectId||'project')+'_v2_Location_Pins.json';a.click();setTimeout(()=>URL.revokeObjectURL(u),1000);});
+ document.getElementById('aad-clear-pins').addEventListener('click',()=>{sync();pins=[];try{localStorage.removeItem(key());say('Feedback pins cleared on this device.');}catch{say('Pins cleared for this session. Device storage is unavailable.');}draw();});
+ return{sync};
 }

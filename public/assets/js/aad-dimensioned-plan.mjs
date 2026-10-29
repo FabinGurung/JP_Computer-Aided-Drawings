@@ -40,7 +40,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
    }
   }
  }
- if((furniture||roofOnly)&&levelId!=='all')for(const e of building.elements.filter(e=>(e.level===levelId||e.contextLevels?.includes(levelId))&&(roofOnly?e.roofAccess&&!e.roofCover:!e.roofPart)&&['furniture','fixture','stair','landing','auxiliary'].includes(e.kind))){
+ if((furniture||roofOnly)&&levelId!=='all')for(const e of building.elements.filter(e=>e.discipline!=='MEP'&&(e.level===levelId||e.contextLevels?.includes(levelId))&&(roofOnly?e.roofAccess&&!e.roofCover:!e.roofPart)&&['furniture','fixture','stair','landing','auxiliary'].includes(e.kind))){
   const group=make('g',{'data-presentation-id':e.id,class:'aad-furnishing'+(e.id===selectedId?' is-selected':''),tabindex:0,role:'button','aria-label':e.name||e.id});
   group.addEventListener('click',event=>{event.stopPropagation();onSelect(e);});
   group.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();onSelect(e);}});

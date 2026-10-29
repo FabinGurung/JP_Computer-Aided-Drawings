@@ -1,6 +1,6 @@
 # AAD domain guide template — CAD-owned
 
-Current implementation version: **0.3.0**, at the same canonical template path
+Current implementation version: **0.3.1**, at the same canonical template path
 and template ID. The added code register and archive-before-update document
 control are reusable capabilities within the existing CAD boundary. Human pages:
 `/memory-wall/` and `/codes/pokhara/`. Private engineering working records stay in
@@ -40,3 +40,5 @@ When a CAD/AAD task creates or changes schemas, templates, drawings, site guides
 The present Narayani pilot remains held at a private DWG-to-reviewed-DXF step; do not infer source-version parity, structural dimensions or actual construction-ready results.
 
 V2 adds reusable MEP classification, source-linked route data, plot/building coordinate conversion, location-feedback pins and roof-cover visibility controls. Spreadsheet schedules are data views, not geometry engines.
+
+0.3.1 repairs feedback-pin restoration, validation and redraws, touch feedback and the MEP plan visibility toggle. Excel remains a coordination worksheet; it does not publish or synchronize geometry.

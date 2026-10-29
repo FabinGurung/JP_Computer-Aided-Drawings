@@ -173,7 +173,9 @@ jobs:
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
           ASHOK_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/ashok-adhikari/
-        run: node tools/site/ashok-rev04-browser.mjs
+        run: |
+          node tools/site/ashok-rev04-browser.mjs
+          node tools/site/ashok-usability-browser.mjs
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
