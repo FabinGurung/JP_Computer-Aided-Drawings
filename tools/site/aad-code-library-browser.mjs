@@ -6,6 +6,7 @@ try{for(const width of [320,360,390,768,1440]){
  const page=await browser.newPage({viewport:{width,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));
  assert.equal((await page.goto(base+'codes/pokhara/',{waitUntil:'networkidle'})).status(),200);
  await page.locator('#rule-body tr').first().waitFor();
+ const tree=page.locator('.code-tree');assert.equal(await tree.getAttribute('tabindex'),'0');if(await tree.evaluate(e=>e.scrollWidth>e.clientWidth)){await tree.focus();await page.keyboard.press('ArrowRight');await page.waitForTimeout(180);assert.ok(await tree.evaluate(e=>e.scrollLeft>0),'Code hierarchy must be keyboard-scrollable');}
  assert.equal(await page.locator('.card h3').evaluateAll(es=>es.filter(e=>e.scrollWidth>e.clientWidth+2).length),0,'Source title overflows its card');
  const table=page.locator('.tablewrap');await table.focus();if(width<768){await page.keyboard.press('ArrowRight');await page.waitForTimeout(200);assert.ok(await table.evaluate(e=>e.scrollLeft>0),'Code table must be keyboard-scrollable');}
 assert.equal(await page.locator('#rule-body tr').count(),39);assert.equal(await page.locator('[data-reference-id]').count(),10);
