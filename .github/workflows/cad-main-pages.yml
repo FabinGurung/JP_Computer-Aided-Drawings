@@ -84,6 +84,7 @@ jobs:
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
+          node tools/site/ashok-usability-browser.mjs
           node tools/site/aad-code-library-browser.mjs
       - name: Save render verification screenshots
         if: always()

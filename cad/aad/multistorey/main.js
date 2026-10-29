@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2');return u.href;};
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2-qa');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
@@ -653,6 +653,7 @@ function drawPlan(){
  }
  $("aad-plan-level").textContent=ground;
  $("aad-building-level").textContent=activeLevel==="all"?"All storeys":"Selected storey "+activeLevel.toUpperCase();
+ sitePicker.sync();
 }
 function focusEditor(level,kind,id){
  const nativeId=building.projectId+":"+level+":"+id;
@@ -1139,7 +1140,7 @@ window.AADStudio=Object.freeze({
 });
 main().catch(e=>{status("Unable to assemble this project: "+e.message);$("qa-result").textContent="ERROR: "+e.message;});
 
-installSitePicker(()=>building);
+const sitePicker=installSitePicker(()=>building);
 $('aad-mep-view').addEventListener('click',()=>{if(!building?.manifest.services)return;mepMode=true;roofAccessMode=false;showMEP=true;$('aad-mep-visible').checked=true;setLevel('all');setViewMode('split');renderModel();drawPlan();centerView();});
 $('aad-mep-visible').addEventListener('change',e=>{showMEP=e.target.checked;applyVisible();drawPlan();});
 $('aad-roof-cover').addEventListener('change',e=>{showRoofCover=e.target.checked;applyVisible();});

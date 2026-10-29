@@ -152,6 +152,18 @@ header nav{flex-wrap:wrap}header>div,.head>div,.unified-toolbar>*,.panel-title>*
 .aad-audit-type td:nth-last-child(-n+2){white-space:normal;overflow-wrap:anywhere;min-width:200px;max-width:320px}
 .table-wrap:focus-visible{outline:3px solid #138579;outline-offset:-3px}
 @media(max-width:660px){.unified-toolbar label{flex:1 1 160px}.unified-toolbar button{flex:1 1 125px}.view-foot,.head p,#edit-notice,.legend{font-size:12px}table{font-size:12px}}
+#aad-presentation-controls label:has(input[type="checkbox"]){flex-direction:row;align-items:center;flex:1 1 105px;min-height:44px}
+#aad-presentation-controls label input[type="checkbox"]{flex:0 0 auto}
+#aad-services-controls label{display:inline-flex;align-items:center;gap:8px;flex-wrap:wrap;max-width:100%;min-height:44px;margin:5px 12px 5px 0}
+#aad-services-controls select{max-width:100%;min-height:44px;padding:8px;font:inherit}
+#aad-services-controls button{min-height:44px;padding:10px;white-space:normal;overflow-wrap:anywhere;max-width:100%}
+#aad-site-readout{display:block;margin:10px 0;font-size:13px;line-height:1.6;overflow-wrap:anywhere}
+#aad-site-readout[hidden]{display:none}
+#aad-site-pins{padding-left:22px;max-height:230px;overflow:auto;line-height:1.6}
+#aad-site-pins li{overflow-wrap:anywhere}
+#aad-pin-status{font-size:13px;line-height:1.5}
+button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visible{outline:3px solid #138579;outline-offset:2px}
+@media(max-width:660px){#aad-services-controls select{font-size:16px}#aad-services-controls h2{font-size:19px}}
 </style>
 </head>
 <body>
@@ -176,20 +188,20 @@ header nav{flex-wrap:wrap}header>div,.head>div,.unified-toolbar>*,.panel-title>*
 <button id="aad-save-working" class="btn-primary" type="button">Save editable BIM draft</button>
 <button id="aad-import-working" type="button">Open BIM draft</button><input id="aad-import-file" type="file" accept=".json,application/json" hidden>
 </div>
-<section id="aad-services-controls" class="panel" hidden style="padding:12px;margin:12px 0;overflow-wrap:anywhere"><h2>v2 · MEP and site locations</h2><button id="aad-mep-view" type="button">MEP / underground view</button> <label><input id="aad-mep-visible" type="checkbox" checked> Show MEP routes</label><p>Brown: sanitary · violet: full-bore vent · teal: septic effluent · green: fan exhaust · gold: electrical conduit. Select objects for their system names. Stormwater stays separate.</p><p id="aad-mep-conflicts" role="status"></p><details><summary>Design basis and source notes</summary><p id="aad-mep-summary"></p><a href="../../../codes/pokhara/#house-meaning">Read the interpreted code rules and MEP sources</a></details><p>Hover for location. On touch screens, enable pin mode and tap. Plot origin is the front-left plot corner; building coordinates are shown separately.</p><label><input id="aad-pin-mode" type="checkbox"> Pin location feedback (does not move design objects)</label> <label>Pin label <select id="aad-pin-label"><option>Soak pit</option><option>Septic tank</option><option>Other correction</option></select></label><output id="aad-site-readout" aria-live="off">Hover over the 2D plan for plot X/Y in millimetres.</output><ul id="aad-site-pins"></ul><button id="aad-export-pins" type="button">Download pins to share in chat</button> <button id="aad-clear-pins" type="button">Clear my pins</button></section><div class="workspace">
+<section id="aad-services-controls" class="panel" hidden style="padding:12px;margin:12px 0;overflow-wrap:anywhere"><h2>v2 · MEP and site locations</h2><button id="aad-mep-view" type="button">MEP / underground view</button> <label><input id="aad-mep-visible" type="checkbox" checked> Show MEP routes</label><p>Brown: sanitary · violet: full-bore vent · teal: septic effluent · green: fan exhaust · gold: electrical conduit. Select objects for their system names. Stormwater stays separate.</p><p id="aad-mep-conflicts" role="status"></p><details><summary>Design basis and source notes</summary><p id="aad-mep-summary"></p><a href="../../../codes/pokhara/#house-meaning">Read the interpreted code rules and MEP sources</a></details><p>Hover for location. On touch screens, enable pin mode and tap. Plot origin is the front-left plot corner; building coordinates are shown separately.</p><label><input id="aad-pin-mode" type="checkbox"> Pin location feedback (does not move design objects)</label> <label>Pin label <select id="aad-pin-label"><option>Soak pit</option><option>Septic tank</option><option>Other correction</option></select></label><p id="aad-pin-status" role="status"></p><ul id="aad-site-pins"></ul><button id="aad-export-pins" type="button">Download pins to share in chat</button> <button id="aad-clear-pins" type="button">Clear my pins</button></section><div class="workspace">
 <div id="aad-presentation-controls" class="unified-toolbar" hidden style="grid-column:1/-1">
 <strong>Architectural views</strong><button id="aad-preset-gf" type="button">Furnished GF</button><button id="aad-preset-ff" type="button">Furnished FF</button><button id="aad-preset-exterior" type="button">Exterior</button><button id="aad-preset-roof" type="button">Roof access</button>
 <button id="aad-view-3d" type="button">3D model</button><button id="aad-view-plan" type="button">Dimensioned plan</button><button id="aad-view-both" type="button">Both views</button>
 <label><input id="aad-roof-cover" type="checkbox" checked> Staircase roof cover</label><label><input id="aad-cutaway" type="checkbox" checked> Cutaway walls</label><label><input id="aad-dimensions" type="checkbox" checked> Dimensions</label><label><input id="aad-plan-grid" type="checkbox" checked> 100/500/1000 grid</label><label><input id="aad-furniture" type="checkbox" checked> Furniture</label>
 <button id="aad-plan-in" type="button">Plan +</button><button id="aad-plan-out" type="button">Plan −</button><button id="aad-plan-export" type="button">Save dimensioned SVG</button>
-<output id="aad-coordinate-readout" style="font-size:11px">X/Y coordinates in source millimetres</output>
+
 </div>
  <div class="panel">
   <div class="panel-title"><strong>One editable building · linked 2D + 3D</strong><small>One authoritative building state updates all viewports, components and IFC</small></div>
   <div class="linked-views">
    <div class="viewport" id="viewport2d"><div class="viewport-title">2D floor plan <small id="aad-plan-level">Ground floor</small></div>
     <svg id="viewer2d" xmlns="http://www.w3.org/2000/svg" viewBox="-1 -1 27 17" role="img" aria-label="Live AAD editable wall and hosted openings plan"></svg>
-    <div class="view-foot">Click a wall, door, window or column to highlight the identical BIM component in 2D, 3D and the schedule. Drag nodes to edit the shared model.</div>
+    <div class="view-foot"><output id="aad-coordinate-readout" style="display:block;font-size:12px">X/Y coordinates in source millimetres</output><output id="aad-site-readout" aria-live="off" hidden>Hover over the 2D plan for plot X/Y in millimetres.</output>Click a wall, door, window or column to highlight the identical BIM component in 2D, 3D and the schedule. Drag nodes to edit the shared model.</div>
    </div>
    <div class="viewport" id="viewport3d"><div class="viewport-title">Interactive 3D building <small id="aad-building-level">All storeys</small></div>
     <div id="viewer3d" aria-label="Assembled multistorey model derived from same editable floor graph"><div class="viewhud">World coordinates in metres · vertical Y</div></div>

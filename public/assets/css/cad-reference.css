@@ -3,3 +3,5 @@
 .card,.step,.ref section,.formgrid>*{min-width:0}.card h3,.card p,.ref a{overflow-wrap:anywhere}.tablewrap table{min-width:760px}.tablewrap:focus-visible{outline:3px solid #245d55;outline-offset:2px}.table-hint{font-size:.85rem;color:var(--muted)}
 
 .code-tree{font:14px/1.65 ui-monospace,monospace;white-space:pre;overflow:auto;background:#fffdf8;border:1px solid var(--line);padding:18px;border-radius:10px}.ref li{margin:12px 0}
+
+.code-tree:focus-visible{outline:3px solid #138579;outline-offset:2px}
