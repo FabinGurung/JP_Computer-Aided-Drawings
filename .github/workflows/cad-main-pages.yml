@@ -32,6 +32,7 @@ jobs:
           python tools/site/ashok-build-coordinated.py
           git diff --exit-code -- 'public/data/projects/ashok-adhikari/*qa02.json'
           node tools/site/ashok-qa02-smoke.mjs
+          node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
       - name: M26 immutable source-backed 2D/3D/table/IFC acceptance
@@ -85,6 +86,7 @@ jobs:
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
+          node tools/site/ashok-navigation-browser.mjs
           node tools/site/aad-code-library-browser.mjs
       - name: Save render verification screenshots
         if: always()
