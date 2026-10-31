@@ -265,6 +265,21 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 <small style="display:block;margin:9px 0;color:#795a20">This panel reports original drawing handles, section annotations and independent raw geometry. It does not create, approve or size upper-floor BIM beams. Native sheet coordinates must be registered to a verified common building datum first.</small>
 <a id="aad-m30-evidence-link" target="_blank" rel="noopener" style="display:block;font-size:12px" href="#">Source inventory, SHA fingerprints and limitations ↗</a>
 </section>
+<section id="aad-m32-source" hidden aria-label="M32 read-only native structural DXF beam-strip candidate inspector">
+<h2>M32 · Source-native paired-strip inspection</h2>
+<p id="aad-m32-summary" style="font-size:11px;color:#4b6572">Loading source handle evidence.</p>
+<label for="aad-m32-floor" style="font-size:12px">Original DXF sheet (unregistered coordinates)</label>
+<select id="aad-m32-floor" style="display:block;width:100%;margin:7px 0;padding:8px;border:1px solid #bfd0d5;border-radius:6px">
+<option value="gf">Ground floor (GF)</option>
+<option value="ff" selected>First floor (FF)</option>
+<option value="sf">Second floor (SF)</option>
+</select>
+<svg id="aad-m32-plot" role="img" aria-label="17 read-only original DXF paired-line geometry hypotheses in source-sheet normalized metre coordinates, not a building plan" viewBox="-7.4 115.6 23.6 14.9" preserveAspectRatio="xMidYMid meet" style="width:100%;height:auto;aspect-ratio:23.6/14.9;background:#eff6f7;border:1px solid #bfced5;border-radius:8px;touch-action:pan-y"></svg>
+<p id="aad-m32-picked" role="status" aria-live="polite" style="font-size:11px;white-space:pre-wrap;background:#f3f8f8;padding:9px;border-radius:6px">Click a line for native CAD source handles.</p>
+<small style="display:block;margin:8px 0;color:#795a20">17 conservative strip candidates per sheet (51 trace records), identified from paired native wall-layer strokes. These are NOT independently verified structural beams. Axes repeat after sheet translation, potentially copied source drawing linework. No link to surveyed building datum, column support, load path, structural section or IFC member.</small>
+<a id="aad-m32-data-link" href="#" target="_blank" rel="noopener" style="display:block;font-size:12px">M32 read-only CAD handle register ↗</a>
+<a id="aad-m32-archive-link" href="#" target="_blank" rel="noopener" style="display:block;font-size:12px;margin-top:5px">Full extracted strip evidence and regeneration script (Drive) ↗</a>
+</section>
 <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
  <section><details><summary>AI-controlled authoring · machine-readable inputs</summary>
 <p style="font-size:11px;color:#52707d">This canonical template is controlled by structured project manifests, editable floor-graph JSON and the validated <code>window.AADStudio</code> command API. Ask ChatGPT or your own connected AI to generate or update these inputs. No natural-language command entry is required here, and this static website does not claim to run an embedded LLM.</p>

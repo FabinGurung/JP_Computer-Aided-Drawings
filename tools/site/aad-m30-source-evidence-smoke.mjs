@@ -14,9 +14,14 @@ const history=read("aad-m30-source-index-version-history.json");
 assert.equal(inventory.schema,"jp-cad://aad-m30-original-dxf-source-index/1");
 assert.equal(inventory.projectId,manifest.projectId);
 assert.equal(manifest.structuralReview.fullSourceIndex,"aad-m30-original-dxf-full-source-index.json");
-assert.deepEqual(manifest,after);
+const m32Pre=read("archive/m32/M32_PRE_aad-building-v1.json");
+const m32Post=read("archive/m32/M32_POST_aad-building-v1.json");
+assert.deepEqual(after,m32Pre,
+ "M30 POST must remain exactly identical to pre-M32 same-live-file source manifest");
+assert.deepEqual(manifest,m32Post,
+ "Current live source manifest must match saved M32 POST");
 assert.deepEqual({...before,structuralReview:{...before.structuralReview,
- fullSourceIndex:"aad-m30-original-dxf-full-source-index.json"}},manifest,
+ fullSourceIndex:"aad-m30-original-dxf-full-source-index.json"}},after,
  "M30 may only add reference to derived source inventory");
 assert.equal(history.events.length,2);
 assert.equal(history.events[0].version,"M30_PRE");
