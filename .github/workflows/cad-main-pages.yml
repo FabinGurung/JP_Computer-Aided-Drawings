@@ -47,6 +47,8 @@ jobs:
         run: node tools/site/aad-m30-source-evidence-smoke.mjs
       - name: M31 owner decision debt reconciliation and source-aware structural diagnostics
         run: node tools/site/aad-m31-current-debt-gate.mjs
+      - name: M32 source-native 51 strip candidate evidence and exact original handle gate
+        run: node tools/site/aad-m32-strip-register-smoke.mjs
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs
@@ -80,6 +82,7 @@ jobs:
           AAD_M26_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
           AAD_M29_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m29-primary-studio-browser-smoke.mjs
           AAD_M30_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m30-source-browser-smoke.mjs
+          AAD_M32_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m32-native-strip-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
@@ -99,6 +102,7 @@ jobs:
             /tmp/aad-m26-main-studio-source-structural.png
             /tmp/aad-m29-dxf-datum-and-upper-floor-evidence.png
             /tmp/aad-m30-source-native-upper-floors.png
+            /tmp/aad-m32-native-source-strip-inspector.png
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
