@@ -268,7 +268,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 <section id="aad-m32-source" hidden aria-label="M32 read-only native structural DXF beam-strip candidate inspector">
 <h2>M32 · Source-native paired-strip inspection</h2>
 <p id="aad-m32-summary" style="font-size:11px;color:#4b6572">Loading source handle evidence.</p>
-<label for="aad-m32-floor" style="font-size:12px">Original DXF sheet (unregistered coordinates)</label>
+<label for="aad-m32-floor" style="font-size:12px">Original structural DXF sheet (relative drawing coordinates, not surveyed)</label>
 <select id="aad-m32-floor" style="display:block;width:100%;margin:7px 0;padding:8px;border:1px solid #bfd0d5;border-radius:6px">
 <option value="gf">Ground floor (GF)</option>
 <option value="ff" selected>First floor (FF)</option>
@@ -279,6 +279,13 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 <small style="display:block;margin:8px 0;color:#795a20">17 conservative strip candidates per sheet (51 trace records), identified from paired native wall-layer strokes. These are NOT independently verified structural beams. Axes repeat after sheet translation, potentially copied source drawing linework. No link to surveyed building datum, column support, load path, structural section or IFC member.</small>
 <a id="aad-m32-data-link" href="#" target="_blank" rel="noopener" style="display:block;font-size:12px">M32 read-only CAD handle register ↗</a>
 <a id="aad-m32-archive-link" href="#" target="_blank" rel="noopener" style="display:block;font-size:12px;margin-top:5px">Full extracted strip evidence and regeneration script (Drive) ↗</a>
+</section>
+<section id="aad-m33-source" hidden aria-label="M33 original DXF GF column grid source-drawing registration and candidate endpoint proximity">
+<h2>M33 · Drawing-frame alignment and column proximity</h2>
+<p id="aad-m33-summary" style="font-size:11px;color:#425e68">Loading source GF control-point checks…</p>
+<div id="aad-m33-witnesses" style="white-space:pre-wrap;background:#f3f8f8;font-size:11px;padding:9px;border-radius:6px"></div>
+<small style="display:block;margin:8px 0;color:#795a20">Source registration is INTERNAL to structural DXF drawing coordinates, not a site survey, engineered connection test or registration of architectural walls. GF orange points in the drawing above indicate the 23 owner-selected GF working column centres, shown only when viewing GF. The FF and SF sheets have NO independently verified upper-storey column controls. Blue lines remain source strip candidates, not structural IFC beams.</small>
+<a id="aad-m33-audit-link" href="#" target="_blank" rel="noopener" style="display:block;font-size:12px">M33 five-control registration and endpoint inspection audit ↗</a>
 </section>
 <section><h2>Quality and IFC round-trip</h2><pre id="qa-result">Pending validation</pre></section>
  <section><details><summary>AI-controlled authoring · machine-readable inputs</summary>
