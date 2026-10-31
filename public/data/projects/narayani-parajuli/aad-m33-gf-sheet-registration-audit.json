@@ -1,0 +1,77 @@
+{
+  "schema": "jp-cad://aad-m33-gf-sheet-registration-audit/1",
+  "projectId": "PRJ-000007",
+  "milestone": "M33",
+  "date": "2026-10-31",
+  "status": "SOURCE_DRAWING_FRAME_ALIGNMENT_GROUND_FLOOR_ONLY",
+  "sourceAuthoritativeData": [
+    "aad-source-gf-review-v1.json",
+    "aad-m28-reconciliation-20261027.json",
+    "aad-m32-beam-strip-source-register.json"
+  ],
+  "computationalModule": "public/assets/js/aad-m33-source-sheet-registration.mjs",
+  "originalStructuralDxfSHA256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+  "geometryFrame": "GF original structural DXF column xy to M32 normalized sheet coordinates; native source units millimetres, sheet registration translation ONLY; architectural AAD building frame not surveyed.",
+  "sourceCalibration": {
+    "method": "3-control median translation GF original DXF columns to native M32 drawing strip axes",
+    "controls": [
+      "A1",
+      "F6",
+      "G6"
+    ],
+    "independentHeldOutControls": [
+      "H6",
+      "I2"
+    ],
+    "translationXMetres": -762.364891,
+    "translationZMetres": 0,
+    "calibrationResidualXmm": {
+      "A1": -0.015,
+      "F6": 0,
+      "G6": 0.009
+    },
+    "heldOutResidualXmm": {
+      "H6": -0.853,
+      "I2": -0.852
+    },
+    "maximumAbsoluteWitnessResidualMm": 0.853,
+    "note": "Excellent drawing-to-original-source grid alignment, NOT an as-built survey, not beam structural connectivity and not upper floor signed drawing registration."
+  },
+  "endpointProximity": {
+    "maxDistanceMetres": 0.25,
+    "totalCandidateAxisEndpoints": 34,
+    "endpointNearGFWorkingColumn": 29,
+    "pairedCandidatesBothEndsNearGFColumns": 12,
+    "pairedCandidatesOnlyOneEndNearGFColumn": 5,
+    "uniqueGFColumnCandidates": 23,
+    "originalM32CandidateAxes": 17,
+    "unmatchedStripIndices": [
+      3,
+      6,
+      7,
+      9,
+      16
+    ],
+    "ownerApprovedI3SourceReplacement": "SC-I4→QA-COL:I3, shifted 0.655 m in source plan z"
+  },
+  "conclusions": {
+    "ownerWorkingLayout": "SETTLED_M25_M28",
+    "actualGFStructuralIFC": [
+      23,
+      21,
+      16
+    ],
+    "upperStoreyMembersAdded": 0,
+    "engineerVerifiedBeamSupports": 0,
+    "surveyAlignmentEstablished": false,
+    "independentUpperFloorColumnContinuityVerified": false,
+    "issueForConstruction": false
+  },
+  "residualRisk": [
+    "Five candidate strip endpoints do not lie within 250 mm of a GF working-column centre. Could be internal supports or drawing partitions; no engineering member classification inferred.",
+    "29 close endpoints are only geometric coincidences; a drawn strip near a column is not proof of a structural connection.",
+    "GF column source matches M32 repeated beam drawing sheets internally; does not establish independently verified FF/SF column positioning or capacities.",
+    "Architectural DXF and structural column working-frame transform still lacks survey control and verified architectural walls.",
+    "Loads, shear, reinforcement, founding elevations and structural engineer signoff are still separate evidence gates."
+  ]
+}

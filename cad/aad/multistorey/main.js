@@ -23,6 +23,7 @@ let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let m30Evidence=null;
 let m32Evidence=null;
+let m33Evidence=null;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
@@ -956,6 +957,38 @@ async function main(){
     source.sourceOriginalDXFSha256!==m30Evidence?.originals?.structure?.sha256)
    throw Error("M32 source candidate register is not admissible for a nonstructural inspection");
   m32Evidence=source;
+  if(manifest.structuralReview?.gfDrawingColumnProximity){
+   const auditURL=new URL(manifest.structuralReview.gfDrawingColumnProximity,prefix);
+   const gfURL=new URL(manifest.structuralReview.sourceLedger,prefix);
+   const m28URL=new URL(manifest.structuralReview.derivedReconciliation,prefix);
+   for(const u of [auditURL,gfURL,m28URL])
+    if(u.origin!==location.origin||!u.pathname.startsWith(prefix.pathname))
+     throw Error("M33 source comparison input outside current project");
+   const responses=await Promise.all([auditURL,gfURL,m28URL].map(u=>fetch(u.href,{cache:"no-store"})));
+   if(responses.some(r=>!r.ok))throw Error("M33 source-frame reconciliation input HTTP failure");
+   const [contract,gfSource,m28]=await Promise.all(responses.map(r=>r.json()));
+   const {deriveM33ColumnProximity}=await import(/* @vite-ignore */moduleURL("aad-m33-source-sheet-registration.mjs"));
+   m33Evidence=deriveM33ColumnProximity(gfSource,source,m28);
+   if(contract.schema!=="jp-cad://aad-m33-gf-sheet-registration-audit/1"||
+      contract.projectId!==manifest.projectId||
+      contract.conclusions.issueForConstruction!==false||
+      contract.sourceCalibration.maximumAbsoluteWitnessResidualMm!==m33Evidence.calibration.maximumWitnessResidualMm||
+      contract.endpointProximity.endpointNearGFWorkingColumn!==m33Evidence.summary.endpointsWithin250mm||
+      contract.endpointProximity.pairedCandidatesBothEndsNearGFColumns!==m33Evidence.summary.stripsBothEndsWithin250mm)
+    throw Error("M33 sourced GF sheet geometry/contract drift");
+   $("aad-m33-source").hidden=false;
+   $("aad-m33-audit-link").href=auditURL.href;
+   $("aad-m33-summary").textContent="GF drawing-to-original structural DXF grid: "+
+    m33Evidence.calibration.controlWitnesses.filter(x=>x.role==="CALIBRATION").map(x=>x.grid).join(", ")+
+    " calibrated; H6 and I2 held out. Maximum source X residual "+
+    m33Evidence.calibration.maximumWitnessResidualMm.toFixed(3)+" mm. "+
+    m33Evidence.summary.endpointsWithin250mm+"/34 source endpoints within 250 mm of a working GF column; "+
+    m33Evidence.summary.stripsBothEndsWithin250mm+"/17 drawing candidates have both endpoints nearby.";
+   $("aad-m33-witnesses").textContent=m33Evidence.calibration.controlWitnesses.map(c=>
+    c.grid+" · "+c.role+" · "+c.residualXmm.toFixed(3)+" mm X residual").join("\n")+
+    "\nFive candidate strip records have one endpoint without a proximate GF column. "+
+    "Verified structural support connections: 0.";
+  }
   $("aad-m32-source").hidden=false;
   $("aad-m32-data-link").href=m32URL.href;
   $("aad-m32-archive-link").href=source.sourceM32Archive.url;
@@ -983,15 +1016,45 @@ async function main(){
      ff.nearestTextHandles[i]+" (not verified beam section or capacity)";
     line.append(tip);
     line.addEventListener("click",()=>{
+     const mapped=m33Evidence?.stripEndpointProximity[i];
+     const endpointInfo=mapped?.endpointProximity.map((p,k)=>["Start","End"][k]+": "+
+      p.nearestGrid+" ("+(p.distanceM*1000).toFixed(0)+" mm, "+
+      (p.within250mm?"near GF column":"NO nearby GF column")+ ")").join("\n");
      picked.textContent=id+" · Original DXF native line handles: "+handles.join(" + ")+
       "\nNearest-only MTEXT handle: "+ff.nearestTextHandles[i]+
       "\nNative sheet-relative axis endpoints (m): ("+x1+", "+y1+") → ("+x2+", "+y2+")"+
+      "\n"+(floor==="gf"?(endpointInfo||"GF proximity unavailable"):
+       "Only a GF reference proximity comparison exists. FF/SF actual supports NOT VERIFIED.")+
       "\nDesign status: SOURCE LINE-PAIR CANDIDATE, NOT AN IFC BEAM.";
     });
     plot.append(line);
    }
+   if(floor==="gf"&&m33Evidence){
+    for(const col of m33Evidence.columns){
+     const circle=document.createElementNS(svgNS,"circle");
+     circle.setAttribute("cx",String(col.xSheetM));
+     circle.setAttribute("cy",String(col.zSheetM));
+     circle.setAttribute("r",".13");
+     circle.setAttribute("fill","#bc762e");
+     circle.setAttribute("stroke","#fff");
+     circle.setAttribute("stroke-width",".035");
+     circle.setAttribute("data-gf-source-column",col.grid);
+     circle.setAttribute("role","img");
+     circle.setAttribute("aria-label","GF source working column "+col.grid+"; not upper floor member");
+     const tip=document.createElementNS(svgNS,"title");
+     tip.textContent="GF "+col.grid+" · owner-reviewed source DXF centre · source-sheet drawing reference only";
+     circle.append(tip);
+     circle.addEventListener("click",()=>{
+      picked.textContent="GF "+col.grid+" source-DXF working column reference · "+
+       col.workingSelection+"\nSource-sheet ("+col.xSheetM+", "+col.zSheetM+") m. "+
+       "Engineered beam-support connection NOT VERIFIED.";
+     });
+     plot.append(circle);
+    }
+   }
    picked.textContent=floor.toUpperCase()+" original DXF drawing: "+ff.pairedHandles.length+
-    " source-native candidates. Click a line to inspect its handles (no design member approved).";
+    " source-native candidates. Click a line to inspect its handles "+
+    (floor==="gf"?"and the 23 owner-selected GF reference columns.":"(no independently checked upper-storey column supports).");
   }
   floorSelect.addEventListener("change",drawM32Source);drawM32Source();
  }
@@ -1198,6 +1261,18 @@ window.AADStudio=Object.freeze({
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
+ getM33SourceEvidence:()=>m33Evidence?{
+  schema:m33Evidence.schema,
+  calibratedTranslationXMetres:m33Evidence.calibration.sourceSheetXTranslationM,
+  heldOutControlResidualMaxMm:m33Evidence.calibration.maximumWitnessResidualMm,
+  endpointsWithin250mm:m33Evidence.summary.endpointsWithin250mm,
+  bothEndsNearby:m33Evidence.summary.stripsBothEndsWithin250mm,
+  unmatchedEndpointStripCount:m33Evidence.summary.stripsWithUnmatchedEndpoint,
+  GFColumnReferenceCount:m33Evidence.columns.length,
+  verifiedBeamSupportConnections:m33Evidence.summary.verifiedStructuralSupportConnections,
+  upperFloorColumnControls:m33Evidence.summary.verifiedUpperFloorColumnControls,
+  constructionApproved:m33Evidence.issuedForConstruction
+ }:null,
  getM32SourceEvidence:()=>m32Evidence?{
   schema:m32Evidence.schema,
   count:m32Evidence.summary.totalStripRecords,

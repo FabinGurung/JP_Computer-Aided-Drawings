@@ -56,16 +56,20 @@ for(const axis of src.commonStrictSheetNormalizedAxesM){
  assert.ok(length>0.5&&length<20);
 }
 assert.equal(model.structuralReview.nativeBeamStripEvidence,"aad-m32-beam-strip-source-register.json");
-assert.deepEqual(read("archive/m32/M32_POST_aad-building-v1.json"),model);
-assert.deepEqual(read("archive/m32/M32_POST_current-engineering-register.json"),reg);
+assert.deepEqual(read("archive/m32/M32_POST_aad-building-v1.json"),
+ read("archive/m33/M33_PRE_aad-building-v1.json"));
+assert.deepEqual(read("archive/m32/M32_POST_current-engineering-register.json"),
+ read("archive/m33/M33_PRE_current-engineering-register.json"));
+assert.deepEqual(read("archive/m33/M33_POST_aad-building-v1.json"),model);
+assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),reg);
 assert.equal(read("archive/m32/M32_PRE_aad-building-v1.json").structuralReview.nativeBeamStripEvidence,undefined);
 assert.equal(read("archive/m32/M32_PRE_current-engineering-register.json").currentVersion,"M31-20261028");
-assert.equal(reg.currentVersion,"M32-20261031");
+assert.equal(reg.currentVersion,"M33-20261031");
 assert.equal(reg.noFurtherOwnerLayoutApprovalRequired,true);
 assert.equal(reg.issues.filter(x=>x.engineeringGate==="OPEN").length,7);
 assert.equal(reg.counts.closedOwnerDecisionConflicts,1);
 assert.equal(reg.latestTechnicalEvidence.strictCandidates,51);
-assert.equal(reg.latestTechnicalEvidence.verifiedUniqueBeams,0);
+assert.equal(reg.latestTechnicalEvidence.engineeredSupportMembersVerified,0);
 assert.equal(reg.latestTechnicalEvidence.constructionApproval,false);
 const models=Object.fromEntries(model.levels.map(l=>[l.id,read(l.model)]));
 const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");

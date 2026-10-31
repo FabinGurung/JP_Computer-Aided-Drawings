@@ -161,6 +161,7 @@
     "derivedReconciliation": "aad-m28-reconciliation-20261027.json",
     "datumEvidence": "aad-m29-datum-upper-projection-20261027.json",
     "fullSourceIndex": "aad-m30-original-dxf-full-source-index.json",
-    "nativeBeamStripEvidence": "aad-m32-beam-strip-source-register.json"
+    "nativeBeamStripEvidence": "aad-m32-beam-strip-source-register.json",
+    "gfDrawingColumnProximity": "aad-m33-gf-sheet-registration-audit.json"
   }
 }

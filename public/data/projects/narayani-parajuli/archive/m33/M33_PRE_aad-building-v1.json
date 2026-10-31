@@ -1,0 +1,166 @@
+{
+  "schema": "jp-cad://aad-building/1",
+  "projectId": "PRJ-000007",
+  "name": "Narayani Parajuli — Block B unified architectural BIM draft",
+  "revision": "AAD-BIM-A01_20261019",
+  "coordinateSystem": {
+    "axes": "CAD-X_EAST_CAD-Z_PLAN_DEPTH_Y_ELEVATION",
+    "units": "m",
+    "worldOrigin": "Narayani Block B ground-floor AAD local (0,0); NOT SURVEYED",
+    "ifcAxisConversion": "(X,plan Z,elevation Y) → (IFC X,Y,Z)"
+  },
+  "levels": [
+    {
+      "id": "gf",
+      "name": "Ground floor",
+      "elevation": 0,
+      "height": 3,
+      "model": "aad-ground-floor-model.json",
+      "sourceArea": 205.16,
+      "transform": {
+        "x": 0,
+        "z": 0,
+        "rotationDeg": 0
+      },
+      "status": "SOURCE_RECONCILED_AREA_UNVERIFIED_OUTLINE"
+    },
+    {
+      "id": "ff",
+      "name": "First floor",
+      "elevation": 3,
+      "height": 3,
+      "model": "aad-first-floor-model.json",
+      "sourceArea": 200.67,
+      "transform": {
+        "x": -0.267,
+        "z": -0.717,
+        "rotationDeg": 0
+      },
+      "status": "ASSUMED_MIN_ENVELOPE_ALIGNMENT"
+    },
+    {
+      "id": "sf",
+      "name": "Second floor",
+      "elevation": 6,
+      "height": 3,
+      "model": "aad-second-floor-model.json",
+      "sourceArea": 175.62,
+      "transform": {
+        "x": -0.447,
+        "z": -0.717,
+        "rotationDeg": 0
+      },
+      "status": "ASSUMED_MIN_ENVELOPE_ALIGNMENT"
+    }
+  ],
+  "structural": {
+    "columns": {
+      "gridX": [
+        6.8,
+        11.1,
+        15.4,
+        19.7
+      ],
+      "gridZ": [
+        3.4,
+        7,
+        10.6
+      ],
+      "sizeX": 0.3,
+      "sizeZ": 0.3,
+      "source": "AI_INFERRED_4x3_AXIS_GRID_NOT_DXF_CERTIFIED"
+    },
+    "beams": {
+      "widthX": 0.25,
+      "widthZ": 0.25,
+      "depth": 0.45,
+      "source": "ASSUMED_BEAM_SECTIONS_ENGINEERING_HOLD"
+    },
+    "slabs": {
+      "thickness": 0.18,
+      "roofThickness": 0.18,
+      "source": "ASSUMED_SLAB_THICKNESS_ENGINEERING_HOLD"
+    }
+  },
+  "stairs": {
+    "opening": {
+      "x": 11.2,
+      "z": 2.8,
+      "width": 2.1,
+      "depth": 4.4
+    },
+    "risers": 18,
+    "source": "CONCEPTUAL_U_STAIR_ACROSS_GF_FF_SF_NOT_ENGINEERING_VERIFIED"
+  },
+  "sourceAuthority": {
+    "architecturalDxfDriveId": "1owyqD67FUnBh5KbuvqidTZiJzi_BC1mv",
+    "architecturalDxfSha256": "077e7b4ffd5ce3c5c9789f9d040ef32ee661175aedd5f2d1059dbbe18176e124",
+    "structuralDxfDriveId": "13k901-pejMY7lE_0VepomzxUZFiZyzox",
+    "areaSchedule_m2": [
+      205.16,
+      200.67,
+      175.62
+    ],
+    "areaBlockB_m2": 581.45,
+    "otherBlockA_m2": 304.83,
+    "combinedArchitecturalSchedule_m2": 886.28
+  },
+  "assumptions": [
+    {
+      "code": "COMMON_DATUM",
+      "decision": "Set elevation 0.00 at GF; FF +3.00, SF +6.00, roof +9.00 m",
+      "status": "NOT_SURVEYED"
+    },
+    {
+      "code": "PLAN_ALIGNMENT",
+      "decision": "Register FF/SF floor local minima to GF's local X/Z minima via (-0.267,-0.717) and (-0.447,-0.717) m, respectively; no rotation",
+      "status": "NOT_REGISTERED_TO_STRUCTURAL_GRID"
+    },
+    {
+      "code": "COLUMN_GRID",
+      "decision": "4x3 12-column conceptual grid selected within ground-floor envelope. Columns outside upper-floor area are omitted and continuity audited",
+      "status": "ENGINEERING_HOLD"
+    },
+    {
+      "code": "MEMBER_SECTIONS",
+      "decision": "0.30x0.30m columns; 0.25x0.45m beams; 0.18m floor/roof slab; do not interpret as designed capacities",
+      "status": "ENGINEERING_HOLD"
+    },
+    {
+      "code": "STAIR",
+      "decision": "Two 9-riser flights per storey transition, two transitions, stairwell cut through floor plates",
+      "status": "GEOMETRY_ONLY_NOT_CODE_CHECKED"
+    },
+    {
+      "code": "IFC_MAPPING",
+      "decision": "IfcProject/IfcSite/IfcBuilding/IfcBuildingStorey and typed elements exported with stable IDs; IFC export must be independently round-trip parsed",
+      "status": "SCHEMA_TEST_PENDING"
+    }
+  ],
+  "restrictions": {
+    "engineeringApproval": "HOLD",
+    "issueForConstruction": false,
+    "bimStage": "M26_OWNER_APPROVED_STRUCTURAL_GF_REVIEW_PREVIEW_NOT_CONSTRUCTION_CERTIFIED",
+    "surveyAlignment": "NOT_VERIFIED",
+    "exportGate": "STEP_WRITER_ROUNDTRIP_REQUIRED",
+    "reproducibility": "Same pinned AAD building engine plus unchanged project models and this manifest"
+  },
+  "structuralReview": {
+    "schema": "jp-cad://aad-structural-source-review/1",
+    "mode": "OWNER_APPROVED_SOURCE_QA_GROUND_FLOOR_ONLY",
+    "sourceLedger": "aad-source-gf-review-v1.json",
+    "stageLinks": "aad-source-stage-links-v1.json",
+    "userQA": "aad-user-qa-decisions-v1.json",
+    "userApproval": "aad-user-message-approval-20261024.json",
+    "originalSyntheticGridRetainedForHistoricalCompatibility": true,
+    "sourceMemberPlacement": "GROUND_FLOOR_SOURCE_REVIEW_ONLY__UPPER_STOREYS_NOT_RECONCILED",
+    "architecturalRegistration": "PROVISIONAL_AREA_ADJUSTED_AAD_VS_DXF_COORDINATE_RESIDUAL",
+    "constructionApproval": false,
+    "engineeringHold": true,
+    "ownerVerification": "aad-m28-owner-verification-20261027.json",
+    "derivedReconciliation": "aad-m28-reconciliation-20261027.json",
+    "datumEvidence": "aad-m29-datum-upper-projection-20261027.json",
+    "fullSourceIndex": "aad-m30-original-dxf-full-source-index.json",
+    "nativeBeamStripEvidence": "aad-m32-beam-strip-source-register.json"
+  }
+}
