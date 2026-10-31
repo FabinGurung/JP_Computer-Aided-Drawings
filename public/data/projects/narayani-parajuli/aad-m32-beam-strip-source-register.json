@@ -1,0 +1,435 @@
+{
+  "schema": "jp-cad://aad-m32-native-beam-strip-register/1",
+  "projectId": "PRJ-000007",
+  "stage": "M32",
+  "issuedForConstruction": false,
+  "ifcMemberCountAdded": 0,
+  "authoritativeSource": "ORIGINAL_STRUCTURAL_DXF_ON_GOOGLE_DRIVE",
+  "sourceOriginalDXFSha256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+  "sourceM30ArchiveSHA256": "c89a0d54cda341794ebb0db750cd153f8a68febc39f63fcfac4477209d57d9b6",
+  "sourceM32Archive": {
+    "driveFileId": "1DMPF-RiOVDldGKjl4CHq8q0GPb8ZmaTp",
+    "driveFolderId": "1GoAjmoT2lbxbsRqcyfhG4Vywojv6Nj19",
+    "fileName": "Narayani_M32_Native_Beam_Strip_Evidence.zip",
+    "fileSizeBytes": 7597,
+    "sha256": "e0e5e7dec6ca7f4dc7287f23aeb0b5d91d79fbcee508efcca03865182e098f35",
+    "uploadReadback": "GOOGLE_DRIVE_REDOWLOAD_SHA256_AND_ZIP_CRC_CONFIRMED",
+    "url": "https://drive.google.com/file/d/1DMPF-RiOVDldGKjl4CHq8q0GPb8ZmaTp/view"
+  },
+  "method": "Read-only candidate strips from pairs of native wall-layer LINE segments >500mm. Parallel within 0.7deg, separation 230±2.1mm and overlap >=500mm and >=83% shortest segment. Strict accepted as candidate only if source length diff <5mm, overlap >99.5% shortest length, separation 230±1.25mm. Preserve both original handles and nearest-only MTEXT handle; no engineering classification.",
+  "sheetFrame": "X=(DXF native X - floor title x anchor)/1000; Z=-DXF native Y/1000; sheet-relative meters, NOT AAD building coordinates or a verified datum.",
+  "commonStrictSheetNormalizedAxesM": [
+    [
+      -6.159,
+      129.534,
+      -1.659,
+      129.534
+    ],
+    [
+      -6.36,
+      129.334,
+      -6.36,
+      126.134
+    ],
+    [
+      8.329,
+      129.334,
+      8.329,
+      126.049
+    ],
+    [
+      -6.159,
+      125.934,
+      -1.659,
+      125.934
+    ],
+    [
+      -1.259,
+      125.934,
+      3.249,
+      125.934
+    ],
+    [
+      3.564,
+      125.934,
+      8.214,
+      125.934
+    ],
+    [
+      8.444,
+      125.934,
+      12.941,
+      125.934
+    ],
+    [
+      13.341,
+      125.934,
+      14.509,
+      125.934
+    ],
+    [
+      8.329,
+      125.819,
+      8.329,
+      123.309
+    ],
+    [
+      14.641,
+      123.241,
+      14.641,
+      125.802
+    ],
+    [
+      13.141,
+      119.034,
+      13.141,
+      122.909
+    ],
+    [
+      8.329,
+      119.034,
+      8.329,
+      122.909
+    ],
+    [
+      3.364,
+      119.034,
+      3.364,
+      122.909
+    ],
+    [
+      3.564,
+      118.834,
+      8.129,
+      118.834
+    ],
+    [
+      8.529,
+      118.834,
+      12.941,
+      118.834
+    ],
+    [
+      2.389,
+      118.719,
+      2.39,
+      117.116
+    ],
+    [
+      -0.742,
+      116.984,
+      2.257,
+      116.984
+    ]
+  ],
+  "floorSource": {
+    "gf": {
+      "originalWallLines": 113,
+      "eligibleLines": 62,
+      "allParallel230Pairs": 35,
+      "sheetAnchorXMM": 832998.5,
+      "pairedHandles": [
+        [
+          "AFBCC",
+          "AFBCD"
+        ],
+        [
+          "AFBD0",
+          "AFBD1"
+        ],
+        [
+          "AFC17",
+          "AFC19"
+        ],
+        [
+          "AFBD4",
+          "AFBD5"
+        ],
+        [
+          "AFC23",
+          "AFC24"
+        ],
+        [
+          "AFC1D",
+          "AFC1F"
+        ],
+        [
+          "AFC1E",
+          "AFC20"
+        ],
+        [
+          "AFC06",
+          "AFC07"
+        ],
+        [
+          "AFC18",
+          "AFC1A"
+        ],
+        [
+          "AFC01",
+          "AFC02"
+        ],
+        [
+          "AFBF7",
+          "AFBF8"
+        ],
+        [
+          "AFBEF",
+          "AFBF0"
+        ],
+        [
+          "AFBE4",
+          "AFBE5"
+        ],
+        [
+          "AFBEB",
+          "AFBEC"
+        ],
+        [
+          "AFBF3",
+          "AFBF4"
+        ],
+        [
+          "AFBB9",
+          "AFBBA"
+        ],
+        [
+          "AFBB7",
+          "AFBB8"
+        ]
+      ],
+      "nearestTextHandles": [
+        "AFF0D",
+        "AFF0F",
+        "AFF3B",
+        "AFF0E",
+        "AFF07",
+        "AFF08",
+        "AFF09",
+        "AFF65",
+        "AFF3D",
+        "AFF65",
+        "AFF3F",
+        "AFF3C",
+        "AFF39",
+        "AFEBB",
+        "AFEE0",
+        "AFF8A",
+        "AFBB6"
+      ]
+    },
+    "ff": {
+      "originalWallLines": 113,
+      "eligibleLines": 62,
+      "allParallel230Pairs": 35,
+      "sheetAnchorXMM": 869172.5,
+      "pairedHandles": [
+        [
+          "B017E",
+          "B017F"
+        ],
+        [
+          "B0182",
+          "B0183"
+        ],
+        [
+          "B01C9",
+          "B01CB"
+        ],
+        [
+          "B0186",
+          "B0187"
+        ],
+        [
+          "B01D5",
+          "B01D6"
+        ],
+        [
+          "B01CF",
+          "B01D1"
+        ],
+        [
+          "B01D0",
+          "B01D2"
+        ],
+        [
+          "B01B8",
+          "B01B9"
+        ],
+        [
+          "B01CA",
+          "B01CC"
+        ],
+        [
+          "B01B3",
+          "B01B4"
+        ],
+        [
+          "B01A9",
+          "B01AA"
+        ],
+        [
+          "B01A1",
+          "B01A2"
+        ],
+        [
+          "B0196",
+          "B0197"
+        ],
+        [
+          "B019D",
+          "B019E"
+        ],
+        [
+          "B01A5",
+          "B01A6"
+        ],
+        [
+          "B016B",
+          "B016C"
+        ],
+        [
+          "B0169",
+          "B016A"
+        ]
+      ],
+      "nearestTextHandles": [
+        "B01E9",
+        "B01EB",
+        "B01F3",
+        "B01EA",
+        "B01E3",
+        "B01E4",
+        "B01E5",
+        "B01F9",
+        "B01F5",
+        "B01F9",
+        "B01F7",
+        "B01F4",
+        "B01F1",
+        "B01DE",
+        "B01DF",
+        "B01FA",
+        "B0168"
+      ]
+    },
+    "sf": {
+      "originalWallLines": 107,
+      "eligibleLines": 57,
+      "allParallel230Pairs": 33,
+      "sheetAnchorXMM": 907281.5,
+      "pairedHandles": [
+        [
+          "B057D",
+          "B057E"
+        ],
+        [
+          "B0581",
+          "B0582"
+        ],
+        [
+          "B05C8",
+          "B05CA"
+        ],
+        [
+          "B0585",
+          "B0586"
+        ],
+        [
+          "B05D4",
+          "B05D5"
+        ],
+        [
+          "B05CE",
+          "B05D0"
+        ],
+        [
+          "B05CF",
+          "B05D1"
+        ],
+        [
+          "B05B7",
+          "B05B8"
+        ],
+        [
+          "B05C9",
+          "B05CB"
+        ],
+        [
+          "B05B2",
+          "B05B3"
+        ],
+        [
+          "B05A8",
+          "B05A9"
+        ],
+        [
+          "B05A0",
+          "B05A1"
+        ],
+        [
+          "B0595",
+          "B0596"
+        ],
+        [
+          "B059C",
+          "B059D"
+        ],
+        [
+          "B05A4",
+          "B05A5"
+        ],
+        [
+          "B056A",
+          "B056B"
+        ],
+        [
+          "B0568",
+          "B0569"
+        ]
+      ],
+      "nearestTextHandles": [
+        "B05E8",
+        "B05EA",
+        "B05F2",
+        "B05E9",
+        "B05E2",
+        "B05E3",
+        "B05E4",
+        "B05F8",
+        "B05F4",
+        "B05F8",
+        "B05F6",
+        "B05F3",
+        "B05F0",
+        "B05DD",
+        "B05DE",
+        "B05F9",
+        "B0567"
+      ]
+    }
+  },
+  "summary": {
+    "strictCandidatePairsByFloor": {
+      "gf": 17,
+      "ff": 17,
+      "sf": 17
+    },
+    "totalStripRecords": 51,
+    "uniqueSourceLineHandles": 102,
+    "sameAxesAfterSourceSheetTranslation": 17,
+    "additionalNonStrictParallelHypothesesByFloor": {
+      "gf": 18,
+      "ff": 18,
+      "sf": 16
+    }
+  },
+  "sourceLimits": [
+    "17 strict line-pairs per sheet are source-drawing strip candidates only; cannot be counted as verified independent beam members.",
+    "Repeated geometric axes across copied floor plans are not evidence of independently designed or approved upper-storey framing.",
+    "Nearest beam-section MTEXT handles are proximity only, not validated member-section associations.",
+    "Other nonstrict edge matches are intentionally excluded from the published traceable strict set.",
+    "No common surveyed architectural/structural datum, no column connection assignment, no load reactions, beam bending/shear design, reinforcement, or construction certification."
+  ],
+  "nextEvidenceGate": "Map unique native strip and annotation geometry to survey-registered structural grids, column nodes and individual beam IDs with engineering review; then independently calculate column/footing/load-path capacities."
+}
