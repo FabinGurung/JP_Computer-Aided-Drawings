@@ -17,10 +17,14 @@ const manifest=read("aad-building-v1.json");
 const history=fs.readFileSync(dir+"aad-engineering-current-register-history.jsonl","utf8")
  .trim().split("\n").map(s=>JSON.parse(s));
 assert.deepEqual(pre,old,"M27 original eight-open historical source must remain exact");
-assert.deepEqual(post,live,"M31 POST snapshot must match living register");
-assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED","M31_ARCHIVE_BINARY_VERIFIED"]);
+assert.deepEqual(post,read("archive/m32/M32_PRE_current-engineering-register.json"),
+ "M31 POST snapshot must exactly match the M32 PRE live-ID history");
+assert.deepEqual(read("archive/m32/M32_POST_current-engineering-register.json"),live,
+ "Current M32 POST must match same authoritative living register");
+assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED","M31_ARCHIVE_BINARY_VERIFIED","M32_PRE","M32_POST"]);
 assert.equal(live.schema,"jp-cad://aad-current-engineering-debt-register/1");
 assert.equal(live.projectId,"PRJ-000007");
+assert.equal(live.currentVersion,"M32-20261031");
 assert.equal(live.noFurtherOwnerLayoutApprovalRequired,true);
 assert.equal(live.ownerAuthority,"M25_M28_WORKING_GEOMETRY_APPROVAL_FINAL");
 assert.equal(m28.ownerDecisionStatus,"VERIFIED_AND_APPROVED_NO_REAPPROVAL_REQUEST");
