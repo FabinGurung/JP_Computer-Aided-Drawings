@@ -22,6 +22,7 @@ let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let m30Evidence=null;
+let m32Evidence=null;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
@@ -939,6 +940,61 @@ async function main(){
   };
   select.addEventListener("change",update);update();
  }
+ if(reviewStructure&&manifest.structuralReview?.nativeBeamStripEvidence){
+  const m32URL=new URL(manifest.structuralReview.nativeBeamStripEvidence,prefix);
+  if(m32URL.origin!==location.origin||!m32URL.pathname.startsWith(prefix.pathname))
+   throw Error("M32 source register must be within current project source directory");
+  const res=await fetch(m32URL.href,{cache:"no-store"});
+  if(!res.ok)throw Error("M32 source register HTTP "+res.status);
+  const source=await res.json();
+  const fs=source.floorSource||{};
+  if(source.schema!=="jp-cad://aad-m32-native-beam-strip-register/1"||
+    source.projectId!==manifest.projectId||
+    source.issuedForConstruction!==false||source.ifcMemberCountAdded!==0||
+    source.commonStrictSheetNormalizedAxesM?.length!==17||
+    !["gf","ff","sf"].every(l=>fs[l]?.pairedHandles?.length===17)||
+    source.sourceOriginalDXFSha256!==m30Evidence?.originals?.structure?.sha256)
+   throw Error("M32 source candidate register is not admissible for a nonstructural inspection");
+  m32Evidence=source;
+  $("aad-m32-source").hidden=false;
+  $("aad-m32-data-link").href=m32URL.href;
+  $("aad-m32-archive-link").href=source.sourceM32Archive.url;
+  $("aad-m32-summary").textContent="51 native paired-strip records across GF/FF/SF · "+
+   "17 common drawing axes after sheet-origin translation · 102 unique original CAD LINE handles. "+
+   "No verified FF/SF beams or construction authorization.";
+  const plot=$("aad-m32-plot"),floorSelect=$("aad-m32-floor"),picked=$("aad-m32-picked");
+  const svgNS="http://www.w3.org/2000/svg";
+  function drawM32Source(){
+   const floor=floorSelect.value,ff=source.floorSource[floor];
+   plot.replaceChildren();
+   for(let i=0;i<source.commonStrictSheetNormalizedAxesM.length;i++){
+    const [x1,y1,x2,y2]=source.commonStrictSheetNormalizedAxesM[i];
+    const id=floor.toUpperCase()+"-STRIP-"+String(i+1).padStart(3,"0");
+    const handles=ff.pairedHandles[i];
+    const line=document.createElementNS(svgNS,"line");
+    for(const [name,value] of Object.entries({x1,y1,x2,y2}))line.setAttribute(name,String(value));
+    line.setAttribute("data-native-strip-id",id);
+    line.setAttribute("data-native-handles",handles.join(","));
+    line.setAttribute("stroke","#18689a");line.setAttribute("stroke-width",".20");
+    line.setAttribute("stroke-linecap","round");line.setAttribute("role","img");
+    line.setAttribute("aria-label",id+" original DXF paired-line candidate "+handles.join(" and "));
+    const tip=document.createElementNS(svgNS,"title");
+    tip.textContent=id+" native wall LINE handles "+handles.join(", ")+"; nearest-only MTEXT "+
+     ff.nearestTextHandles[i]+" (not verified beam section or capacity)";
+    line.append(tip);
+    line.addEventListener("click",()=>{
+     picked.textContent=id+" · Original DXF native line handles: "+handles.join(" + ")+
+      "\nNearest-only MTEXT handle: "+ff.nearestTextHandles[i]+
+      "\nNative sheet-relative axis endpoints (m): ("+x1+", "+y1+") → ("+x2+", "+y2+")"+
+      "\nDesign status: SOURCE LINE-PAIR CANDIDATE, NOT AN IFC BEAM.";
+    });
+    plot.append(line);
+   }
+   picked.textContent=floor.toUpperCase()+" original DXF drawing: "+ff.pairedHandles.length+
+    " source-native candidates. Click a line to inspect its handles (no design member approved).";
+  }
+  floorSelect.addEventListener("change",drawM32Source);drawM32Source();
+ }
  workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey=draftStorageKey(manifest);
  try{
@@ -1142,6 +1198,15 @@ window.AADStudio=Object.freeze({
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
+ getM32SourceEvidence:()=>m32Evidence?{
+  schema:m32Evidence.schema,
+  count:m32Evidence.summary.totalStripRecords,
+  sourceHandleCount:m32Evidence.summary.uniqueSourceLineHandles,
+  commonAxes:m32Evidence.commonStrictSheetNormalizedAxesM.length,
+  floorCounts:Object.fromEntries(Object.entries(m32Evidence.floorSource).map(([k,v])=>[k,v.pairedHandles.length])),
+  IFCMembersAdded:m32Evidence.ifcMemberCountAdded,
+  constructionApproval:m32Evidence.issuedForConstruction
+ }:null,
  getM30SourceEvidence:()=>m30Evidence?{
   schema:m30Evidence.schema,architectureIndexed:m30Evidence.originals.architecture.modelspaceEntities,
   structureIndexed:m30Evidence.originals.structure.modelspaceEntities,
