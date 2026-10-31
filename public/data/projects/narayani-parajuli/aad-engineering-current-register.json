@@ -2,7 +2,7 @@
   "schema": "jp-cad://aad-current-engineering-debt-register/1",
   "projectId": "PRJ-000007",
   "subject": "Narayani structural and architectural source acceptance",
-  "currentVersion": "M32-20261031",
+  "currentVersion": "M33-20261031",
   "historicalBaseline": "aad-m27-engineering-holds.json",
   "ownerAuthority": "M25_M28_WORKING_GEOMETRY_APPROVAL_FINAL",
   "noFurtherOwnerLayoutApprovalRequired": true,
@@ -125,11 +125,12 @@
       "workingDecision": "PRESERVE_DXF_GEOMETRY_UNSNAPPED",
       "engineeringGate": "OPEN",
       "state": "ENGINEERING_EVIDENCE_REQUIRED",
-      "resolved": "M29 source edge comparison quantified; M30 complete architectural DXF index and native Block B source wall regions located.",
+      "resolved": "M29 source edge comparison quantified; M30 complete architectural DXF index and native Block B source wall regions located. M33 establishes only a structural-source sheet-to-GF structural-DXF column relative drawing translation using held-out controls; architectural DXF-to-structural registration and site survey remain unverified.",
       "needed": "Control-point correspondences, signed survey datum and registered wall/column setting-out residuals; reconcile complete floor perimeter topology.",
       "evidence": [
         "aad-m29-datum-upper-projection-20261027.json",
-        "aad-m30-original-dxf-full-source-index.json"
+        "aad-m30-original-dxf-full-source-index.json",
+        "aad-m33-gf-sheet-registration-audit.json"
       ]
     },
     {
@@ -137,11 +138,12 @@
       "workingDecision": "PRESERVE_GF_ONLY_STRUCTURAL_IFC",
       "engineeringGate": "OPEN",
       "state": "ENGINEERING_EVIDENCE_REQUIRED",
-      "resolved": "Original GF/FF/SF beam-plan source drawings and column summary identified in complete structural DXF. M30 GF/FF repeated native sheet geometry separated from actual design verification. M32 source extraction identifies 17 strict original paired-line candidates on each level; 17 drawing axes repeat after native sheet translation, supporting copy/reuse detection but NOT verified member counts.",
-      "needed": "Register surveyed common plan datum; classify each native paired strip as structural beam/member or other drawing geometry; verify unique beam endpoints and FF/SF column support nodes, transfer and reactions, design capacities and reinforcement before IFC admission.",
+      "resolved": "Original GF/FF/SF beam-plan source drawings and column summary identified in complete structural DXF. M30 GF/FF repeated native sheet geometry separated from actual design verification. M32 source extraction identifies 17 strict original paired-line candidates on each level; 17 drawing axes repeat after native sheet translation, supporting copy/reuse detection but NOT verified member counts. M33 registered original GF drawing-strip coordinates to original GF structural DXF columns using 3 controls with 2 independent witnesses (≤0.853 mm X residual), and found 29/34 endpoints within 250mm of a working GF column; this is source drawing proximity, not structural member support.",
+      "needed": "Resolve five unmatched source strip endpoints; independently verify each beam/column connection and exact as-built plan grid; separately register FF/SF column layouts with a valid common datum and check member support capacity, reactions and reinforcement.",
       "evidence": [
         "aad-m30-original-dxf-full-source-index.json/upperFloorStructuralSheetEvidence",
-        "aad-m32-beam-strip-source-register.json"
+        "aad-m32-beam-strip-source-register.json",
+        "aad-m33-gf-sheet-registration-audit.json"
       ]
     },
     {
@@ -160,13 +162,30 @@
   "archivedHistoryPolicy": "M27 original 8 OPEN issue states preserved as historical snapshot; active M31 per-gate states supersede administrative implications without modifying engineering source.",
   "completionPolicy": "Only independent design/source calculations or actual signed survey controls can close an engineering gate. User working-model approval already settled. CI and website success never equal construction certification.",
   "latestTechnicalEvidence": {
-    "stage": "M32",
-    "register": "aad-m32-beam-strip-source-register.json",
+    "stage": "M33",
+    "register": "aad-m33-gf-sheet-registration-audit.json",
     "source": "Unchanged original structural DXF via M30 indexed local source archive",
     "sourceArchiveDriveFileId": "1DMPF-RiOVDldGKjl4CHq8q0GPb8ZmaTp",
     "sourceArchiveSHA256": "e0e5e7dec6ca7f4dc7287f23aeb0b5d91d79fbcee508efcca03865182e098f35",
     "strictCandidates": 51,
     "verifiedUniqueBeams": 0,
-    "constructionApproval": false
+    "constructionApproval": false,
+    "comparison": "ORIGINAL_GF_DXF_COLUMN_SOURCE_TO_M32_STRUCTURAL_SHEET_FRAME",
+    "calibratedBy": [
+      "A1",
+      "F6",
+      "G6"
+    ],
+    "heldOutBy": [
+      "H6",
+      "I2"
+    ],
+    "maxHeldOutResidualMM": 0.853,
+    "stripEndpointsNearGFColumnsAt250mm": 29,
+    "candidateAxesWithBothEndsNearGFColumns": 12,
+    "candidateAxesWithOneUnmatchedEndpoint": 5,
+    "engineeredSupportMembersVerified": 0,
+    "sourceSurveyRegistration": false,
+    "verifiedUpperFloorStructuralMembers": 0
   }
 }
