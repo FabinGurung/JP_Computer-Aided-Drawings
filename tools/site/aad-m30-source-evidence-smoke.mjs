@@ -21,7 +21,7 @@ assert.deepEqual(after,m32Pre,
 assert.deepEqual(manifest,m32Post,
  "Current live source manifest must match saved M32 POST");
 assert.deepEqual({...before,structuralReview:{...before.structuralReview,
- fullSourceIndex:"aad-m30-original-dxf-full-source-index.json"}},manifest,
+ fullSourceIndex:"aad-m30-original-dxf-full-source-index.json"}},after,
  "M30 may only add reference to derived source inventory");
 assert.equal(history.events.length,2);
 assert.equal(history.events[0].version,"M30_PRE");
