@@ -18,8 +18,10 @@ const m32Pre=read("archive/m32/M32_PRE_aad-building-v1.json");
 const m32Post=read("archive/m32/M32_POST_aad-building-v1.json");
 assert.deepEqual(after,m32Pre,
  "M30 POST must remain exactly identical to pre-M32 same-live-file source manifest");
-assert.deepEqual(manifest,m32Post,
- "Current live source manifest must match saved M32 POST");
+assert.deepEqual(m32Post,read("archive/m33/M33_PRE_aad-building-v1.json"),
+ "M32 POST must match M33 PRE immutable chain");
+assert.deepEqual(manifest,read("archive/m33/M33_POST_aad-building-v1.json"),
+ "Current live source manifest must match saved M33 POST");
 assert.deepEqual({...before,structuralReview:{...before.structuralReview,
  fullSourceIndex:"aad-m30-original-dxf-full-source-index.json"}},after,
  "M30 may only add reference to derived source inventory");
