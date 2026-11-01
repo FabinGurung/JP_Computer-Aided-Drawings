@@ -40,11 +40,15 @@ assert.equal(result.columns.filter(c=>c.workingSelection==="SOURCE_ORIGINAL_DXF"
 assert.equal(result.summary.verifiedStructuralSupportConnections,0);
 assert.equal(result.summary.verifiedUpperFloorColumnControls,0);
 assert.equal(manifest.structuralReview.gfDrawingColumnProximity,"aad-m33-gf-sheet-registration-audit.json");
-assert.deepEqual(read("archive/m33/M33_POST_aad-building-v1.json"),manifest);
-assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),ledger);
+assert.deepEqual(read("archive/m33/M33_POST_aad-building-v1.json"),
+ read("archive/m34/M34_PRE_aad-building-v1.json"));
+assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),
+ read("archive/m34/M34_PRE_current-engineering-register.json"));
+assert.deepEqual(read("archive/m34/M34_POST_aad-building-v1.json"),manifest);
+assert.deepEqual(read("archive/m34/M34_POST_current-engineering-register.json"),ledger);
 assert.equal(read("archive/m33/M33_PRE_aad-building-v1.json").structuralReview.gfDrawingColumnProximity,undefined);
 assert.equal(read("archive/m33/M33_PRE_current-engineering-register.json").currentVersion,"M32-20261031");
-assert.equal(ledger.currentVersion,"M33-20261031");
+assert.equal(ledger.currentVersion,"M34-20261101_OWNER_OBSERVATION_RECONCILED");
 assert.equal(ledger.noFurtherOwnerLayoutApprovalRequired,true);
 assert.equal(ledger.issues.filter(x=>x.engineeringGate==="OPEN").length,7);
 assert.equal(ledger.latestTechnicalEvidence.engineeredSupportMembersVerified,0);
