@@ -24,6 +24,7 @@ let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let m30Evidence=null;
 let m32Evidence=null;
 let m33Evidence=null;
+let m34Evidence=null;
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
@@ -989,6 +990,31 @@ async function main(){
     "\nFive candidate strip records have one endpoint without a proximate GF column. "+
     "Verified structural support connections: 0.";
   }
+  if(manifest.structuralReview?.ownerSourceGeometryClarification){
+   const url=new URL(manifest.structuralReview.ownerSourceGeometryClarification,prefix);
+   if(url.origin!==location.origin||!url.pathname.startsWith(prefix.pathname))
+    throw Error("M34 owner source clarification outside current project");
+   const res=await fetch(url.href,{cache:"no-store"});
+   if(!res.ok)throw Error("M34 clarification HTTP "+res.status);
+   const owner=await res.json();
+   if(owner.schema!=="jp-cad://aad-m34-owner-geometry-reconciliation/1"||
+      owner.projectId!==manifest.projectId||
+      owner.originalStructuralDxfSha256!==source.sourceOriginalDXFSha256||
+      owner.questions.Q1.ownerDecision!=="DRAWN_BEAM_LINES_MEET_NOT_NEW_G2_COLUMN"||
+      owner.questions.Q2.ownerDecision!=="RECTIFY_WORKING_REFERENCE_ONLY_ORTHOGONAL_C6_F6_TO_016"||
+      owner.sourcePreservation.newG2ColumnAdded!==false||
+      owner.sourcePreservation.upperIFCStructuralMembersAdded!==0||
+      owner.issueDisposition.issueForConstruction!==false)
+    throw Error("M34 owner/source evidence not admitted");
+   m34Evidence=owner;
+   $("aad-m34-source").hidden=false;
+   $("aad-m34-register-link").href=url.href;
+   $("aad-m34-image-link").href=owner.clarificationIllustration.url;
+   $("aad-m34-summary").textContent="Q1: owner-confirmed G2 beam-line meeting (strips 003, 006, 007, 009); no new column. "+
+      "Q2: original horizontal centreline AFB3C follows C6–F6; original vertical centreline AFB5C is perpendicular at strip 016. "+
+      "Original wall edges AFBC0/AFBBB remain slightly angled (~0.471°) and are not rewritten. "+
+      "Structural support and member capacity are still on HOLD.";
+  }
   $("aad-m32-source").hidden=false;
   $("aad-m32-data-link").href=m32URL.href;
   $("aad-m32-archive-link").href=source.sourceM32Archive.url;
@@ -1052,11 +1078,43 @@ async function main(){
      plot.append(circle);
     }
    }
+   if(floor==="gf"&&m34Evidence&&$("aad-m34-overlay").checked){
+    const q1=m34Evidence.questions.Q1,q2=m34Evidence.questions.Q2;
+    for(const [h,pair] of Object.entries(q2.originalWallEdges)){
+     if(!pair.a||!pair.b)continue;
+     const line=document.createElementNS(svgNS,"line");
+     for(const [k,v] of Object.entries({x1:pair.a[0],y1:pair.a[1],x2:pair.b[0],y2:pair.b[1]}))
+      line.setAttribute(k,String(v));
+     line.setAttribute("stroke","#ad765c");line.setAttribute("stroke-width",".035");
+     line.setAttribute("stroke-dasharray",".09 .06");
+     line.setAttribute("data-owner-source-handle",h);
+     plot.append(line);
+    }
+    for(const [n,pair] of [["c6-f6",q2.workingOverlayIntent.sourceSheetC6ToF6CenterlineM],
+      ["016",q2.workingOverlayIntent.sourceSheetStrip016CenterlineM]]){
+     const line=document.createElementNS(svgNS,"line");
+     for(const [k,v] of Object.entries({x1:pair[0][0],y1:pair[0][1],x2:pair[1][0],y2:pair[1][1]}))
+      line.setAttribute(k,String(v));
+     line.setAttribute("stroke","#149266");line.setAttribute("stroke-width",".09");
+     line.setAttribute("stroke-dasharray",".22 .1");line.setAttribute("data-owner-orthogonal",n);
+     line.setAttribute("pointer-events","none");plot.append(line);
+    }
+    const junction=document.createElementNS(svgNS,"circle");
+    junction.setAttribute("cx",String(q1.sourceJunctionSheetM.x));
+    junction.setAttribute("cy",String(q1.sourceJunctionSheetM.z));
+    junction.setAttribute("r",".17");junction.setAttribute("fill","none");
+    junction.setAttribute("stroke","#c54638");junction.setAttribute("stroke-width",".055");
+    junction.setAttribute("data-owner-g2-beam-junction","true");
+    junction.setAttribute("pointer-events","none");
+    plot.append(junction);
+   }
    picked.textContent=floor.toUpperCase()+" original DXF drawing: "+ff.pairedHandles.length+
     " source-native candidates. Click a line to inspect its handles "+
     (floor==="gf"?"and the 23 owner-selected GF reference columns.":"(no independently checked upper-storey column supports).");
   }
-  floorSelect.addEventListener("change",drawM32Source);drawM32Source();
+  floorSelect.addEventListener("change",drawM32Source);
+  if(m34Evidence)$("aad-m34-overlay").addEventListener("change",drawM32Source);
+  drawM32Source();
  }
  workspace=createAADWorkspace(manifest,models,{reviewStructure});
  const storageKey=draftStorageKey(manifest);
@@ -1261,6 +1319,17 @@ window.AADStudio=Object.freeze({
    table:row?{x:Number(row.cells[4].textContent),y:Number(row.cells[5].textContent),
     z:Number(row.cells[6].textContent)}:null};
  },
+ getM34OwnerSourceClarification:()=>m34Evidence?{
+  schema:m34Evidence.schema,
+  G2Interpretation:m34Evidence.questions.Q1.ownerDecision,
+  c6f6Interpretation:m34Evidence.questions.Q2.ownerDecision,
+  originalSlopedEdgeDegrees:m34Evidence.questions.Q2.originalWallEdges.AFBC0.slopeDegrees,
+  horizontalCenterlineHandle:m34Evidence.questions.Q2.originalCenterlines.C6_F6,
+  perpendicularCenterlineHandle:m34Evidence.questions.Q2.originalCenterlines.stripe016,
+  newG2ColumnsAdded:m34Evidence.sourcePreservation.newG2ColumnAdded,
+  structuralUpperIFCMembersAdded:m34Evidence.sourcePreservation.upperIFCStructuralMembersAdded,
+  constructionApproved:m34Evidence.issueDisposition.issueForConstruction
+ }:null,
  getM33SourceEvidence:()=>m33Evidence?{
   schema:m33Evidence.schema,
   calibratedTranslationXMetres:m33Evidence.calibration.sourceSheetXTranslationM,
