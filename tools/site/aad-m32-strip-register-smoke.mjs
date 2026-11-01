@@ -60,11 +60,15 @@ assert.deepEqual(read("archive/m32/M32_POST_aad-building-v1.json"),
  read("archive/m33/M33_PRE_aad-building-v1.json"));
 assert.deepEqual(read("archive/m32/M32_POST_current-engineering-register.json"),
  read("archive/m33/M33_PRE_current-engineering-register.json"));
-assert.deepEqual(read("archive/m33/M33_POST_aad-building-v1.json"),model);
-assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),reg);
+assert.deepEqual(read("archive/m33/M33_POST_aad-building-v1.json"),
+ read("archive/m34/M34_PRE_aad-building-v1.json"));
+assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),
+ read("archive/m34/M34_PRE_current-engineering-register.json"));
+assert.deepEqual(read("archive/m34/M34_POST_aad-building-v1.json"),model);
+assert.deepEqual(read("archive/m34/M34_POST_current-engineering-register.json"),reg);
 assert.equal(read("archive/m32/M32_PRE_aad-building-v1.json").structuralReview.nativeBeamStripEvidence,undefined);
 assert.equal(read("archive/m32/M32_PRE_current-engineering-register.json").currentVersion,"M31-20261028");
-assert.equal(reg.currentVersion,"M33-20261031");
+assert.equal(reg.currentVersion,"M34-20261101_OWNER_OBSERVATION_RECONCILED");
 assert.equal(reg.noFurtherOwnerLayoutApprovalRequired,true);
 assert.equal(reg.issues.filter(x=>x.engineeringGate==="OPEN").length,7);
 assert.equal(reg.counts.closedOwnerDecisionConflicts,1);
