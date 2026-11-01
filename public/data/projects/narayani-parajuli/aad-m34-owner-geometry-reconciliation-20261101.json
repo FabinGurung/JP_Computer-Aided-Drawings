@@ -1,0 +1,186 @@
+{
+  "schema": "jp-cad://aad-m34-owner-geometry-reconciliation/1",
+  "projectId": "PRJ-000007",
+  "milestone": "M34_OWNER_SOURCE_RECONCILIATION_20261101",
+  "recordedDate": "2026-11-01",
+  "sourceAuthority": "ORIGINAL_STRUCTURAL_DXF_UNMODIFIED",
+  "originalStructuralDxfSha256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+  "sourceReferenceFrame": "Source structural DXF GF sheet; X = (native drawing X - 832998.5)/1000; Z = -native Y/1000. Values in m, NOT survey control.",
+  "ownerObservationSource": "User's 2026-11-01 explicit chat clarification; retain verbatim in conversation; this register is derived and noncertifying.",
+  "previousM34SourceArchive": {
+    "driveFileId": "1Wcv7ZMoZWn3Zd5b3lx9o40S2pALcwv00",
+    "url": "https://drive.google.com/file/d/1Wcv7ZMoZWn3Zd5b3lx9o40S2pALcwv00/view"
+  },
+  "clarificationIllustration": {
+    "driveFileId": "1A9HU-0T-YpSRDIu0Q4u0Jgp0wZDuhVRb",
+    "url": "https://drive.google.com/file/d/1A9HU-0T-YpSRDIu0Q4u0Jgp0wZDuhVRb/view",
+    "status": "REVIEW_OVERLAY_NOT_ORIGINAL_DXF"
+  },
+  "questions": {
+    "Q1": {
+      "topic": "G2 four-strip junction",
+      "ownerObservation": "This is simply where the beams meet; no additional G2 column is intended.",
+      "ownerDecision": "DRAWN_BEAM_LINES_MEET_NOT_NEW_G2_COLUMN",
+      "sourceStrictStripIndices": [
+        3,
+        6,
+        7,
+        9
+      ],
+      "originalLineHandles": [
+        "AFC17",
+        "AFC19",
+        "AFC1D",
+        "AFC1F",
+        "AFC1E",
+        "AFC20",
+        "AFC18",
+        "AFC1A"
+      ],
+      "originalCenterlineHandles": [
+        "AFB31",
+        "AFB4A"
+      ],
+      "sourceJunctionSheetM": {
+        "x": 8.329401,
+        "z": 125.93374
+      },
+      "existingGFColumnAtIntersection": false,
+      "sourceStatus": "SOURCE_DRAWING_JUNCTION_OWNER_CLARIFIED",
+      "structuralJunctionSupportCapacity": "UNVERIFIED",
+      "action": "Record owner interpretation; do NOT add an extra column or pretend the four segments have verified bending, shear, anchorage or transfer."
+    },
+    "Q2": {
+      "topic": "Strip 016 perpendicular to C6-F6 straight axis",
+      "ownerObservation": "The previously highlighted line is not intended to slope. The intended geometry runs straight between C6 and F6, and strip 016 meets it perpendicularly. Previous classification of the highlighted sloping wall edge as nonstructural is the owner's observation, not engineer validation.",
+      "ownerDecision": "RECTIFY_WORKING_REFERENCE_ONLY_ORTHOGONAL_C6_F6_TO_016",
+      "originalWallSourceHandles": [
+        "AFBC0",
+        "AFBBB",
+        "AFBB9",
+        "AFBBA"
+      ],
+      "originalAxisSourceHandles": [
+        "AFB3C",
+        "AFB5C"
+      ],
+      "originalLayerAtHighlightedLine": "wall",
+      "originalWallEdges": {
+        "AFBC0": {
+          "a": [
+            -0.762177,
+            118.744647
+          ],
+          "b": [
+            3.164039,
+            118.712369
+          ],
+          "slopeDegrees": 0.471038
+        },
+        "AFBBB": {
+          "a": [
+            -1.25852,
+            118.97874
+          ],
+          "b": [
+            3.164039,
+            118.94238
+          ],
+          "slopeDegrees": 0.471038
+        },
+        "AFBB9": {
+          "slopeDegreesFromVertical": 0.067598
+        },
+        "AFBBA": {
+          "slopeDegreesFromVertical": 0
+        }
+      },
+      "originalCenterlines": {
+        "C6_F6": "AFB3C",
+        "stripe016": "AFB5C"
+      },
+      "originalGFColumnSourceMM": {
+        "C6": [
+          760905.038,
+          -118833.74
+        ],
+        "F6": [
+          765728.891,
+          -118833.387
+        ]
+      },
+      "sourceColumnCenterDifferenceZMM": 0.353,
+      "columnSeparationM": 4.823853,
+      "gfSourceReferenceAxisM": {
+        "C6": [
+          -1.459853,
+          118.83374
+        ],
+        "F6": [
+          3.364,
+          118.833387
+        ]
+      },
+      "workingOverlayIntent": {
+        "sourceSheetC6ToF6CenterlineM": [
+          [
+            -1.459853,
+            118.83374
+          ],
+          [
+            3.364,
+            118.83374
+          ]
+        ],
+        "sourceSheetStrip016CenterlineM": [
+          [
+            2.389578,
+            116.9837
+          ],
+          [
+            2.389578,
+            118.83374
+          ]
+        ],
+        "crossing": [
+          2.389578,
+          118.83374
+        ],
+        "nominalAngleDegrees": 90,
+        "geometrySource": "ORIGINAL_SOURCE_CENTERLINES_AFB3C_AFB5C",
+        "topology": "STRIP_016_ORTHOGONAL_TO_C6_F6_WORKING_REFERENCE__REVIEW_ONLY",
+        "status": "OWNER_INTENT_COORDINATION_OVERLAY_ONLY_NO_ORIGINAL_DXF_MUTATION"
+      },
+      "originalStrip016SourceFaceTerminationM": {
+        "x": 2.389578,
+        "zApprox": 118.719
+      },
+      "originalDistanceFaceToHorizontalCenterlineMMApprox": 114.74,
+      "interpretation": "The original 230mm paired-wall strip 016 terminates at the upper face of the horizontal wall-line pair; this is not evidence of a missing structural column.",
+      "explicitNotApproved": [
+        "structural beam type/section and reinforcement of C6-F6",
+        "verified structural junction/member connectivity",
+        "any upper floor column continuity or support",
+        "replacing original DXF coordinates",
+        "issued-for-construction geometry"
+      ]
+    }
+  },
+  "sourcePreservation": {
+    "originalDxfUnmodified": true,
+    "M70_M60_M40_V03FrozenUnmodified": true,
+    "acceptedGFColumns": 23,
+    "acceptedGFFootings": 21,
+    "acceptedGFBeams": 16,
+    "newG2ColumnAdded": false,
+    "upperIFCStructuralMembersAdded": 0
+  },
+  "issueDisposition": {
+    "ownerObservationG2": "CLOSED_FOR_GEOMETRIC_INTENT",
+    "ownerObservationC6F6": "CLOSED_FOR_GEOMETRIC_INTENT",
+    "remainingIndependentTechnicalGates": 7,
+    "beamConnectionVerification": "ENGINEERING_HOLD",
+    "issueForConstruction": false
+  },
+  "nextRequiredWork": "M34 trace and qualify junction support/load path and remaining strict strip geometry from original CAD; M35 independent FF/SF source-supported member mapping."
+}

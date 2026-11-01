@@ -22,12 +22,15 @@ assert.deepEqual(post,read("archive/m32/M32_PRE_current-engineering-register.jso
 assert.deepEqual(read("archive/m32/M32_POST_current-engineering-register.json"),
  read("archive/m33/M33_PRE_current-engineering-register.json"),
  "M32 POST must exactly match M33 PRE in one-live-ID lineage");
-assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),live,
- "Current M33 POST must match authoritative living register");
-assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED","M31_ARCHIVE_BINARY_VERIFIED","M32_PRE","M32_POST","M33_PRE","M33_POST"]);
+assert.deepEqual(read("archive/m33/M33_POST_current-engineering-register.json"),
+ read("archive/m34/M34_PRE_current-engineering-register.json"),
+ "M33 POST must match M34 PRE");
+assert.deepEqual(read("archive/m34/M34_POST_current-engineering-register.json"),live,
+ "Current M34 POST must match authoritative living register");
+assert.deepEqual(history.map(x=>x.version),["M31_PRE","M31_POST","M31_POST_ARCHIVE_RECONCILED","M31_ARCHIVE_BINARY_VERIFIED","M32_PRE","M32_POST","M33_PRE","M33_POST","M34_PRE","M34_POST"]);
 assert.equal(live.schema,"jp-cad://aad-current-engineering-debt-register/1");
 assert.equal(live.projectId,"PRJ-000007");
-assert.equal(live.currentVersion,"M33-20261031");
+assert.equal(live.currentVersion,"M34-20261101_OWNER_OBSERVATION_RECONCILED");
 assert.equal(live.noFurtherOwnerLayoutApprovalRequired,true);
 assert.equal(live.ownerAuthority,"M25_M28_WORKING_GEOMETRY_APPROVAL_FINAL");
 assert.equal(m28.ownerDecisionStatus,"VERIFIED_AND_APPROVED_NO_REAPPROVAL_REQUEST");

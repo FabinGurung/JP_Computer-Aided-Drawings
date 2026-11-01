@@ -51,6 +51,8 @@ jobs:
         run: node tools/site/aad-m32-strip-register-smoke.mjs
       - name: M33 original structural DXF GF sheet-control alignment and proximity gate
         run: node tools/site/aad-m33-source-registration-smoke.mjs
+      - name: M34 owner source-drawing geometry and unchanged engineering-HOLD gate
+        run: node tools/site/aad-m34-owner-source-reconciliation-smoke.mjs
       - name: Generate verified public synthetic AI-to-AAD package from versioned specification
         run: |
           node tools/site/aad-ai-pipeline-smoke.mjs
@@ -86,6 +88,7 @@ jobs:
           AAD_M30_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m30-source-browser-smoke.mjs
           AAD_M32_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m32-native-strip-browser-smoke.mjs
           AAD_M33_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m33-source-registration-browser-smoke.mjs
+          AAD_M34_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m34-owner-source-browser-smoke.mjs
           AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
           CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
@@ -107,6 +110,7 @@ jobs:
             /tmp/aad-m30-source-native-upper-floors.png
             /tmp/aad-m32-native-source-strip-inspector.png
             /tmp/aad-m33-source-column-drawing-frame-proximity.png
+            /tmp/aad-m34-owner-g2-c6f6-orthogonal-source-review.png
             /tmp/cad-aad-building-*.png
             /tmp/cad-aad-shared-highlight-selection.png
             /tmp/cad-aad-topology-3way-ui.png
