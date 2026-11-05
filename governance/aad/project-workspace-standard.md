@@ -66,3 +66,40 @@ programmes or source code are transplanted into these projects.
 
 A7 remains read-only. Peer Cost and Scheduling ownership and integration gates
 remain unchanged. This release has no new source-design or compliance acceptance.
+
+
+## Construction-stage workbenches — 2026-11-06 navigation supplement
+
+The existing four-chapter contract remains unchanged. Chapter 01 / Views now
+has two sibling subsection families: **linked floor views** and
+**construction-stage workbenches**. Chapter 02 / Quantities has a prominent
+shortcut to those same source-governed workbenches. Share state uses
+the panel=views, section=stages and stage=<stage-key> URL parameters;
+phase and design edition continue to identify the same source interpretation.
+
+One common stage taxonomy is rendered across all four projects: ground
+preparation/PCC, footing reinforcement, footing RCC, starters/dowels,
+columns, plinth beams, slabs/upper floors, and tanks/services. A taxonomy
+entry is not evidence that a stage workbench exists; missing stages show a
+specific unknown-aware unadmitted state.
+
+- **Narayani:** the seven original immutable work-package viewers, V02/V03
+  and M40–M80, are first-class selectable workbenches, embedded from their
+  existing original routes with a separate full-page link. Their source
+  files, frozen status, hashes and HOLD state are not altered. The original
+  module hub remains in record.html; old fragment links remain valid.
+  The V02 module covers PCC/blinding, not an independently verified soling
+  module. Upper-floor reinforcement packages remain unadmitted.
+- **Harisharan:** through-plinth estimates link to the original plinth study;
+  floor summaries link to the existing phase BOQ. These are provisional,
+  not complete BBS/fabrication instructions.
+- **Ashok:** existing architecture/MEP floor coordination is linked with
+  COORDINATION ONLY qualification; no structural material stage is asserted.
+  v1/v2 data and provenance remain separate.
+- **Ramachandra:** all stage-workbench details are unadmitted pending source
+  verification; unknowns are never replaced with fabricated geometry or zero.
+
+This navigation change introduces no design edition, source revision,
+engineering acceptance, new quantities, new schedule, cross-repository
+sync, or native Drive document revision. Engineering and privacy gates in
+AGENTS.md and the AAD domain template still apply.
