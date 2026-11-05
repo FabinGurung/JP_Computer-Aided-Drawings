@@ -1,7 +1,8 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-const base=process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/';
+// Retained interface regression: current project shell has its own four-project browser test.
+const base=new URL('record.html',process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/').href;
 const widths=(process.env.ASHOK_WIDTHS||'390,820,1440').split(',').map(Number);
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader']});
 try{

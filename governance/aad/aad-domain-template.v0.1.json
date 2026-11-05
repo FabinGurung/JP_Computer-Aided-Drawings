@@ -1,8 +1,8 @@
 {
   "schema": "jp-cad://aad-domain-template/0.1",
   "template_id": "AAD-CAD-TEMPLATE-001",
-  "name": "AI-Aided Design and Drawing — owned CAD domain template",
-  "version": "0.3.2",
+  "name": "AI-Aided Design and Drawing \u2014 owned CAD domain template",
+  "version": "0.3.3",
   "status": "ACTIVE_DOMAIN_OWNED_TEMPLATE",
   "owner_repository": "FabinGurung/JP_Computer-Aided-Drawings",
   "owner_module": "CAD",
@@ -135,5 +135,25 @@
     "filter_scope": "Register search/storey/discipline/type controls affect rows only; drawing visibility has a separate labeled scope.",
     "sorting": "Stable ascending/descending within type; storeys remain in elevation order. All modeled IFC-typed objects remain discoverable.",
     "recovery": "Visible active filters, independent removal, empty-result feedback, reset and expand/collapse; retain 2D and exports when WebGL is unavailable."
+  },
+  "project_workspace": {
+    "interfaceStandard": "1.0",
+    "owner": "CAD",
+    "contract": "governance/aad/project-workspace-standard.md",
+    "hierarchy": [
+      "design edition",
+      "chapter",
+      "section",
+      "phase / floor"
+    ],
+    "chapters": [
+      "Views",
+      "Quantities / BOQ",
+      "Programme / Gantt",
+      "Sources & records"
+    ],
+    "linkedViews": "same phase and component ID in 2D, 3D and register",
+    "unknownData": "explicit availability state; never substitute geometry, zero quantities or programme dates",
+    "projectEditionsSeparateFromDocumentRevisions": true
   }
 }

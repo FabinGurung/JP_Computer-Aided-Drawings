@@ -16,6 +16,14 @@ try{
  for(const [route,title] of routes){
   const response=await p.goto(new URL(route,prefix).href,{waitUntil:"domcontentloaded",timeout:45000});
   if(!response||response.status()>=400)throw Error(title+" route unavailable: "+response?.status());
+  if(await p.locator('body[data-project]').count()){
+   await p.locator('.pw-top').waitFor({timeout:12000});
+   if(await p.locator('link[href*="project-workspace.css"]').count()!==1)throw Error(title+' missing shared project stylesheet');
+   if(await p.locator('.pw-chapter-bar [role=tab]').count()!==4)throw Error(title+' missing common chapters');
+   if(await p.locator('#pw-edition option').count()<1)throw Error(title+' missing source edition');
+   if(await p.locator('.pw-top-links a[href$="/projects/"]').count()!==1)throw Error(title+' missing return to project library');
+   continue;
+  }
   await p.locator("#cad-global-navigation").waitFor({timeout:12000});
   const sheet=await p.locator('link[href*="cad-unified-theme.css"]').count();
   if(sheet!==1)throw Error(title+" missing one shared stylesheet");

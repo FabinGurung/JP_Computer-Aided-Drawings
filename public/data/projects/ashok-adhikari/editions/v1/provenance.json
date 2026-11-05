@@ -1,0 +1,15 @@
+{
+  "schema": "jp-cad://project-edition-provenance/1",
+  "edition": "v1 \u2014 preserved architectural baseline",
+  "sourceCommit": "49a26473c7e4d58331784fde510e7d6bd60870ee",
+  "sourceDirectory": "public/data/projects/ashok-adhikari",
+  "filesSha256": {
+    "aad-gf-model-qa02.json": "cbab00f783cc8366c929199d6df7b23c07af198d031c4a7df44a8024aec309f5",
+    "aad-ff-model-qa02.json": "a0c8d230c6498075f14a5dcbe6c16f5b970b0099975149109ec35288febfb3c8",
+    "coordination-ledger-qa02.json": "f3a2e1e7d0cda8b6bce8a3e4ae3af585d4683c31c90c984911b5cc83f5280324",
+    "aad-building-qa02.json": "99d770991de0dfac345b7a9be0a27dd4ba4167d2fe1b29aca9cf24dd0e4a3e8b"
+  },
+  "laterMepPresent": false,
+  "geometryEdited": false,
+  "engineeringApproval": false
+}

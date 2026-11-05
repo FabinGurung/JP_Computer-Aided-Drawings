@@ -32,7 +32,8 @@ for p in project["projects"]: assert (root/p["href"]/"index.html").is_file()
 ashok=(root/"projects/ashok-adhikari/index.html").read_text()
 assert 'data-cad-route="projects/ashok-adhikari/"' in ashok and "Narayani Modular Drawing Atlas" not in ashok,"Ashok must be a real route, never the branded 404 fallback"
 assert sum(p["slug"]=="ashok-adhikari" for p in project["projects"])==1,"Ashok must have exactly one registry entry"
-assert "CODAL_NOT_VERIFIED" in (root/"projects/narayani-parajuli/index.html").read_text()
+assert "CODAL_NOT_VERIFIED" in (root/"projects/narayani-parajuli/record.html").read_text()
+assert "engineering HOLD" in (root/"assets/js/project-workspace-config.mjs").read_text()
 assert "HOLD" in (root/"stages/m80/index.html").read_text()
 class Links(HTMLParser):
  def __init__(self): super().__init__();self.a=[]
@@ -63,8 +64,11 @@ assert (root/"assets/css/cad-unified-theme.css").is_file(), "CAD shared theme mi
 assert (root/"assets/js/cad-site-shell.js").is_file(), "CAD shared nav missing"
 for page in current_pages:
     content=(root/page).read_text()
-    assert "cad-unified-theme.css" in content,(page,"missing shared theme")
-    assert "cad-site-shell.js" in content,(page,"missing shared navigation")
+    if 'data-project=' in content:
+        assert 'project-workspace.css' in content and 'project-workspace.mjs' in content,(page,'missing standardized project shell')
+    else:
+        assert "cad-unified-theme.css" in content,(page,"missing shared theme")
+        assert "cad-site-shell.js" in content,(page,"missing shared navigation")
 home=(root/"index.html").read_text()
 for anchor in ('id="capabilities"','id="research"','id="projects"','id="releases"','href="./cad/aad/"','href="./cad/brief/"','href="./cad/"'):
     assert anchor in home, ("missing route or preserved legacy link", anchor)

@@ -9,3 +9,6 @@ assert.throws(()=>buildHarisharan(s,m,{crews:0}));assert.throws(()=>buildHarisha
 for(const l of m.levels){assert.ok(fs.existsSync(root+l.sourceSvg));assert.ok(l.walls.every(w=>w.thickness>.06&&w.thickness<.31));assert.ok(l.walls.every(w=>w.source.startsWith('ARC-')));}
 for(const file of fs.readdirSync(root).filter(f=>f.startsWith('source-'))){const svg=fs.readFileSync(root+file,'utf8');assert.ok(!/tecarchengineering|9769494047|GPS COORDINATES|drive.google.com|docs.google.com/.test(svg));}
 assert.equal(m.issueForConstruction,false);console.log('HARISHARAN_WORKSPACE_SOURCE_QA_PASS',JSON.stringify({components:b.elements.length,floors:b.levels.length,sourceArea:b.sourceArea,planningDays:b.totalDays,activities:b.tasks.length}));
+
+for(const key of ["rcc","steel"]){const total=key==="rcc"?b.totalRcc:b.totalSteel;assert.ok(Math.abs(b.phaseQuantities.reduce((a,q)=>a+q[key],0)-total)<1e-7,"phase "+key+" conservation");}
+assert.equal(b.phaseQuantities.length,6);assert.equal(six.phaseQuantities.length,7);assert.ok(Math.abs(b.phaseQuantities.reduce((a,q)=>a+q.cementBags,0)-(b.totalRcc*b.options.rccCementKgM3+b.takeoff.pccCement)/50)<1e-7);
