@@ -8,6 +8,7 @@ on:
     paths:
       - "index.html"
       - "src/main.ts"
+      - "projects/**"
       - "vite.config.ts"
       - "public/**"
       - "cad/aad/multistorey/**"
@@ -36,6 +37,8 @@ jobs:
           node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
+      - name: Validate Harisharan source schedule and material assumptions
+        run: node tools/site/harisharan-material-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
@@ -48,6 +51,7 @@ jobs:
           npx playwright install --with-deps chromium
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/ashok-preview.log 2>&1 &)
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
+          node tools/site/harisharan-browser-smoke.mjs
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs

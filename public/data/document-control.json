@@ -24,6 +24,13 @@
       "provider": "Google Docs",
       "locator": "Resolve by logical ID in the project's Documentation folder",
       "revisionAuthority": "Read the current revision and archive links from the native Google Doc; do not mirror a stale private revision counter publicly."
+    },
+    {
+      "logicalId": "AAD-HARISHARAN-ENG-001",
+      "purpose": "Harisharan source reconciliation and foundation-to-plinth material working record",
+      "provider": "Google Docs",
+      "locator": "Resolve by logical ID in the existing Fishtail Harisharan project Engineering Working Record folder",
+      "revisionAuthority": "Native current Doc controls R-sequence; first registration R000001 on 2026-11-05. Public material study is provisional and does not authorize construction."
     }
   ]
 }

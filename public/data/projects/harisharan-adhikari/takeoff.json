@@ -1,0 +1,190 @@
+{
+  "schema": "jp-cad://harisharan-plinth-takeoff/1",
+  "logicalId": "INTAKE-20260826-HARISHARAN",
+  "revision": "R000001",
+  "date": "2026-11-05",
+  "name": "Harisharan Adhikari",
+  "organization": "Fishtail Builders",
+  "status": "PROVISIONAL_QUANTITY_STUDY",
+  "issueForConstruction": false,
+  "jurisdiction": {
+    "country": "Nepal",
+    "municipality": "Pokhara Metropolitan City",
+    "ward": 12,
+    "source": "STR-01 and ARC-02 title blocks",
+    "occupancy": "Class B, commercial + residential",
+    "parcelAndRow": "ARC-02 labels plot 10, 6 m ROW and 2 m setback; title/ROW/permit not independently verified",
+    "route": "PROJECT_SPECIFIC_ENGINEERING_REQUIRED"
+  },
+  "sources": [
+    {
+      "id": "HAR-SRC-STR-001",
+      "filename": "Harisharan str without basement.pdf",
+      "sha256": "6ae8eaa70273b79a50ad28a2345da7966201efd5f4a32ea260cbece34f75b9c5",
+      "bytes": 5960220,
+      "pages": 17,
+      "sourceDate": "September 2026",
+      "custody": "Original retained in governed project storage; no source binary/contact block published"
+    },
+    {
+      "id": "HAR-SRC-ARC-001",
+      "filename": "Harisharan cad without basement.pdf",
+      "sha256": "8429a256588c87c7f1cef5ae6a25006ee5f1e5b3ac7d6c5c27423efa4cc908e9",
+      "bytes": 2240271,
+      "pages": 7,
+      "sourceDate": "September 2026",
+      "custody": "Original retained in governed project storage; no source binary/contact block published"
+    },
+    {
+      "id": "HAR-SRC-RPT-001",
+      "filename": "Structural Report revised - Harisaran Adhikari for torsion.docx",
+      "sha256": "8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35",
+      "bytes": 7415710,
+      "pages": null,
+      "sourceDate": "2083, as stated",
+      "custody": "Original retained in governed project storage; no source binary/contact block published"
+    }
+  ],
+  "rows": [
+    {
+      "row": 1,
+      "rightGrid": "F",
+      "z": 0,
+      "rightBay": 5.662,
+      "basis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT"
+    },
+    {
+      "row": 2,
+      "rightGrid": "F",
+      "z": 5,
+      "rightBay": 5.662,
+      "basis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT"
+    },
+    {
+      "row": 3,
+      "rightGrid": "F",
+      "z": 10,
+      "rightBay": 5.662,
+      "basis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT"
+    },
+    {
+      "row": 4,
+      "rightGrid": "E",
+      "z": 15,
+      "rightBay": 5.594986,
+      "basis": "PDF_VECTOR_SCALED_CANDIDATE"
+    },
+    {
+      "row": 5,
+      "rightGrid": "D",
+      "z": 20,
+      "rightBay": 5.363184,
+      "basis": "PDF_VECTOR_SCALED_CANDIDATE"
+    },
+    {
+      "row": 6,
+      "rightGrid": "C",
+      "z": 25,
+      "rightBay": 5.115,
+      "basis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT"
+    }
+  ],
+  "dimensions": {
+    "leftBay": 5.722,
+    "longBay": 5,
+    "column": 0.45,
+    "footingDepth": 0.6,
+    "foundingBelowGround": 1.5,
+    "plinthAboveGround": 0.55,
+    "plinthWidth": 0.3,
+    "plinthDepth": 0.35,
+    "strapWidth": 0.45,
+    "strapDepth": 0.8,
+    "pccDepth": 0.075
+  },
+  "defaults": {
+    "footCover": 0.05,
+    "beamCover": 0.025,
+    "columnCover": 0.04,
+    "columnTieDiameter": 8,
+    "columnTieSpacing": 0.125,
+    "rccCementKgM3": 350,
+    "pccDryFactor": 1.54,
+    "cementDensity": 1440,
+    "bagKg": 50,
+    "steelWastePercent": 5,
+    "cementWastePercent": 3,
+    "footingMats": 2,
+    "strapCover": 0.05
+  },
+  "exclusions": [
+    "No actual site consumption records: cement used and steel installed are unknown.",
+    "No approved bar bending schedule: laps, chairs, spacers, bend deductions, anchorage and bars projecting above the plinth are excluded from the linear-bar subtotal.",
+    "Reported four-legged strap stirrups are allowed as two full rectangular hoops per set. Exact hoop overlap, cross-tie shape, bend deductions and cutting lengths need the checked BBS.",
+    "Shear/lift wall below plinth, lift pit, toe wall/masonry mortar, floor PCC, tanks, septic/soak pit, steps and construction joints are not quantified in this structural subtotal.",
+    "PCC is counted below footing pads only; no unshown PCC under strap-beam gaps is invented."
+  ],
+  "issues": [
+    {
+      "id": "HAR-01",
+      "title": "Concrete grade conflict",
+      "detail": "STR-01/03/05 specify M20. The report Materials section specifies M25 for footings, columns, slabs, beams and stairs. Obtain the accepted revision and approved mix. The 350 kg/m\u00b3 setting is an editable estimating allowance, not a mix design or guaranteed M20/M25 yield."
+    },
+    {
+      "id": "HAR-02",
+      "title": "Sloping footing volume unresolved",
+      "detail": "STR-02 shows sloped pads without edge thickness, slope break or plateau dimensions. The report SAFE property uses uniform 600 mm M25 footing slabs. The displayed 600 mm full prisms follow that analysis-envelope scenario, not a verified sloped casting volume. Total project quantities are not an upper bound because other items remain excluded."
+    },
+    {
+      "id": "HAR-03",
+      "title": "Footing mats conflict",
+      "detail": "STR-01 schedule specifies 16 mm at 150 mm both directions, top and bottom. STR-02 section depicts a lower mesh. The default takes the explicit schedule as two mats; engineer must reconcile."
+    },
+    {
+      "id": "HAR-04",
+      "title": "Grid dimensions do not close",
+      "detail": "Top overall is labeled 11284 mm, while 5722 + 5115 = 10837 mm. Bottom bays give 5722 + 5662 = 11384 mm. Intermediate right-grid offsets are scaled from PDF vectors, not surveyed or fully dimensioned. No value has been silently corrected."
+    },
+    {
+      "id": "HAR-05",
+      "title": "Column ties disagree",
+      "detail": "Column ties: STR-02 says 8 mm at 125 mm; STR-06 says 10 mm at 100 mm. STR-03/16 show six-legged confinement. Strap summary table in the report specifies 4-legged 8 mm at 100 mm throughout, whereas STR-06 shows 100 mm ends / 125 mm middle. Report tie-beam summary says 8 mm at 125 mm throughout, while STR-05 shows 100/150 mm zones. Default: column STR-02, plinth STR-05, strap report 4L/100 allowance; these are explicit unresolved source choices, not an approved BBS."
+    },
+    {
+      "id": "HAR-06",
+      "title": "Levels and intersections need acceptance",
+      "detail": "1.5 m below ground is interpreted as underside of footing; ARC-07 places plinth top 550 mm above ground. Strap bottom is provisionally aligned with footing bottom as drawn in STR-06. Footing/strap intersections are deducted from the prism scenario. Actual footing profile and joint levels must be checked."
+    },
+    {
+      "id": "HAR-07",
+      "title": "Report and current code reconciliation",
+      "detail": "The report is internally inconsistent: prose Z=0.3 versus calculation table Z=0.35; soil C in prose versus A in tables; assumed bearing 100 kPa versus Annex E 429 kPa for a mat at 3 m attributed to a soil report not supplied. Importance factors appear as 1.0, 1.25 and 1.5. Official NBC105:2025 Annex C row 338 lists Pokhara Lekhnath Z=0.35. Resolve the actual model inputs and geotechnical source with the structural designer; no seismic design is recomputed here."
+    },
+    {
+      "id": "HAR-08",
+      "title": "Construction approval and scope incomplete",
+      "detail": "No signed source acceptance, municipal permit, geotechnical verification, BBS or pour/stock register has been supplied. Prescriptive NBC205 is outside scope for this building: 5 m / 5.722 m bays, about 297.84 m\u00b2 footprint and mixed occupancy. The page is a source interpretation and estimating aid. The report also includes one 600 mm lift/shear-wall mat with 12 mm bars at 100 mm both ways, top and bottom; its accepted footprint, elevations and intersections are not sufficiently established for this subtotal."
+    }
+  ],
+  "references": [
+    {
+      "title": "NBC 105:2025 \u00b7 Annex C, row 338",
+      "url": "https://giwmscdnone.gov.np/media/files/NBC_105_2025_Seismic%20Design%20of%20Buildings%20in%20Nepal_lqqvx6a.pdf"
+    },
+    {
+      "title": "NBC 205:2024 \u00b7 \u00a74.2 eligibility only",
+      "url": "https://giwmscdnone.gov.np/media/pdf_upload/NBC_205_READY-TO-USE_DETAILING_GUIDELINE_FOR-signed.pdf"
+    },
+    {
+      "title": "IS 456:2000 \u00b7 \u00a79.1 / \u00a79.3, mix design",
+      "url": "https://wriddodoti.gov.np/uploads/blog/20230331071217_IS-456-with-all-ammendments.pdf"
+    }
+  ],
+  "coverEvidence": {
+    "footing": "Report general features and footing design summary: 50 mm clear cover",
+    "column": "Report general features: 40 mm",
+    "plinth": "Report general features: 25 mm or bar diameter, whichever greater; 25 mm used for 8 mm links",
+    "strap": "Report Strap Beam Summary: 50 mm clear cover",
+    "strapLinks": "Report Strap Beam Summary: 4L 8 mm at 100 mm throughout; two full-hoop length allowance per set, exact BBS unresolved"
+  }
+}
