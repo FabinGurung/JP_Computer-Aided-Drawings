@@ -16,6 +16,7 @@ const one=calculate(source,{footingMats:1});near(result.totalSteel-one.totalStee
 const tie10=calculate(source,{columnTieDiameter:10,columnTieSpacing:.1});assert.ok(tie10.totalSteel>result.totalSteel);assert.equal(tie10.byDiameter.find(n=>n.diameter===10).diameter,10);
 const richer=calculate(source,{rccCementKgM3:400});near(richer.cementBags-result.cementBags,result.rcc);
 assert.throws(()=>calculate(source,{rccCementKgM3:NaN}));assert.throws(()=>calculate(source,{footingMats:3}));
+assert.equal(source.defaults.beamCover,.025);assert.equal(source.defaults.strapCover,.05);const strap=result.steel.filter(x=>x.stage==='Strap links');assert.equal(strap.length,12);assert.ok(strap.every(x=>x.note.includes('4L @100')));
 assert.equal(source.issueForConstruction,false);assert.equal(source.issues.length,8);assert.ok(source.exclusions.length>=5);
 const files=['public/data/projects/harisharan-adhikari/takeoff.json','public/assets/js/harisharan-takeoff.mjs','projects/harisharan-adhikari/index.html','projects/harisharan-adhikari/main.ts'];
 for(const f of files)assert.ok(!/drive\.google\.com|docs\.google\.com|tecarchengineering@|9769494047/.test(fs.readFileSync(f,'utf8')),`Private source leak in ${f}`);

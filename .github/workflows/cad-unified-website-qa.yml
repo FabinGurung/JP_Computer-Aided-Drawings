@@ -8,6 +8,7 @@ on:
     paths:
       - "index.html"
       - "src/main.ts"
+      - "projects/**"
       - "vite.config.ts"
       - "public/**"
       - "cad/aad/multistorey/**"

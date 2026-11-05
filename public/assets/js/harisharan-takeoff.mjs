@@ -48,9 +48,9 @@ export function calculate(source,settings={}) {
   const net=d.strapWidth*(clear*d.strapDepth-padOverlap*d.footingDepth);
   vol(b.id,'Strap beams',net,`0.45 × [(${b.length.toFixed(4)} − 0.45) × 0.8 − 2.7 × 0.6]`,'STR-01/04/06');
   bar(b.id+'-20','Strap longitudinal',20,12,b.length,'STR-06','8 top + 4 bottom; centreline length, excluding anchor/lap');
-  const links=2*Math.ceil(clear/4/.1)+Math.ceil(clear/2/.125)+1;
-  const cut=2*(d.strapWidth+d.strapDepth-4*p.beamCover-2*.008)+20*.008;
-  bar(b.id+'-8','Strap links',8,links,cut,'STR-06','Outer hoop only; additional internal cross-ties unresolved');
+  const links=Math.ceil(clear/.1)+1; // Report strap summary: four legs @100 throughout.
+  const cut=2*(2*(d.strapWidth+d.strapDepth-4*p.strapCover-2*.008)+20*.008); // Two full-hoop allowance, not final BBS.
+  bar(b.id+'-8','Strap links',8,links,cut,'Report Strap Beam Summary / STR-06 conflict','Reported 4L @100 throughout; two full-hoop allowance per set, exact overlap/bends unresolved');
  }
  for(const b of a.plinth){
   const clear=b.length-d.column;
