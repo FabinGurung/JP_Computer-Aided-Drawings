@@ -1,6 +1,7 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-const url=process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/';
+// Retained interface regression: current project shell has its own four-project browser test.
+const url=new URL('record.html',process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/').href;
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader']});
 try{for(const [width,height]of [[320,740],[390,844],[844,390],[768,1024],[1440,950]]){
  const page=await browser.newPage({viewport:{width,height},hasTouch:width<1000,isMobile:width<1000}),errors=[];page.on('pageerror',e=>errors.push(e.message));

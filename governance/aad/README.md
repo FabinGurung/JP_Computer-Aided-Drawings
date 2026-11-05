@@ -1,6 +1,6 @@
 # AAD domain guide template — CAD-owned
 
-Current implementation version: **0.3.2**, at the same canonical template path
+Current implementation version: **0.3.3**, at the same canonical template path
 and template ID. The added code register and archive-before-update document
 control are reusable capabilities within the existing CAD boundary. Human pages:
 `/memory-wall/` and `/codes/pokhara/`. Private engineering working records stay in
@@ -44,3 +44,5 @@ V2 adds reusable MEP classification, source-linked route data, plot/building coo
 0.3.1 repairs feedback-pin restoration, validation and redraws, touch feedback and the MEP plan visibility toggle. Excel remains a coordination worksheet; it does not publish or synchronize geometry.
 
 0.3.2 organizes project contents and edition definitions, separates drawing visibility from register filtering, includes every modeled type, adds ascending/descending sorting and group controls, and keeps 2D/register/export usable without WebGL. Project editions and document revision sequences stay independent.
+
+0.3.3 standardizes the four project entrypoints with edition-first chapters, shared phase and linked plan/model selection, distributed tools and truthful data availability. See [Project workspace standard 1.0](project-workspace-standard.md).

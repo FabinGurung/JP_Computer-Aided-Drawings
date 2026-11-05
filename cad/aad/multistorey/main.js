@@ -25,6 +25,10 @@ let m30Evidence=null;
 let m32Evidence=null;
 let m33Evidence=null;
 let m34Evidence=null;
+let projectPhase="all";
+const standardProject=params.get("workspace")==="standard";
+function projectAllows(e){return projectPhase!=="substructure"||Boolean(e.previewOnly&&["footing","column","beam"].includes(e.kind));}
+function projectNotify(){if(standardProject)document.dispatchEvent(new Event("project-drawing-state"));}
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
 let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
@@ -135,6 +139,7 @@ function applyVisible(){
   if(e.discipline==='MEP')m.visible=showMEP&&(mepMode||!roofAccessMode);
   if(mepMode)m.visible=m.visible&&e.discipline==='MEP';
   if(e.roofCover&&!showRoofCover)m.visible=false;
+  if(standardProject)m.visible=m.visible&&projectAllows(e)&&(activeLevel==="all"||e.level===activeLevel||e.contextLevels?.includes(activeLevel));
  }
  paintSelection();
 }
@@ -679,6 +684,14 @@ function drawPlan(){
  $("aad-plan-level").textContent=ground;
  $("aad-building-level").textContent=activeLevel==="all"?"All storeys":"Selected storey "+activeLevel.toUpperCase();
  sitePicker.sync();
+ if(standardProject){
+  for(const node of doc.querySelectorAll('[data-element-id],[data-presentation-id],[data-part]')){
+   const id=node.dataset.elementId||node.dataset.presentationId||(building.projectId+':'+node.dataset.part);
+   const e=building.elements.find(e=>e.id===id);if(e&&!projectAllows(e))node.style.display='none';
+  }
+  if(projectPhase==='substructure')for(const node of doc.querySelectorAll('.aad-wall,.aad-door,.aad-window,.aad-node'))node.style.display='none';
+ }
+ projectNotify();
 }
 function focusEditor(level,kind,id){
  const nativeId=building.projectId+":"+level+":"+id;
@@ -839,6 +852,7 @@ function persistDraft(){
  try{localStorage.setItem(draftStorageKey(workspace.snapshot().manifest),JSON.stringify(workspace.bundle()));}catch(_){}
 }
 function setLevel(level){
+ if(standardProject&&!["substructure","roof"].includes(projectPhase))projectPhase=level;
  activeLevel=level;drawFirst=null;
  for(const l of building.levels)floorFlags.set(l.id,level==="all"||l.id===level);
  for(const [idx,label] of [...$("storeys").querySelectorAll("label")].entries())
@@ -1149,6 +1163,17 @@ async function main(){
   if(manifest.services){$('aad-mep-summary').textContent=manifest.services.notes.join(' ');$('aad-mep-conflicts').textContent=siteConflicts(manifest.services.assets,manifest.services.siteFrame).map(a=>a.id+': '+(a.outsidePlot?'outside plot; ':'')+(a.plinthOverlap?'excavation envelope crosses house outline; ':'')+(a.wcOverlap?'overlaps outside WC; ':'')).join(' | ');}
   cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
   setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
+ }
+ if(standardProject){
+  const {installProjectEngine}=await import(/* @vite-ignore */moduleURL('project-engine-layout.mjs'));
+  installProjectEngine({
+   getState:()=>({ready:!!building,phase:projectPhase,selectedId,componentCount:building.elements.filter(e=>e.ifcType).length,elements:building.elements.filter(e=>e.ifcType&&projectAllows(e)),levels:building.levels}),
+   setLevel:phase=>{if(projectPhase===phase&&activeLevel!=='all')return;projectPhase=phase;const lev=phase==='substructure'?'gf':phase==='roof'?'ff':phase;roofAccessMode=phase==='roof';mepMode=false;if(building.levels.some(l=>l.id===lev)||lev==='all'){setLevel(lev);setKindVisibility('roof',phase==='roof'||phase==='all');renderModel();drawPlan();centerView();}const filter=$('aad-audit-storey');filter.value=lev;filter.dispatchEvent(new Event('change'));},
+   setLayout:setViewMode,
+   setPanel:panel=>{document.body.dataset.enginePanel=panel;},
+   fit:centerView,
+   select:id=>window.AADStudio.selectElementById(id)
+  });
  }
  document.dispatchEvent(new Event("aad-studio-ready"));
 }

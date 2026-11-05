@@ -10,17 +10,15 @@
       "organization": "Fishtail Builders",
       "location": "Pokhara, Nepal",
       "project_status": "GOVERNED ENGINEERING WORKSTREAM",
-      "portal_status": "MODULAR VIEWERS",
-      "summary": "Existing V02, V03 and M40\u2013M80 structural viewers are preserved and exposed through a project-level route instead of occupying the repository root.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
+      "summary": "Shared source-version workspace with linked floor/structural review views; frozen V02\u2013M80 work-package records preserved separately.",
       "href": "projects/narayani-parajuli/",
       "modules": [
-        "V02 PCC",
-        "V03 Footing Reinforcement",
-        "M40 Footing RCC",
-        "M50 Starter/Dowel",
-        "M60 Column",
-        "M70 Plinth Beam",
-        "M80 Water Tank"
+        "Versions and chapters",
+        "Linked 2D / 3D views",
+        "Phase quantities / BOQ",
+        "Programme / Gantt",
+        "Sources and records"
       ]
     },
     {
@@ -31,18 +29,15 @@
       "organization": "Rohini Engineering and Builders",
       "location": "Ward 14, Pokhara",
       "project_status": "PLANNED",
-      "portal_status": "PROJECT PAGE READY",
-      "summary": "Governed CAD revisions, architectural visualization, native preliminary estimate workspace and current project-state controls are enough to support a useful portal now, with future WBS, reports and field modules reserved.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
+      "summary": "Shared REV02 source workspace, restricted estimate/state references and explicit pending states for public geometry, quantities and programme.",
       "href": "projects/ramachandra-devkota/",
       "modules": [
-        "Drawings & Models",
-        "Visualization",
-        "Estimate / BOQ",
-        "Project State",
-        "WBS / Gantt",
-        "Reports",
-        "Site & Media",
-        "Release History"
+        "Versions and chapters",
+        "Linked 2D / 3D views",
+        "Phase quantities / BOQ",
+        "Programme / Gantt",
+        "Sources and records"
       ]
     },
     {
@@ -52,14 +47,15 @@
       "organization": "Rohini Engineering and Builders",
       "location": "Nepal",
       "project_status": "OPEN / NOT FROZEN / NOT FOR CONSTRUCTION",
-      "portal_status": "REV04 WORKING QA",
-      "summary": "Source-backed REV04 v0.8 wall geometry in the shared AAD template, exact deterministic SVGs and approved v0.9 GF c016 / FF c012 visual bookmarks. REV03 remains the recorded client baseline.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
+      "summary": "Shared version-first workspace with actual preserved v1 architecture and current v2 coordination, linked phase views and distributed tools. Existing source and engineering qualifications remain.",
       "href": "projects/ashok-adhikari/",
       "modules": [
-        "Shared AAD Studio",
-        "Exact Source Plans",
-        "Approved Visuals",
-        "QA and Source Trail"
+        "Versions and chapters",
+        "Linked 2D / 3D views",
+        "Phase quantities / BOQ",
+        "Programme / Gantt",
+        "Sources and records"
       ]
     },
     {
@@ -69,16 +65,15 @@
       "organization": "Fishtail Builders",
       "location": "Pokhara-12, Nepal \u00b7 drawing title block",
       "project_status": "PROVISIONAL TAKEOFF / ENGINEERING REVIEW REQUIRED",
-      "portal_status": "FULL PROJECT WORKSPACE R000002",
-      "summary": "Source-derived five-floor 2D/3D workspace, linked component register, editable planning Gantt and scenario controls; detailed plinth takeoff retained as a subpage.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
+      "summary": "Shared phase workspace with simultaneous linked plan/model views, floor material summaries, component register and editable planning Gantt. Detailed plinth subpage preserved.",
       "href": "projects/harisharan-adhikari/",
       "modules": [
-        "2D/3D Studio",
-        "Component register",
-        "Planning Gantt",
-        "Scenarios",
-        "Source drawings",
-        "Through plinth beam"
+        "Versions and chapters",
+        "Linked 2D / 3D views",
+        "Phase quantities / BOQ",
+        "Programme / Gantt",
+        "Sources and records"
       ]
     }
   ]
