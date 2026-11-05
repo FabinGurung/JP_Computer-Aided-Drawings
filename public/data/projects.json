@@ -69,15 +69,16 @@
       "organization": "Fishtail Builders",
       "location": "Pokhara-12, Nepal \u00b7 drawing title block",
       "project_status": "PROVISIONAL TAKEOFF / ENGINEERING REVIEW REQUIRED",
-      "portal_status": "FOUNDATION TO PLINTH",
-      "summary": "Source-linked 3D/plan substructure and provisional steel/cement takeoff; material conflicts and exclusions remain visible.",
+      "portal_status": "FULL PROJECT WORKSPACE R000002",
+      "summary": "Source-derived five-floor 2D/3D workspace, linked component register, editable planning Gantt and scenario controls; detailed plinth takeoff retained as a subpage.",
       "href": "projects/harisharan-adhikari/",
       "modules": [
-        "3D and plan",
-        "Rebar",
-        "Concrete and cement",
-        "Source schedule",
-        "Review issues"
+        "2D/3D Studio",
+        "Component register",
+        "Planning Gantt",
+        "Scenarios",
+        "Source drawings",
+        "Through plinth beam"
       ]
     }
   ]

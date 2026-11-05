@@ -1,0 +1,11 @@
+import fs from 'node:fs';import assert from 'node:assert/strict';import {buildHarisharan} from '../../public/assets/js/harisharan-building.mjs';
+const root='public/data/projects/harisharan-adhikari/',s=JSON.parse(fs.readFileSync(root+'takeoff.json')),m=JSON.parse(fs.readFileSync(root+'building.json')),b=buildHarisharan(s,m);
+assert.equal(b.levels.length,5);assert.equal(b.sourceArea,1371.27);assert.equal(b.elements.length,new Set(b.elements.map(e=>e.id)).size);assert.ok(b.elements.filter(e=>e.kind==='wall').length>150);assert.equal(b.elements.filter(e=>e.kind==='column').length,102);assert.ok(Math.abs(b.elements.find(e=>e.id==='SLAB-fourth').dz-15.45)<1e-9);assert.ok(Math.abs(Math.max(...b.elements.filter(e=>e.kind==='slab').map(e=>e.y+e.dy/2))-15.55)<1e-9);
+assert.ok(b.tasks.every(t=>t.deps.every(d=>b.tasks.find(x=>x.id===d).finish<=t.start)));assert.ok(b.tasks.every(t=>t.finish-t.start===t.duration&&t.float>=0));assert.equal(b.tasks.at(-1).finish,b.totalDays);
+const delayed=buildHarisharan(s,m,{durations:{'setup':12}});assert.equal(delayed.totalDays-b.totalDays,10);assert.equal(delayed.tasks.find(t=>t.id==='excavation').start,12);
+const six=buildHarisharan(s,m,{storeys:6});assert.ok(six.elements.length>b.elements.length&&six.totalRcc>b.totalRcc&&six.totalDays>b.totalDays);assert.equal(six.sourceTotalsReconciled,false);
+const mesh=buildHarisharan(s,m,{footingMats:1});assert.ok(mesh.totalSteel<b.totalSteel);const crews=buildHarisharan(s,m,{crews:2});assert.ok(crews.totalDays<b.totalDays);const thick=buildHarisharan(s,m,{waist:.15});assert.ok(thick.totalRcc<b.totalRcc);
+assert.throws(()=>buildHarisharan(s,m,{crews:0}));assert.throws(()=>buildHarisharan(s,m,{durations:{setup:-2}}));
+for(const l of m.levels){assert.ok(fs.existsSync(root+l.sourceSvg));assert.ok(l.walls.every(w=>w.thickness>.06&&w.thickness<.31));assert.ok(l.walls.every(w=>w.source.startsWith('ARC-')));}
+for(const file of fs.readdirSync(root).filter(f=>f.startsWith('source-'))){const svg=fs.readFileSync(root+file,'utf8');assert.ok(!/tecarchengineering|9769494047|GPS COORDINATES|drive.google.com|docs.google.com/.test(svg));}
+assert.equal(m.issueForConstruction,false);console.log('HARISHARAN_WORKSPACE_SOURCE_QA_PASS',JSON.stringify({components:b.elements.length,floors:b.levels.length,sourceArea:b.sourceArea,planningDays:b.totalDays,activities:b.tasks.length}));

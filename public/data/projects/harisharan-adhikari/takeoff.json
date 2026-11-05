@@ -143,7 +143,7 @@
     {
       "id": "HAR-04",
       "title": "Grid dimensions do not close",
-      "detail": "Top overall is labeled 11284 mm, while 5722 + 5115 = 10837 mm. Bottom bays give 5722 + 5662 = 11384 mm. Intermediate right-grid offsets are scaled from PDF vectors, not surveyed or fully dimensioned. No value has been silently corrected."
+      "detail": "Width datum needs reconciliation: ARC bottom outer width 11834 equals 5722 + 5662 + 450 mm column faces. Top outer width 11284 is within 3 mm of 5722 + 5115 + 450 = 11287. Therefore the earlier apparent 447 mm discrepancy may be an outer-face versus centreline comparison, not a missing bay. STR overall dimension datum and intermediate PDF-scaled positions still require confirmation."
     },
     {
       "id": "HAR-05",

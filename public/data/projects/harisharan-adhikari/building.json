@@ -1,0 +1,3385 @@
+{
+  "schema": "jp-cad://harisharan-building-workspace/1",
+  "revision": "R000002",
+  "issueForConstruction": false,
+  "sourceAuthority": "HAR-SRC-ARC-001 / HAR-SRC-STR-001 / HAR-SRC-RPT-001",
+  "levels": [
+    {
+      "id": "ground",
+      "name": "Ground floor",
+      "elevation": 0,
+      "sourceArea": 297.84,
+      "walls": [
+        {
+          "id": "ground-W001",
+          "a": [
+            11.18369,
+            20.29767
+          ],
+          "b": [
+            11.409,
+            15.25202
+          ],
+          "thickness": 0.2479,
+          "source": "ARC-03 native PDF wall-face pair 0/13",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W002",
+          "a": [
+            11.48369,
+            4.77415
+          ],
+          "b": [
+            11.48369,
+            0.22386
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 1/19",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W003",
+          "a": [
+            -0.10002,
+            19.77773
+          ],
+          "b": [
+            -0.10002,
+            15.25284
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 2/29",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W004",
+          "a": [
+            -0.10002,
+            15.1163
+          ],
+          "b": [
+            -0.10002,
+            10.43582
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 3/27",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W005",
+          "a": [
+            -0.10002,
+            10.25165
+          ],
+          "b": [
+            -0.10002,
+            5.25998
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 4/25",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W006",
+          "a": [
+            -0.10002,
+            4.9107
+          ],
+          "b": [
+            -0.10002,
+            0.22386
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 5/23",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W007",
+          "a": [
+            11.05978,
+            25.1171
+          ],
+          "b": [
+            -0.22545,
+            25.1171
+          ],
+          "thickness": 0.2255,
+          "source": "ARC-03 native PDF wall-face pair 7/9",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W008",
+          "a": [
+            10.9602,
+            24.78518
+          ],
+          "b": [
+            11.18293,
+            20.29866
+          ],
+          "thickness": 0.2494,
+          "source": "ARC-03 native PDF wall-face pair 10/11",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W009",
+          "a": [
+            11.40898,
+            15.25413
+          ],
+          "b": [
+            11.48519,
+            10.25294
+          ],
+          "thickness": 0.2479,
+          "source": "ARC-03 native PDF wall-face pair 14/15",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W010",
+          "a": [
+            11.50909,
+            9.77535
+          ],
+          "b": [
+            11.50909,
+            5.25998
+          ],
+          "thickness": 0.2,
+          "source": "ARC-03 native PDF wall-face pair 16/35",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W011",
+          "a": [
+            11.60912,
+            -0.11273
+          ],
+          "b": [
+            -0.22545,
+            -0.11273
+          ],
+          "thickness": 0.2223,
+          "source": "ARC-03 native PDF wall-face pair 20/21",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W012",
+          "a": [
+            -0.10002,
+            20.25404
+          ],
+          "b": [
+            -0.10002,
+            24.77893
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 30/31",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W013",
+          "a": [
+            11.16139,
+            10.0516
+          ],
+          "b": [
+            9.94205,
+            10.0516
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 33/42",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W014",
+          "a": [
+            11.09153,
+            15.08137
+          ],
+          "b": [
+            7.95428,
+            15.08137
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 36/39",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W015",
+          "a": [
+            3.21346,
+            15.17664
+          ],
+          "b": [
+            1.37493,
+            15.17664
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 44/57",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W016",
+          "a": [
+            3.21361,
+            9.84658
+          ],
+          "b": [
+            0.02554,
+            9.84051
+          ],
+          "thickness": 0.1494,
+          "source": "ARC-03 native PDF wall-face pair 45/46",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W017",
+          "a": [
+            3.28808,
+            15.10043
+          ],
+          "b": [
+            3.28808,
+            13.61118
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 47/49",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W018",
+          "a": [
+            3.28808,
+            12.51251
+          ],
+          "b": [
+            3.28808,
+            10.92165
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 48/50",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W019",
+          "a": [
+            3.21346,
+            12.58792
+          ],
+          "b": [
+            1.37493,
+            12.58792
+          ],
+          "thickness": 0.1508,
+          "source": "ARC-03 native PDF wall-face pair 51/55",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W020",
+          "a": [
+            1.22548,
+            12.58792
+          ],
+          "b": [
+            0.0256,
+            12.5911
+          ],
+          "thickness": 0.1508,
+          "source": "ARC-03 native PDF wall-face pair 52/56",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W021",
+          "a": [
+            1.30031,
+            9.91824
+          ],
+          "b": [
+            1.30031,
+            10.39772
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 61/64",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W022",
+          "a": [
+            1.22569,
+            13.88268
+          ],
+          "b": [
+            0.0254,
+            13.88268
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 67/68",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W023",
+          "a": [
+            1.22569,
+            11.22172
+          ],
+          "b": [
+            0.0254,
+            11.22172
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 69/70",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W024",
+          "a": [
+            8.45122,
+            15.15758
+          ],
+          "b": [
+            8.45122,
+            16.09114
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 81/83",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W025",
+          "a": [
+            8.52592,
+            16.16564
+          ],
+          "b": [
+            11.24069,
+            16.16263
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 82/84",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W026",
+          "a": [
+            0.0254,
+            17.98842
+          ],
+          "b": [
+            0.92403,
+            17.98842
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 85/86",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "ground-W027",
+          "a": [
+            1.00024,
+            17.9138
+          ],
+          "b": [
+            1.00024,
+            15.25284
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 87/88",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        }
+      ],
+      "windows": [
+        {
+          "id": "ground-GL001",
+          "a": [
+            0.22545112725588468,
+            -0.12860333622273717
+          ],
+          "b": [
+            5.4965486143326,
+            -0.12860333622273717
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL002",
+          "a": [
+            0.22545112725588468,
+            25.09328769030414
+          ],
+          "b": [
+            5.4965486143326,
+            25.09328769030414
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL003",
+          "a": [
+            5.947450868844369,
+            -0.11907764170904579
+          ],
+          "b": [
+            11.161390958694984,
+            -0.11907764170904579
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL004",
+          "a": [
+            5.947450868844369,
+            25.09328769030414
+          ],
+          "b": [
+            10.634283148073683,
+            25.09328769030414
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL005",
+          "a": [
+            2.3592906820655,
+            10.000798621761591
+          ],
+          "b": [
+            3.2579199595844752,
+            10.000798621761591
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL006",
+          "a": [
+            2.451378855985754,
+            12.782414474797788
+          ],
+          "b": [
+            3.261095191089039,
+            12.782414474797788
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL007",
+          "a": [
+            1.2955461361652563,
+            13.760424539930856
+          ],
+          "b": [
+            0.958958676105687,
+            13.172984100578892
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL008",
+          "a": [
+            0.9399072870783042,
+            14.579668184619809
+          ],
+          "b": [
+            1.2764947471378734,
+            13.995401361700432
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "ground-GL009",
+          "a": [
+            0.9399072870783042,
+            10.524732815950305
+          ],
+          "b": [
+            1.2764947471378734,
+            11.108999638869681
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        }
+      ],
+      "sourceSvg": "source-ground.svg",
+      "source": "ARC-03",
+      "pairing": {
+        "pairedWallSegments": 27,
+        "unpairedWallFaces": 21,
+        "calibration": "A-B 5722 mm / 108.12 PDF points; local X and plan Z; no survey registration"
+      },
+      "originPdf": [
+        221.0400390625,
+        641.0299987792969
+      ]
+    },
+    {
+      "id": "first",
+      "name": "First floor",
+      "elevation": 3,
+      "sourceArea": 297.84,
+      "walls": [
+        {
+          "id": "first-W001",
+          "a": [
+            10.95551,
+            24.78545
+          ],
+          "b": [
+            11.17827,
+            20.64718
+          ],
+          "thickness": 0.2588,
+          "source": "ARC-03 native PDF wall-face pair 0/10",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W002",
+          "a": [
+            11.18369,
+            20.29767
+          ],
+          "b": [
+            11.409,
+            15.25202
+          ],
+          "thickness": 0.2479,
+          "source": "ARC-03 native PDF wall-face pair 1/12",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W003",
+          "a": [
+            11.50673,
+            10.00721
+          ],
+          "b": [
+            11.50985,
+            5.25992
+          ],
+          "thickness": 0.1985,
+          "source": "ARC-03 native PDF wall-face pair 2/33",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W004",
+          "a": [
+            11.48448,
+            4.9107
+          ],
+          "b": [
+            11.48448,
+            0.22386
+          ],
+          "thickness": 0.2493,
+          "source": "ARC-03 native PDF wall-face pair 3/18",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W005",
+          "a": [
+            -0.10002,
+            20.25404
+          ],
+          "b": [
+            -0.10002,
+            15.25284
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 4/28",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W006",
+          "a": [
+            -0.10002,
+            15.1163
+          ],
+          "b": [
+            -0.10002,
+            10.43582
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 5/26",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W007",
+          "a": [
+            -0.10002,
+            10.25165
+          ],
+          "b": [
+            -0.10002,
+            5.25998
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 6/24",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W008",
+          "a": [
+            -0.10002,
+            4.9107
+          ],
+          "b": [
+            -0.10002,
+            0.22386
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 7/22",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W009",
+          "a": [
+            11.40828,
+            15.25412
+          ],
+          "b": [
+            11.48448,
+            10.25357
+          ],
+          "thickness": 0.2493,
+          "source": "ARC-03 native PDF wall-face pair 13/14",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W010",
+          "a": [
+            11.50989,
+            10.25483
+          ],
+          "b": [
+            11.50989,
+            5.25998
+          ],
+          "thickness": 0.1985,
+          "source": "ARC-03 native PDF wall-face pair 15/16",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W011",
+          "a": [
+            11.60912,
+            -0.11273
+          ],
+          "b": [
+            -0.22545,
+            -0.11273
+          ],
+          "thickness": 0.2223,
+          "source": "ARC-03 native PDF wall-face pair 19/20",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W012",
+          "a": [
+            -0.10002,
+            20.25404
+          ],
+          "b": [
+            -0.10002,
+            24.77893
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 29/30",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W013",
+          "a": [
+            11.41225,
+            10.0516
+          ],
+          "b": [
+            9.94205,
+            10.0516
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 31/38",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W014",
+          "a": [
+            11.35509,
+            15.08137
+          ],
+          "b": [
+            7.95428,
+            15.08137
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 34/37",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W015",
+          "a": [
+            0.22545,
+            25.1044
+          ],
+          "b": [
+            10.61205,
+            25.1044
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-03 native PDF wall-face pair 40/41",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W016",
+          "a": [
+            3.21347,
+            15.17664
+          ],
+          "b": [
+            1.37493,
+            15.17664
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 44/57",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W017",
+          "a": [
+            3.21361,
+            9.84658
+          ],
+          "b": [
+            0.02555,
+            9.84051
+          ],
+          "thickness": 0.1494,
+          "source": "ARC-03 native PDF wall-face pair 45/46",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W018",
+          "a": [
+            3.28809,
+            15.10043
+          ],
+          "b": [
+            3.28809,
+            13.61118
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 47/49",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W019",
+          "a": [
+            3.28809,
+            12.51251
+          ],
+          "b": [
+            3.28809,
+            10.92165
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 48/50",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W020",
+          "a": [
+            3.21347,
+            12.58792
+          ],
+          "b": [
+            1.37493,
+            12.58792
+          ],
+          "thickness": 0.1508,
+          "source": "ARC-03 native PDF wall-face pair 51/55",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W021",
+          "a": [
+            1.22549,
+            12.58792
+          ],
+          "b": [
+            0.0256,
+            12.5911
+          ],
+          "thickness": 0.1508,
+          "source": "ARC-03 native PDF wall-face pair 52/56",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W022",
+          "a": [
+            1.30031,
+            9.91824
+          ],
+          "b": [
+            1.30031,
+            10.39772
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 61/64",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W023",
+          "a": [
+            1.22569,
+            13.88268
+          ],
+          "b": [
+            0.0254,
+            13.88268
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 67/68",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W024",
+          "a": [
+            1.22569,
+            11.22172
+          ],
+          "b": [
+            0.0254,
+            11.22172
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 69/70",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W025",
+          "a": [
+            8.45122,
+            15.15758
+          ],
+          "b": [
+            8.45122,
+            16.05621
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 81/83",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W026",
+          "a": [
+            8.52593,
+            16.13309
+          ],
+          "b": [
+            11.24069,
+            16.13008
+          ],
+          "thickness": 0.1507,
+          "source": "ARC-03 native PDF wall-face pair 82/84",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W027",
+          "a": [
+            0.0254,
+            17.98842
+          ],
+          "b": [
+            0.92403,
+            17.98842
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 85/86",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W028",
+          "a": [
+            1.00024,
+            17.9138
+          ],
+          "b": [
+            1.00024,
+            15.25284
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 87/88",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W029",
+          "a": [
+            -0.15083,
+            25.22983
+          ],
+          "b": [
+            -0.15083,
+            26.07765
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-03 native PDF wall-face pair 89/92",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W030",
+          "a": [
+            -0.07621,
+            26.15386
+          ],
+          "b": [
+            10.90736,
+            26.15386
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 90/93",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "first-W031",
+          "a": [
+            10.98357,
+            26.07765
+          ],
+          "b": [
+            10.98357,
+            25.22983
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-03 native PDF wall-face pair 91/94",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        }
+      ],
+      "windows": [
+        {
+          "id": "first-GL001",
+          "a": [
+            0.1746458081108881,
+            25.09328769030414
+          ],
+          "b": [
+            5.496546999260623,
+            25.09328769030414
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL002",
+          "a": [
+            0.2254495121839088,
+            -0.12860333622273717
+          ],
+          "b": [
+            5.496546999260623,
+            -0.12860333622273717
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL003",
+          "a": [
+            5.947449253772393,
+            -0.14447949374555616
+          ],
+          "b": [
+            11.161392573766959,
+            -0.14447949374555616
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL004",
+          "a": [
+            5.947449253772393,
+            25.09328769030414
+          ],
+          "b": [
+            10.61205491246976,
+            25.09328769030414
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL005",
+          "a": [
+            2.359292297137476,
+            10.000798621761591
+          ],
+          "b": [
+            3.257921574656451,
+            10.000798621761591
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL006",
+          "a": [
+            2.4513772409137777,
+            12.782414474797788
+          ],
+          "b": [
+            3.2610968061610146,
+            12.782414474797788
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL007",
+          "a": [
+            1.295547751237232,
+            13.760424539930856
+          ],
+          "b": [
+            0.9589602911776629,
+            13.172984100578892
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL008",
+          "a": [
+            0.9399056720063284,
+            14.579668184619809
+          ],
+          "b": [
+            1.2764963622098493,
+            13.995401361700432
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "first-GL009",
+          "a": [
+            0.9399056720063284,
+            10.524732815950305
+          ],
+          "b": [
+            1.2764963622098493,
+            11.108999638869681
+          ],
+          "thickness": 0.05,
+          "source": "ARC-03 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        }
+      ],
+      "sourceSvg": "source-first.svg",
+      "source": "ARC-03",
+      "pairing": {
+        "pairedWallSegments": 31,
+        "unpairedWallFaces": 19,
+        "calibration": "A-B 5722 mm / 108.12 PDF points; local X and plan Z; no survey registration"
+      },
+      "originPdf": [
+        610.9800109863281,
+        641.0299987792969
+      ]
+    },
+    {
+      "id": "second",
+      "name": "Second floor",
+      "elevation": 6,
+      "sourceArea": 297.84,
+      "walls": [
+        {
+          "id": "second-W001",
+          "a": [
+            10.9555,
+            24.78395
+          ],
+          "b": [
+            11.17827,
+            20.64551
+          ],
+          "thickness": 0.2619,
+          "source": "ARC-04 native PDF wall-face pair 0/9",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W002",
+          "a": [
+            11.18362,
+            20.29765
+          ],
+          "b": [
+            11.40907,
+            15.252
+          ],
+          "thickness": 0.2511,
+          "source": "ARC-04 native PDF wall-face pair 1/11",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W003",
+          "a": [
+            11.50673,
+            10.00562
+          ],
+          "b": [
+            11.50985,
+            5.25833
+          ],
+          "thickness": 0.1954,
+          "source": "ARC-04 native PDF wall-face pair 2/32",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W004",
+          "a": [
+            11.48144,
+            4.90903
+          ],
+          "b": [
+            11.48432,
+            0.22553
+          ],
+          "thickness": 0.2522,
+          "source": "ARC-04 native PDF wall-face pair 3/17",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W005",
+          "a": [
+            -0.10002,
+            20.25245
+          ],
+          "b": [
+            -0.10002,
+            15.25126
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 4/27",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W006",
+          "a": [
+            -0.10002,
+            15.11789
+          ],
+          "b": [
+            -0.10002,
+            10.43741
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 5/25",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W007",
+          "a": [
+            -0.10002,
+            10.25006
+          ],
+          "b": [
+            -0.10002,
+            5.25839
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 6/23",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W008",
+          "a": [
+            11.4099,
+            15.2531
+          ],
+          "b": [
+            11.48288,
+            10.25504
+          ],
+          "thickness": 0.2493,
+          "source": "ARC-04 native PDF wall-face pair 12/13",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W009",
+          "a": [
+            11.50909,
+            10.25641
+          ],
+          "b": [
+            11.50909,
+            5.25839
+          ],
+          "thickness": 0.1969,
+          "source": "ARC-04 native PDF wall-face pair 14/15",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W010",
+          "a": [
+            11.60753,
+            -0.11273
+          ],
+          "b": [
+            -0.22386,
+            -0.11273
+          ],
+          "thickness": 0.2254,
+          "source": "ARC-04 native PDF wall-face pair 18/19",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W011",
+          "a": [
+            -0.11273,
+            0.22545
+          ],
+          "b": [
+            -0.11273,
+            5.24887
+          ],
+          "thickness": 0.2223,
+          "source": "ARC-04 native PDF wall-face pair 20/21",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W012",
+          "a": [
+            -0.10002,
+            20.25245
+          ],
+          "b": [
+            -0.10002,
+            24.77734
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 28/29",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W013",
+          "a": [
+            11.41066,
+            10.0516
+          ],
+          "b": [
+            9.94047,
+            10.0516
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 30/37",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W014",
+          "a": [
+            11.35668,
+            15.08138
+          ],
+          "b": [
+            7.95587,
+            15.08138
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 33/36",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W015",
+          "a": [
+            0.22386,
+            25.10281
+          ],
+          "b": [
+            5.49814,
+            25.10281
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-04 native PDF wall-face pair 39/40",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W016",
+          "a": [
+            3.21188,
+            15.17664
+          ],
+          "b": [
+            1.37334,
+            15.17664
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 44/57",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W017",
+          "a": [
+            3.21209,
+            9.84806
+          ],
+          "b": [
+            0.02403,
+            9.83896
+          ],
+          "thickness": 0.1495,
+          "source": "ARC-04 native PDF wall-face pair 45/46",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W018",
+          "a": [
+            3.28808,
+            15.10201
+          ],
+          "b": [
+            3.28808,
+            13.61277
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 47/49",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W019",
+          "a": [
+            3.28808,
+            12.51092
+          ],
+          "b": [
+            3.28808,
+            10.92324
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 48/50",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W020",
+          "a": [
+            3.21175,
+            12.58554
+          ],
+          "b": [
+            1.37347,
+            12.58872
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 51/55",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W021",
+          "a": [
+            1.2241,
+            12.58872
+          ],
+          "b": [
+            0.02381,
+            12.58872
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 52/56",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W022",
+          "a": [
+            1.29872,
+            9.91665
+          ],
+          "b": [
+            1.29872,
+            10.39613
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 61/64",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W023",
+          "a": [
+            1.2241,
+            13.88268
+          ],
+          "b": [
+            0.02381,
+            13.88268
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 67/68",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W024",
+          "a": [
+            1.2241,
+            11.22172
+          ],
+          "b": [
+            0.02381,
+            11.22172
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 69/70",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W025",
+          "a": [
+            8.45122,
+            15.156
+          ],
+          "b": [
+            8.45122,
+            16.0578
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 81/83",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W026",
+          "a": [
+            8.52751,
+            16.13229
+          ],
+          "b": [
+            11.23911,
+            16.12929
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 82/84",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W027",
+          "a": [
+            0.02381,
+            17.98683
+          ],
+          "b": [
+            0.92562,
+            17.98683
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 85/86",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W028",
+          "a": [
+            1.00024,
+            17.91221
+          ],
+          "b": [
+            1.00024,
+            15.25126
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 87/88",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W029",
+          "a": [
+            -0.14924,
+            25.22824
+          ],
+          "b": [
+            -0.14924,
+            26.07924
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 89/92",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W030",
+          "a": [
+            -0.07462,
+            26.15386
+          ],
+          "b": [
+            10.90895,
+            26.15386
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 90/93",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "second-W031",
+          "a": [
+            10.98516,
+            26.07924
+          ],
+          "b": [
+            10.98516,
+            25.26952
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 91/94",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        }
+      ],
+      "windows": [
+        {
+          "id": "second-GL001",
+          "a": [
+            0.22386351150360276,
+            -0.1301893369030432
+          ],
+          "b": [
+            5.5203660807607795,
+            -0.1301893369030432
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL002",
+          "a": [
+            0.22386351150360276,
+            25.094873690984446
+          ],
+          "b": [
+            5.4981362300848815,
+            25.094873690984446
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL003",
+          "a": [
+            5.92363663256014,
+            -0.14606549442586217
+          ],
+          "b": [
+            11.159806573086653,
+            -0.14606549442586217
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL004",
+          "a": [
+            5.945863253092087,
+            25.094873690984446
+          ],
+          "b": [
+            10.613644143294017,
+            25.094873690984446
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL005",
+          "a": [
+            2.3577062964571702,
+            10.002386237513873
+          ],
+          "b": [
+            3.259507575336757,
+            10.002386237513873
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL006",
+          "a": [
+            2.4497912402334716,
+            12.78400209055007
+          ],
+          "b": [
+            3.2626828068413207,
+            12.78400209055007
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL007",
+          "a": [
+            0.9383196713260223,
+            14.581255800372091
+          ],
+          "b": [
+            1.2780823628901554,
+            13.99381374594815
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL008",
+          "a": [
+            0.9383196713260223,
+            13.184097410844865
+          ],
+          "b": [
+            1.2780823628901554,
+            13.768364233764242
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "second-GL009",
+          "a": [
+            0.9383196713260223,
+            10.526320431702587
+          ],
+          "b": [
+            1.2780823628901554,
+            11.110587254621963
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        }
+      ],
+      "sourceSvg": "source-second.svg",
+      "source": "ARC-04",
+      "pairing": {
+        "pairedWallSegments": 31,
+        "unpairedWallFaces": 19,
+        "calibration": "A-B 5722 mm / 108.12 PDF points; local X and plan Z; no survey registration"
+      },
+      "originPdf": [
+        234.99002075195312,
+        637.1600036621094
+      ]
+    },
+    {
+      "id": "third",
+      "name": "Third floor",
+      "elevation": 9,
+      "sourceArea": 297.84,
+      "walls": [
+        {
+          "id": "third-W001",
+          "a": [
+            10.9555,
+            24.78395
+          ],
+          "b": [
+            11.17827,
+            20.64551
+          ],
+          "thickness": 0.2619,
+          "source": "ARC-04 native PDF wall-face pair 0/10",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W002",
+          "a": [
+            11.18362,
+            20.29765
+          ],
+          "b": [
+            11.40907,
+            15.252
+          ],
+          "thickness": 0.2511,
+          "source": "ARC-04 native PDF wall-face pair 1/12",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W003",
+          "a": [
+            11.50673,
+            10.00562
+          ],
+          "b": [
+            11.50985,
+            5.25833
+          ],
+          "thickness": 0.1954,
+          "source": "ARC-04 native PDF wall-face pair 2/33",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W004",
+          "a": [
+            11.48144,
+            4.90903
+          ],
+          "b": [
+            11.48432,
+            0.22553
+          ],
+          "thickness": 0.2522,
+          "source": "ARC-04 native PDF wall-face pair 3/18",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W005",
+          "a": [
+            -0.10002,
+            20.25245
+          ],
+          "b": [
+            -0.10002,
+            15.25126
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 4/28",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W006",
+          "a": [
+            -0.10002,
+            15.11789
+          ],
+          "b": [
+            -0.10002,
+            10.43741
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 5/26",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W007",
+          "a": [
+            -0.10002,
+            10.25006
+          ],
+          "b": [
+            -0.10002,
+            5.25839
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 6/24",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W008",
+          "a": [
+            -0.10002,
+            4.90911
+          ],
+          "b": [
+            -0.10002,
+            0.22545
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 7/22",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W009",
+          "a": [
+            11.4099,
+            15.2531
+          ],
+          "b": [
+            11.48288,
+            10.25504
+          ],
+          "thickness": 0.2493,
+          "source": "ARC-04 native PDF wall-face pair 13/14",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W010",
+          "a": [
+            11.50909,
+            10.25641
+          ],
+          "b": [
+            11.50909,
+            5.25839
+          ],
+          "thickness": 0.1969,
+          "source": "ARC-04 native PDF wall-face pair 15/16",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W011",
+          "a": [
+            11.61071,
+            -0.11273
+          ],
+          "b": [
+            -0.22386,
+            -0.11273
+          ],
+          "thickness": 0.2254,
+          "source": "ARC-04 native PDF wall-face pair 19/20",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W012",
+          "a": [
+            -0.10002,
+            20.25245
+          ],
+          "b": [
+            -0.10002,
+            24.77734
+          ],
+          "thickness": 0.2477,
+          "source": "ARC-04 native PDF wall-face pair 29/30",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W013",
+          "a": [
+            11.41066,
+            10.0516
+          ],
+          "b": [
+            9.94047,
+            10.0516
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 31/38",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W014",
+          "a": [
+            11.35668,
+            15.08138
+          ],
+          "b": [
+            7.95587,
+            15.08138
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 34/37",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W015",
+          "a": [
+            -0.22386,
+            25.11551
+          ],
+          "b": [
+            11.06137,
+            25.11551
+          ],
+          "thickness": 0.2255,
+          "source": "ARC-04 native PDF wall-face pair 40/41",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W016",
+          "a": [
+            3.21188,
+            15.17664
+          ],
+          "b": [
+            1.37334,
+            15.17664
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 44/57",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W017",
+          "a": [
+            3.21209,
+            9.84806
+          ],
+          "b": [
+            0.02403,
+            9.83896
+          ],
+          "thickness": 0.1495,
+          "source": "ARC-04 native PDF wall-face pair 45/46",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W018",
+          "a": [
+            3.28808,
+            15.10201
+          ],
+          "b": [
+            3.28808,
+            13.61277
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 47/49",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W019",
+          "a": [
+            3.28808,
+            12.51092
+          ],
+          "b": [
+            3.28808,
+            10.92324
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 48/50",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W020",
+          "a": [
+            3.21175,
+            12.58554
+          ],
+          "b": [
+            1.37347,
+            12.58872
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 51/55",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W021",
+          "a": [
+            1.2241,
+            12.58872
+          ],
+          "b": [
+            0.02381,
+            12.58872
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 52/56",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W022",
+          "a": [
+            1.29872,
+            9.91665
+          ],
+          "b": [
+            1.29872,
+            10.39613
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 61/64",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W023",
+          "a": [
+            1.2241,
+            13.88268
+          ],
+          "b": [
+            0.02381,
+            13.88268
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 67/68",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W024",
+          "a": [
+            1.2241,
+            11.22172
+          ],
+          "b": [
+            0.02381,
+            11.22172
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 69/70",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W025",
+          "a": [
+            8.45122,
+            15.156
+          ],
+          "b": [
+            8.45122,
+            16.0578
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 81/83",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W026",
+          "a": [
+            8.52751,
+            16.13229
+          ],
+          "b": [
+            11.23911,
+            16.12929
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 82/84",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W027",
+          "a": [
+            0.02381,
+            17.98683
+          ],
+          "b": [
+            0.92562,
+            17.98683
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 85/86",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W028",
+          "a": [
+            1.00024,
+            17.91221
+          ],
+          "b": [
+            1.00024,
+            15.25126
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 87/88",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W029",
+          "a": [
+            -0.14924,
+            25.25364
+          ],
+          "b": [
+            -0.14924,
+            26.10464
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 89/92",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W030",
+          "a": [
+            -0.07462,
+            26.17926
+          ],
+          "b": [
+            10.90895,
+            26.17926
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-04 native PDF wall-face pair 90/93",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "third-W031",
+          "a": [
+            10.98516,
+            26.10464
+          ],
+          "b": [
+            10.98516,
+            25.25364
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-04 native PDF wall-face pair 91/94",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        }
+      ],
+      "windows": [
+        {
+          "id": "third-GL001",
+          "a": [
+            0.22386351150360276,
+            -0.1301893369030432
+          ],
+          "b": [
+            5.4981362300848815,
+            -0.1301893369030432
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL002",
+          "a": [
+            0.22386351150360276,
+            25.094873690984446
+          ],
+          "b": [
+            5.4981362300848815,
+            25.094873690984446
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL003",
+          "a": [
+            5.945863253092087,
+            -0.12066364238935182
+          ],
+          "b": [
+            11.159806573086653,
+            -0.12066364238935182
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL004",
+          "a": [
+            5.923633402416188,
+            25.12027877316491
+          ],
+          "b": [
+            10.613640913150066,
+            25.12027877316491
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL005",
+          "a": [
+            2.3577062964571702,
+            10.002386237513873
+          ],
+          "b": [
+            3.259507575336757,
+            10.002386237513873
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL006",
+          "a": [
+            2.4497912402334716,
+            12.78400209055007
+          ],
+          "b": [
+            3.2626828068413207,
+            12.78400209055007
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL007",
+          "a": [
+            0.9383196713260223,
+            14.581255800372091
+          ],
+          "b": [
+            1.2780823628901554,
+            13.99381374594815
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL008",
+          "a": [
+            0.9383196713260223,
+            13.184097410844865
+          ],
+          "b": [
+            1.2780823628901554,
+            13.768364233764242
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "third-GL009",
+          "a": [
+            0.9383196713260223,
+            10.526320431702587
+          ],
+          "b": [
+            1.2780823628901554,
+            11.110587254621963
+          ],
+          "thickness": 0.05,
+          "source": "ARC-04 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        }
+      ],
+      "sourceSvg": "source-third.svg",
+      "source": "ARC-04",
+      "pairing": {
+        "pairedWallSegments": 31,
+        "unpairedWallFaces": 19,
+        "calibration": "A-B 5722 mm / 108.12 PDF points; local X and plan Z; no survey registration"
+      },
+      "originPdf": [
+        624.9300231933594,
+        637.1600036621094
+      ]
+    },
+    {
+      "id": "fourth",
+      "name": "Fourth floor residence",
+      "elevation": 12,
+      "sourceArea": 179.91,
+      "walls": [
+        {
+          "id": "fourth-W001",
+          "a": [
+            10.96024,
+            24.78388
+          ],
+          "b": [
+            11.18402,
+            20.68991
+          ],
+          "thickness": 0.26,
+          "source": "ARC-05 native PDF wall-face pair 0/10",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W002",
+          "a": [
+            11.18845,
+            20.34061
+          ],
+          "b": [
+            11.41376,
+            15.29496
+          ],
+          "thickness": 0.2511,
+          "source": "ARC-05 native PDF wall-face pair 1/12",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W003",
+          "a": [
+            -0.09685,
+            20.29691
+          ],
+          "b": [
+            -0.09685,
+            15.29571
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 2/24",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W004",
+          "a": [
+            -0.09685,
+            15.15917
+          ],
+          "b": [
+            -0.09685,
+            10.47869
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 3/22",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W005",
+          "a": [
+            -0.09685,
+            10.29452
+          ],
+          "b": [
+            -0.09685,
+            8.79257
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 4/20",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W006",
+          "a": [
+            11.41439,
+            15.29707
+          ],
+          "b": [
+            11.48742,
+            10.29587
+          ],
+          "thickness": 0.2498,
+          "source": "ARC-05 native PDF wall-face pair 13/14",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W007",
+          "a": [
+            11.51386,
+            10.2977
+          ],
+          "b": [
+            11.51386,
+            8.56712
+          ],
+          "thickness": 0.1969,
+          "source": "ARC-05 native PDF wall-face pair 15/16",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W008",
+          "a": [
+            -0.09685,
+            8.79257
+          ],
+          "b": [
+            -0.09685,
+            9.79281
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 19/133",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W009",
+          "a": [
+            -0.09685,
+            15.29571
+          ],
+          "b": [
+            -0.09685,
+            18.10591
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 23/167",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W010",
+          "a": [
+            -0.09685,
+            20.29691
+          ],
+          "b": [
+            -0.09685,
+            24.77734
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 25/26",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W011",
+          "a": [
+            3.60562,
+            19.94444
+          ],
+          "b": [
+            3.60562,
+            25.00279
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 27/28",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W012",
+          "a": [
+            7.96063,
+            10.09447
+          ],
+          "b": [
+            10.63746,
+            10.09447
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 29/33",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W013",
+          "a": [
+            5.9284,
+            15.12424
+          ],
+          "b": [
+            11.35827,
+            15.12424
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 31/32",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W014",
+          "a": [
+            5.47115,
+            25.10281
+          ],
+          "b": [
+            6.04589,
+            25.10281
+          ],
+          "thickness": 0.2509,
+          "source": "ARC-05 native PDF wall-face pair 37/39",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W015",
+          "a": [
+            5.5283,
+            10.15163
+          ],
+          "b": [
+            4.35342,
+            10.15163
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 40/42",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W016",
+          "a": [
+            1.3527,
+            10.15163
+          ],
+          "b": [
+            0.02858,
+            10.15163
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 41/43",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W017",
+          "a": [
+            0.17782,
+            15.2195
+          ],
+          "b": [
+            3.78821,
+            15.2195
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 48/49",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W018",
+          "a": [
+            0.17782,
+            19.86982
+          ],
+          "b": [
+            0.62872,
+            19.86982
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 59/63",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W019",
+          "a": [
+            1.37811,
+            19.86982
+          ],
+          "b": [
+            2.61332,
+            19.86982
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 60/64",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W020",
+          "a": [
+            3.68025,
+            19.86982
+          ],
+          "b": [
+            5.5283,
+            19.86982
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 61/65",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W021",
+          "a": [
+            8.23689,
+            19.86982
+          ],
+          "b": [
+            10.91372,
+            19.86982
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 62/66",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W022",
+          "a": [
+            7.24776,
+            19.7952
+          ],
+          "b": [
+            7.24776,
+            25.00279
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 67/68",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W023",
+          "a": [
+            4.42963,
+            21.37018
+          ],
+          "b": [
+            5.77598,
+            21.37018
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 75/77",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W024",
+          "a": [
+            5.85219,
+            21.29397
+          ],
+          "b": [
+            5.85219,
+            20.29691
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 76/78",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W025",
+          "a": [
+            0.25562,
+            25.22824
+          ],
+          "b": [
+            0.25562,
+            26.14592
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 79/82",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W026",
+          "a": [
+            0.33024,
+            26.22054
+          ],
+          "b": [
+            3.37859,
+            26.22054
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 80/83",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W027",
+          "a": [
+            3.61039,
+            26.29516
+          ],
+          "b": [
+            3.61039,
+            25.22824
+          ],
+          "thickness": 0.1588,
+          "source": "ARC-05 native PDF wall-face pair 81/85",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W028",
+          "a": [
+            3.83901,
+            26.22054
+          ],
+          "b": [
+            7.02072,
+            26.22054
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 86/89",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W029",
+          "a": [
+            7.25094,
+            26.29516
+          ],
+          "b": [
+            7.25094,
+            25.22824
+          ],
+          "thickness": 0.1556,
+          "source": "ARC-05 native PDF wall-face pair 87/91",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W030",
+          "a": [
+            7.48115,
+            26.22054
+          ],
+          "b": [
+            10.51362,
+            26.22054
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 92/95",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W031",
+          "a": [
+            10.58983,
+            26.14592
+          ],
+          "b": [
+            10.58983,
+            25.22824
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 93/96",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W032",
+          "a": [
+            8.53378,
+            19.94444
+          ],
+          "b": [
+            8.53378,
+            21.29397
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 116/118",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W033",
+          "a": [
+            8.6084,
+            21.37018
+          ],
+          "b": [
+            10.25641,
+            21.37018
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 117/119",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W034",
+          "a": [
+            8.52902,
+            16.20704
+          ],
+          "b": [
+            9.08788,
+            16.20704
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 120/122",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W035",
+          "a": [
+            10.68827,
+            16.20545
+          ],
+          "b": [
+            11.24395,
+            16.20545
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 121/123",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W036",
+          "a": [
+            1.53053,
+            18.0297
+          ],
+          "b": [
+            0.02858,
+            18.0297
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 124/129",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W037",
+          "a": [
+            2.52441,
+            18.10591
+          ],
+          "b": [
+            2.52441,
+            19.7952
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 125/126",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W038",
+          "a": [
+            2.52441,
+            17.95349
+          ],
+          "b": [
+            2.52441,
+            17.36605
+          ],
+          "thickness": 0.1524,
+          "source": "ARC-05 native PDF wall-face pair 128/130",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W039",
+          "a": [
+            1.27808,
+            8.94499
+          ],
+          "b": [
+            1.27808,
+            10.14528
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 134/135",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W040",
+          "a": [
+            11.41542,
+            8.60523
+          ],
+          "b": [
+            10.20244,
+            8.60523
+          ],
+          "thickness": 0.0762,
+          "source": "ARC-05 native PDF wall-face pair 146/154",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W041",
+          "a": [
+            1.005,
+            15.29571
+          ],
+          "b": [
+            1.005,
+            15.95619
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 168/170",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W042",
+          "a": [
+            1.005,
+            16.61349
+          ],
+          "b": [
+            1.005,
+            17.95349
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 169/172",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        },
+        {
+          "id": "fourth-W043",
+          "a": [
+            2.61015,
+            16.53887
+          ],
+          "b": [
+            1.07962,
+            16.53887
+          ],
+          "thickness": 0.1492,
+          "source": "ARC-05 native PDF wall-face pair 171/173",
+          "status": "PDF_VECTOR_CALIBRATED_CANDIDATE"
+        }
+      ],
+      "windows": [
+        {
+          "id": "fourth-GL001",
+          "a": [
+            1.3527035333913562,
+            10.075419792262792
+          ],
+          "b": [
+            4.353420050674309,
+            10.075419792262792
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL002",
+          "a": [
+            5.928399479816986,
+            11.694854077541338
+          ],
+          "b": [
+            5.928399479816986,
+            14.695568979752315
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL003",
+          "a": [
+            10.431061871493696,
+            25.12027877316491
+          ],
+          "b": [
+            7.55100738152812,
+            25.12027877316491
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL004",
+          "a": [
+            10.202435512733247,
+            10.170679967543657
+          ],
+          "b": [
+            8.10034504282532,
+            10.170679967543657
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL005",
+          "a": [
+            3.226167644538837,
+            25.002788747208143
+          ],
+          "b": [
+            1.4257370881402753,
+            25.002788747208143
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL006",
+          "a": [
+            9.087884032616032,
+            16.283249334913247
+          ],
+          "b": [
+            10.688265313795219,
+            16.280074103408683
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL007",
+          "a": [
+            5.4711467622960885,
+            25.22823987446403
+          ],
+          "b": [
+            3.8707654811169014,
+            25.22823987446403
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL008",
+          "a": [
+            6.1951286166322,
+            15.04803421240668
+          ],
+          "b": [
+            7.395414577516591,
+            15.04803421240668
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL009",
+          "a": [
+            6.045886275629798,
+            24.977386895171634
+          ],
+          "b": [
+            7.046126191438766,
+            24.977386895171634
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL010",
+          "a": [
+            2.4037503834172966,
+            10.180207277129325
+          ],
+          "b": [
+            1.4130361621220202,
+            10.180207277129325
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL011",
+          "a": [
+            10.431061871493696,
+            25.148855856705982
+          ],
+          "b": [
+            9.44034765019842,
+            25.148855856705982
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL012",
+          "a": [
+            5.820438378517865,
+            14.635237966093628
+          ],
+          "b": [
+            5.820438378517865,
+            13.644525359870327
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL013",
+          "a": [
+            5.820438378517865,
+            12.745897697423327
+          ],
+          "b": [
+            5.820438378517865,
+            11.755185091200026
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL014",
+          "a": [
+            4.293087421943645,
+            10.180207277129325
+          ],
+          "b": [
+            3.30237643079232,
+            10.180207277129325
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL015",
+          "a": [
+            8.538546371318834,
+            25.148855856705982
+          ],
+          "b": [
+            7.55100738152812,
+            25.148855856705982
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL016",
+          "a": [
+            2.3084869779924793,
+            25.15520631971511
+          ],
+          "b": [
+            3.226167644538837,
+            25.15520631971511
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL017",
+          "a": [
+            1.4606678648344287,
+            25.05359568142512
+          ],
+          "b": [
+            2.343417754686633,
+            25.05359568142512
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL018",
+          "a": [
+            3.4706701608221047,
+            19.874583138124706
+          ],
+          "b": [
+            2.756214000999685,
+            20.287379384437756
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL019",
+          "a": [
+            7.112809283178557,
+            19.874583138124706
+          ],
+          "b": [
+            6.398353123356138,
+            20.287379384437756
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL020",
+          "a": [
+            8.081293653797935,
+            20.3096060049697
+          ],
+          "b": [
+            7.366837493975516,
+            19.89680975865665
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL021",
+          "a": [
+            8.52902067680514,
+            15.283011034176255
+          ],
+          "b": [
+            8.52902067680514,
+            16.08320167476585
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL022",
+          "a": [
+            3.9025177961625395,
+            25.15520631971511
+          ],
+          "b": [
+            4.686832279229314,
+            25.15520631971511
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL023",
+          "a": [
+            4.655079964183677,
+            25.05359568142512
+          ],
+          "b": [
+            5.436219215745887,
+            25.05359568142512
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL024",
+          "a": [
+            8.1416262825286,
+            10.062718866244538
+          ],
+          "b": [
+            8.837031053323637,
+            10.062718866244538
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL025",
+          "a": [
+            9.46574950223493,
+            10.062718866244538
+          ],
+          "b": [
+            10.157979041525403,
+            10.062718866244538
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL026",
+          "a": [
+            0.7557373995257006,
+            19.50941536438011
+          ],
+          "b": [
+            1.343177838877665,
+            19.849181286088193
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL027",
+          "a": [
+            10.948643987601306,
+            20.671598547209733
+          ],
+          "b": [
+            10.948643987601306,
+            21.347948698833438
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL028",
+          "a": [
+            3.7405745291418824,
+            20.671598547209733
+          ],
+          "b": [
+            3.7405745291418824,
+            21.347948698833438
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL029",
+          "a": [
+            2.165598330143157,
+            17.235859163081784
+          ],
+          "b": [
+            2.5021857902027262,
+            16.65159072509043
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL030",
+          "a": [
+            0.07938401775804661,
+            8.871958599873839
+          ],
+          "b": [
+            0.6636524557493988,
+            9.208546059933408
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL031",
+          "a": [
+            5.521953696513061,
+            10.996274075241738
+          ],
+          "b": [
+            5.842664999049812,
+            11.551962199548065
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL032",
+          "a": [
+            5.502902307485678,
+            10.83433080822108
+          ],
+          "b": [
+            5.823613610022429,
+            10.278642683914756
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        },
+        {
+          "id": "fourth-GL033",
+          "a": [
+            1.2034611923889544,
+            8.944992154622756
+          ],
+          "b": [
+            0.7779640200576472,
+            8.944992154622756
+          ],
+          "thickness": 0.05,
+          "source": "ARC-05 WINDOW layer trace",
+          "status": "PDF_VECTOR_TRACE_HEIGHT_SCENARIO"
+        }
+      ],
+      "sourceSvg": "source-fourth.svg",
+      "source": "ARC-05",
+      "pairing": {
+        "pairedWallSegments": 43,
+        "unpairedWallFaces": 26,
+        "calibration": "A-B 5722 mm / 108.12 PDF points; local X and plan Z; no survey registration"
+      },
+      "originPdf": [
+        247.3800048828125,
+        644.4200134277344
+      ]
+    }
+  ],
+  "roofSource": "source-roof.svg",
+  "floorToFloor": 3,
+  "slabThickness": 0.125,
+  "mainBeam": [
+    0.3,
+    0.55
+  ],
+  "secondaryBeam": [
+    0.3,
+    0.4
+  ],
+  "stair": {
+    "widthScenario": 1.1,
+    "riser": 0.15,
+    "tread": 0.3,
+    "waist": 0.17,
+    "source": "STR-12; tread/riser dimensions source-backed; waist note also says 150 mm; stair envelopes are coordination proxies"
+  },
+  "notes": [
+    "Named PDF wall layers are paired into calibrated wall centreline candidates. Original vector plans remain separately available for comparison.",
+    "Door openings are retained where wall-face pairs are interrupted; door leaves and frames are not semantically certified. Window trace heights are selectable scenarios.",
+    "Slab openings, lift/shear-wall foundations and reinforcing detail require accepted source registration. Gross floor/slab quantities are labeled accordingly.",
+    "No approved dates, crew sizes or productivity rates were supplied. Gantt uses editable planning assumptions and relative days; no scheduling-repository synchronization is claimed."
+  ]
+}
