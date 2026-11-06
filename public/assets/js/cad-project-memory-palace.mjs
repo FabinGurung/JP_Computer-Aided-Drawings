@@ -68,6 +68,14 @@ const chapters=[
   {name:'New upload onboarding',sub:[
    poster('Start from the empty dummy, not another building','<p>New-project steps: register a new stable logical ID; verify original files and permissions; identify jurisdiction/occupancy/ROW/datum; index real design editions; run controlled extraction; fill the 16 stage slots only when actual source evidence is available; run unit and browser QA; close technical HOLDs with an authorized professional. The dummy contains no reusable engineering numbers.</p>'),
    poster('Publication memory palace','<p><a href="'+esc(url('memory-wall/pages/'))+'">Open GitHub Pages / Actions memory wall ↗</a> for repository routes, tested builds, mobile/desktop navigation, release gates, rollback and privacy. <a href="'+esc(url('templates/project-workspace/'))+'">Open reusable project template ↗</a>.</p>')]}
+ ]},
+ {name:'Field capture and continuous site lessons',sections:[
+  {name:'Daily project evidence',sub:[
+   poster('Daily work-package observation','<p>Record site task IDs, levels/member marks, dated observations, actual measured differences, batch identity, source drawing revision and responsible reviewer. A daily activity entry is evidence, not automatically approved design or actual completed BOQ.</p>'),
+   poster('Photo and test custody','<p>Keep dated photographs, cube/compaction tests, rebar inspection sheets, site instructions and their original sources in permission-controlled project folders. Only authorized derived summaries may be displayed on public Pages.</p>')]},
+  {name:'Closing decisions and learning from practice',sub:[
+   poster('Keep engineering and financial registers separate','<p>Separate CAD takeoff, accepted BOQ, site progress, vendor bills, certified contractor running bills and paid transactions. Preserve each owner, source and revision; web navigation is not payment certification.</p>'),
+   poster('Promote a site lesson only after review','<p>Record the originating site, actual measured evidence, why assumptions differed, applicable code and responsible professional. Convert an observation into a reusable project memory rule only after documented technical review, never because one prior job happened to use it.</p>')]}
  ]}
 ];
 const app=document.getElementById('memory-app');
