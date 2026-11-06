@@ -46,3 +46,12 @@ V2 adds reusable MEP classification, source-linked route data, plot/building coo
 0.3.2 organizes project contents and edition definitions, separates drawing visibility from register filtering, includes every modeled type, adds ascending/descending sorting and group controls, and keeps 2D/register/export usable without WebGL. Project editions and document revision sequences stay independent.
 
 0.3.3 standardizes the four project entrypoints with edition-first chapters, shared phase and linked plan/model selection, distributed tools and truthful data availability. See [Project workspace standard 1.0](project-workspace-standard.md).
+
+0.3.3 remains the **AAD geometry/domain kernel** revision. The independent
+**project workspace presentation standard 1.1** adds a fifth chapter
+(Packages / Site Modules), four-sided navigation, source-status cards and the
+CAD-owned new-project template. See
+[Site package workspace guide](site-package-workspace-guide.md) and
+[Site package JSON Schema](site-package-workspace-template.v1.json).
+Original Narayani V02–M80 and other site sources remain immutable; package UI
+changes do not issue new design editions or construction approval.

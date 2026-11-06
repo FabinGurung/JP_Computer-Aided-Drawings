@@ -4,7 +4,7 @@ import crypto from 'node:crypto';
 import assert from 'node:assert/strict';
 import {PROJECTS,CHAPTERS} from '../../public/assets/js/project-workspace-config.mjs';
 import {CONSTRUCTION_STAGES,PROJECT_STAGE_EVIDENCE,availableConstructionStages,preferredConstructionStage,renderConstructionStages} from '../../public/assets/js/project-construction-stages.mjs';
-assert.equal(Object.keys(PROJECTS).length,4);assert.equal(CHAPTERS.length,4);
+assert.equal(Object.keys(PROJECTS).length,4);assert.equal(CHAPTERS.length,5);assert.deepEqual(CHAPTERS.map(c=>c[0]),['views','boq','gantt','packages','sources']);
 for(const [slug,c] of Object.entries(PROJECTS)){
  const page=fs.readFileSync('public/projects/'+slug+'/index.html','utf8');assert.match(page,new RegExp('data-project="'+slug+'"'));assert.match(page,/project-workspace\.mjs/);assert.match(page,/project-workspace\.css/);
  assert.equal(new Set(c.editions.map(e=>e.id)).size,c.editions.length);
@@ -49,8 +49,6 @@ for(const code of ['v02','v03','m40','m50','m60','m70','m80']){
  else assert.equal(meta.status,'FROZEN');
 }
 const stageWorkspace=fs.readFileSync('public/assets/js/project-workspace.mjs','utf8');
-assert.match(stageWorkspace,/data-stage-quick/);
-assert.match(stageWorkspace,/renderConstructionStages/);
-assert.match(stageWorkspace,/section==='stages'/);
+assert.match(stageWorkspace,/panel==='packages'/);assert.match(stageWorkspace,/renderPackages/);assert.match(stageWorkspace,/data-rail-package/);assert.match(stageWorkspace,/pw-inspector/);assert.match(stageWorkspace,/pw-dock/);assert.doesNotMatch(stageWorkspace,/groups\.find\(g=>g\.modules\)/);
 
 console.log('PROJECT_WORKSPACE_CONTRACT_PASS 4 projects, real edition snapshots, source links, preserved modules, stage workbenches preserved, no invented public geometry');

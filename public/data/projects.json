@@ -1,6 +1,6 @@
 {
   "schema": "a9-project-drawings://public-project-registry/0.2",
-  "generated_at_npt": "2026-11-05",
+  "generated_at_npt": "2026-11-06",
   "policy": "Public-safe project metadata only. A9-governed Google Drive remains engineering/project authority. Private Drive IDs, private source URLs, internal checkpoint links and unapproved contact details are excluded.",
   "projects": [
     {
@@ -10,14 +10,15 @@
       "organization": "Fishtail Builders",
       "location": "Pokhara, Nepal",
       "project_status": "GOVERNED ENGINEERING WORKSTREAM",
-      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
-      "summary": "Shared source-version workspace with linked floor/structural review views; frozen V02\u2013M80 work-package records preserved separately.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.1",
+      "summary": "Shared source-version workspace with linked floor/structural review views; frozen V02–M80 work-package records preserved separately. Site package cards are a distinct fifth chapter, with original source links and explicit admission status.",
       "href": "projects/narayani-parajuli/",
       "modules": [
         "Versions and chapters",
         "Linked 2D / 3D views",
         "Phase quantities / BOQ",
         "Programme / Gantt",
+        "Site packages / material workbenches",
         "Sources and records"
       ]
     },
@@ -25,18 +26,19 @@
       "project_id": "PRJ-000029",
       "project_code": "REB-002",
       "slug": "ramachandra-devkota",
-      "name": "14 One Storey House \u2014 Ramachandra Devkota",
+      "name": "14 One Storey House — Ramachandra Devkota",
       "organization": "Rohini Engineering and Builders",
       "location": "Ward 14, Pokhara",
       "project_status": "PLANNED",
-      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
-      "summary": "Shared REV02 source workspace, restricted estimate/state references and explicit pending states for public geometry, quantities and programme.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.1",
+      "summary": "Shared REV02 source workspace, restricted estimate/state references and explicit pending states for public geometry, quantities and programme. Site package cards are a distinct fifth chapter, with original source links and explicit admission status.",
       "href": "projects/ramachandra-devkota/",
       "modules": [
         "Versions and chapters",
         "Linked 2D / 3D views",
         "Phase quantities / BOQ",
         "Programme / Gantt",
+        "Site packages / material workbenches",
         "Sources and records"
       ]
     },
@@ -47,14 +49,15 @@
       "organization": "Rohini Engineering and Builders",
       "location": "Nepal",
       "project_status": "OPEN / NOT FROZEN / NOT FOR CONSTRUCTION",
-      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
-      "summary": "Shared version-first workspace with actual preserved v1 architecture and current v2 coordination, linked phase views and distributed tools. Existing source and engineering qualifications remain.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.1",
+      "summary": "Shared version-first workspace with actual preserved v1 architecture and current v2 coordination, linked phase views and distributed tools. Existing source and engineering qualifications remain. Site package cards are a distinct fifth chapter, with original source links and explicit admission status.",
       "href": "projects/ashok-adhikari/",
       "modules": [
         "Versions and chapters",
         "Linked 2D / 3D views",
         "Phase quantities / BOQ",
         "Programme / Gantt",
+        "Site packages / material workbenches",
         "Sources and records"
       ]
     },
@@ -63,16 +66,17 @@
       "slug": "harisharan-adhikari",
       "name": "Harisharan Adhikari",
       "organization": "Fishtail Builders",
-      "location": "Pokhara-12, Nepal \u00b7 drawing title block",
+      "location": "Pokhara-12, Nepal · drawing title block",
       "project_status": "PROVISIONAL TAKEOFF / ENGINEERING REVIEW REQUIRED",
-      "portal_status": "STANDARD PROJECT WORKSPACE 1.0",
-      "summary": "Shared phase workspace with simultaneous linked plan/model views, floor material summaries, component register and editable planning Gantt. Detailed plinth subpage preserved.",
+      "portal_status": "STANDARD PROJECT WORKSPACE 1.1",
+      "summary": "Shared phase workspace with simultaneous linked plan/model views, floor material summaries, component register and editable planning Gantt. Detailed plinth subpage preserved. Site package cards are a distinct fifth chapter, with original source links and explicit admission status.",
       "href": "projects/harisharan-adhikari/",
       "modules": [
         "Versions and chapters",
         "Linked 2D / 3D views",
         "Phase quantities / BOQ",
         "Programme / Gantt",
+        "Site packages / material workbenches",
         "Sources and records"
       ]
     }

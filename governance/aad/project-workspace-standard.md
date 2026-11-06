@@ -103,3 +103,46 @@ This navigation change introduces no design edition, source revision,
 engineering acceptance, new quantities, new schedule, cross-repository
 sync, or native Drive document revision. Engineering and privacy gates in
 AGENTS.md and the AAD domain template still apply.
+
+
+## Standard 1.1 — site package chapter and four-sided layout (2026-11-06)
+
+The navigation standard now uses **five independent chapters**, while keeping all prior
+project/design editions and source data intact:
+
+1. Views — synchronized 2D + 3D by floor and phase;
+2. Quantities / BOQ — quantities, source basis and component register;
+3. Programme / Gantt — qualified planning scenario / admitted programme;
+4. Packages / Site Modules — site-useful, source-linked material workbenches;
+5. Sources & records — drawing sources, document controls, assumptions and history.
+
+The previous construction-stage subsection under Views is superseded by chapter 04.
+Old links using panel=views, section=stages and stage=<id> are redirected in the
+client to the corresponding new Packages chapter link. The frozen original
+Narayani stage URLs remain unchanged.
+
+**Four-cardinal UI:** north provides project identity and chapter tabs; west
+provides version, chapters and floor selection; east provides a contextual
+package inspector, source gate and working original-workbench/copy-link actions;
+south provides a horizontally scrollable package dock. The connected 2D/3D
+views and registers remain inside the centre. On narrow screens the west rail
+uses its labelled open/close menu; the east inspector stacks beneath the main
+content and the south dock is scrollable and sticky.
+
+**Harisharan's detailed material module has moved to Packages**, represented
+using exactly the same source-backed card format as the seven Narayani modules.
+Only the original through-plinth calculation study is claimed: its related
+stage cards may reference that same source, but no complete additional BBS is
+invented. Narayani V02/V03/M40–M80 remain frozen and source-backed; M80 remains
+HOLD. Ashok's available link is architecture/MEP coordination, not a verified
+structural work package. Ramachandra's missing public packages remain unknown.
+
+The reusable template files for future projects are
+`governance/aad/site-package-workspace-template.v1.json`,
+`governance/aad/site-package-workspace-guide.md` and
+`public/templates/project-workspace/project-template.v1.json`.
+The public guide is at `/templates/project-workspace/`.
+
+No automatic Google Sheets/Docs refresh or authenticated provider action is
+introduced by this website release. Site packages link to existing original
+viewer evidence; editing and approvals remain separate and authenticated.

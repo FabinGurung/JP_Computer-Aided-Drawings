@@ -1,0 +1,268 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "jp-cad://aad/site-package-workspace-template/1",
+  "title": "CAD / AAD Project Workspace and Site Package Book (navigation standard v1.1)",
+  "description": "CAD-owned public template for five chapters and four-side navigation. NOT a design approval or source of construction dimensions.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "project",
+    "editions",
+    "chapters",
+    "packages",
+    "sourceBoundary"
+  ],
+  "properties": {
+    "schema": {
+      "const": "jp-cad://project-workspace/site-packages/1"
+    },
+    "project": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "logicalId",
+        "slug",
+        "title",
+        "organization",
+        "status"
+      ],
+      "properties": {
+        "logicalId": {
+          "type": "string",
+          "minLength": 3
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$"
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "organization": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "type": "string",
+          "minLength": 1
+        },
+        "jurisdiction": {
+          "type": [
+            "string",
+            "null"
+          ]
+        }
+      }
+    },
+    "editions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "name",
+          "sourceEvidence",
+          "phases"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "sourceEvidence": {
+            "type": "string"
+          },
+          "phases": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "required": [
+                "id",
+                "name"
+              ],
+              "properties": {
+                "id": {
+                  "type": "string"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "geometryStatus": {
+                  "enum": [
+                    "admitted",
+                    "pending",
+                    "hold"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "chapters": {
+      "type": "array",
+      "prefixItems": [
+        {
+          "const": "views"
+        },
+        {
+          "const": "boq"
+        },
+        {
+          "const": "gantt"
+        },
+        {
+          "const": "packages"
+        },
+        {
+          "const": "sources"
+        }
+      ],
+      "minItems": 5,
+      "maxItems": 5
+    },
+    "navigation": {
+      "type": "object",
+      "properties": {
+        "north": {
+          "const": "project-and-chapters"
+        },
+        "west": {
+          "const": "versions-and-chapter-tree"
+        },
+        "east": {
+          "const": "evidence-and-actions-inspector"
+        },
+        "south": {
+          "const": "package-dock"
+        }
+      }
+    },
+    "packages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "category",
+          "sourceStatus",
+          "sourceRevision",
+          "sourceLocator",
+          "engineeringGate"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "category": {
+            "type": "string"
+          },
+          "sourceStatus": {
+            "enum": [
+              "FROZEN",
+              "PROVISIONAL STUDY",
+              "PHASE SUMMARY",
+              "COORDINATION ONLY",
+              "ENGINEERING HOLD",
+              "NOT ADMITTED"
+            ]
+          },
+          "sourceRevision": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "sourceLocator": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "Public-safe relative URL only when verified. Restricted Drive URLs and IDs are never committed."
+          },
+          "engineeringGate": {
+            "enum": [
+              "not-for-construction",
+              "hold",
+              "accepted-by-authority"
+            ]
+          },
+          "description": {
+            "type": "string"
+          },
+          "measurements": {
+            "type": [
+              "array",
+              "null"
+            ],
+            "description": "Unknown quantities remain null, not fabricated zero."
+          },
+          "methodStatement": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "workPackageRevision": {
+            "type": [
+              "string",
+              "null"
+            ]
+          },
+          "approvalEvidence": {
+            "type": [
+              "string",
+              "null"
+            ],
+            "description": "No approval may be inferred from FROZEN, version labels or site UI."
+          }
+        }
+      }
+    },
+    "sourceBoundary": {
+      "type": "object",
+      "required": [
+        "authority",
+        "publicRedaction",
+        "designApproval"
+      ],
+      "properties": {
+        "authority": {
+          "type": "string"
+        },
+        "publicRedaction": {
+          "const": true
+        },
+        "designApproval": {
+          "const": false
+        }
+      }
+    },
+    "notes": {
+      "type": "string"
+    }
+  },
+  "x-governance": {
+    "owner": "JP_Computer-Aided-Drawings",
+    "projectNativeDocs": "Existing Docs edited only through archive-before-update and revision-guarded in-place workflow.",
+    "peerDomains": {
+      "BOQ": "JP_Cost_Estimation",
+      "Gantt": "JP_Scheduling_Work_and_Resources_Management",
+      "constructionAcceptance": "engineering authority"
+    },
+    "sourceVersionDistinctFromPackageVersion": true,
+    "archiveBeforeEdit": true,
+    "noPublicPrivateIds": true,
+    "readOnlyA7": true
+  }
+}

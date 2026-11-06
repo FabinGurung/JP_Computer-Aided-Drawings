@@ -26,6 +26,7 @@ jobs:
       - name: Ashok REV04 source admission and architecture-only template QA
         run: |
           node tools/site/project-workspace-smoke.mjs
+          node tools/site/site-package-standard-smoke.mjs
           node tools/site/ashok-rev04-smoke.mjs
           python tools/site/aad-build-code-register.py
           git diff --exit-code -- public/data/codes/nepal-pokhara.json
