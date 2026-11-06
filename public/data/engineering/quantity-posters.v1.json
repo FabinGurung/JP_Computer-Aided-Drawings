@@ -1,0 +1,70 @@
+{
+  "schema": "jp-cad://aad/quantity-posters/1",
+  "status": "PUBLIC_SAFE_MATH_NOT_SITE_APPROVAL",
+  "source": "CAD-owned general geometry identities. Project input comes from authenticated current engineering source only.",
+  "rules": [
+    {
+      "id": "REBAR-MASS-001",
+      "title": "Theoretical steel mass, not bar bending schedule",
+      "formula": "unit kg/m = (π/4) × (diameter_mm/1000)^2 × density_kg/m³; total kg = unit kg/m × accepted bar count × accepted cut length_m",
+      "inputs": [
+        "diameter_mm",
+        "accepted bar cut length_m",
+        "count",
+        "steel density kg/m³"
+      ],
+      "sampleInputs": null,
+      "siteDefaults": null,
+      "approval": "NO"
+    },
+    {
+      "id": "CONCRETE-GROSS-001",
+      "title": "Gross rectangular volume",
+      "formula": "L_m × B_m × H_m = gross m³; net result requires verified shape and deductions",
+      "inputs": [
+        "L_m",
+        "B_m",
+        "H_m"
+      ],
+      "sampleInputs": null,
+      "siteDefaults": null,
+      "approval": "NO"
+    },
+    {
+      "id": "MIX-CEMENT-001",
+      "title": "Cement bag math (source-accepted dosage only)",
+      "formula": "volume_m³ × approved dosage_kg/m³ / verified bag_kg; no arbitrary mix dosage",
+      "inputs": [
+        "net concrete m³",
+        "signed mix reference and dosage",
+        "verified bag size"
+      ],
+      "sampleInputs": null,
+      "siteDefaults": null,
+      "approval": "NO"
+    },
+    {
+      "id": "STEEL-BBS-001",
+      "title": "Stirrups, hoops, dowels and bars",
+      "formula": null,
+      "reason": "NO UNIVERSAL CUT LENGTH. Require accepted member geometry, bar shape, cover, hook angle/length, bend allowances, lap and development, source detail ID.",
+      "sampleInputs": null,
+      "siteDefaults": null,
+      "approval": "NO"
+    },
+    {
+      "id": "EARTHWORK-001",
+      "title": "Excavation and backfill",
+      "formula": "Net measured boundaries and cut/fill volume by accepted geometry; no default depth, bulking or batter",
+      "inputs": [
+        "accepted excavation geometry",
+        "site strata",
+        "support/battering method"
+      ],
+      "sampleInputs": null,
+      "siteDefaults": null,
+      "approval": "NO"
+    }
+  ],
+  "memoryPosterNote": "A prior user discussion involved a rectangular reinforcement cage inside a finished circular column. The concrete outline and steel layout must be documented separately. The exact historical rod schedule/diameters were not recovered; no user-specific bar sizes are memorized or fabricated."
+}

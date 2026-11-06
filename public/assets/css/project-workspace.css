@@ -117,3 +117,23 @@
 @media(max-width:1400px){.pw-work-area{grid-template-columns:minmax(0,1fr) 215px;gap:10px}.pw-inspector-inner{padding:11px}}
 @media(max-width:1150px){.pw-work-area{grid-template-columns:minmax(0,1fr)}.pw-inspector{position:relative;top:auto}.pw-inspector-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:0 16px}.pw-inspector-heading,.pw-inspector-disclaimer{grid-column:1/-1}.pw-inspector-actions{align-content:start}}
 @media(max-width:760px){.pw-work-area{display:flex;flex-direction:column;gap:8px}.pw-work-area>.pw-body,.pw-inspector{width:100%}.pw-inspector-inner{display:block}.pw-inspector{position:relative}.pw-dock{border-radius:0;margin-left:-10px;margin-right:-10px;gap:8px;padding:7px 9px;bottom:0}.pw-dock-label{flex-basis:77px}.pw-dock-label strong{font-size:11px}.pw-package-cards.grid{grid-template-columns:1fr}.pw-packages-head{margin-top:8px}.pw-package-card{padding:11px;min-height:82px}.pw-package-controls label{flex-basis:100%}.pw-package-mode{width:100%}.pw-package-mode button{flex:1}.pw-chapter-bar{scrollbar-width:thin}}
+
+/* Project standard 1.2: uniform sixteen-stage engineering readiness / no fabricated design data */
+.pw-normalized{margin:15px 0 22px}
+.pw-normalized>h2{font-size:21px;margin:2px 0 12px}
+.pw-normalized>p{color:var(--muted);line-height:1.7}
+.pw-normalized-note{padding:11px 13px;background:#fff9e8;border-left:3px solid #be9049;color:#5c5235!important}
+.pw-normalized-summary{display:flex;flex-wrap:wrap;gap:12px;border-top:1px solid var(--line);padding:15px 0;font-size:12px;color:var(--muted)}
+.pw-normalized-summary strong{font-size:15px;color:var(--ink)}
+.pw-normalized-item{border:1px solid var(--line);border-radius:9px;background:#fff;margin:8px 0;overflow:hidden}
+.pw-normalized-item summary{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 14px;font-weight:700;line-height:1.5;color:var(--ink);font-size:12px}
+.pw-normalized-item[open] summary{background:#f0f8f5;border-bottom:1px solid var(--line)}
+.pw-normalized-state{flex:0 0 auto;font-size:10px;text-align:right;font-weight:650;color:#79552e;max-width:130px}
+.pw-normalized-inside{padding:11px 15px 17px;line-height:1.7;font-size:12px}
+.pw-normalized-inside h4{margin:11px 0 3px;font-size:12px;color:#176e68}
+.pw-normalized-inside ul{margin:4px 0;padding-left:22px}
+.pw-normalized-inside li{padding:2px 0}
+.pw-normalized-no-data{padding:9px;background:#f5f7f7;border-radius:6px;color:var(--muted)}
+@media(max-width:540px){.pw-normalized-item summary{align-items:flex-start;flex-direction:column;gap:3px}.pw-normalized-state{max-width:none}.pw-normalized-inside{padding:9px 12px 14px}}
+
+.pw-tree-section{display:block;font-size:11px;color:#176e68;padding:9px 6px 3px}.pw-subnav details summary{font-size:11px;font-weight:750}.pw-subnav details button{overflow-wrap:anywhere}

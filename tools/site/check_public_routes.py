@@ -16,7 +16,14 @@ required=[
 "releases/index.html","guide/index.html","source/index.html",
 "memory-wall/index.html","codes/pokhara/index.html","data/codes/nepal-pokhara.json","data/document-control.json",
 "data/projects.json","data/navigation.json","stages/m80/index.html",
-"templates/project-workspace/index.html","templates/project-workspace/project-template.v1.json","assets/js/project-site-packages.mjs",".nojekyll"]
+"templates/project-workspace/index.html","templates/project-workspace/project-template.v1.json","assets/js/project-site-packages.mjs",
+"assets/js/project-engineering-normalization.mjs","assets/js/engineering-quantity-guardrails.mjs",
+"assets/js/cad-project-memory-palace.mjs","assets/css/cad-memory-palace.css",
+"data/engineering/engineering-package-readiness.v1.json","data/engineering/quantity-posters.v1.json",
+"memory-wall/pages/index.html","projects/example-empty/index.html",
+"projects/example-empty/memory-wall/index.html",
+"projects/ashok-adhikari/memory-wall/index.html","projects/narayani-parajuli/memory-wall/index.html",
+"projects/harisharan-adhikari/memory-wall/index.html","projects/ramachandra-devkota/memory-wall/index.html",".nojekyll"]
 missing=[x for x in required if not (root/x).is_file()]
 guide=(root/"guide/index.html").read_text() if (root/"guide/index.html").exists() else ""
 assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","VALIDATE","EXECUTE","VERIFY","VIEW","TRACE","3D","2D","4D","5D","engineering acceptance","CAD-owned AAD template","AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md")), "AI aided CAD guide missing canonical policy or safety details"
@@ -82,4 +89,12 @@ nav=(root/"assets/js/cad-site-shell.js").read_text()
 assert '["Design Studio","cad/aad/"]' in nav and '["CAD Studio","cad/"]' not in nav,"Legacy CAD should not be top-level navigation"
 assert '["Describe a building","cad/brief/"]' not in nav,"Previous mass preview must not be a top-level feature"
 assert "PRODUCTION CONNECTION PENDING" in home,"Do not conceal source-admission limitation"
+
+# The fictional starter MUST remain outside the four-production-project registry.
+assert sum(p["slug"]=="example-empty" for p in project["projects"])==0, "template leaked into real client project registry"
+assert len([p for p in project["projects"] if p["slug"] in ("narayani-parajuli","harisharan-adhikari","ashok-adhikari","ramachandra-devkota")])==4
+assert "packages" in (root/"assets/js/project-workspace-config.mjs").read_text()
+assert "NOT A SITE" in (root/"assets/js/project-engineering-normalization.mjs").read_text()
+assert "Three-level table of contents" in (root/"memory-wall/pages/index.html").read_text()
+
 print("CAD_UNIFIED_STATIC_SITE_QA=PASS",len(required),"required paths; 7 unchanged Narayani stage families")

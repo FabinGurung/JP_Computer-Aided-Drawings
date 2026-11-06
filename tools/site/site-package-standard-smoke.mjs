@@ -14,9 +14,11 @@ assert.equal(schema.$id,'jp-cad://aad/site-package-workspace-template/1');
 assert.deepEqual(CHAPTERS.map(c=>c[0]),['views','boq','gantt','packages','sources']);
 assert.deepEqual(example.chapters,CHAPTERS.map(c=>c[0]));
 assert.deepEqual(Object.keys(example.navigation).sort(),['east','north','south','west']);
-assert.equal(example.packages[0].sourceStatus,'NOT ADMITTED');
-assert.equal(example.packages[0].sourceLocator,null);
-assert.equal(example.packages[0].measurements,null);
+
+
+
+assert.equal(example.packages.length,0,'empty fictional starter must not supply even a sample work item');
+assert.equal(example.normalization.templateOnly,true);assert.equal(example.normalization.requiredPackageSlots,16);
 assert.equal(example.sourceBoundary.designApproval,false);
 assert.equal(example.sourceBoundary.publicRedaction,true);
 assert.match(templatePage,/four navigation directions/i);
@@ -34,7 +36,7 @@ for(const slug of Object.keys(PROJECTS)){
  assert.equal(new Set(records.map(r=>r.id)).size,records.length);
  const html=renderPackages({slug,root:new URL('https://example.org/JP_Computer-Aided-Drawings/'),
   editionId:PROJECTS[slug].editions[0].id,selected:records[0]?.id||'',escape:s=>String(s).replaceAll('&','&amp;')});
- assert.match(html,/Packages \/ Site Modules/);
+ assert.match(html,/4\.1 · Published site workbenches/);assert.match(html,/4\.2 · Engineering package normalization/);
  assert.equal((html.match(/data-package-id=/g)||[]).length,records.length);
  assert.equal(filterPackageRecords(records,'nonexistent-test-token','all').length,0);
  const insp=renderPackageInspector({slug,root:new URL('https://example.org/JP_Computer-Aided-Drawings/'),

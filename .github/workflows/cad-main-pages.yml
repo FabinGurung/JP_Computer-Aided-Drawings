@@ -27,6 +27,7 @@ jobs:
         run: |
           node tools/site/project-workspace-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
+          node tools/site/engineering-normalization-smoke.mjs
           node tools/site/ashok-rev04-smoke.mjs
           python tools/site/aad-build-code-register.py
           git diff --exit-code -- public/data/codes/nepal-pokhara.json
@@ -97,6 +98,7 @@ jobs:
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
           node tools/site/project-workspace-browser.mjs
+          node tools/site/engineering-normalization-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
           node tools/site/aad-code-library-browser.mjs

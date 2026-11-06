@@ -146,3 +146,25 @@ The public guide is at `/templates/project-workspace/`.
 No automatic Google Sheets/Docs refresh or authenticated provider action is
 introduced by this website release. Site packages link to existing original
 viewer evidence; editing and approvals remain separate and authenticated.
+
+
+## Project workspace standard 1.2 — normalized site package book (2026-11-06)
+
+Every real project keeps the five-chapter and four-cardinal-directions UI from
+v1.1. Chapter 04 now has **4.1 Original site workbenches** and **4.2 Engineering
+normalization (4.2.1–4.2.16)**. All sixteen categories have identical source
+requirements, quantity checks and field QA. Unadmitted categories remain null
+and REVIEW REQUIRED; this does not backfill missing site engineering.
+
+One separate **fake and completely empty** project at
+`/projects/example-empty/` exercises the same UI contract. It is not a fifth
+real project. All five workspaces have per-project engineering memory palaces
+with chapter n / section n.m / subsection n.m.k navigation. Website-specific
+memory is under `/memory-wall/pages/`; the main Memory Wall links them.
+
+Read `governance/aad/engineering-normalization-memory-palace.v1.md` for the
+source authority, 16-package catalog, calculation guardrails, zero-data dummy,
+peer ownership and source-preserving QA. This UI release does not copy Narayani
+modules, alter Ashok v1 geometry, accept Harisharan's provisional BBS as a shop
+schedule or create Ramachandra engineering details. No user-specific rod sizes
+were imported without a recovered authoritative schedule.

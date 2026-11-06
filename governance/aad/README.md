@@ -55,3 +55,13 @@ CAD-owned new-project template. See
 [Site package JSON Schema](site-package-workspace-template.v1.json).
 Original Narayani V02–M80 and other site sources remain immutable; package UI
 changes do not issue new design editions or construction approval.
+
+
+## 1.2 project presentation — engineering-package normalization and memory palaces
+
+The AAD geometry kernel remains **0.3.3**, and the independent site/workspace
+presentation standard advances to **1.2** (not a new architectural edition).
+Read [engineering package normalization and memory palace](engineering-normalization-memory-palace.v1.md).
+The canonical public-safe readiness register is `public/data/engineering/engineering-package-readiness.v1.json`; it declares 16 identical evidence-gated work-package slots for each of the four real project adapters and one explicitly synthetic zero-data starter, `/projects/example-empty/`.
+Each real project has its own memory palace `/projects/<slug>/memory-wall/`, and the publishing-only memory palace is `/memory-wall/pages/`. Both have 3-level ToCs.
+Schema normalization **does not** mean accepted structure, fabricated rebar, source certification or engineering approval. A7 remains read-only. Original Narayani stage trees and maintained project engineering Docs remain unchanged.
