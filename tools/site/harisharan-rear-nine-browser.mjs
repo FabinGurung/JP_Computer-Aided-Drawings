@@ -11,6 +11,8 @@ try{
   await p.waitForFunction(()=>Boolean(window.HarisharanRearNine),null,{timeout:25000});
   let data=await p.evaluate(()=>window.HarisharanRearNine.getState());
   assert.equal(data.scope.columns,9);assert.equal(data.scope.footings,9);
+  assert.match(await p.locator('#governing-report').innerText(),/M25 concrete \/ Fe500 steel/);
+  assert.match(await p.locator('#governing-report').innerText(),/125 mm throughout/);
   assert.equal(data.scope.strapBeams,6);assert.equal(data.scope.plinthTotal,15);
   assert.equal(await p.locator('[data-node-choice]:checked').count(),9);
   assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'mobile overflow '+width);
