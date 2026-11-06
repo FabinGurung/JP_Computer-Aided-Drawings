@@ -36,6 +36,44 @@ try{
    await chapter(p,'views');await p.locator('#pw-layout').selectOption('plan');assert.equal(await fr.locator(har?'#viewport':'#viewport3d').isVisible(),false);await p.locator('#pw-layout').selectOption('split');if(har){await p.locator('#pw-fit').click();const proof=await p.evaluate(()=>window.ProjectWorkspace.getDrawing().getViewProof());assert.equal(proof.outside,0,'Fit must keep the actual model inside the viewport');}
    assert.equal(await p.locator('iframe').evaluate(f=>f.contentDocument.documentElement.scrollWidth<=f.contentWindow.innerWidth+2),true,'engine overflow '+slug+'/'+width);
   }else{assert.match(await p.locator('#pw-content').innerText(),/not been admitted|No admitted/);await chapter(p,'boq');assert.match(await p.locator('#pw-content').innerText(),/unknown|pending/);await chapter(p,'gantt');assert.match(await p.locator('#pw-content').innerText(),/start date unknown/);}
+
+  // The stage workbench is a first-class Views subsection across projects.
+  // All original Narayani viewers remain distinct immutable sources.
+  await chapter(p,'views');
+  await p.locator('#pw-open-stages').click();
+  await p.waitForFunction(()=>window.ProjectWorkspace.getState().section==='stages');
+  assert.equal(await p.locator('[data-stage-select]').count(),8);
+  assert.match(p.url(),/section=stages/);
+  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'stage overflow '+slug+'/'+width);
+  if(slug==='narayani-parajuli'){
+   const original=await p.locator('.pw-stage-frame').getAttribute('src');
+   assert.match(original,/\/stages\/v02\/$/);
+   await p.locator('[data-stage-select=dowels]').click();
+   await p.waitForFunction(()=>window.ProjectWorkspace.getState().stage==='dowels');
+   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/stages\/m50\/$/);
+   assert.match(await p.locator('.pw-stage-detail').innerText(),/Starter|Dowel/);
+   await p.locator('[data-stage-select=tank]').click();
+   assert.match(await p.locator('.pw-stage-detail').innerText(),/ENGINEERING HOLD/);
+   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/stages\/m80\/$/);
+   assert.match(await p.locator('.pw-stage-legacy a').getAttribute('href'),/narayani-parajuli\/record\.html/);
+  }else if(slug==='harisharan-adhikari'){
+   await p.locator('[data-stage-select=plinth]').click();
+   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/harisharan-adhikari\/plinth\/$/);
+   assert.match(await p.locator('.pw-stage-detail').innerText(),/PROVISIONAL STUDY/);
+  }else if(slug==='ashok-adhikari'){
+   await p.locator('[data-stage-select=upper-floors]').click();
+   assert.match(await p.locator('.pw-stage-detail').innerText(),/COORDINATION ONLY/);
+   assert.equal(await p.locator('.pw-stage-frame').count(),0);
+  }else{
+   assert.match(await p.locator('.pw-stage-detail').innerText(),/SOURCE ADMISSION PENDING/);
+   assert.equal(await p.locator('.pw-stage-frame').count(),0);
+  }
+  await p.reload({waitUntil:'domcontentloaded'});
+  await p.waitForFunction(()=>window.ProjectWorkspace?.getState().section==='stages');
+  assert.match(p.url(),/section=stages/);
+  await chapter(p,'views');
+  if(slug!=='ramachandra-devkota')await ready(p,slug);
+
   await chapter(p,'sources');await p.locator('#pw-source-0').waitFor();assert.ok(await p.locator('.pw-resource').count()>0);assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
   await chapter(p,'views');await p.screenshot({path:`/tmp/project-standard-${slug}-${width}.png`});await p.reload({waitUntil:'networkidle'});await ready(p,slug);assert.equal(await p.locator('#pw-layout').inputValue(),'split');assert.deepEqual(errors,[]);await p.close();console.log('PROJECT_STANDARD_BROWSER_PASS',slug,width);
  }
