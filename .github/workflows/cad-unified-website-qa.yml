@@ -46,6 +46,7 @@ jobs:
           node tools/site/project-workspace-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
+          node tools/site/harisharan-rear-nine-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
@@ -60,6 +61,7 @@ jobs:
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/project-workspace-browser.mjs
           node tools/site/engineering-normalization-browser.mjs
+          node tools/site/harisharan-rear-nine-browser.mjs
           node tools/site/harisharan-browser-smoke.mjs
           node tools/site/harisharan-workspace-browser.mjs
           node tools/site/ashok-rev04-browser.mjs
