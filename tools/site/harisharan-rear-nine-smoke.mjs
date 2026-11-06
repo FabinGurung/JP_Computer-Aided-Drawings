@@ -54,7 +54,7 @@ assert.equal(calculate(source).steel.find(r=>r.id==='F-A4-X').count,baseRow.coun
 assert.throws(()=>validateDraft({...draft,selectedNodeIds:['A4']},source),/exactly nine/);
 assert.throws(()=>validateDraft({...draft,approvedByEngineer:true},source),/cannot claim approval/);
 assert.throws(()=>validateDraft({...draft,sourceFileSha256:'fake'},source),/source hash mismatch/);
-assert.throws(()=>validateDraft({...draft,overrides:{'F-A1-X':{count:33}}},source),/bar outside/);
+assert.throws(()=>scopeCalculation(source,{...draft,overrides:{'F-A1-X':{count:33}}}),/bar outside/);
 assert.match(html,/NOT FOR CONSTRUCTION/);
 assert.match(main,/localStorage/);
 assert.match(main,/Export draft JSON/);
