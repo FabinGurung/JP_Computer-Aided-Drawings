@@ -7,14 +7,26 @@ import {assembly,calculate,unitMass} from './harisharan-takeoff.mjs';
 
 export const REAR_NINE_CANDIDATE=Object.freeze(['A4','B4','E4','A5','B5','D5','A6','B6','C6']);
 export const ALTERNATE_NINE_CANDIDATE=Object.freeze(['A1','B1','F1','A2','B2','F2','A3','B3','F3']);
-export const REAR_DRAFT_SCHEMA='jp-cad://harisharan/rear-nine-scope-draft/1';
-export const HARISHARAN_SCOPE_STATE='CANDIDATE_REAR_ORIENTATION_NOT_VERIFIED';
+export const REAR_DRAFT_SCHEMA='jp-cad://harisharan/rear-nine-scope-draft/2';
+export const GOVERNING_REPORT=Object.freeze({
+ id:'HAR-SRC-RPT-001',
+ sha256:'8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35',
+ basis:'USER_CONFIRMED_REPORT_GOVERNS',
+ circledGrid:'physical three-column upper rows 6,5,4',
+ concreteGrade:'M25',steelGrade:'Fe500',columnMm:[450,450],
+ tieBeam:{sizeMm:[300,350],mainTop:'2Ø20 + 1Ø16',mainBottom:'2Ø20 + 1Ø16',linkDiameterMm:8,linkSpacingMm:125},
+ strapBeam:{sizeMm:[450,800],mainTop:'8Ø20',mainBottom:'4Ø20',linkDiameterMm:8,linkSpacingMm:100,legs:4},
+ footing:{F1mm:[2550,2550,600],F2mm:[2700,2100,600],barDiameterMm:16,spacingMm:150,meshLayerCount:null},
+ caveat:'Governing source selected by project user. Report does NOT resolve certified BBS, exact footing mat layer count, column ties, site concrete mix or independent engineering approval.'
+});
+export const HARISHARAN_SCOPE_STATE='USER_CIRCLED_ROWS_4_6_REPORT_GOVERNS_GEO_ORIENTATION_NOT_VERIFIED';
 const numeric=(x,min,max,label)=>{if(typeof x!=='number'||!Number.isFinite(x)||x<min||x>max)throw new Error('Invalid '+label);return x};
 export const sourceNodeMap=source=>Object.fromEntries(assembly(source).nodes.map(n=>[n.id,n]));
 export function draftDefaults(source){
  return {schema:REAR_DRAFT_SCHEMA,sourceLogicalId:source.logicalId,sourceRevision:source.revision,
   sourceFileSha256:source.sources.find(s=>s.id==='HAR-SRC-STR-001')?.sha256||null,
-  label:'Rows 4–6 · candidate rear nine (orientation HOLD)',
+  label:'User-circled upper block rows 4–6 · report grid IDs (geographic bearing unverified)',
+  governingReportId:GOVERNING_REPORT.id,governingReportSha256:GOVERNING_REPORT.sha256,
   selectedNodeIds:[...REAR_NINE_CANDIDATE],includeBoundaryPlinth:true,
   settings:{columnTieDiameter:source.defaults.columnTieDiameter,
             columnTieSpacing:source.defaults.columnTieSpacing,footingMats:source.defaults.footingMats,
@@ -25,6 +37,8 @@ const hasOwn=(v,k)=>Object.prototype.hasOwnProperty.call(v,k);
 export function validateDraft(raw,source){
  if(!raw||raw.schema!==REAR_DRAFT_SCHEMA||raw.sourceLogicalId!==source.logicalId||raw.sourceRevision!==source.revision)throw Error('Invalid draft or source-revision mismatch');
  if(raw.sourceFileSha256!==source.sources.find(s=>s.id==='HAR-SRC-STR-001')?.sha256)throw Error('Original structural source hash mismatch');
+ if(raw.governingReportId!==GOVERNING_REPORT.id||raw.governingReportSha256!==GOVERNING_REPORT.sha256)throw Error('Governing report identity or SHA-256 mismatch; v1 drawing-first drafts must not be silently imported');
+ if(source.sources.find(s=>s.id===GOVERNING_REPORT.id)?.sha256!==GOVERNING_REPORT.sha256)throw Error('Verified governing structural report missing in source registry');
  if(!Array.isArray(raw.selectedNodeIds)||new Set(raw.selectedNodeIds).size!==raw.selectedNodeIds.length)throw Error('Invalid column selection');
  const validIds=new Set(assembly(source).nodes.map(n=>n.id));
  if(raw.selectedNodeIds.some(id=>!validIds.has(id)))throw Error('Unrecognized column ID');
@@ -64,6 +78,9 @@ export function scopeCalculation(source,draft){
  const d=validateDraft(draft,source);
  const graph=scopeMemberGraph(source,d.selectedNodeIds,d.includeBoundaryPlinth);
  const whole=calculate(source,d.settings);
+ // The original STR-05 link counts are preserved as sourceCount. The user's
+ // governing report stipulates Ø8 links at 125 mm throughout for tie beams.
+ const reportTieCounts=new Map(graph.plinth.map(b=>[b.id+'-8',Math.ceil((b.length-source.dimensions.column)/(.001*GOVERNING_REPORT.tieBeam.linkSpacingMm))+1]));
  const rows=whole.steel.filter(r=>{
   if(r.id.startsWith('F-'))return graph.nodeIds.has(r.id.slice(2).replace(/-(X|Z)$/,''));
   if(r.id.startsWith('CT-'))return graph.nodeIds.has(r.id.slice(3));
@@ -71,10 +88,15 @@ export function scopeCalculation(source,draft){
   const bm=r.id.replace(/-(20|16|8)$/,'');
   return graph.strapIds.has(bm)||graph.plinthIds.has(bm);
  }).map(r=>{
-  const over=d.overrides[r.id]||{},diameter=over.diameter??r.diameter,count=over.count??r.count,cut=over.cut??r.cut;
+  const over=d.overrides[r.id]||{},reportGoverned=reportTieCounts.has(r.id),
+   diameter=over.diameter??r.diameter,
+   count=over.count??(reportGoverned?reportTieCounts.get(r.id):r.count),
+   cut=over.cut??r.cut;
   const kg=count*cut*unitMass(diameter);
   return {...r,sourceDiameter:r.diameter,sourceCount:r.count,sourceCut:r.cut,sourceKg:r.kg,
-   diameter,count,cut,length:count*cut,kg,edited:hasOwn(d.overrides,r.id)};
+   ref:reportGoverned?'HAR-SRC-RPT-001 (tie Ø8 @125) / original '+r.ref:r.ref,
+   note:reportGoverned?'GOVERNING REPORT: Ø8 at 125 mm throughout; original STR-05 100/150 preserved as sourceCount. Link set cut shape unapproved.':r.note,
+   reportGoverned,diameter,count,cut,length:count*cut,kg,edited:hasOwn(d.overrides,r.id)};
  });
  const lookup=new Map(rows.map(x=>[x.id,x]));
  // Discard orphaned override IDs rather than quietly mixing another phase into the subtotal.
@@ -95,7 +117,7 @@ export function scopeCalculation(source,draft){
  const strapRcc=concrete.filter(x=>x.stage==='Strap beams').reduce((s,r)=>s+r.volume,0);
  const plinthRcc=concrete.filter(x=>x.stage==='Plinth beams').reduce((s,r)=>s+r.volume,0);
  const rcc=footingRcc+columnRcc+strapRcc+plinthRcc;
- return {draft:d,graph,rows,concrete,stages:stageRows,
+ return {draft:d,governing:GOVERNING_REPORT,graph,rows,concrete,stages:stageRows,
   scope:{columns:graph.nodes.length,footings:graph.nodes.length,strapBeams:graph.straps.length,
    plinthInternal:graph.plinthInternal.length,plinthBoundary:d.includeBoundaryPlinth?graph.plinthBoundary.length:0,
    plinthTotal:graph.plinth.length},
@@ -104,7 +126,7 @@ export function scopeCalculation(source,draft){
   steelDiameterKg:rows.reduce((o,r)=>(o[r.diameter]=(o[r.diameter]||0)+r.kg,o),{}),
   cementScenarioBags:null, // never promote estimating dosage to a mix/order quantity
   sourceNotAccepted:source.issues.map(i=>i.id),
-  qa:{rearOrientation:'HOLD',footingGeometry:'HOLD',columnTies:'HOLD',strapLinks:'HOLD',plinthLinks:'HOLD',barCutLengths:'HOLD',
+  qa:{rearOrientation:'UPPER_ROWS_SELECTED__GEOGRAPHIC_ORIENTATION_NOT_VERIFIED',footingGeometry:'HOLD',footingMats:'HOLD',columnTies:'HOLD',strapLinks:'HOLD',plinthLinks:'REPORT_125_MM_BUT_CUT_SHAPES_HOLD',barCutLengths:'HOLD',
    soilAndSeismic:'HOLD',constructionRelease:'NOT_ISSUED'}
  };
 }
