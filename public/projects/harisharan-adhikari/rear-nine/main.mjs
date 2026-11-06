@@ -1,7 +1,7 @@
 import {assembly} from '../../../assets/js/harisharan-takeoff.mjs';
 import {draftDefaults,validateDraft,scopeCalculation,scopeMemberGraph,REAR_NINE_CANDIDATE,ALTERNATE_NINE_CANDIDATE,REAR_DRAFT_SCHEMA} from '../../../assets/js/harisharan-rear-nine.mjs';
 const $=id=>document.getElementById(id);
-const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;','"':'&quot;'}[c]));
+const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nfmt=(n,d=2)=>Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
 const storageKey='harisharan-rear-nine-draft-1:INTAKE-20260826-HARISHARAN';
 let source,draft,scope,stageFilter='ALL',error='',savedLabel='Not yet saved';
