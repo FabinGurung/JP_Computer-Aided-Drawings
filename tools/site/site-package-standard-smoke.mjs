@@ -51,7 +51,7 @@ for(const slug of Object.keys(PROJECTS)){
   assert.match(packageById(slug,'groundworks').note,/soling module has not been verified/i);
  }
  if(slug==='harisharan-adhikari'){
-  assert.equal(records.length,7);
+  assert.equal(records.length,10);
   assert.equal(records[0].id,'rear-nine');assert.equal(records[0].verified,false);
   assert.equal(records[1].title,'Through plinth beam · rebar and cement');
   assert.equal(records[1].href,'projects/harisharan-adhikari/plinth/');
