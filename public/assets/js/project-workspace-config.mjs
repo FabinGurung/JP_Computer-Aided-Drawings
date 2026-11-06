@@ -33,3 +33,21 @@ export const PROJECTS={
  }
 };
 export const CHAPTERS=[['views','01','Views'],['boq','02','Quantities / BOQ'],['gantt','03','Programme / Gantt'],['packages','04','Packages / Site Modules'],['sources','05','Sources & records']];
+
+/**
+ * This is a deliberately EMPTY, FICTIONAL sample. It must never appear in
+ * public project registries, finance metrics or approved engineering counts.
+ * The ordinary site workspace shell is used so future uploads can follow
+ * the same chapter, phase and package semantics.
+ */
+export const EMPTY_DUMMY_PROJECT={
+ name:'Empty Template Project — FICTIONAL',company:'DEMONSTRATION ONLY · NO CLIENT / NO SITE',
+ status:'TEMPLATE ONLY · NO DRAWINGS OR ENGINEERING',defaultLevel:'gf',synthetic:true,
+ editions:[{id:'template-empty',name:'Template · Empty',basis:'No real project, source drawings or adopted revisions. This is a zero-data template, not a zero-quantity estimate.',
+ levels:[level('gf','Unpopulated phase','No level dimensions, building geometry or engineering evidence are present.')]}],
+ quantities:'No measurements, unit rates, takeoff, material schedule, BBS or BOQ have been admitted. Every quantity is unknown, never assumed zero.',
+ programme:'No programme, activities, dependencies, dates or resource allocation exist for this fictional starter.',
+ sourceGroups:[{title:'5.1 · Starter guides and memory posters',links:[{title:'Empty dummy project memory wall',href:'memory-wall/',note:'Guardrail instructions only; contains no real source file or person.'},
+ {title:'CAD-wide publication memory wall',href:'../../memory-wall/pages/',note:'Actions, Pages, source safety and release checks; no dummy project data.'}]}]
+};
+export const ALL_WORKSPACE_PROJECTS={...PROJECTS,'example-empty':EMPTY_DUMMY_PROJECT};
