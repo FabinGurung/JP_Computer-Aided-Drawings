@@ -31,7 +31,7 @@ const cleanBar=(r,origin,reportCount=null)=>{
  };
 };
 const refRow=(r,origin)=>({...cleanBar(r,origin),role:'REFERENCE_SAME_BARS_NOT_ADDITIVE'});
-const q=(v,unit,n=3)=>Number.isFinite(v)?Number(v.toFixed(n)):null;
+const q=(v,n=3)=>Number.isFinite(v)?Number(v.toFixed(n)):null;
 export function buildHarisharanStages(source,options={}){
  if(source.logicalId!=='INTAKE-20260826-HARISHARAN'||source.issueForConstruction!==false)throw Error('Unexpected project/source approval state');
  const report=source.sources.find(s=>s.id===GOVERNING_REPORT.id);
