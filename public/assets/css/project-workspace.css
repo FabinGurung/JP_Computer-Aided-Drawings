@@ -135,3 +135,5 @@
 .pw-normalized-inside li{padding:2px 0}
 .pw-normalized-no-data{padding:9px;background:#f5f7f7;border-radius:6px;color:var(--muted)}
 @media(max-width:540px){.pw-normalized-item summary{align-items:flex-start;flex-direction:column;gap:3px}.pw-normalized-state{max-width:none}.pw-normalized-inside{padding:9px 12px 14px}}
+
+.pw-tree-section{display:block;font-size:11px;color:#176e68;padding:9px 6px 3px}.pw-subnav details summary{font-size:11px;font-weight:750}.pw-subnav details button{overflow-wrap:anywhere}
