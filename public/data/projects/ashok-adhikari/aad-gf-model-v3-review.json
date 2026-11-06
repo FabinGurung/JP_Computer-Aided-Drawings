@@ -378,14 +378,14 @@
         "width": 0.95,
         "height": 2.1,
         "sill": 0,
-        "offset": 2.45,
+        "offset": 0.25,
         "style": "sliding",
         "swingSign": 1,
         "source": "OWNER_20261106",
         "status": "CANDIDATE_ELDER_ACCESS__CLEAR_WIDTH_AND_FIXTURES_HOLD",
         "provenance": {
           "sourceId": "GF-D-BATH-LOUNGE-V3",
-          "basis": "Owner-requested 2026-11-06 change; hall-free access from lounge; door size/type provisional pending 1500 mm wheelchair turn and fixture clearance checks"
+          "basis": "Owner-requested 2026-11-06 change; proposed bath door at lounge-side lower end near Bedroom2 junction, not upper kitchen end. Exact clear wheelchair circulation must be checked."
         }
       },
       {
