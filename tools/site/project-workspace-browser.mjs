@@ -9,7 +9,7 @@ try{
  for(const width of widths)for(const slug of ['harisharan-adhikari','ashok-adhikari','narayani-parajuli','ramachandra-devkota']){
   const p=await browser.newPage({viewport:{width,height:1000},acceptDownloads:true}),errors=[];p.on('pageerror',e=>errors.push(e.message));
   const response=await p.goto(base+'projects/'+slug+'/',{waitUntil:'networkidle'});assert.equal(response.status(),200);await ready(p,slug);
-  assert.equal(await p.locator('.pw-chapter-bar [role=tab]').count(),4);assert.equal(await p.locator('#pw-layout').inputValue(),'split');
+  assert.equal(await p.locator('.pw-chapter-bar [role=tab]').count(),5);assert.equal(await p.locator('#pw-layout').inputValue(),'split');
   assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'outer overflow '+slug+'/'+width);
   if(width<760){await p.locator('#pw-menu').click();assert.equal(await p.locator('#pw-rail').isVisible(),true);await p.keyboard.press('Escape');assert.equal(await p.locator('#pw-rail').isVisible(),false);}
   const fr=p.frameLocator('iframe.pw-frame');
@@ -37,44 +37,52 @@ try{
    assert.equal(await p.locator('iframe').evaluate(f=>f.contentDocument.documentElement.scrollWidth<=f.contentWindow.innerWidth+2),true,'engine overflow '+slug+'/'+width);
   }else{assert.match(await p.locator('#pw-content').innerText(),/not been admitted|No admitted/);await chapter(p,'boq');assert.match(await p.locator('#pw-content').innerText(),/unknown|pending/);await chapter(p,'gantt');assert.match(await p.locator('#pw-content').innerText(),/start date unknown/);}
 
-  // The stage workbench is a first-class Views subsection across projects.
-  // All original Narayani viewers remain distinct immutable sources.
-  await chapter(p,'views');
-  await p.locator('#pw-open-stages').click();
-  await p.waitForFunction(()=>window.ProjectWorkspace.getState().section==='stages');
-  assert.equal(await p.locator('[data-stage-select]').count(),8);
-  assert.match(p.url(),/section=stages/);
-  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'stage overflow '+slug+'/'+width);
+  // The packages are now a separate fifth chapter. The original frozen
+  // source viewers are linked in place; the east and south panes are real UI.
+  await chapter(p,'views');await p.locator('#pw-open-stages').click();
+  await p.waitForFunction(()=>window.ProjectWorkspace.getState().panel==='packages');
+  assert.match(p.url(),/panel=packages/);
+  assert.equal(await p.locator('#pw-tab-packages').getAttribute('aria-selected'),'true');
+  assert.ok(await p.locator('#pw-inspector').isVisible());
+  assert.ok(await p.locator('#pw-dock').isVisible());
+  assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'four-pane outer overflow '+slug+'/'+width);
   if(slug==='narayani-parajuli'){
-   const original=await p.locator('.pw-stage-frame').getAttribute('src');
-   assert.match(original,/\/stages\/v02\/$/);
-   await p.locator('[data-stage-select=dowels]').click();
+   assert.equal(await p.locator('[data-package-id]').count(),7);
+   assert.match(await p.locator('#pw-package-cards').innerText(),/PCC|Blinding/);
+   assert.match(await p.locator('#pw-inspector').innerText(),/FROZEN/);
+   await p.locator('[data-package-id=dowels]').click();
    await p.waitForFunction(()=>window.ProjectWorkspace.getState().stage==='dowels');
-   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/stages\/m50\/$/);
-   assert.match(await p.locator('.pw-stage-detail').innerText(),/Starter|Dowel/);
-   await p.locator('[data-stage-select=tank]').click();
-   assert.match(await p.locator('.pw-stage-detail').innerText(),/ENGINEERING HOLD/);
-   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/stages\/m80\/$/);
-   assert.match(await p.locator('.pw-stage-legacy a').getAttribute('href'),/narayani-parajuli\/record\.html/);
+   assert.match(await p.locator('.pw-inspector-primary').getAttribute('href'),/\/stages\/m50\/$/);
+   await p.locator('[data-package-id=tank]').click();
+   assert.match(await p.locator('#pw-inspector').innerText(),/ENGINEERING HOLD/);
+   assert.match(await p.locator('.pw-inspector-primary').getAttribute('href'),/\/stages\/m80\/$/);
+   await p.locator('#pw-package-filter').selectOption('hold');
+   assert.equal(await p.locator('[data-package-id]').count(),1);
+   await p.locator('#pw-package-filter').selectOption('all');
+   await p.locator('#pw-package-search').fill('Footing');
+   assert.equal(await p.locator('[data-package-id]').count(),2);
+   await p.locator('#pw-package-search').fill('');
   }else if(slug==='harisharan-adhikari'){
-   await p.locator('[data-stage-select=plinth]').click();
-   assert.match(await p.locator('.pw-stage-frame').getAttribute('src'),/\/harisharan-adhikari\/plinth\/$/);
-   assert.match(await p.locator('.pw-stage-detail').innerText(),/PROVISIONAL STUDY/);
+   assert.equal(await p.locator('[data-package-id]').count(),6);
+   assert.match(await p.locator('#pw-package-cards').innerText(),/Through plinth beam · rebar and cement/);
+   await p.locator('[data-package-id=plinth-materials]').click();
+   assert.match(await p.locator('.pw-inspector-primary').getAttribute('href'),/\/harisharan-adhikari\/plinth\/$/);
+   assert.match(await p.locator('#pw-inspector').innerText(),/PROVISIONAL STUDY/);
   }else if(slug==='ashok-adhikari'){
-   await p.locator('[data-stage-select=upper-floors]').click();
-   assert.match(await p.locator('.pw-stage-detail').innerText(),/COORDINATION ONLY/);
-   assert.equal(await p.locator('.pw-stage-frame').count(),0);
+   assert.equal(await p.locator('[data-package-id]').count(),1);
+   assert.match(await p.locator('#pw-inspector').innerText(),/COORDINATION ONLY/);
+   assert.match(await p.locator('#pw-package-cards').innerText(),/MEP/);
   }else{
-   assert.match(await p.locator('.pw-stage-detail').innerText(),/SOURCE ADMISSION PENDING/);
-   assert.equal(await p.locator('.pw-stage-frame').count(),0);
+   assert.equal(await p.locator('[data-package-id]').count(),0);
+   assert.match(await p.locator('#pw-content').innerText(),/No admitted public package records/);
   }
   await p.reload({waitUntil:'domcontentloaded'});
-  await p.waitForFunction(()=>window.ProjectWorkspace?.getState().section==='stages');
-  assert.match(p.url(),/section=stages/);
+  await p.waitForFunction(()=>window.ProjectWorkspace?.getState().panel==='packages');
+  assert.match(p.url(),/panel=packages/);
   await chapter(p,'views');
   if(slug!=='ramachandra-devkota')await ready(p,slug);
 
-  await chapter(p,'sources');await p.locator('#pw-source-0').waitFor();assert.ok(await p.locator('.pw-resource').count()>0);assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
+  await chapter(p,'sources');await p.locator('#pw-source-0').waitFor();assert.ok(await p.locator('.pw-resource').count()>0);if(slug==='harisharan-adhikari'||slug==='narayani-parajuli')assert.doesNotMatch(await p.locator('#pw-content').innerText(),/4\.2 · Detailed material module|4\.2 · Work-package records/);assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2));
   await chapter(p,'views');await p.screenshot({path:`/tmp/project-standard-${slug}-${width}.png`});await p.reload({waitUntil:'networkidle'});await ready(p,slug);assert.equal(await p.locator('#pw-layout').inputValue(),'split');assert.deepEqual(errors,[]);await p.close();console.log('PROJECT_STANDARD_BROWSER_PASS',slug,width);
  }
  const p=await browser.newPage();await p.goto(base+'projects/harisharan-adhikari/#materials');await p.waitForURL('**/plinth/#materials');assert.match(await p.title(),/Harisharan/);await p.close();
