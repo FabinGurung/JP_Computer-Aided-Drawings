@@ -14,9 +14,11 @@ assert.equal(schema.$id,'jp-cad://aad/site-package-workspace-template/1');
 assert.deepEqual(CHAPTERS.map(c=>c[0]),['views','boq','gantt','packages','sources']);
 assert.deepEqual(example.chapters,CHAPTERS.map(c=>c[0]));
 assert.deepEqual(Object.keys(example.navigation).sort(),['east','north','south','west']);
-assert.equal(example.packages[0].sourceStatus,'NOT ADMITTED');
-assert.equal(example.packages[0].sourceLocator,null);
-assert.equal(example.packages[0].measurements,null);
+
+
+
+assert.equal(example.packages.length,0,'empty fictional starter must not supply even a sample work item');
+assert.equal(example.normalization.templateOnly,true);assert.equal(example.normalization.requiredPackageSlots,16);
 assert.equal(example.sourceBoundary.designApproval,false);
 assert.equal(example.sourceBoundary.publicRedaction,true);
 assert.match(templatePage,/four navigation directions/i);
