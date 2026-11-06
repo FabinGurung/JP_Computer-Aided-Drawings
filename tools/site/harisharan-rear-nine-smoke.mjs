@@ -80,7 +80,7 @@ assert.match(main,/Export draft JSON/);
 assert.match(main,/User-confirmed nine-column block|geographic north\/rear datum/i);
 assert.match(main,/HAR-01|source\.issues/);
 const cards=packageRecords('harisharan-adhikari');
-assert.equal(cards.length,7);
+assert.equal(cards.length,10);
 const card=cards.find(c=>c.id==='rear-nine');
 assert.ok(card);
 assert.match(card.status,/DRAFT/);
