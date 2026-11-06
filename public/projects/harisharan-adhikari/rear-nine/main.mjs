@@ -1,9 +1,9 @@
 import {assembly} from '../../../assets/js/harisharan-takeoff.mjs';
-import {draftDefaults,validateDraft,scopeCalculation,scopeMemberGraph,REAR_NINE_CANDIDATE,ALTERNATE_NINE_CANDIDATE,REAR_DRAFT_SCHEMA} from '../../../assets/js/harisharan-rear-nine.mjs';
+import {draftDefaults,validateDraft,scopeCalculation,scopeMemberGraph,REAR_NINE_CANDIDATE,ALTERNATE_NINE_CANDIDATE,REAR_DRAFT_SCHEMA,GOVERNING_REPORT} from '../../../assets/js/harisharan-rear-nine.mjs';
 const $=id=>document.getElementById(id);
 const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const nfmt=(n,d=2)=>Number(n).toLocaleString('en-IN',{minimumFractionDigits:d,maximumFractionDigits:d});
-const storageKey='harisharan-rear-nine-draft-1:INTAKE-20260826-HARISHARAN';
+const storageKey='harisharan-rear-nine-draft-2:INTAKE-20260826-HARISHARAN'; // pre-report v1 draft stays separate; no silent migration
 let source,draft,scope,stageFilter='ALL',error='',savedLabel='Not yet saved';
 const setError=e=>{error=String(e||'');if($('error-message'))$('error-message').textContent=error;};
 function persist(){
@@ -20,7 +20,7 @@ function initialDraft(){
 }
 function setGroup(which){
  draft.selectedNodeIds=[...(which==='rear'?REAR_NINE_CANDIDATE:ALTERNATE_NINE_CANDIDATE)];
- draft.label=which==='rear'?'Rows 4–6 · candidate rear nine (orientation HOLD)':'Rows 1–3 · opposite block (orientation HOLD)';
+ draft.label=which==='rear'?'User-circled upper block rows 4–6 · report member IDs (geographic direction unverified)':'Rows 1–3 · alternate unconfirmed block';
  draft.overrides={};persist();render();
 }
 function updateNode(id){
@@ -91,7 +91,11 @@ function stagesSummary(){
 function render(){
  try{scope=draft.selectedNodeIds.length===9?scopeCalculation(source,draft):null;setError('');}catch(e){scope=null;setError(e.message);}
  const nodes=assembly(source).nodes;
- $('app').innerHTML='<section class="panel" id="section-plan"><h2>1 · Nine-column selection</h2><p class="alert"><strong>Rear orientation HOLD.</strong> Rows 4–6 are a provisional candidate, not a surveyed north/rear designation. You can switch to rows 1–3 or manually select exactly nine. The source also has open conflicts in reinforcement details and concrete grades.</p>'+
+ $('app').innerHTML='<section class="panel" id="governing-report"><h2>0.1 · Governing analysis report</h2>'+
+ '<div class="notice"><strong>User-selected governing source:</strong> HAR-SRC-RPT-001 · 2083 · M25 concrete / Fe500 steel. The highlighted tie-beam drawing identifies the upper three rows (6–4); original actual column marks are A4/B4/E4, A5/B5/D5 and A6/B6/C6. The letter C visible on the plan is a third visual bay, not necessarily the unique report column ID at every row.</div>'+
+ '<p><strong>Report beam rules:</strong> tie/plinth 300 × 350 mm, top and bottom each 2Ø20 + 1Ø16, Ø8 links @125 mm throughout; strap 450 × 800 mm, 8Ø20 top / 4Ø20 bottom, four-leg Ø8 @100 mm throughout. All corresponding tie-beam draft counts follow the report; the former STR-05 100/150 counts are preserved in source comparison fields.</p>'+
+ '<p class="alert"><strong>Unresolved procurement HOLD:</strong> report says footing Ø16 @150 both ways but does not independently resolve top/bottom mat count; column tie size/spacing, bar shapes, anchorage, laps and site mix acceptance remain open. A report selected as governing is not a signed cut-and-bend instruction.</p></section>'+
+ '<section class="panel" id="section-plan"><h2>1 · Nine-column selection</h2><p class="alert"><strong>User-confirmed nine-column block:</strong> the circled plan shows rows 6, 5 and 4. Unique right-column report marks are C6, D5 and E4. The geographic north/rear datum and structural issue-for-construction status have not been independently verified. You can select an alternate nine for comparison, not construction.</p>'+
  '<div class="layout"><div class="map-frame">'+mapSvg()+'<div class="legend"><span><i class="swatch" style="background:#147b72"></i>Selected column / pad</span><span><i class="swatch" style="background:#158476"></i>Plinth</span><span><i class="swatch" style="background:#b67b2d"></i>Strap</span><span>Dashed teal = boundary plinth</span></div></div>'+
  '<aside class="controls"><label>Preserved structural source<select disabled><option>HAR-SRC-STR-001 · Sept 2026</option></select></label><label>Review group<select id="group-select"><option value="rear"'+(draft.selectedNodeIds.join(',')===REAR_NINE_CANDIDATE.join(',')?' selected':'')+'>Rows 4–6 · candidate rear</option><option value="front"'+(draft.selectedNodeIds.join(',')===ALTERNATE_NINE_CANDIDATE.join(',')?' selected':'')+'>Rows 1–3 · opposite group</option><option value="custom">Custom nine IDs</option></select></label>'+
  '<div class="small">Selected: <strong>'+draft.selectedNodeIds.length+' / 9</strong>. Tap nodes or check IDs to choose a group; drawn member labels are not independently surveyed.</div><div class="check-grid">'+nodes.map(n=>'<label title="'+esc(n.type+' / '+n.footing)+'"><input type="checkbox" data-node-choice="'+esc(n.id)+'"'+(draft.selectedNodeIds.includes(n.id)?' checked':'')+'>'+esc(n.id)+'</label>').join('')+'</div>'+

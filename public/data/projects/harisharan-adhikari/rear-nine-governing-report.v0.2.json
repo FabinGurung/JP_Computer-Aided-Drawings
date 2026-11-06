@@ -1,0 +1,98 @@
+{
+  "schema": "jp-cad://harisharan/rear-nine-report-precedence/2",
+  "projectLogicalId": "INTAKE-20260826-HARISHARAN",
+  "recordRevision": "R000002",
+  "userDeclaredScope": {
+    "source": "Uploaded annotated tie-beam drawing",
+    "description": "circled upper-left 3 x 3 block, visually A-B-C, rows 6-5-4",
+    "modelColumnIds": [
+      "A4",
+      "B4",
+      "E4",
+      "A5",
+      "B5",
+      "D5",
+      "A6",
+      "B6",
+      "C6"
+    ],
+    "geographicRearBearing": "NOT_SURVEYED",
+    "confirmedPhysicalBlock": true
+  },
+  "governingDocument": {
+    "id": "HAR-SRC-RPT-001",
+    "title": "Structural Report revised - Harisaran Adhikari for torsion.docx",
+    "sha256": "8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35",
+    "precedence": "GOVERNS_DESIGN_ASSUMPTIONS_PER_USER__NOT_ENGINEER_IFC_RELEASE"
+  },
+  "engineeringSummary": {
+    "concreteGrade": "M25",
+    "reinforcementGrade": "Fe500",
+    "columns": {
+      "sectionMm": [
+        450,
+        450
+      ]
+    },
+    "tieBeams": {
+      "sectionMm": [
+        300,
+        350
+      ],
+      "top": "2Ø20 + 1Ø16",
+      "bottom": "2Ø20 + 1Ø16",
+      "linkDiaMm": 8,
+      "linkSpacingMm": 125,
+      "spacingRegion": "throughout"
+    },
+    "strapBeams": {
+      "sectionMm": [
+        450,
+        800
+      ],
+      "top": "8Ø20",
+      "bottom": "4Ø20",
+      "linkDiaMm": 8,
+      "linkSpacingMm": 100,
+      "legs": 4,
+      "spacingRegion": "throughout"
+    },
+    "footings": {
+      "F1mm": [
+        2550,
+        2550,
+        600
+      ],
+      "F2mm": [
+        2700,
+        2100,
+        600
+      ],
+      "meshDiaMm": 16,
+      "spacingMm": 150,
+      "directions": 2,
+      "numberOfLayers": null
+    }
+  },
+  "precedenceApplied": [
+    "M25/Fe500 source specification",
+    "Tie-beam Ø8 links at 125mm throughout",
+    "Strap Ø8 four-leg link set at 100mm throughout",
+    "Grid rows 6/5/4 are user-selected; unique report right-side marks E4, D5, C6"
+  ],
+  "retainedHolds": [
+    "No signed IFC/engineer accepted BBS or procurement approval",
+    "Footing one-versus-two mat layer count not explicitly resolved by report footing summary",
+    "Column ties Ø8@125 versus Ø10@100 retained from structural PDF; report not conclusive",
+    "Bar cut shapes, anchorage, lap, bend deductions and stock yield not verified",
+    "Site geodetic front/rear bearing and municipal/soil geotechnical evidence not verified",
+    "M20 structural drawing notes conflict with user-selected M25 report; report precedence is not a site concrete mix certification"
+  ],
+  "previousWorkingDraft": {
+    "googleSheetRevision": "R000001",
+    "archivedBeforeRevision": true,
+    "archivedDescription": "PRE_R000001__HAR-REAR9-REBAR-DRAFT__BEFORE_RPT_GOVERNS_20261106",
+    "modelSourceUnchanged": true
+  },
+  "notForConstruction": true
+}
