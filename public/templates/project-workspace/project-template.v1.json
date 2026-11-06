@@ -2,10 +2,10 @@
   "schema": "jp-cad://project-workspace/site-packages/1",
   "project": {
     "logicalId": "EXAMPLE-ONLY-000",
-    "slug": "example-project",
-    "title": "Example — new-project starter",
+    "slug": "example-empty",
+    "title": "Fictional Empty Project — TEMPLATE ONLY",
     "organization": "Example organization (synthetic)",
-    "status": "TEMPLATE / NO DESIGN",
+    "status": "SYNTHETIC_EMPTY_NOT_AN_ENGINEERING_PROJECT",
     "jurisdiction": null
   },
   "editions": [
@@ -40,26 +40,18 @@
     "east": "evidence-and-actions-inspector",
     "south": "package-dock"
   },
-  "packages": [
-    {
-      "id": "sample-pcc",
-      "title": "PCC / Blinding — example category only",
-      "category": "Substructure",
-      "sourceStatus": "NOT ADMITTED",
-      "sourceRevision": null,
-      "sourceLocator": null,
-      "engineeringGate": "not-for-construction",
-      "description": "No source package admitted; no thickness, mix, quantity or schedule invented.",
-      "measurements": null,
-      "methodStatement": null,
-      "workPackageRevision": null,
-      "approvalEvidence": null
-    }
-  ],
+  "packages": [],
   "sourceBoundary": {
     "authority": "Authenticated source owner; originals remain in Drive.",
     "publicRedaction": true,
     "designApproval": false
   },
-  "notes": "This example demonstrates the reusable contract and navigation, not a construction project. Replace with admitted source-backed project data only."
+  "notes": "FICTIONAL EMPTY STARTER. No real project, source, geometry, quantities, rod diameters, mix, approved package, calendar or site exists. The 16 normalization slots are separate metadata, all TEMPLATE ONLY. For a real project register new logical IDs and read authenticated source evidence.",
+  "normalization": {
+    "register": "data/engineering/engineering-package-readiness.v1.json",
+    "templateOnly": true,
+    "engineeringApproval": false,
+    "requiredPackageSlots": 16,
+    "memoryPosterPath": "projects/example-empty/memory-wall/"
+  }
 }
