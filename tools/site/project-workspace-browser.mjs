@@ -63,7 +63,7 @@ try{
    assert.equal(await p.locator('[data-package-id]').count(),2);
    await p.locator('#pw-package-search').fill('');
   }else if(slug==='harisharan-adhikari'){
-   assert.equal(await p.locator('[data-package-id]').count(),7);assert.ok(await p.locator('[data-package-id=rear-nine]').count()===1);
+   assert.equal(await p.locator('[data-package-id]').count(),10);assert.ok(await p.locator('[data-package-id=rear-nine]').count()===1);
    assert.match(await p.locator('#pw-package-cards').innerText(),/Through plinth beam · rebar and cement/);
    await p.locator('[data-package-id=plinth-materials]').click();
    assert.match(await p.locator('.pw-inspector-primary').getAttribute('href'),/\/harisharan-adhikari\/plinth\/$/);
