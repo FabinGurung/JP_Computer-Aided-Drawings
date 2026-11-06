@@ -13,6 +13,7 @@ on:
       - "public/**"
       - "cad/aad/multistorey/**"
       - "tools/site/**"
+      - "governance/aad/**"
       - ".github/workflows/cad-unified-website-qa.yml"
 permissions:
   contents: read
@@ -42,6 +43,7 @@ jobs:
           node tools/site/harisharan-material-smoke.mjs
           node tools/site/harisharan-workspace-smoke.mjs
           node tools/site/project-workspace-smoke.mjs
+          node tools/site/site-package-standard-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
