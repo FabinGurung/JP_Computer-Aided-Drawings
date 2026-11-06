@@ -1,0 +1,65 @@
+{
+  "schema": "jp-cad://project-workspace/site-packages/1",
+  "project": {
+    "logicalId": "EXAMPLE-ONLY-000",
+    "slug": "example-project",
+    "title": "Example — new-project starter",
+    "organization": "Example organization (synthetic)",
+    "status": "TEMPLATE / NO DESIGN",
+    "jurisdiction": null
+  },
+  "editions": [
+    {
+      "id": "source-pending",
+      "name": "Current source family — not admitted",
+      "sourceEvidence": "Original building drawings must be resolved and verified in governed Drive.",
+      "phases": [
+        {
+          "id": "substructure",
+          "name": "Through plinth beam",
+          "geometryStatus": "pending"
+        },
+        {
+          "id": "gf",
+          "name": "Ground floor",
+          "geometryStatus": "pending"
+        }
+      ]
+    }
+  ],
+  "chapters": [
+    "views",
+    "boq",
+    "gantt",
+    "packages",
+    "sources"
+  ],
+  "navigation": {
+    "north": "project-and-chapters",
+    "west": "versions-and-chapter-tree",
+    "east": "evidence-and-actions-inspector",
+    "south": "package-dock"
+  },
+  "packages": [
+    {
+      "id": "sample-pcc",
+      "title": "PCC / Blinding — example category only",
+      "category": "Substructure",
+      "sourceStatus": "NOT ADMITTED",
+      "sourceRevision": null,
+      "sourceLocator": null,
+      "engineeringGate": "not-for-construction",
+      "description": "No source package admitted; no thickness, mix, quantity or schedule invented.",
+      "measurements": null,
+      "methodStatement": null,
+      "workPackageRevision": null,
+      "approvalEvidence": null
+    }
+  ],
+  "sourceBoundary": {
+    "authority": "Authenticated source owner; originals remain in Drive.",
+    "publicRedaction": true,
+    "designApproval": false
+  },
+  "notes": "This example demonstrates the reusable contract and navigation, not a construction project. Replace with admitted source-backed project data only."
+}
