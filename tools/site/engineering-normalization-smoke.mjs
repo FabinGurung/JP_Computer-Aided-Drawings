@@ -27,7 +27,7 @@ assert.equal(new Set(NORMALIZED_PACKAGE_CATALOG.map(x=>x.id)).size,16);
 assert.deepEqual(register.catalog,NORMALIZED_PACKAGE_CATALOG,'JSON and deployed renderer must describe exactly the same package categories');
 assert.deepEqual(register.projects,NORMALIZED_PROJECTS,'No stale/competing machine register or UI status');
 assert.deepEqual(Object.keys(register.projects).sort(),all);
-const expectedCounts={'narayani-parajuli':7,'harisharan-adhikari':5,'ashok-adhikari':1,'ramachandra-devkota':0,'example-empty':0};
+const expectedCounts={'narayani-parajuli':7,'harisharan-adhikari':8,'ashok-adhikari':1,'ramachandra-devkota':0,'example-empty':0};
 for(const slug of all){
  const p=NORMALIZED_PROJECTS[slug],slots=normalizedSlots(slug);
  assert.equal(slots.length,16,slug);
@@ -62,7 +62,7 @@ for(const slug of all){
 for(const s of normalizedSlots('example-empty'))assert.equal(s.sourceStatus,'TEMPLATE ONLY');
 assert.equal(packageRecords('example-empty').length,0);
 assert.equal(packageRecords('narayani-parajuli').length,7);
-assert.equal(packageRecords('harisharan-adhikari').length,7);
+assert.equal(packageRecords('harisharan-adhikari').length,10);
 assert.equal(packageRecords('ashok-adhikari').length,1);
 assert.equal(packageRecords('ramachandra-devkota').length,0);
 assert.equal(normalizedSlots('narayani-parajuli').find(s=>s.slotId==='tank').sourceStatus,'ENGINEERING HOLD');
