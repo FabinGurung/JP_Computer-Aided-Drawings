@@ -62,7 +62,7 @@ for(const slug of all){
 for(const s of normalizedSlots('example-empty'))assert.equal(s.sourceStatus,'TEMPLATE ONLY');
 assert.equal(packageRecords('example-empty').length,0);
 assert.equal(packageRecords('narayani-parajuli').length,7);
-assert.equal(packageRecords('harisharan-adhikari').length,6);
+assert.equal(packageRecords('harisharan-adhikari').length,7);
 assert.equal(packageRecords('ashok-adhikari').length,1);
 assert.equal(packageRecords('ramachandra-devkota').length,0);
 assert.equal(normalizedSlots('narayani-parajuli').find(s=>s.slotId==='tank').sourceStatus,'ENGINEERING HOLD');
