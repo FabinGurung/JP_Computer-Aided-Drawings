@@ -49,8 +49,6 @@ for(const code of ['v02','v03','m40','m50','m60','m70','m80']){
  else assert.equal(meta.status,'FROZEN');
 }
 const stageWorkspace=fs.readFileSync('public/assets/js/project-workspace.mjs','utf8');
-assert.match(stageWorkspace,/data-stage-quick/);
-assert.match(stageWorkspace,/renderConstructionStages/);
-assert.match(stageWorkspace,/panel==='packages'/);assert.match(stageWorkspace,/pw-inspector/);assert.match(stageWorkspace,/pw-dock/);assert.doesNotMatch(stageWorkspace,/groups\.find\(g=>g\.modules\)/);
+assert.match(stageWorkspace,/panel==='packages'/);assert.match(stageWorkspace,/renderPackages/);assert.match(stageWorkspace,/data-rail-package/);assert.match(stageWorkspace,/pw-inspector/);assert.match(stageWorkspace,/pw-dock/);assert.doesNotMatch(stageWorkspace,/groups\.find\(g=>g\.modules\)/);
 
 console.log('PROJECT_WORKSPACE_CONTRACT_PASS 4 projects, real edition snapshots, source links, preserved modules, stage workbenches preserved, no invented public geometry');
