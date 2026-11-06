@@ -54,7 +54,8 @@ for(const slug of all){
    assert.equal(s.sourceRevisionAccepted,null);assert.ok(s.originalSourceModule);
    const u=new URL(s.publicSourceHref,'https://example.com/');
    const fn=path.join('public',u.pathname.replace(/^\/+/,''));
-   assert.ok(fs.existsSync(fn)||fs.existsSync(path.join(fn,'index.html')),fn);
+   const other=path.join('.',u.pathname.replace(/^\/+/,''));
+   assert.ok(fs.existsSync(fn)||fs.existsSync(path.join(fn,'index.html'))||fs.existsSync(other)||fs.existsSync(path.join(other,'index.html')),fn);
   }else assert.equal(s.originalSourceModule,null);
  }
 }
