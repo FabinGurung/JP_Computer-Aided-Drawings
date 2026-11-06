@@ -17,7 +17,7 @@ try{
   assert.equal(await p.locator('.qa-list li').count(),8);
   await p.locator('#stage-filter').selectOption('Column verticals');
   const first=await p.locator('[data-bar-id][data-bar-field=count]').first();
-  const initial=Number(await first.inputValue());
+  const initial=Number(await first.inputValue()),barId=await first.getAttribute('data-bar-id');
   await first.fill(String(initial+1));await first.dispatchEvent('change');
   assert.match(await p.locator('#saved-label').innerText(),/Saved locally/);
   const draftDl=p.waitForEvent('download');
@@ -26,7 +26,7 @@ try{
   assert.match(download.suggestedFilename(),/harisharan-nine-columns-draft/);
   await p.reload({waitUntil:'domcontentloaded'});
   await p.waitForFunction(()=>Boolean(window.HarisharanRearNine));
-  assert.equal(Number(await p.locator('[data-bar-field=count]').first().inputValue()),initial+1);
+  assert.equal(Number(await p.locator('[data-bar-id="'+barId+'"][data-bar-field=count]').inputValue()),initial+1);
   await p.locator('#group-select').selectOption('front');
   data=await p.evaluate(()=>window.HarisharanRearNine.getState());
   assert.equal(data.scope.columns,9);
