@@ -77,7 +77,7 @@ assert.throws(()=>scopeCalculation(source,{...draft,overrides:{'F-A1-X':{count:3
 assert.match(html,/NOT FOR CONSTRUCTION/);
 assert.match(main,/localStorage/);
 assert.match(main,/Export draft JSON/);
-assert.match(main,/rear orientation|Rear orientation/i);
+assert.match(main,/User-confirmed nine-column block|geographic north\/rear datum/i);
 assert.match(main,/HAR-01|source\.issues/);
 const cards=packageRecords('harisharan-adhikari');
 assert.equal(cards.length,7);
