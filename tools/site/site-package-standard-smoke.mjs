@@ -51,10 +51,11 @@ for(const slug of Object.keys(PROJECTS)){
   assert.match(packageById(slug,'groundworks').note,/soling module has not been verified/i);
  }
  if(slug==='harisharan-adhikari'){
-  assert.equal(records.length,6);
-  assert.equal(records[0].title,'Through plinth beam · rebar and cement');
-  assert.equal(records[0].href,'projects/harisharan-adhikari/plinth/');
-  assert.match(records[0].status,/PROVISIONAL/);
+  assert.equal(records.length,7);
+  assert.equal(records[0].id,'rear-nine');assert.equal(records[0].verified,false);
+  assert.equal(records[1].title,'Through plinth beam · rebar and cement');
+  assert.equal(records[1].href,'projects/harisharan-adhikari/plinth/');
+  assert.match(records[1].status,/PROVISIONAL/);
  }
  if(slug==='ashok-adhikari'){assert.equal(records.length,1);assert.match(records[0].status,/COORDINATION/);}
  if(slug==='ramachandra-devkota'){assert.equal(records.length,0);assert.doesNotMatch(html,/pw-package-badge frozen/);}
