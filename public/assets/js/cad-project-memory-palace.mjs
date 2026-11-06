@@ -6,6 +6,14 @@ if(!project||!record)throw Error('Unknown project memory wall');
 document.title=project.name+' · Engineering Memory Palace';
 const url=p=>new URL(p,root).href;
 const poster=(id,html)=>({id,html});
+const projectLearnings={
+ 'narayani-parajuli':'<strong>Source-derived model audit:</strong> 23 GF columns, 21 footing outlines and 16 M70 runs are published as source-review counts, not accepted fabrication counts. Engineering HOLDs remain for registration, footing/load paths and technical issues. M80 tank is held; no independently source-confirmed soling module.',
+ 'harisharan-adhikari':'<strong>Provisional site-study case:</strong> through-plinth basic rebar is approximately 11,492.98 kg; cement scenario approximately 713 bags before allowances. These depend on provisional geometry and assumptions, NOT procurement or standard defaults. Source report and drawings have an M20/M25 discrepancy; upper-storey source/floor counts need reconciliation.',
+ 'ashok-adhikari':'<strong>Edition discipline:</strong> v1 is the frozen pre-MEP architecture; v2 is a coordination edition. Septic/soak positioning, site boundary registration and any structural/detail approval require project evidence; never treat coordination model columns as designed structural members.',
+ 'ramachandra-devkota':'<strong>Source admission:</strong> REV02 exists as a governed source family. Public structural members, checked rebar BBS, concrete mixes and programme are not admitted. Private financial or client files must not be copied into public posters.',
+ 'example-empty':'<strong>FICTIONAL:</strong> There are no source-derived findings and no real steel, cement, floor, cost, site or client values.'
+};
+
 const siteRows=NORMALIZED_PACKAGE_CATALOG.map((p,i)=>{
  const r=record.slots[i];
  return '<tr><td><a href="'+esc(url('projects/'+slug+'/?panel=packages#packages'))+'">'+esc(p.number)+'</a></td><td>'+esc(p.title)+'</td><td>'+esc(r.sourceStatus)+'</td><td>'+esc(r.reviewState)+'</td></tr>';
@@ -16,7 +24,7 @@ const chapters=[
  {name:'Sources, identity & evidence',sections:[
   {name:'Authority',sub:[
    poster('Preserve source authority','<p>Original DWG/DXF, site reports and signed decisions remain with the authenticated owner in governed Drive. GitHub owns public-safe CAD code, manifests, source pointers and presentation, not original privately held engineering approval.</p>'),
-   poster('Registered project identity','<p>Project: <strong>'+esc(project.name)+'</strong>. State: <strong>'+esc(record.overallApproval)+'</strong>. Input provenance: '+esc(record.sourceBasis||'NONE — synthetic empty starter')+'. Distinguish an engineering approval from a website visibility setting.</p>')]},
+   poster('Registered project identity','<p>Project: <strong>'+esc(project.name)+'</strong>. State: <strong>'+esc(record.overallApproval)+'</strong>. Input provenance: '+esc(record.sourceBasis||'NONE — synthetic empty starter')+'. Distinguish an engineering approval from a website visibility setting.</p><p>'+projectLearnings[slug]+'</p>')]},
   {name:'Three-level source trace',sub:[
    poster('Source → interpretation → derived result','<p>Every accepted measurement or model member needs a source document, sheet/member mark, provider revision, extraction method, unit, calculation record and reviewer decision. Missing links block engineering acceptance.</p>'),
    poster('Hold conflicts rather than invent','<p>Conflicting drawings, levels, member dimensions, soil conditions, municipal applicability or design codes stay explicit HOLDs. A nearby project, old draft, template or friendly AI answer never supplies a missing approved source.</p>')]}
