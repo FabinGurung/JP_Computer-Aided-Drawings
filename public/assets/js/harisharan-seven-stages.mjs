@@ -32,11 +32,13 @@ const cleanBar=(r,origin,reportCount=null)=>{
 };
 const refRow=(r,origin)=>({...cleanBar(r,origin),role:'REFERENCE_SAME_BARS_NOT_ADDITIVE'});
 const q=(v,unit,n=3)=>Number.isFinite(v)?Number(v.toFixed(n)):null;
-export function buildHarisharanStages(source){
+export function buildHarisharanStages(source,options={}){
  if(source.logicalId!=='INTAKE-20260826-HARISHARAN'||source.issueForConstruction!==false)throw Error('Unexpected project/source approval state');
  const report=source.sources.find(s=>s.id===GOVERNING_REPORT.id);
  if(!report||report.sha256!==GOVERNING_REPORT.sha256)throw Error('Governing report fingerprint mismatch');
- const original=calculate(source),a=assembly(source),steelById=new Map(original.steel.map(r=>[r.id,r])),volById=new Map(original.concrete.map(r=>[r.id,r]));
+ const acceptedOptionKeys=['footingMats','columnTieDiameter','columnTieSpacing','rccCementKgM3'];
+ if(Object.keys(options).some(k=>!acceptedOptionKeys.includes(k)))throw Error('Unsupported scenario input');
+ const original=calculate(source,options),a=assembly(source),steelById=new Map(original.steel.map(r=>[r.id,r])),volById=new Map(original.concrete.map(r=>[r.id,r]));
  const sourceKey=source.sources.find(x=>x.id==='HAR-SRC-STR-001')?.sha256;
  const physical={nodes:a.nodes.map(n=>({id:n.id,x:n.x,z:n.z,row:n.row,side:n.side,columnType:n.type,footingType:n.footing})),
   plinth:a.plinth.map(b=>({id:b.id,a:b.a.id,b:b.b.id,lengthM:b.length})),
@@ -51,9 +53,9 @@ export function buildHarisharanStages(source){
  };
  const padGeometry=n=>n.footing==='F1'?{widthM:2.55,lengthM:2.55,depthM:source.dimensions.footingDepth}:{widthM:2.10,lengthM:2.70,depthM:source.dimensions.footingDepth};
  const perMember=[];
- const rccCement=volume=>({planningKg:q(volume*source.defaults.rccCementKgM3,3),
+ const rccCement=volume=>({planningKg:q(volume*original.settings.rccCementKgM3,3),
   planningBags:q(volume*source.defaults.rccCementKgM3/source.defaults.bagKg,3),
-  dosageKgPerM3:source.defaults.rccCementKgM3,bagKg:source.defaults.bagKg,
+  dosageKgPerM3:original.settings.rccCementKgM3,bagKg:source.defaults.bagKg,
   acceptedMixQuantity:null,status:'PLANNING_SCENARIO__NOT_APPROVED_M25_DOSAGE'});
  const pccCement=volume=>({planningKg:q(volume*source.defaults.pccDryFactor*source.defaults.cementDensity/10,3),
   planningBags:q(volume*source.defaults.pccDryFactor*source.defaults.cementDensity/(10*source.defaults.bagKg),3),
@@ -142,7 +144,7 @@ export function buildHarisharanStages(source){
  return {schema:HAR_STAGE_SCHEMA,project:'INTAKE-20260826-HARISHARAN',revision:'R000001',
   issueForConstruction:false,sourceRevision:source.revision,sourceFingerprint:sourceKey,
   governingReport:GOVERNING_REPORT,stageDefinitions:STAGES,geometry:physical,
-  items:perMember,byStage,summary,totals:{steelKgScenario:grandSteel,rccM3Scenario:grandRcc,pccM3Scenario:summary.v02.concreteM3,
+  scenarioInputs:options,items:perMember,byStage,summary,totals:{steelKgScenario:grandSteel,rccM3Scenario:grandRcc,pccM3Scenario:summary.v02.concreteM3,
    approvedCementBags:null,installedSteelKg:null,dowelsExtraKg:null,tankVolumeM3:null},
   membership:{v02:18,v03:18,m40:18,m50:18,m60:18,m70:39,m80:0},limits};
 }
