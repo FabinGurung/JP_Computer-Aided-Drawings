@@ -39,7 +39,7 @@ for(const slug of Object.keys(PROJECTS)){
  assert.equal(filterPackageRecords(records,'nonexistent-test-token','all').length,0);
  const insp=renderPackageInspector({slug,root:new URL('https://example.org/JP_Computer-Aided-Drawings/'),
   editionId:PROJECTS[slug].editions[0].id,selected:records[0]?.id||'',panel:'packages',phase:'gf',escape:s=>String(s)});
- assert.match(insp,/Package details/);assert.match(insp,/engineering/i);
+ assert.match(insp,/Package details/);assert.match(insp,/Package status/);
  const dock=renderPackageDock({slug,selected:records[0]?.id||'',escape:s=>String(s)});
  assert.match(dock,/Package dock/);
  if(slug==='narayani-parajuli'){
