@@ -23,7 +23,7 @@ required=[
 "memory-wall/pages/index.html","projects/example-empty/index.html",
 "projects/example-empty/memory-wall/index.html",
 "projects/ashok-adhikari/memory-wall/index.html","projects/narayani-parajuli/memory-wall/index.html",
-"projects/harisharan-adhikari/memory-wall/index.html","projects/ramachandra-devkota/memory-wall/index.html",".nojekyll"]
+"projects/harisharan-adhikari/memory-wall/index.html","projects/harisharan-adhikari/rear-nine/index.html","projects/harisharan-adhikari/rear-nine/main.mjs","assets/js/harisharan-rear-nine.mjs","assets/css/harisharan-rear-nine.css","projects/ramachandra-devkota/memory-wall/index.html",".nojekyll"]
 missing=[x for x in required if not (root/x).is_file()]
 guide=(root/"guide/index.html").read_text() if (root/"guide/index.html").exists() else ""
 assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","VALIDATE","EXECUTE","VERIFY","VIEW","TRACE","3D","2D","4D","5D","engineering acceptance","CAD-owned AAD template","AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md")), "AI aided CAD guide missing canonical policy or safety details"
