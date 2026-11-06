@@ -54,7 +54,7 @@ export function buildHarisharanStages(source,options={}){
  const padGeometry=n=>n.footing==='F1'?{widthM:2.55,lengthM:2.55,depthM:source.dimensions.footingDepth}:{widthM:2.10,lengthM:2.70,depthM:source.dimensions.footingDepth};
  const perMember=[];
  const rccCement=volume=>({planningKg:q(volume*original.settings.rccCementKgM3,3),
-  planningBags:q(volume*source.defaults.rccCementKgM3/source.defaults.bagKg,3),
+  planningBags:q(volume*original.settings.rccCementKgM3/source.defaults.bagKg,3),
   dosageKgPerM3:original.settings.rccCementKgM3,bagKg:source.defaults.bagKg,
   acceptedMixQuantity:null,status:'PLANNING_SCENARIO__NOT_APPROVED_M25_DOSAGE'});
  const pccCement=volume=>({planningKg:q(volume*source.defaults.pccDryFactor*source.defaults.cementDensity/10,3),
