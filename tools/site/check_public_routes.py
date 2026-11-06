@@ -15,7 +15,8 @@ required=[
 "projects/index.html","projects/narayani-parajuli/index.html","projects/ramachandra-devkota/index.html","projects/ashok-adhikari/index.html",
 "releases/index.html","guide/index.html","source/index.html",
 "memory-wall/index.html","codes/pokhara/index.html","data/codes/nepal-pokhara.json","data/document-control.json",
-"data/projects.json","data/navigation.json","stages/m80/index.html",".nojekyll"]
+"data/projects.json","data/navigation.json","stages/m80/index.html",
+"templates/project-workspace/index.html","templates/project-workspace/project-template.v1.json","assets/js/project-site-packages.mjs",".nojekyll"]
 missing=[x for x in required if not (root/x).is_file()]
 guide=(root/"guide/index.html").read_text() if (root/"guide/index.html").exists() else ""
 assert all(x in guide for x in ("How It Works","UNDERSTAND","RESOLVE","VALIDATE","EXECUTE","VERIFY","VIEW","TRACE","3D","2D","4D","5D","engineering acceptance","CAD-owned AAD template","AI_AIDED_DRAWING_GUIDE_ADOPTION_v0.1.md")), "AI aided CAD guide missing canonical policy or safety details"
