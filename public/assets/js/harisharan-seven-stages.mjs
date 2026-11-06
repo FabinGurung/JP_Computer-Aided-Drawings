@@ -131,7 +131,7 @@ export function buildHarisharanStages(source){
  const byStage=Object.fromEntries(STAGES.map(s=>[s.id,perMember.filter(r=>r.stage===s.id)]));
  byStage.m80=[];
  const summary=Object.fromEntries(STAGES.map(s=>{
-  const items=byStage[s.id],primary=items.filter(x=>!['v03','m50'].includes(s.id));
+  const items=byStage[s.id],primary=items;
   return [s.id,{objectCount:items.length,concreteM3:items.length?s.id==='v03'||s.id==='m50'?null:q(primary.reduce((x,r)=>x+r.concreteM3,0),5):null,
     theoreticalSteelKg:items.length?s.id==='v02'?null:s.id==='m40'?null:s.id==='m50'?null:q(primary.reduce((x,r)=>x+r.theoreticalSteelKg,0),4):null,
     sourceAdmission:s.id==='m80'?'NOT_ADMITTED':'PROVISIONAL',approved:false}];
