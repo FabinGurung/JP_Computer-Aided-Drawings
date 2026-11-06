@@ -14,6 +14,7 @@ on:
       - "cad/aad/multistorey/**"
       - "tools/site/**"
       - "governance/aad/**"
+      - "public/memory-wall/**"
       - ".github/workflows/cad-unified-website-qa.yml"
 permissions:
   contents: read
@@ -44,6 +45,7 @@ jobs:
           node tools/site/harisharan-workspace-smoke.mjs
           node tools/site/project-workspace-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
+          node tools/site/engineering-normalization-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
@@ -57,6 +59,7 @@ jobs:
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/ashok-preview.log 2>&1 &)
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/project-workspace-browser.mjs
+          node tools/site/engineering-normalization-browser.mjs
           node tools/site/harisharan-browser-smoke.mjs
           node tools/site/harisharan-workspace-browser.mjs
           node tools/site/ashok-rev04-browser.mjs
