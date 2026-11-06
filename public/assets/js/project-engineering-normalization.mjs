@@ -334,8 +334,8 @@ export const NORMALIZED_PROJECT_METADATA=Object.freeze({
     "title": "Harisharan Adhikari",
     "synthetic": false,
     "overallApproval": "PROVISIONAL / REVIEW OPEN",
-    "notice": "Source conflict M20 vs M25; material takeoff provisional. One plinth study is referenced by multiple stage cards, not independent complete BBS records.",
-    "sourceBasis": "September source structural/architectural plans, report and provisional takeoff.",
+    "notice": "Seven source-specific Harisharan V02–M80 viewer routes implemented using original 18-column takeoff; no approved fabrication BBS. M50 dowels are non-additive references; M80 is a source-hold checklist, not fabricated tank geometry. Two footing mesh layers and column ties remain unresolved.",
+    "sourceBasis": "HAR-SRC-STR-001 + HAR-SRC-RPT-001 user-selected precedence, original R000001 takeoff and preserved architectural sources. M25/Fe500 grade, source-based planning allowances only.",
     "rawGeometryAdmitted": true
   },
   "ashok-adhikari": {
@@ -402,30 +402,45 @@ export const NORMALIZED_EVIDENCE=Object.freeze({
     ]
   },
   "harisharan-adhikari": {
-    "footing-rebar": [
-      "Through-plinth study",
+    "pcc": [
+      "V02 · Harisharan PCC / blinding",
       "PROVISIONAL STUDY",
-      "projects/harisharan-adhikari/plinth/"
+      "projects/harisharan-adhikari/stages/v02/"
+    ],
+    "footing-rebar": [
+      "V03 · Harisharan footing rebar",
+      "ENGINEERING HOLD",
+      "projects/harisharan-adhikari/stages/v03/"
     ],
     "footing-rcc": [
-      "Through-plinth study",
+      "M40 · Harisharan footing RCC",
       "PROVISIONAL STUDY",
-      "projects/harisharan-adhikari/plinth/"
+      "projects/harisharan-adhikari/stages/m40/"
+    ],
+    "dowels": [
+      "M50 · Harisharan dowel source QA (non-additive)",
+      "ENGINEERING HOLD",
+      "projects/harisharan-adhikari/stages/m50/"
     ],
     "columns": [
-      "Phase quantities",
-      "PHASE SUMMARY",
-      "projects/harisharan-adhikari/?panel=boq&phase=substructure"
+      "M60 · Harisharan columns and six-leg tie scenario",
+      "PROVISIONAL STUDY",
+      "projects/harisharan-adhikari/stages/m60/"
     ],
     "plinth": [
-      "Through-plinth study",
+      "M70 · Harisharan 27 plinth + 12 strap beams",
       "PROVISIONAL STUDY",
-      "projects/harisharan-adhikari/plinth/"
+      "projects/harisharan-adhikari/stages/m70/"
     ],
     "upper-floors": [
       "Per-floor ledger",
       "PHASE SUMMARY",
       "projects/harisharan-adhikari/?panel=boq&phase=first"
+    ],
+    "tank": [
+      "M80 · Harisharan tank source-intake HOLD, no geometry",
+      "ENGINEERING HOLD",
+      "projects/harisharan-adhikari/stages/m80/"
     ]
   },
   "ashok-adhikari": {
@@ -662,8 +677,8 @@ export const NORMALIZED_PROJECTS=Object.freeze({
     "title": "Harisharan Adhikari",
     "synthetic": false,
     "overallApproval": "PROVISIONAL / REVIEW OPEN",
-    "notice": "Source conflict M20 vs M25; material takeoff provisional. One plinth study is referenced by multiple stage cards, not independent complete BBS records.",
-    "sourceBasis": "September source structural/architectural plans, report and provisional takeoff.",
+    "notice": "Seven source-specific Harisharan V02–M80 viewer routes implemented using original 18-column takeoff; no approved fabrication BBS. M50 dowels are non-additive references; M80 is a source-hold checklist, not fabricated tank geometry. Two footing mesh layers and column ties remain unresolved.",
+    "sourceBasis": "HAR-SRC-STR-001 + HAR-SRC-RPT-001 user-selected precedence, original R000001 takeoff and preserved architectural sources. M25/Fe500 grade, source-based planning allowances only.",
     "rawGeometryAdmitted": true,
     "normalizationStatus": "SCHEMA_NORMALIZED_NOT_ENGINEERING_APPROVED",
     "slots": [
@@ -708,9 +723,9 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       },
       {
         "slotId": "pcc",
-        "sourceStatus": "NOT ADMITTED",
-        "originalSourceModule": null,
-        "publicSourceHref": null,
+        "sourceStatus": "PROVISIONAL STUDY",
+        "originalSourceModule": "V02 · Harisharan PCC / blinding",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/v02/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -721,9 +736,9 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       },
       {
         "slotId": "footing-rebar",
-        "sourceStatus": "PROVISIONAL STUDY",
-        "originalSourceModule": "Through-plinth study",
-        "publicSourceHref": "projects/harisharan-adhikari/plinth/",
+        "sourceStatus": "ENGINEERING HOLD",
+        "originalSourceModule": "V03 · Harisharan footing rebar",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/v03/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -735,8 +750,8 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       {
         "slotId": "footing-rcc",
         "sourceStatus": "PROVISIONAL STUDY",
-        "originalSourceModule": "Through-plinth study",
-        "publicSourceHref": "projects/harisharan-adhikari/plinth/",
+        "originalSourceModule": "M40 · Harisharan footing RCC",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/m40/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -747,9 +762,9 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       },
       {
         "slotId": "dowels",
-        "sourceStatus": "NOT ADMITTED",
-        "originalSourceModule": null,
-        "publicSourceHref": null,
+        "sourceStatus": "ENGINEERING HOLD",
+        "originalSourceModule": "M50 · Harisharan dowel source QA (non-additive)",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/m50/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -760,9 +775,9 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       },
       {
         "slotId": "columns",
-        "sourceStatus": "PHASE SUMMARY",
-        "originalSourceModule": "Phase quantities",
-        "publicSourceHref": "projects/harisharan-adhikari/?panel=boq&phase=substructure",
+        "sourceStatus": "PROVISIONAL STUDY",
+        "originalSourceModule": "M60 · Harisharan columns and six-leg tie scenario",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/m60/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -774,8 +789,8 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       {
         "slotId": "plinth",
         "sourceStatus": "PROVISIONAL STUDY",
-        "originalSourceModule": "Through-plinth study",
-        "publicSourceHref": "projects/harisharan-adhikari/plinth/",
+        "originalSourceModule": "M70 · Harisharan 27 plinth + 12 strap beams",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/m70/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
@@ -838,9 +853,9 @@ export const NORMALIZED_PROJECTS=Object.freeze({
       },
       {
         "slotId": "tank",
-        "sourceStatus": "NOT ADMITTED",
-        "originalSourceModule": null,
-        "publicSourceHref": null,
+        "sourceStatus": "ENGINEERING HOLD",
+        "originalSourceModule": "M80 · Harisharan tank source-intake HOLD, no geometry",
+        "publicSourceHref": "projects/harisharan-adhikari/stages/m80/",
         "sourceRevisionAccepted": null,
         "engineeringApprovalEvidence": null,
         "quantityBasisVerified": false,
