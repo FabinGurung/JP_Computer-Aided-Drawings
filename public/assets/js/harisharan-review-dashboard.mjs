@@ -30,7 +30,7 @@ function plan2D(){
  for(const b of lines){const a=byId.get(b.a),c=byId.get(b.b);if(!a||!c)continue;const p=point2(a),q=point2(c),id=b.id,active=id===selected()?.id;
   const stroke=b.id.startsWith('ST-')?'#9b8e75':'#aabdc3';
   const hit='<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="'+(active?'#b24f2a':stroke)+'" stroke-width="'+(active?8:4)+'" stroke-linecap="round"/>';
-  html+=state.stage==='m70'?svgButton(id,hit+'<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="transparent" stroke-width="18"/>'):hit;
+  html+=state.stage==='m70'?svgButton(id,hit+'<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="transparent" stroke-width="18"/><circle cx="'+((p.x+q.x)/2)+'" cy="'+((p.y+q.y)/2)+'" r="12" fill="transparent" pointer-events="all"/>'):hit;
  }
  for(const n of nodes){const p=point2(n),id=mBySupport.get(n.id),active=id===selected()?.id;
   const circle='<rect x="'+(p.x-7)+'" y="'+(p.y-7)+'" width="14" height="14" rx="3" fill="'+(active?'#b24f2a':'#2e6f72')+'" stroke="white" stroke-width="2"/><text x="'+(p.x+10)+'" y="'+(p.y-9)+'" class="nodeid">'+esc(n.id)+'</text>';
@@ -48,7 +48,7 @@ function axon3D(){
  for(const b of beams){const a=byId.get(b.a),c=byId.get(b.b);if(!a||!c)continue;
   const id=b.id,isStrap=id.startsWith('ST-'),elev=isStrap?-1.1:.38,p=point3(a,elev),q=point3(c,elev);
   const active=id===selected()?.id,mark='<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="'+(active?'#b24f2a':isStrap?'#afa28e':'#87b3b7')+'" stroke-width="'+(active?9:isStrap?7:5)+'" stroke-linecap="round"/>';
-  html+=state.stage==='m70'?svgButton(id,mark+'<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="transparent" stroke-width="20"/>'):mark;
+  html+=state.stage==='m70'?svgButton(id,mark+'<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="transparent" stroke-width="20"/><circle cx="'+((p.x+q.x)/2)+'" cy="'+((p.y+q.y)/2)+'" r="12" fill="transparent" pointer-events="all"/>'):mark;
  }
  for(const n of model.geometry.nodes){const base=point3(n,-.9),top=point3(n,.55),id=memberBySupport.get(n.id),active=id===selected()?.id;
   const footing=point3(n,-1.5);
