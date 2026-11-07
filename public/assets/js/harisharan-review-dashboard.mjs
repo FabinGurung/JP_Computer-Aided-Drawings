@@ -28,15 +28,19 @@ function plan2D(){
  for(let z=0;z<=25;z+=5){const y=45+z*18;html+='<line x1="58" y1="'+y+'" x2="446" y2="'+y+'" class="gridline"/><text x="15" y="'+(y+4)+'" class="gridlabel">Z '+z+'</text>';}
  for(let x=0;x<=12;x+=3){const xx=72+x*28;html+='<line x1="'+xx+'" y1="30" x2="'+xx+'" y2="515" class="gridline"/>';}
  for(const b of lines){const a=byId.get(b.a),c=byId.get(b.b);if(!a||!c)continue;const p=point2(a),q=point2(c),id=b.id,active=id===selected()?.id;
-  const stroke=b.id.startsWith('ST-')?'#9b8e75':'#aabdc3';
-  const hit='<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="'+(active?'#b24f2a':stroke)+'" stroke-width="'+(active?8:4)+'" stroke-linecap="round"/>';
-  html+=state.stage==='m70'?svgButton(id,hit+'<line x1="'+p.x+'" y1="'+p.y+'" x2="'+q.x+'" y2="'+q.y+'" stroke="transparent" stroke-width="18"/><circle cx="'+((p.x+q.x)/2)+'" cy="'+((p.y+q.y)/2)+'" r="12" fill="transparent" pointer-events="all"/>'):hit;
+  // PB and ST share several plan centrelines at different elevations. Offset only
+  // their 2D HIT/DISPLAY LANES; endpoints/engineering source coordinates stay intact.
+  const dx=q.x-p.x,dy=q.y-p.y,len=Math.hypot(dx,dy)||1,lane=state.stage==='m70'?(id.startsWith('ST-')?11:-11):0;
+  const px=p.x-dy/len*lane,py=p.y+dx/len*lane,qx=q.x-dy/len*lane,qy=q.y+dx/len*lane;
+  const stroke=id.startsWith('ST-')?'#9b8e75':'#aabdc3';
+  const hit='<line x1="'+px+'" y1="'+py+'" x2="'+qx+'" y2="'+qy+'" stroke="'+(active?'#b24f2a':stroke)+'" stroke-width="'+(active?8:4)+'" stroke-linecap="round"/>';
+  html+=state.stage==='m70'?svgButton(id,hit+'<line x1="'+px+'" y1="'+py+'" x2="'+qx+'" y2="'+qy+'" stroke="transparent" stroke-width="16"/><circle cx="'+((px+qx)/2)+'" cy="'+((py+qy)/2)+'" r="9" fill="transparent" pointer-events="all"/>'):hit;
  }
  for(const n of nodes){const p=point2(n),id=mBySupport.get(n.id),active=id===selected()?.id;
   const circle='<rect x="'+(p.x-7)+'" y="'+(p.y-7)+'" width="14" height="14" rx="3" fill="'+(active?'#b24f2a':'#2e6f72')+'" stroke="white" stroke-width="2"/><text x="'+(p.x+10)+'" y="'+(p.y-9)+'" class="nodeid">'+esc(n.id)+'</text>';
   html+=id?svgButton(id,circle):'<g>'+circle+'</g>';
  }
- return html+'<text x="20" y="538" class="viewnote">Plan X / Z in metres · positions source-calibrated, not surveyed</text></svg>';
+ return html+'<text x="20" y="538" class="viewnote">Plan X/Z in m · source-calibrated, not surveyed · overlapping ST/PB drawn in separate display-only lanes</text></svg>';
 }
 function axon3D(){
  const byId=new Map(model.geometry.nodes.map(n=>[n.id,n]));
