@@ -183,6 +183,7 @@ jobs:
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
+          PROJECT_SITE_URL=https://fabingurung.github.io/JP_Computer-Aided-Drawings/ node tools/site/ashok-grid-browser.mjs
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
