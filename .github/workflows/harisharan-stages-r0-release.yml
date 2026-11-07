@@ -1,0 +1,98 @@
+name: Harisharan stages v0.1.0 — governed prerelease
+
+on:
+  workflow_run:
+    workflows: ["CAD M01 Live Pages Readback"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: harisharan-stages-v0.1.0-release
+  cancel-in-progress: false
+
+jobs:
+  seal-prerelease:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact metadata commit that passed live readback
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - name: Prepare Node source sanity check
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Verify frozen stage commit and complete publication chain
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_META_SHA: ${{ github.event.workflow_run.head_sha }}
+          FROZEN_SHA: dfd60740b7c003bc1eac581e1ac0e5c217f2fe63
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_META_SHA"
+          current_main="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          test "$current_main" = "$VERIFIED_META_SHA" || { echo "::error::main moved after readback"; exit 1; }
+          git cat-file -e "$FROZEN_SHA^{commit}"
+          git merge-base --is-ancestor "$FROZEN_SHA" "$VERIFIED_META_SHA"
+          # This prerelease must seal the already verified engineering viewer source,
+          # not accidentally include post-baseline changes to stage logic or source data.
+          git diff --quiet "$FROZEN_SHA" "$VERIFIED_META_SHA" -- \
+            public/assets/js/harisharan-seven-stages.mjs \
+            public/assets/js/harisharan-stage-app.mjs \
+            public/data/projects/harisharan-adhikari/takeoff.json \
+            public/data/projects/harisharan-adhikari/rear-nine-governing-report.v0.2.json \
+            public/projects/harisharan-adhikari/stages/
+          test -s governance/aad/releases/HARISHARAN_STAGES_V0_1_0.md
+          grep -q 'NOT FOR CONSTRUCTION' governance/aad/releases/HARISHARAN_STAGES_V0_1_0.md
+          node tools/site/harisharan-seven-stages-smoke.mjs
+          for workflow_name in "CAD Unified Website Staging QA" "CAD Main GitHub Pages (validated CAD publishing)" "CAD M01 Live Pages Readback"; do
+            n="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$FROZEN_SHA&per_page=100" \
+              --jq "[.workflow_runs[] | select(.name == \"$workflow_name\" and .head_sha == \"$FROZEN_SHA\" and .conclusion == \"success\")] | length")"
+            test "$n" -ge 1 || { echo "::error::Missing successful frozen baseline gate: $workflow_name"; exit 1; }
+          done
+          meta_pages="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_META_SHA&per_page=100" \
+            --jq '[.workflow_runs[] | select(.name == "CAD Main GitHub Pages (validated CAD publishing)" and .conclusion == "success")] | length')"
+          test "$meta_pages" -ge 1 || { echo "::error::No successful metadata Pages deployment"; exit 1; }
+          echo "HARISHARAN_R0_SOURCE_AND_LIVE_READBACK_GATES_PASS frozen=$FROZEN_SHA metadata=$VERIFIED_META_SHA"
+      - name: Seal immutable annotated tag and GitHub prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: harisharan-stages-v0.1.0
+          FROZEN_SHA: dfd60740b7c003bc1eac581e1ac0e5c217f2fe63
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "refs/tags/$TAG"; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
+            actual="$(git rev-parse "$TAG^{}")"
+            test "$actual" = "$FROZEN_SHA" || { echo "::error::Immutable tag exists on unexpected commit"; exit 1; }
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "Harisharan source-qualified workbenches v0.1.0; engineering HOLD; NOT FOR CONSTRUCTION" "$FROZEN_SHA"
+            git push origin "refs/tags/$TAG"
+          fi
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "HARISHARAN_R0_RELEASE_ALREADY_SEALED $TAG at $FROZEN_SHA"
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" \
+              --verify-tag --prerelease \
+              --title "Harisharan stages v0.1.0 — source-qualified (NOT FOR CONSTRUCTION)" \
+              --notes-file governance/aad/releases/HARISHARAN_STAGES_V0_1_0.md
+          fi
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,isPrerelease,publishedAt
+          echo "HARISHARAN_R0_PRERELEASE_PASS $TAG at $FROZEN_SHA"
+          echo "### Harisharan R0 release" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Frozen software SHA: $FROZEN_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tag: $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: source-qualified, not for construction" >> "$GITHUB_STEP_SUMMARY"
