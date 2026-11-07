@@ -1,0 +1,232 @@
+{
+  "schema": "jp-cad://owner-change-review/1.0",
+  "project": "Ashok Adhikari Residence",
+  "company": "Rohini Engineering and Builders",
+  "municipalWard": 14,
+  "dateNpt": "2026-11-06",
+  "state": "OWNER_REQUESTED_V3_COORDINATION_DRAFT_NOT_FOR_CONSTRUCTION",
+  "originalEdition": "v2",
+  "candidateEdition": "v3",
+  "dateBasis": "Owner conversation and 2 annotated GF/FF screenshots with follow-up door annotations; not a new native surveyed CAD source",
+  "notPublicSource": "Annotated original images remain in the conversation; public repo stores only derived intent and references existing approved comparison images; A9 Drive intake pending",
+  "authority": {
+    "currentOfficialBaseline": "REV03 v0.4",
+    "reviewSource": "REV04 v0.8",
+    "previousWorkingEdition": "v2",
+    "previousVisuals": "Original GF c016 and FF c012 preserved and remain visual only",
+    "newOwnerReview": "v3 not engineering-approved"
+  },
+  "changes": [
+    {
+      "id": "GF-01",
+      "phase": "gf",
+      "title": "Hall absorbed by enlarged bathroom",
+      "source": "Owner markup",
+      "action": "GF-HALL removed, GF-BATH nominal bbox x=0..3300 mm, y=5600..9400 mm (old v2 bath width 2112 mm)",
+      "status": "CANDIDATE",
+      "hold": "Professional accessibility and sanitary layout review required"
+    },
+    {
+      "id": "GF-02",
+      "phase": "gf",
+      "title": "Bedroom 1 to kitchen door",
+      "action": "GF-D-BED1-KITCHEN-V3, 914.4 mm wide × 2133.6 mm high, shared internal wall",
+      "status": "GEOMETRY_CANDIDATE",
+      "hold": "Confirm hinge, swing, furniture clearance and exact station"
+    },
+    {
+      "id": "GF-03",
+      "phase": "gf",
+      "title": "Kitchen to lounge left-end door",
+      "action": "GF-D-KITCHEN-LOUNGE-V3 on internal partition",
+      "status": "GEOMETRY_CANDIDATE",
+      "hold": "Confirm final door station and wall pier"
+    },
+    {
+      "id": "GF-04",
+      "phase": "gf",
+      "title": "Delete lounge's right exterior door",
+      "action": "No right-wall door exists in previous QA02 model; keep that exterior wall sealed",
+      "status": "ALREADY_ABSENT_IN_V2",
+      "hold": "Do not adopt raster hallucination as a model door"
+    },
+    {
+      "id": "GF-05",
+      "phase": "gf",
+      "title": "Replace former hall-based circulation",
+      "action": "Single GF bath opening via owner-confirmed sliding bath-to-lounge door; former hall doors removed. Bedroom 2 to lounge remains provisional circulation proposal.",
+      "status": "BATH_LOUNGE_ONLY_OWNER_CONFIRMED__BED2_ENTRY_PENDING",
+      "hold": "Confirm Bedroom 2 entrance separately; bathroom 950 mm candidate slider and clearance need accessibility review"
+    },
+    {
+      "id": "FF-01",
+      "phase": "ff",
+      "title": "Two large aluminium main bedroom windows",
+      "action": "FF-W001/FF-W002 on rear wall, each candidate 2100×1500 mm, aluminum sliding",
+      "status": "SIZE_PROVISIONAL",
+      "hold": "Dimensions, frame, elevation, lintel/pier and waterproofing to be confirmed"
+    },
+    {
+      "id": "FF-02",
+      "phase": "ff",
+      "title": "Lounge door shifted to side",
+      "action": "FF-D-LOUNGE-MAIN shifted along main bedroom/lounge shared internal wall",
+      "status": "OWNER_CONFIRMED_INTERNAL_SIDE_POSITION__NOT_ENGINEERING_APPROVED",
+      "hold": "Owner confirms internal main-bedroom/lounge side doorway. Verify jamb, swing, support and furniture clearances; zero-right-setback wall remains closed."
+    },
+    {
+      "id": "FF-03",
+      "phase": "ff",
+      "title": "One centred internal stair-side window at Bedroom 2",
+      "action": "Retain only FF-W008-BED2-STAIR-V3, centered along FF-STAIR-REAR-1 host wall; retire second unapproved candidate FF-W009; width 900 mm and height 1100 mm remain provisional.",
+      "status": "COUNT_AND_CENTRE_OWNER_CONFIRMED__FIRE_SAFETY_HOLD",
+      "hold": "Not exterior ventilation or egress: verify stair fire separation, privacy, glazing safety, sill and frame; retain one opening only."
+    },
+    {
+      "id": "FF-04",
+      "phase": "ff",
+      "title": "Lounge sliding window",
+      "action": "Convert existing balcony-facing FF-W005 to aluminum sliding on front wall",
+      "status": "PROVISIONAL",
+      "hold": "No direct right boundary window; confirm intended sliding aperture"
+    }
+  ],
+  "impacts": {
+    "views": {
+      "status": "V3_GEOMETRY_CANDIDATE",
+      "summary": "New GF/FF hosted wall and aperture versions drive connected 2D/3D model; user screenshots are not geometry authority.",
+      "records": [
+        "v1 and v2 retained; v3 is new unapproved edition",
+        "External building envelope remains 7200×14400 mm",
+        "No right-wall openings; owner confirms internal side lounge door and exactly one centered internal Bedroom 2 stair-side glazed opening",
+        "Ground-floor bath nominal envelope becomes 3300×3800 mm"
+      ]
+    },
+    "boq": {
+      "status": "UNPRICED_DELTA_PENDING_TAKEOFF",
+      "summary": "Room zoning, wall lengths, hosted openings and finishes changed. The proposed count/quantity difference is not an approved payment or BOQ.",
+      "quantitative": {
+        "oldBathNominalM2": 8.0256,
+        "newBathNominalM2": 12.54,
+        "grossBathroomZoneIncreaseM2": 4.5144,
+        "hallZoneDecreaseM2": 4.5144,
+        "envelopeAreaChangeM2": 0,
+        "bed2StairGlazingCountCandidate": 1,
+        "bed2StairGlazingNominalWidthMm": 900,
+        "bed2StairGlazingNominalAreaM2": 0.99,
+        "retiredSecondStairGlazingCount": 1
+      },
+      "affected": [
+        "Bathroom floor/wall finish and waterproofing",
+        "Internal brick partitions and door-frame jambs",
+        "Salwood door set positions / type checks",
+        "Two large aluminum bedroom windows",
+        "Lounge slider and one owner-confirmed centred Bed 2/stair vision panel (construction approval pending)"
+      ],
+      "price": null,
+      "approvedBOQ": null
+    },
+    "gantt": {
+      "status": "NO_ACCEPTED_DATES_OR_DURATIONS",
+      "summary": "Dependency-only coordination sequence. No invented dates, resources or programme completion.",
+      "dependencies": [
+        "Confirm owner-marked openings and dimensioned schedule",
+        "Validate elderly-access bathroom circulation/fixtures",
+        "Resolve fire/privacy/safety of one centered FF Bed 2-to-stair glazed opening and zero-setback wall restriction",
+        "Reconcile structural header/lintel, wall reinforcement and MEP penetrations",
+        "Review plan, building model and source provenance QA",
+        "Recalculate measurement and tender/BOQ deltas in owning cost system",
+        "Only after approved gate, issue site instructions and schedule revisions"
+      ],
+      "startDate": null,
+      "durations": null
+    },
+    "packages": {
+      "status": "CONSTRUCTION_PACKAGES_HOLD",
+      "summary": "Package and trade interfaces updated for review; no masonry, aluminum, bathroom or schedule work package is construction-issued.",
+      "tradeImpacts": [
+        "Architectural wall/opening and wet area",
+        "Joinery / hinges / sliding door specification",
+        "Aluminum framing and glazing",
+        "One centered stair-compartment glazed vision panel; fire/privacy review",
+        "MEP/sanitary coordination",
+        "Programme/cost dependencies"
+      ],
+      "drawingsForSite": "NOT_ISSUED"
+    },
+    "sources": {
+      "status": "SOURCE_RECONCILIATION_PENDING",
+      "summary": "New owner markup and previous approved visual states are distinguished; original source and prior editions preserved.",
+      "prior": [
+        "v1 archived architecture",
+        "v2 coordinated architecture + MEP",
+        "REV04 v0.8 source model",
+        "REV04 v0.9 GF c016 / FF c012 approved historical visuals"
+      ],
+      "new": [
+        "2026-11-06 owner GF bathroom and door markup",
+        "2026-11-06 owner FF window/door markup",
+        "2026-11-06 GF follow-up 3 ft × 7 ft door request",
+        "2026-11-07 owner follow-up: lounge-only common bathroom access; one centered internal Bed 2/stair glazed opening; internal FF lounge-side door confirmed"
+      ],
+      "a9Sync": "NOT_PERFORMED_IN_THIS_GITHUB_BRANCH"
+    }
+  },
+  "qaGates": [
+    "GF-BATH accessibility clear floor and safe door swing",
+    "GF-BED2 lounge entry owner review",
+    "Host-wall apertures and no overlapping windows/doors",
+    "FF-W008 one centered stair-side internal window fire separation and natural ventilation",
+    "No direct opening on zero right setback",
+    "On-site measurements and wall thickness conventions",
+    "Re-quantify partitions and openings and approve BOQ",
+    "Scheduling specialist accepts dependencies and dates",
+    "Record original screenshots in governed Drive then Local/Main readback",
+    "Revised 2026-11-07 owner confirmations preserved without duplicate image objects or changes to v1/v2"
+  ],
+  "ownerDecisionEvents": [
+    {
+      "id": "OWNER-CONFIRM-20261107-01",
+      "dateNpt": "2026-11-07",
+      "source": "Owner's follow-up in 14_Ashok_Adhikari_01 ChatGPT project thread",
+      "decisions": [
+        {
+          "subject": "GF enlarged bathroom access",
+          "decision": "Bathroom ONLY opens into living/lounge",
+          "scope": "CONFIRMED_ROOM_CONNECTION",
+          "exception": "GF Bedroom 2 entrance was not explicitly resolved and remains a marked coordination candidate"
+        },
+        {
+          "subject": "FF Bedroom 2 front glazing",
+          "decision": "One INTERNAL glazed opening centered in the shared stair-side wall",
+          "scope": "CONFIRMED_ONE_CENTERED_WINDOW",
+          "modelRef": "FF-W008-BED2-STAIR-V3",
+          "retiredCandidate": "FF-W009-BED2-STAIR-V3",
+          "centerRule": "(HOST_WALL_LENGTH - WINDOW_WIDTH)/2",
+          "review": "Fire separation/privacy/clearance still on hold"
+        },
+        {
+          "subject": "FF Lounge entry",
+          "decision": "Yes, moved door is the internal main-bedroom/lounge side entry, not an exterior right-wall opening",
+          "scope": "CONFIRMED_INTERNAL_DOOR",
+          "modelRef": "FF-D-LOUNGE-MAIN"
+        }
+      ]
+    }
+  ],
+  "currentDecisionState": {
+    "dateNpt": "2026-11-07",
+    "groundBathEntrance": "LOUNGE_ONLY",
+    "groundBedroom2Entrance": "PROPOSED_LOUNGE_UNCONFIRMED",
+    "firstFloorBed2Glazing": {
+      "count": 1,
+      "location": "CENTER_OF_STAIR_SIDE_PARTITION",
+      "type": "INTERNAL",
+      "widthMmCandidate": 900,
+      "heightMmCandidate": 1100,
+      "requiredSafetyReview": true
+    },
+    "firstFloorLoungeDoor": "INTERNAL_SIDE_POSITION_OWNER_CONFIRMED",
+    "zeroSetbackRightWall": "NO_OPENINGS"
+  }
+}
