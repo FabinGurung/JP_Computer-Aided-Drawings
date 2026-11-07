@@ -1,0 +1,112 @@
+{
+  "schema": "jp-cad://architectural-coordinate-grid/1.0",
+  "project": "Ashok Adhikari Residence",
+  "revision": "GRID-ALIGN-REVIEW-20261107",
+  "status": "DRAFT_COORDINATE_CONTROL_NOT_SURVEY_REGISTRATION",
+  "unit": "mm",
+  "horizontalPrecisionMm": 1,
+  "baseCellMm": 100,
+  "visibleMinorMm": 100,
+  "visibleMidMm": 500,
+  "visibleMajorMm": 1000,
+  "snapEnabled": false,
+  "method": "Building-local planar Cartesian. Building X increases to the right/eastward in the drawing, local Y increases towards the REAR/top. The renderer graph uses x metres and z metres increasing towards FRONT; building Y(mm) = 14400 - z(m)*1000. No geographic latitude/longitude assumed.",
+  "building": {
+    "boundsMm": [
+      0,
+      0,
+      7200,
+      14400
+    ],
+    "origin": "Front-left outer building corner",
+    "xRight": true,
+    "yRear": true,
+    "axisNames": [
+      "X",
+      "Y"
+    ],
+    "zDatum": "0 mm GF relative; elevation +610 mm above ground"
+  },
+  "plot": {
+    "widthMm": 9144,
+    "depthMm": 18288,
+    "origin": "Front-left plot corner",
+    "buildingOriginInPlotMm": [
+      1944,
+      2000
+    ],
+    "rearSetbackMm": 1888,
+    "rightSetbackMm": 0,
+    "notSurveyGeoreferenced": true
+  },
+  "sheet": {
+    "paper": "A3",
+    "sizeMm": [
+      420,
+      297
+    ],
+    "modelToPaper": "xSheetMm=xModelMm/scaleDenominator; ySheetMm=yModelMm/scaleDenominator; preserve uniform scale; viewport margins and title block independent",
+    "recommendedScaleDenominator": 100,
+    "scaleVerification": "Plot 9,144×18,288 mm at 1:100 occupies 91.44×182.88 mm; model 7,200×14,400 mm occupies 72×144 mm"
+  },
+  "addressing": {
+    "format": "BXnnn-BYnnn",
+    "example": "BX036-BY056",
+    "meaning": "Lower-left corner of 100 mm cell in building-local coordinates: X=3600 mm, Y=5600 mm",
+    "exactCoordinatesKept": true
+  },
+  "constraints": [
+    {
+      "id": "GF-PARTITION-X036",
+      "targetXmm": 3600,
+      "kind": "COLLINEAR_WALL_CENTERLINES",
+      "ownerDirected": true,
+      "source": "2026-11-07 screenshots and follow-up in project chat",
+      "wallIds": [
+        "GF-BED-KITCHEN",
+        "GF-BATH-LOUNGE-V3",
+        "GF-HALL-LOW-1"
+      ],
+      "zRangesMetres": [
+        [
+          0.115,
+          5
+        ],
+        [
+          5,
+          8.8
+        ],
+        [
+          8.8,
+          12.2
+        ]
+      ],
+      "approval": "USER_DIRECTED_COORDINATION_CANDIDATE_NOT_ISSUED"
+    },
+    {
+      "id": "GF-STAIR-SPLIT-HOLD",
+      "kind": "NOT_YET_ALIGNED_TO_X036",
+      "ownerDirected": true,
+      "source": "2026-11-07 screenshot stair-side mismatch",
+      "wallId": "GF-EXT-02-1",
+      "existingStairOuterFaceMm": 4290,
+      "existingStairBoundaryCentrelineXmm": 4175,
+      "targetInteriorPartitionCentrelineMm": 3600,
+      "centrelineOffsetMm": 575,
+      "outerFaceOffsetMm": 690,
+      "hold": "Changing stair bay touches landings, 18-riser design, porch, boundary and slab/MEP/structure; no unauthorized stair redesign or loss of usable stair clearance."
+    }
+  ],
+  "coordinateTransform": {
+    "graphXToLocalXmm": "1000 * xMetres",
+    "graphZToLocalYmm": "14400 - 1000 * zMetres",
+    "localToPlotXmm": "1944 + localXmm",
+    "localToPlotYmm": "2000 + localYmm"
+  },
+  "holds": [
+    "Grid is a local mathematical control, NOT surveyed latitude/longitude or structural grid registration.",
+    "Stair/porch 575 mm centreline offset remains flagged; retain original stair geometry until full re-coordination.",
+    "Actual external face / room clear dimensions must subtract applicable wall build-ups; not rounded to grid.",
+    "Not engineering-approved or construction-issued."
+  ]
+}

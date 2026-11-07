@@ -23,8 +23,19 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
    pattern.append(make('path',{d:`M${size} 0H0V${size}`,fill:'none',stroke:colour,'stroke-width':width}));defs.append(pattern);
   }back.append(defs);
   for(const id of ['minor','medium','major'])back.append(make('rect',{x:x0-2,y:z0-2,width:W+4,height:D+4,fill:`url(#aad-grid-${id})`,'pointer-events':'none','data-grid-spacing':id}));
-  for(let x=0;x<=W;x+=(p.grid?.major||1))front.append(make('text',{x:x0+x,y:z0-.28,'text-anchor':'middle',class:'aad-grid-label'},Math.round(x*1000)));
-  for(let y=0;y<=D;y+=(p.grid?.major||1))front.append(make('text',{x:x0-.25,y:sourceDepth-y+.05,'text-anchor':'end',class:'aad-grid-label'},Math.round(y*1000)));
+  const coord=p.coordinateGrid||null,majorStep=p.grid?.major||1;
+  const gridAddress=(mm,axis)=>'B'+axis+String(Math.round(mm/100)).padStart(3,'0');
+  for(let x=0;x<=W+1e-7;x+=majorStep)front.append(make('text',{x:x0+x,y:z0-.28,'text-anchor':'middle',class:'aad-grid-label'},coord?gridAddress(Math.round(x*1000),'X'):Math.round(x*1000)));
+  for(let y=0;y<=D+1e-7;y+=majorStep)front.append(make('text',{x:x0-.25,y:sourceDepth-y+.05,'text-anchor':'end',class:'aad-grid-label'},coord?gridAddress(Math.round(y*1000),'Y'):Math.round(y*1000)));
+  if(coord){
+   const targetX=coord.targetXmm/1000,stairX=coord.unresolvedStairCentrelineXmm/1000;
+   // The blue datum is derived from the JSON coordinate rule; not a new structural grid.
+   back.append(make('path',{d:`M${targetX} ${z0}V${z1}`,stroke:'#2459b4','stroke-width':.038,'stroke-dasharray':'.17 .13',fill:'none','pointer-events':'none','data-owner-grid-datum-mm':coord.targetXmm}));
+   front.append(make('text',{x:targetX,y:z0-.61,'text-anchor':'middle',class:'aad-grid-label',style:'font-weight:750;fill:#2459b4'},'BX036 · 3600 mm'));
+   // A distinct amber leader exposes, rather than hides, the incompatible staircase.
+   back.append(make('path',{d:`M${stairX} 12.20 V14.285`,stroke:'#c17b24','stroke-width':.042,'stroke-dasharray':'.12 .09',fill:'none','pointer-events':'none','data-unresolved-stair-datum-mm':coord.unresolvedStairCentrelineXmm}));
+   front.append(make('text',{x:x0+W/2,y:z1+1.64,'text-anchor':'middle',class:'aad-grid-label',style:'font-weight:700;fill:#976221'},'STAIR OFFSET HOLD · '+coord.stairHoldOffsetMm+' mm between wall centrelines'));
+  }
  }
  const levels=roofOnly?[]:levelId==='all'?['GF','FF']:[levelId.toUpperCase()];
  for(const floor of levels){
@@ -67,6 +78,6 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
   for(const z of [z0,z1-bayD,z1])front.append(make('path',{d:`M${x0} ${z}H${x0-1.65}`,class:'aad-dim'}));
   dim(x0-1.45,z0,x0-1.45,z1,mm(D)+' overall');dim(x0-.85,z1-bayD,x0-.85,z1,mm(bayD)+' stair bay');
   front.append(make('text',{x:x0+W/2,y:z0-1.65,'text-anchor':'middle',class:'aad-space-size'},p.wallLegend||''));
-  front.append(make('text',{x:x0+W/2,y:z0-1.28,'text-anchor':'middle',class:'aad-space-size'},[p.grid?.minor||.1,p.grid?.medium||.5,p.grid?.major||1].map(n=>Math.round(n*1000)).join(' / ')+' mm callable grid · outer-face dimensions'));
+  front.append(make('text',{x:x0+W/2,y:z0-1.28,'text-anchor':'middle',class:'aad-space-size'},(p.coordinateGrid?'BUILDING X/Y · exact mm / ':'')+[p.grid?.minor||.1,p.grid?.medium||.5,p.grid?.major||1].map(n=>Math.round(n*1000)).join(' / ')+' mm grid · not an engineered structural grid'));
  }
 }

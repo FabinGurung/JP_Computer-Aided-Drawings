@@ -496,6 +496,7 @@ function projectToWorld(p,t){
 function drawPlan(){
  const doc=$("viewer2d");doc.replaceChildren();
  if(!workspace)return;
+ if(typeof gridHud!=='undefined'){const cg=workspace.snapshot().manifest.presentation?.coordinateGrid;gridHud.hidden=!cg;}
  const state=workspace.snapshot(),models=state.models;
  const levels=activeLevel==="all"?state.manifest.levels:state.manifest.levels.filter(l=>l.id===activeLevel);
  const outlines=[],pts=[];
@@ -1190,9 +1191,43 @@ for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEven
  const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
 });
 $('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg=$('viewer2d').cloneNode(true);svg.setAttribute('xmlns',svgNS);download(building.projectId+'_'+activeLevel+'_DIMENSIONED_PLAN.svg',new XMLSerializer().serializeToString(svg),'image/svg+xml');});
-$('viewer2d').addEventListener('pointermove',ev=>{
- if(!building?.manifest.presentation)return;const svg=$('viewer2d'),p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;const q=p.matrixTransform(svg.getScreenCTM().inverse());
- const x=Math.round(q.x*1000),y=Math.round((building.manifest.presentation.sourceYLength-q.y)*1000),cell=(building.manifest.presentation.grid?.minor||.1)*1000;$('aad-coordinate-readout').textContent=`Building ${activeLevel.toUpperCase()} · X ${x} mm · Y ${y} mm · cell ${Math.floor(x/cell)},${Math.floor(y/cell)}`;
+// Source-neutral coordinate feedback, with an owner-addressable 100 mm cell code for
+// Ashok's explicit grid-manifest only. This is LOCAL building model space, not GIS
+// latitude/longitude or a professionally registered structural grid.
+const gridHud=document.createElement('section');gridHud.id='aad-grid-hud';gridHud.hidden=true;
+gridHud.innerHTML='<strong>Building coordinate grid · 100 mm cells</strong><span id="aad-grid-current">Move the pointer on the plan to read exact X/Y millimetres and cell address.</span><button type="button" id="aad-grid-copy" title="Copy the last selected grid coordinate as a prompt">Copy coordinate</button><small>Plot X = local X + 1944 mm · Plot Y = local Y + 2000 mm. Zero is the building front-left outer corner. Blue BX036 = 3600 mm target wall; amber stair offset remains on HOLD.</small>';
+const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;align-items:center;padding:9px 12px;border-bottom:1px solid #c8d8d8;background:#eef6ff;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong,#aad-grid-hud small{grid-column:1/-1}#aad-grid-hud small{font-size:11px;color:#51677d;line-height:1.35}#aad-grid-current{font:650 12px ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}';
+document.head.append(gridStyle);
+$('viewport2d').insertBefore(gridHud,$('viewer2d'));
+let gridPrompt='';
+function onPlanCoordinate(ev,remember=false){
+ if(!building?.manifest.presentation)return;
+ const svg=$('viewer2d'),m=svg.getScreenCTM();if(!m)return;
+ const p=svg.createSVGPoint();p.x=ev.clientX;p.y=ev.clientY;
+ const q=p.matrixTransform(m.inverse()),presentation=building.manifest.presentation;
+ const x=Math.round(q.x*1000),y=Math.round(((presentation.sourceYLength||14.4)-q.y)*1000),cell=Math.round((presentation.grid?.minor||.1)*1000);
+ const coord=presentation.coordinateGrid;
+ if(coord){
+  gridHud.hidden=false;
+  const inBounds=x>=0&&x<=7200&&y>=0&&y<=14400;
+  const label=inBounds?('BX'+String(Math.floor(x/100)).padStart(3,'0')+'-BY'+String(Math.floor(y/100)).padStart(3,'0')):'OUTSIDE BUILDING';
+  const plotX=x+coord.plotOriginMm[0],plotY=y+coord.plotOriginMm[1];
+  gridPrompt='Ashok '+activeLevel.toUpperCase()+' '+label+' · building X='+x+' mm, Y='+y+' mm · plot X='+plotX+' mm, Y='+plotY+' mm · model precision 1 mm / grid 100 mm';
+  $('aad-grid-current').textContent=gridPrompt;
+  $('aad-coordinate-readout').textContent=gridPrompt;
+  if(remember){$('aad-grid-copy').dataset.coords=gridPrompt;}
+ }else{
+  $('aad-coordinate-readout').textContent='Building '+activeLevel.toUpperCase()+' · X '+x+' mm · Y '+y+' mm · cell '+Math.floor(x/cell)+','+Math.floor(y/cell);
+  gridHud.hidden=true;
+ }
+}
+$('viewer2d').addEventListener('pointermove',ev=>onPlanCoordinate(ev));
+$('viewer2d').addEventListener('click',ev=>onPlanCoordinate(ev,true));
+$('aad-grid-copy').addEventListener('click',async()=>{
+ const s=$('aad-grid-copy').dataset.coords||gridPrompt;
+ if(!s)return;
+ try{await navigator.clipboard.writeText(s);$('aad-grid-copy').textContent='Copied';}
+ catch{$('aad-grid-copy').textContent='Select coordinate text to copy';}
 });
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
