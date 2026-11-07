@@ -20,11 +20,14 @@ const NARAYANI={
  tank:{code:'M80 · v0.4',href:'stages/m80/',status:'ENGINEERING HOLD',note:'Preserved detailed tank model, PCC/RCC, base/wall/cover reinforcement, BBS and stock planning. CODAL_NOT_VERIFIED — not approved for fabrication.'}
 };
 const HARISHARAN={
- 'footing-rebar':{code:'Through-plinth study',href:'projects/harisharan-adhikari/plinth/',status:'PROVISIONAL STUDY',note:'Shared basic reinforcement ledger and source calculations; not a complete fabrication BBS.'},
- 'footing-rcc':{code:'Through-plinth study',href:'projects/harisharan-adhikari/plinth/',status:'PROVISIONAL STUDY',note:'Shared footing-to-plinth RCC/PCC and cement allowance analysis; not a verified concrete order.'},
- columns:{code:'Phase quantities',href:'projects/harisharan-adhikari/?panel=boq&phase=substructure',mode:'link',status:'PHASE SUMMARY',note:'Source-based substructure quantities only. Column ties, laps and anchorage are not fully detailed.'},
- plinth:{code:'Through-plinth study',href:'projects/harisharan-adhikari/plinth/',status:'PROVISIONAL STUDY',note:'Preserved plinth rebar/cement calculation module. Missing reinforcement extras remain qualified.'},
- 'upper-floors':{code:'Per-floor ledger',href:'projects/harisharan-adhikari/?panel=boq&phase=first',mode:'link',status:'PHASE SUMMARY',note:'Per-floor columns, beams, stairs and slab material estimates exist. Detailed upper-floor BBS remains incomplete.'}
+ groundworks:{code:'HAR V02 · site draft',href:'projects/harisharan-adhikari/stages/v02/',status:'PROVISIONAL PCC · SOLING NOT ADMITTED',note:'Source pad-specific PCC volume and qualified cement planning scenario. No approved soling or PCC mix schedule; not a Narayani source copy.'},
+ 'footing-rebar':{code:'HAR V03 · site draft',href:'projects/harisharan-adhikari/stages/v03/',status:'ENGINEERING HOLD · MESH LAYERS',note:'All 18 footing pads selectable. Both mesh directions show bar diameter, assumed layers, straight counts and mass. Top/bottom layer conflict unresolved.'},
+ 'footing-rcc':{code:'HAR M40 · site draft',href:'projects/harisharan-adhikari/stages/m40/',status:'PROVISIONAL · SLOPED PROFILE HOLD',note:'Each of 18 pads: 600mm full-prism envelope, M25 source grade, cement planning scenario and linked V03 bars without double-counting.'},
+ dowels:{code:'HAR M50 · source QA',href:'projects/harisharan-adhikari/stages/m50/',status:'ENGINEERING HOLD · DOWEL BBS MISSING',note:'18 support locations selectable. Column bar continuity from M60 is shown as a NON-ADDITIVE reference. Independent starter cuts, embedment/laps and cement quantities remain unknown.',admitted:false},
+ columns:{code:'HAR M60 · site draft',href:'projects/harisharan-adhikari/stages/m60/',status:'PROVISIONAL · TIE DETAIL HOLD',note:'Each of 18 columns: full source below-to-plinth elevation, main vertical steel, six-leg tie-set scenario and qualified RCC/cement volume.'},
+ plinth:{code:'HAR M70 · site draft',href:'projects/harisharan-adhikari/stages/m70/',status:'PROVISIONAL · BENDS/ANCHORAGE HOLD',note:'Click any of 27 tie/plinth beams or 12 transverse strap beams, e.g. PB-A1-B1 or ST-A1-B1. Report Ø8 @125 links for plinth, four-legged Ø8 @100 for straps.'},
+ 'upper-floors':{code:'Per-floor ledger',href:'projects/harisharan-adhikari/?panel=boq&phase=first',mode:'link',status:'PHASE SUMMARY',note:'Per-floor columns, beams, stairs and slab material estimates exist. Detailed upper-floor BBS remains incomplete.'},
+ tank:{code:'HAR M80 · source HOLD',href:'projects/harisharan-adhikari/stages/m80/',status:'SOURCE NOT ADMITTED / HOLD',note:'Source-required checklist exists but Harisharan-specific tank location, member geometry, rebar or concrete values do not. No Narayani tank values copied.',admitted:false}
 };
 const ASHOK={
  'upper-floors':{code:'Architectural / MEP coordination',href:'projects/ashok-adhikari/?panel=views&phase=ff',mode:'link',status:'COORDINATION ONLY',note:'Existing linked architectural/MEP floor view, not a structural slab or reinforcement stage.'}
@@ -37,7 +40,7 @@ export const PROJECT_STAGE_EVIDENCE=Object.freeze({
 });
 const INTRO={
  'narayani-parajuli':'The seven frozen V02–M80 work packages are preserved as original detailed viewers. They remain work-package records, not alternative design editions.',
- 'harisharan-adhikari':'The through-plinth material workbench and phase-level estimates are available. They do not supply a complete approved reinforcement BBS.',
+ 'harisharan-adhikari':'Seven separate source-qualified V02–M80 stage pages link through the original 18-column takeoff. M50 dowels and M80 tank explicitly remain unadmitted as fabrication packages; all actual material quantities are provisional.',
  'ashok-adhikari':'Architectural and MEP coordination is published. Stage-specific structural reinforcement, materials and fabrication orders are not admitted.',
  'ramachandra-devkota':'REV02 is the current source family, but public stage-specific geometry, quantities and approved work packages have not been admitted.'
 };

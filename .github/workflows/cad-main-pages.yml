@@ -29,6 +29,7 @@ jobs:
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
           node tools/site/harisharan-rear-nine-smoke.mjs
+          node tools/site/harisharan-seven-stages-smoke.mjs
           node tools/site/ashok-rev04-smoke.mjs
           python tools/site/aad-build-code-register.py
           git diff --exit-code -- public/data/codes/nepal-pokhara.json
@@ -101,6 +102,7 @@ jobs:
           node tools/site/project-workspace-browser.mjs
           node tools/site/engineering-normalization-browser.mjs
           node tools/site/harisharan-rear-nine-browser.mjs
+          node tools/site/harisharan-seven-stages-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
           node tools/site/aad-code-library-browser.mjs
