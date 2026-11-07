@@ -24,8 +24,12 @@ try{
   await page.locator('#height').fill('2.8');await page.locator('#height').dispatchEvent('change');
   s=await page.evaluate(()=>window.HarisharanUpperFloorReview.getState());
   assert.equal(s.nominalLengthM,2.8);
+  await page.evaluate(()=>{window.__r3clickTrace=[];document.addEventListener('click',e=>{const g=e.target.closest?.('[data-grid]');window.__r3clickTrace.push({tag:e.target.tagName,grid:g?.dataset?.grid||null})},{capture:true,once:true});});
+  const pre=await page.locator('#plan g[data-grid="A1"]').evaluate(el=>{const r=el.getBoundingClientRect();const t=document.elementFromPoint(r.x+r.width/2,r.y+r.height/2);return {bounds:{x:r.x,y:r.y,w:r.width,h:r.height},fromPoint:t?.closest?.('[data-grid]')?.dataset?.grid||null,html:el.outerHTML.slice(0,480)}});
   await page.locator('#plan g[data-grid="A1"]').click();
-  s=await page.evaluate(()=>window.HarisharanUpperFloorReview.getState());assert.equal(s.grid,'A1');
+  s=await page.evaluate(()=>window.HarisharanUpperFloorReview.getState());
+  console.log('R3_COLUMN_SELECTION_DEBUG',JSON.stringify({pre,state:s,trace:await page.evaluate(()=>window.__r3clickTrace)}));
+  assert.equal(s.grid,'A1');
   assert.equal(await page.locator('#elevation g[data-floor="fourth"]').count(),1);
   const downloadWait=page.waitForEvent('download');
   await page.locator('#download').click();
