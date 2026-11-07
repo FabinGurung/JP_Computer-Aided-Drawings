@@ -1,0 +1,143 @@
+{
+  "schema": "jp-cad://architectural-grid-change/1",
+  "project": "Ashok Adhikari Residence",
+  "organization": "Rohini Engineering and Builders",
+  "dateNpt": "2026-11-07",
+  "revision": "V3.1-GRID-REVIEW",
+  "status": "OWNER_DIRECTED_COORDINATION_CANDIDATE__NOT_CONSTRUCTION",
+  "predecessor": "v3 owner revision",
+  "authoritativeBefore": "v3 review original JSON unchanged",
+  "revisions": {
+    "prior": "v3",
+    "candidate": "v3-grid",
+    "preserved": [
+      "v1 Architecture",
+      "v2 Coordination",
+      "v3 Owner revisions GF/FF",
+      "Original GF/FF approved visual images"
+    ]
+  },
+  "sourceEvidence": [
+    {
+      "type": "CHAT_IMAGE",
+      "title": "Highlighted v3 2D/3D view",
+      "date": "2026-11-07",
+      "coordinateInterpretation": "Blue/teal wall between Bedroom1 and Kitchen X=3600; other highlighted GF internal partition X=3300 and stair boundary X=4175."
+    },
+    {
+      "type": "CHAT_IMAGE",
+      "title": "Whole v3 workspace showing wall misalignment",
+      "date": "2026-11-07",
+      "interpretation": "Request deterministic 100mm indexed mapping, not approximate visual shifts"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "GRID-001",
+      "action": "Define base 100 mm building-local XY coordinate grid, major 1000 mm and intermediate 500 mm layers",
+      "status": "DATA_AND_VIEW_IMPLEMENTED",
+      "idFormat": "BX036-BY056",
+      "meaning": "Local X 3600mm Y 5600mm; plot X 5544mm, plot Y 7600mm"
+    },
+    {
+      "id": "GRID-002",
+      "action": "Move GF bathroom/lounge and Bed2/lounge partition centrelines from X=3300 to 3600 mm; extend Bedroom/Kitchen straight datum down to stair rear partition.",
+      "status": "GEOMETRY_MODELED",
+      "walls": [
+        "GF-BED-KITCHEN",
+        "GF-BATH-LOUNGE-V3",
+        "GF-HALL-LOW-1"
+      ],
+      "targetXmm": 3600
+    },
+    {
+      "id": "GRID-003",
+      "action": "Retire formerly redundant 300 mm rear-band segment and join adjacent wall at the same X=3600 node.",
+      "status": "MODELED",
+      "retiredWall": "GF-REAR-BAND-3"
+    },
+    {
+      "id": "GRID-004",
+      "action": "Do not silently relocate the stair/porch exterior wall centreline at X=4175 mm; report mismatch 575mm pending stair/landing/structure coordination",
+      "status": "ENGINEERING_HOLD",
+      "reason": "Stair clear landings and 18 risers plus external envelope and porch could be invalidated by blind alignment."
+    }
+  ],
+  "quantityChange": {
+    "basis": "Nominal model-space envelopes; independent measured wall-face sizes and toilet fixture clearances not verified",
+    "GF_BATH": {
+      "oldWidthMm": 3300,
+      "newWidthMm": 3600,
+      "depthMm": 3800,
+      "oldAreaM2": 12.54,
+      "newAreaM2": 13.68,
+      "changeAreaM2": 1.14
+    },
+    "GF_BED2": {
+      "oldWidthMm": 3300,
+      "newWidthMm": 3600,
+      "depthMm": 3400,
+      "oldAreaM2": 11.22,
+      "newAreaM2": 12.24,
+      "changeAreaM2": 1.02
+    },
+    "GF_LOUNGE": {
+      "oldWidthMm": 3900,
+      "newWidthMm": 3600,
+      "depthMm": 7200,
+      "oldAreaM2": 28.08,
+      "newAreaM2": 25.92,
+      "changeAreaM2": -2.16
+    },
+    "combinedAreaDeltaM2": 0,
+    "buildingFootprintDeltaM2": 0,
+    "wallLengthDeltaM": 0,
+    "doorCountChange": 0,
+    "openingCountChange": 0,
+    "structuralRccQuantities": null,
+    "boqPrice": null
+  },
+  "chapterImpacts": {
+    "views": "v3-grid review edition uses same vector/mesh source; SVG BX/BY labels, emphasized X3600 datum and amber stair offset. Hover/tap 2D to get exact local & plot XY; copy prompt coordinate. v1/v2/v3 untouched.",
+    "boq": "GF room-zone area deltas computed, no structural/rebar takeoff, no priced BOQ; changed partitions/finish zone and doorway stations require measured recheck.",
+    "gantt": "Existing programme unknown. Add only dependency: owner grid proof -> stair landing decision -> accessible bathroom fixture QA -> structural/MEP clash review -> accept version -> quantities and schedule update; start dates and durations null.",
+    "packages": "Architectural partition and accessibility staging review only; stair masonry/structural packages unchanged and NOT ISSUED.",
+    "sources": "Immutable earlier v1/v2/v3; current geometry JSON + explicit coordinate protocol + this dated mathematical diff. Local/Main Drive readback/registration independent."
+  },
+  "stairIssue": {
+    "gridAxis": "BX036",
+    "targetXmm": 3600,
+    "currentStairWallCenterlineXmm": 4175,
+    "centrelineOffsetMm": 575,
+    "stairOuterBoundaryMm": 4290,
+    "outerBoundaryDifferenceMm": 690,
+    "affected": [
+      "stairs and side landing",
+      "car porch usable width",
+      "front slab and exterior stair perimeter",
+      "vertical GF/FF correspondence",
+      "possible service coordination"
+    ],
+    "state": "RETAIN_EXISTING_STAIR_PENDING_REDESIGN"
+  },
+  "qa": [
+    "all aligned wall centrelines exactly 3600mm",
+    "no wall of zero length",
+    "no deleted v1/v2/v3 source",
+    "no aperture on zero-right setback",
+    "no invented schedule/BOQ/pricing",
+    "print grid remains visual at 1mm precision; never snap source coordinates automatically"
+  ],
+  "approval": {
+    "engineeringApproved": false,
+    "issuedForConstruction": false,
+    "municipalApproved": false,
+    "ownerVisualReviewPending": true
+  },
+  "a9": {
+    "githubReviewBranch": "feat/ashok-a3-coordinate-grid-wall-alignment-20261107",
+    "googleDriveMirror": "PENDING_PROVIDER_REGISTRATION",
+    "localMainCursor": "MUST_NOT_ADVANCE_UNTIL_PROVIDER_READBACK",
+    "prePost": "PRESERVE_CURRENT_SHEETS_AND_SOURCE_ID"
+  }
+}
