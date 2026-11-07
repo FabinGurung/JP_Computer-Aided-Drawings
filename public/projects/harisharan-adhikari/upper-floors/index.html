@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Harisharan R3 · Floor-specific column schedule research</title>
+<meta name="description" content="Evidence-only floor-specific column bars from the revised Harisharan structural report and architectural floor plans. NOT FOR CONSTRUCTION.">
+<style>
+:root{font:14px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;color:#223e46;background:#f3f7f8}*{box-sizing:border-box}body{margin:0}a{color:#195e67;text-underline-offset:3px}button,select,input{font:inherit}
+header{background:#173f4c;color:white;padding:25px max(16px,calc((100% - 1160px)/2));border-bottom:5px solid #daa46c}header h1{font-size:clamp(1.6rem,3.1vw,2.35rem);margin:10px 0 5px;line-height:1.2}header p{max-width:840px;color:#d7e7e8}header a{color:#e0fcff}.risk{display:inline-block;background:#633e36;color:#fff2e2;padding:8px 11px;font-size:.78rem;font-weight:800;border:1px solid #e5a17e}
+main{max-width:1180px;margin:auto;padding:16px}.panel{border:1px solid #d5e2e4;background:white;border-radius:11px;margin:14px 0;padding:16px}h2{font-size:1.2rem;margin:0 0 10px}.muted,small{color:#587278}.warn{padding:10px 12px;background:#fff5eb;border-left:4px solid #b96e39;color:#713e27}.controls{display:flex;flex-wrap:wrap;gap:13px}.controls label{display:flex;flex-direction:column;gap:4px;font-weight:700}.controls input,.controls select{padding:9px;border:1px solid #a5bec2;border-radius:7px;color:#23424a;background:white}.controls input{max-width:120px}
+.summary{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.summary>div{background:#edf5f5;border:1px solid #d4e3e5;padding:12px;border-radius:8px}.summary strong{font-size:1.2rem;color:#195e67;display:block}.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.plot{border:1px solid #d8e5e6;border-radius:8px;background:#fafcfc;padding:9px;min-width:0}.plot svg{width:100%;height:auto;display:block;max-height:460px}.plot h3{margin:5px;font-size:1rem}.grid{stroke:#dce8e9;stroke-width:1}.pick{cursor:pointer}.pick:focus-visible{filter:drop-shadow(0 0 5px #cb7c3c)}.pick.active rect{fill:#ba5d36}.plot text{fill:#527076;font:11px system-ui}.choose{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:5px}.choose button{background:#f0f7f7;border:1px solid #bbd3d6;border-radius:5px;padding:7px 2px;color:#28535c;font-weight:700}.choose button.active{background:#165b65;color:#fff}
+table{border-collapse:collapse;width:100%;min-width:650px}td,th{padding:9px 10px;text-align:left;border-bottom:1px solid #dde8e9;vertical-align:top}th{background:#e9f2f2;font-size:.84rem}.scroll{overflow:auto;max-width:100%}.measure{font-variant-numeric:tabular-nums;font-weight:650}.pill{padding:2px 6px;background:#fff0df;color:#90552c;font-weight:800;font-size:.72rem;border-radius:4px}button.export{background:#165b65;color:white;padding:10px 14px;border:0;border-radius:7px;font-weight:700;margin:7px 7px 3px 0}p{margin:7px 0}.error{color:#a72b2b;font-weight:800}.error:empty{display:none}footer{margin-top:30px;border-top:1px solid #cee0e2;background:#e5f0f1;padding:16px;color:#4f6a72;text-align:center}
+@media(max-width:790px){.two{grid-template-columns:1fr}.choose{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(max-width:480px){main{padding:8px}.panel{padding:12px}.summary{grid-template-columns:1fr}.choose{grid-template-columns:repeat(3,minmax(0,1fr))}header{padding:19px 14px}}
+</style></head><body>
+<header><a href="../">← Harisharan project</a> · <a href="../review/">R1–R4 source and BOQ review</a>
+<h1>R3 · Upper-floor column source schedule</h1><p>Compare each original structural report bar family against five architectural floor labels, with a linked source-coordinate plan and schematic vertical profile. Missing survey, site and engineer approvals stay explicit.</p>
+<div class="risk" role="status">NOT FOR CONSTRUCTION · REFERENCE BAR MASSES ONLY · NO APPROVED BBS</div></header>
+<main>
+<section class="panel"><h2>Original source reconciliation</h2>
+<p>The revised structural report's grid-column table contains 18 columns and four reinforcement categories: Ground, First, Second, and Third-and-above. The architectural drawing depicts Ground through Fourth with a roof. The report also says “G+5 story” and 15 m total at 3 m per storey—<strong>a floor-count inconsistency requiring a signed adopted schedule</strong>.</p>
+<p class="muted">Source IDs: <strong>HAR-SRC-RPT-001</strong> (revised report: “Grid / Column Name / Column Size”), <strong>HAR-SRC-ARC-001</strong> (ARC-02 to ARC-04 architectural floor plans), and <strong>HAR-SRC-STR-001</strong> (structural beam and column sheets). Fourth-floor rows reuse the report's “Third Floor and Above” source category, not an engineering extension approval.</p>
+<div class="warn">All reported columns are nominal 450 × 450 mm. Their bars are reference schedules, not a validated level-by-level structural design. Column stirrups, lap lengths, hooks, transitions, seismic detailing, approvals, and actual installed quantities remain UNKNOWN.</div>
+</section>
+<section class="panel"><h2>Source schedule controls</h2><div class="controls">
+<label for="floor">Architectural floor <select id="floor"><option value="ground">Ground</option><option value="first">First</option><option value="second">Second</option><option value="third">Third</option><option value="fourth">Fourth</option></select></label>
+<label for="member">Grid location <select id="member"></select></label>
+<label for="height">Comparative segment length (m) <input id="height" type="number" min="2" max="4.5" step="0.1" value="3"></label>
+</div><p class="muted">The 3.0 m default comes from the report's nominal storey height. It is a comparison scenario; exact structural member clear heights, beam overlap and cutting lengths have not been established.</p>
+<div id="summary" class="summary" aria-live="polite">Reading original source register…</div></section>
+<section class="panel"><h2>Linked column selection</h2><div class="two">
+<div class="plot"><h3>Source grid, not surveyed</h3><div id="plan"></div></div>
+<div class="plot"><h3>Selected column schedule by level</h3><div id="elevation"></div></div></div>
+<h3>Select a source column</h3><div class="choose" id="choices"></div><div id="selected"></div></section>
+<section class="panel"><h2>Reference mass and nominal concrete envelopes</h2><p class="muted">Steel unit mass = count × (π/4) × (bar diameter / 1000)² × 7,850 kg/m³; excludes ties, anchorage, laps, bends, wastage and overhang. Gross nominal concrete envelopes exclude intersections and openings. Values are not added to the released through-plinth BOQ.</p>
+<div class="scroll" id="table"></div><button type="button" class="export" id="download">Download SOURCE-ONLY upper-floor comparison CSV</button>
+<h3>Upper-floor beam family catalogue (no span assignment)</h3><div class="scroll" id="beams"></div></section>
+<section class="panel"><h2>Engineering admission gates</h2><div class="scroll" id="holds"></div>
+<p class="warn">No owner approval or software calculation can replace an engineer-checked, site-verified construction drawing. Source-schedule values are candidates until the conflicting source revisions and code checks are resolved.</p>
+</section><p id="error" class="error" role="alert"></p></main>
+<footer>HAR-UPPER-COLUMNS-001 / R000001 · Original source hashes retained · A7/A9 governed · Research only</footer>
+<script type="module">
+import {computeUpperFloorReview,csv,EXPORT_FIELDS,STATUS} from '../../../assets/js/harisharan-upper-floor-source.mjs';
+import {buildHarisharanStages} from '../../../assets/js/harisharan-seven-stages.mjs';
+const base=new URL('../../../',import.meta.url);
+const $=x=>document.getElementById(x);
+const esc=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const f=(x,d=3)=>typeof x==='number'&&Number.isFinite(x)?x.toLocaleString('en-IN',{maximumFractionDigits:d}):'UNKNOWN';
+let raw,geometry,review,selected='A1',floorId='ground';
+function svgPlan(){
+ const r=review.entries.filter(x=>x.floorId===floorId);
+ const selectedRows=new Map(r.map(x=>[x.grid,x]));
+ const nodes=geometry.geometry.nodes;
+ const shapes=nodes.map(n=>{const id=n.id,info=selectedRows.get(id),x=40+n.x*28,y=30+n.z*17;
+   return '<g role="button" tabindex="0" class="pick'+(id===selected?' active':'')+'" data-grid="'+esc(id)+'" aria-label="Select column '+esc(id)+'"><rect x="'+(x-8)+'" y="'+(y-8)+'" rx="3" width="16" height="16" fill="'+(id===selected?'#ba5d36':'#306a71')+'" stroke="white" stroke-width="2"/><text x="'+(x+10)+'" y="'+(y-8)+'">'+esc(id)+'</text><title>'+esc(id+' / '+(info?.barNotation||'not present'))+'</title></g>';
+ });
+ return '<svg role="img" aria-label="Source grid plan, accessible column selection" viewBox="0 0 440 505"><rect width="440" height="505" fill="#fafcfc"/>'+
+  [0,5,10,15,20,25].map(z=>'<line class="grid" x1="25" x2="415" y1="'+(30+z*17)+'" y2="'+(30+z*17)+'"/>').join('')+
+  shapes.join('')+'<text x="12" y="492">X / Z metres · nominal PDF registration, not surveyed</text></svg>';
+}
+function svgElevation(){
+ const matches=review.entries.filter(e=>e.grid===selected);
+ return '<svg viewBox="0 0 460 420" role="img" aria-label="Column source reinforcement schedule, five architectural floor labels">'+
+ '<rect width="460" height="420" fill="#fafcfc"/>'+
+ matches.map((x,i)=>{let y=332-i*78,sel=x.floorId===floorId;
+   return '<g class="pick'+(sel?' active':'')+'" tabindex="0" role="button" data-floor="'+x.floorId+'" aria-label="Select '+esc(x.floor)+'"><rect x="72" y="'+(y-18)+'" width="225" height="61" rx="4" fill="'+(sel?'#f5e4d3':'#edf4f3')+'" stroke="'+(sel?'#b86d48':'#a3c2c7')+'" stroke-width="'+(sel?2:1)+'"/>'+
+ '<rect x="99" y="'+(y-7)+'" width="38" height="42" fill="'+(sel?'#b96d49':'#52878b')+'" rx="2"/>'+
+ '<text x="160" y="'+(y+1)+'">'+esc(x.floor)+'</text>'+
+ '<text x="160" y="'+(y+20)+'">'+esc(x.barNotation)+' · '+f(x.kgPerVerticalMetre,2)+' kg/m</text></g>';
+ }).join('')+'<text x="20" y="20">Column '+esc(selected)+' — vertical comparison only</text><text x="20" y="407">Schematic tiers; no adopted levels or cage geometry</text></svg>';
+}
+function tableFor(){
+ const rows=review.entries.filter(x=>x.floorId===floorId);
+ return '<table><thead><tr><th>Grid</th><th>Type</th><th>Bar notation</th><th>Steel kg / m</th><th>Nominal length (m)</th><th>Reference steel kg</th><th>Gross prism m³</th><th>Approval</th></tr></thead><tbody>'+
+ rows.map(x=>'<tr><td>'+esc(x.grid)+'</td><td>'+esc(x.columnType)+'</td><td>'+esc(x.barNotation)+'</td><td>'+f(x.kgPerVerticalMetre,4)+'</td><td>'+f(x.scenarioLengthM,2)+'</td><td>'+f(x.scenarioKg,2)+'</td><td>'+f(x.grossConcreteM3,5)+'</td><td><span class="pill">HOLD</span></td></tr>').join('')+'</tbody></table>';
+}
+function render(){
+ const e=review.entries.find(x=>x.grid===selected&&x.floorId===floorId);if(!e)throw Error('Missing selected source record');
+ $('summary').innerHTML='<div><span>Selected column bars</span><strong>'+esc(e.barNotation)+'</strong><small>'+esc(e.columnType)+' · 450 × 450 mm</small></div>'+
+ '<div><span>Longitudinal steel, per metre</span><strong>'+f(e.kgPerVerticalMetre,3)+' kg/m</strong><small>Excludes ties, laps and bends</small></div>'+
+ '<div><span>Scenario gross concrete</span><strong>'+f(e.grossConcreteM3,4)+' m³</strong><small>'+f(review.heightScenarioM,2)+' m nominal; not net RCC</small></div>';
+ $('plan').innerHTML=svgPlan();$('elevation').innerHTML=svgElevation();
+ $('choices').innerHTML=raw.records.map(x=>'<button type="button" data-grid="'+esc(x.grid)+'" class="'+(x.grid===selected?'active':'')+'">'+esc(x.grid)+'</button>').join('');
+ $('selected').innerHTML='<p><strong>'+esc(e.recordId)+'</strong> · '+esc(e.sourceScheduleField)+' · '+f(e.barAreaMm2,1)+' mm² nominal longitudinal bar area · <span class="pill">NOT APPROVED</span></p>';
+ $('table').innerHTML=tableFor();
+ $('beams').innerHTML='<table><thead><tr><th>Family</th><th>Section</th><th>Top</th><th>Bottom</th><th>Links</th><th>Admission</th></tr></thead><tbody>'+raw.reportBeamFamilies.map(x=>'<tr><td>'+esc(x.family)+'</td><td>'+esc(x.crossSectionMm.join(' × '))+' mm</td><td>'+esc(x.top)+'</td><td>'+esc(x.bottom)+'</td><td>'+esc(x.links)+'</td><td><span class="pill">No per-edge mapping</span></td></tr>').join('')+'</tbody></table>';
+ $('holds').innerHTML='<table><thead><tr><th>ID</th><th>Unresolved source conflict</th><th>Required evidence</th></tr></thead><tbody>'+raw.unresolved.map(x=>'<tr><td>'+esc(x.id)+'</td><td>'+esc(x.topic)+'</td><td>'+esc(x.required)+'</td></tr>').join('')+'</tbody></table>';
+ $('member').value=selected;$('floor').value=floorId;
+ for(const el of document.querySelectorAll('[data-grid]')){const fn=()=>{selected=el.dataset.grid;render();};el.addEventListener('click',fn);el.addEventListener('keydown',event=>{if(el.tagName.toLowerCase()==='g'&&(event.key==='Enter'||event.key===' ')){event.preventDefault();fn();}});}
+ for(const el of document.querySelectorAll('[data-floor]')){const fn=()=>{floorId=el.dataset.floor;render();};el.addEventListener('click',fn);el.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();fn();}});}
+}
+async function init(){
+ try{
+  const [a,b]=await Promise.all([fetch('../../../data/projects/harisharan-adhikari/upper-floor-source-r000001.json',{cache:'no-store'}),fetch('../../../data/projects/harisharan-adhikari/takeoff.json',{cache:'no-store'})]);
+  if(!a.ok||!b.ok)throw Error('Missing source model');
+  raw=await a.json();geometry=buildHarisharanStages(await b.json());review=computeUpperFloorReview(raw);
+  if(new Set(geometry.geometry.nodes.map(n=>n.id)).size!==18||geometry.geometry.nodes.some(n=>!raw.records.some(r=>r.grid===n.id)))throw Error('Grid not consistent with frozen substructure source');
+  $('member').innerHTML=raw.records.map(r=>'<option value="'+esc(r.grid)+'">'+esc(r.grid)+' · '+esc(r.type)+'</option>').join('');
+  $('floor').onchange=event=>{floorId=event.target.value;render();};$('member').onchange=event=>{selected=event.target.value;render();};
+  $('height').onchange=event=>{review=computeUpperFloorReview(raw,{heightScenarioM:Number(event.target.value)});render();};
+  $('download').onclick=()=>{const b=new Blob([csv(review.entries,EXPORT_FIELDS)],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(b);const link=document.createElement('a');link.href=url;link.download='harisharan-upper-floor-source-R000001-NOT_FOR_CONSTRUCTION.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
+  window.HarisharanUpperFloorReview=Object.freeze({getState:()=>({floorId,grid:selected,rows:review.entries.length,nominalLengthM:review.heightScenarioM,approved:review.approval,sourceSha:review.sourceFingerprint,scenarioTotalKg:review.totals.scenarioLongitudinalKg}),getReview:()=>review});
+  render();
+ }catch(e){$('error').textContent='Fail closed: '+e.message;for(const id of ['plan','elevation','summary','table'])$(id).textContent='';}
+}
+init();
+</script></body></html>
