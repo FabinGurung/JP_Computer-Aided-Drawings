@@ -1,0 +1,110 @@
+name: Ashok v3.1.0 grid alignment — governed review prerelease
+
+on:
+  workflow_run:
+    workflows: ["CAD M01 Live Pages Readback"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: ashok-grid-v3.1.0-review-release
+  cancel-in-progress: false
+
+jobs:
+  seal-review-milestone:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact verified production commit
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Fail-closed release gate for geometry, source preservation, live site and HOLD
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          FROZEN_SOURCE_SHA: 6e082200f278c898b07d5822fd534a4facba1f10
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          main_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          test "$VERIFIED_SHA" = "$main_sha" || { echo "::error::main moved after production readback"; exit 1; }
+          git cat-file -e "$FROZEN_SOURCE_SHA^{commit}"
+          git merge-base --is-ancestor "$FROZEN_SOURCE_SHA" "$VERIFIED_SHA"
+          # Release only the exact reviewed Ashok geometry and its linked model,
+          # NOT post-baseline source modifications from any unrelated activity.
+          git diff --quiet "$FROZEN_SOURCE_SHA" "$VERIFIED_SHA" -- \
+            public/assets/js/aad-dimensioned-plan.mjs \
+            public/assets/js/project-workspace-config.mjs \
+            cad/aad/multistorey/main.js \
+            public/data/projects/ashok-adhikari/aad-gf-model-v3-grid-review.json \
+            public/data/projects/ashok-adhikari/aad-building-v3-grid-review.json \
+            public/data/projects/ashok-adhikari/coordinate-grid-v1.json \
+            public/data/projects/ashok-adhikari/grid-alignment-20261107.json \
+            tools/site/ashok-grid-smoke.mjs \
+            tools/site/ashok-grid-browser.mjs
+          test -s governance/aad/releases/ASHOK_GRID_V3_1_0_REVIEW.md
+          grep -q 'NOT FOR CONSTRUCTION' governance/aad/releases/ASHOK_GRID_V3_1_0_REVIEW.md
+          grep -q '575 mm' governance/aad/releases/ASHOK_GRID_V3_1_0_REVIEW.md
+          node tools/site/ashok-grid-smoke.mjs
+          # The exact same verified main SHA must have passed all three gates.
+          for workflow_name in "CAD Unified Website Staging QA" "CAD Main GitHub Pages (validated CAD publishing)" "CAD M01 Live Pages Readback"; do
+            count="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_SHA&per_page=100" --jq "[.workflow_runs[] | select(.name == \"$workflow_name\" and .head_sha == \"$VERIFIED_SHA\" and .conclusion == \"success\")] | length")"
+            test "$count" -ge 1 || { echo "::error::No successful same-commit gate: $workflow_name"; exit 1; }
+          done
+          echo "ASHOK_GRID_V3_1_0_REVIEW_SOURCE_AND_LIVE_GATES_PASS $VERIFIED_SHA"
+      - name: Create immutable annotated review tag and GitHub prerelease
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          FROZEN_SOURCE_SHA: 6e082200f278c898b07d5822fd534a4facba1f10
+          TAG: ashok-grid-v3.1.0-review.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --tags origin "refs/tags/$TAG" | grep -q "refs/tags/$TAG"; then
+            git fetch origin "refs/tags/$TAG:refs/tags/$TAG"
+            original="$(git rev-parse "$TAG^{}")"
+            git merge-base --is-ancestor "$FROZEN_SOURCE_SHA" "$original"
+            git merge-base --is-ancestor "$original" "$VERIFIED_SHA"
+            git diff --quiet "$FROZEN_SOURCE_SHA" "$original" -- \
+              public/assets/js/aad-dimensioned-plan.mjs \
+              public/assets/js/project-workspace-config.mjs \
+              cad/aad/multistorey/main.js \
+              public/data/projects/ashok-adhikari/aad-gf-model-v3-grid-review.json \
+              public/data/projects/ashok-adhikari/aad-building-v3-grid-review.json \
+              public/data/projects/ashok-adhikari/coordinate-grid-v1.json \
+              public/data/projects/ashok-adhikari/grid-alignment-20261107.json
+            echo "ASHOK_GRID_REVIEW_IMMUTABLE_TAG_ALREADY_PRESENT $original"
+          else
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+            git tag -a "$TAG" -m "Ashok Adhikari v3.1 coordinate grid and X3600 wall alignment; architectural REVIEW ONLY; engineering HOLD; NOT FOR CONSTRUCTION" "$VERIFIED_SHA"
+            git push origin "refs/tags/$TAG"
+          fi
+          if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo "ASHOK_GRID_REVIEW_PRERELEASE_ALREADY_SEALED"
+          else
+            gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease \
+              --title "Ashok Adhikari v3.1 — 100 mm grid & wall alignment (REVIEW ONLY)" \
+              --notes-file governance/aad/releases/ASHOK_GRID_V3_1_0_REVIEW.md
+          fi
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,isPrerelease,publishedAt
+          echo "ASHOK_GRID_V3_1_0_REVIEW_PRERELEASE_PASS $TAG"
+          echo "### Ashok v3.1 review-only milestone" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Tag: $TAG" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Frozen owner-change source: $FROZEN_SOURCE_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Same-commit live readback: $VERIFIED_SHA" >> "$GITHUB_STEP_SUMMARY"
+          echo "- Status: engineering HOLD; NOT FOR CONSTRUCTION" >> "$GITHUB_STEP_SUMMARY"
