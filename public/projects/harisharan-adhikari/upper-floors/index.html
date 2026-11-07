@@ -94,7 +94,7 @@ async function init(){
   if(new Set(geometry.geometry.nodes.map(n=>n.id)).size!==18||geometry.geometry.nodes.some(n=>!raw.records.some(r=>r.grid===n.id)))throw Error('Grid not consistent with frozen substructure source');
   $('member').innerHTML=raw.records.map(r=>'<option value="'+esc(r.grid)+'">'+esc(r.grid)+' · '+esc(r.type)+'</option>').join('');
   $('floor').onchange=event=>{floorId=event.target.value;render();};$('member').onchange=event=>{selected=event.target.value;render();};
-  $('height').onchange=event=>{review=computeUpperFloorReview(raw,{heightScenarioM:Number(event.target.value)});render();};
+  $('height').onchange=event=>{const next=Number(event.target.value);if(next!==review.heightScenarioM){review=computeUpperFloorReview(raw,{heightScenarioM:next});render();}};
   $('download').onclick=()=>{const b=new Blob([csv(review.entries,EXPORT_FIELDS)],{type:'text/csv;charset=utf-8'});const url=URL.createObjectURL(b);const link=document.createElement('a');link.href=url;link.download='harisharan-upper-floor-source-R000001-NOT_FOR_CONSTRUCTION.csv';link.click();setTimeout(()=>URL.revokeObjectURL(url),1000);};
   window.HarisharanUpperFloorReview=Object.freeze({getState:()=>({floorId,grid:selected,rows:review.entries.length,nominalLengthM:review.heightScenarioM,approved:review.approval,sourceSha:review.sourceFingerprint,scenarioTotalKg:review.totals.scenarioLongitudinalKg}),getReview:()=>review});
   render();
