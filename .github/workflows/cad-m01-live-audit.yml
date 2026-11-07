@@ -183,6 +183,36 @@ jobs:
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
+      - name: Verify live Harisharan R1-R4 source, routes, and approved-status gates
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          set -euo pipefail
+          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          curl -fsSL --max-time 25 "${BASE}projects/harisharan-adhikari/review/" -o /tmp/harisharan-review-live.html
+          grep -q 'id="review-2d"' /tmp/harisharan-review-live.html
+          grep -q 'id="review-3d"' /tmp/harisharan-review-live.html
+          grep -q 'NOT FOR CONSTRUCTION' /tmp/harisharan-review-live.html
+          curl -fsSL --max-time 25 "${BASE}assets/js/harisharan-review-data.mjs" -o /tmp/harisharan-review-data-live.mjs
+          grep -q 'HAR-REVIEW-R000001' /tmp/harisharan-review-data-live.mjs
+          grep -q 'HAR-09' /tmp/harisharan-review-data-live.mjs
+          curl -fsSL --max-time 25 "${BASE}data/projects/harisharan-adhikari/takeoff.json" -o /tmp/harisharan-review-takeoff-live.json
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          m=json.loads(Path('/tmp/harisharan-review-takeoff-live.json').read_text())
+          assert m['logicalId']=='INTAKE-20260826-HARISHARAN'
+          assert m['revision']=='R000001'
+          assert m['issueForConstruction'] is False
+          ids={s['id']:s['sha256'] for s in m['sources']}
+          assert ids['HAR-SRC-STR-001']=='6ae8eaa70273b79a50ad28a2345da7966201efd5f4a32ea260cbece34f75b9c5'
+          assert ids['HAR-SRC-RPT-001']=='8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35'
+          print('HARISHARAN_R1_R4_LIVE_SOURCE_FINGERPRINT_PASS')
+          PY
+      - name: Verify LIVE Harisharan source-linked 2D-axonometric and member exports
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        env:
+          PROJECT_SITE_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/
+        run: node tools/site/harisharan-review-ledger-browser.mjs
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
