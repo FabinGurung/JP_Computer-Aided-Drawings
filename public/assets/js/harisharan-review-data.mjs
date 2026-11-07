@@ -27,7 +27,7 @@ export const REVIEW_HOLDS = Object.freeze([
 ].map(h => Object.freeze({...h,issueUrl:repository+'/issues/'+h.issue})));
 export const OWNER_STAGE = Object.freeze({v02:'PCC',v03:'FOOTING_STEEL',m40:'FOOTING_RCC',m50:'REFERENCE_ONLY',m60:'COLUMN_RCC_STEEL',m70:'BEAM_RCC_STEEL',m80:'SOURCE_INTAKE'});
 export const STAGE_NAMES = Object.freeze({v02:'V02 · PCC',v03:'V03 · footing mesh',m40:'M40 · footing RCC',m50:'M50 · dowel reference',m60:'M60 · columns',m70:'M70 · beams',m80:'M80 · tank review'});
-const round=(v,d=5)=>Number.isFinite(v)?Number(v.toFixed(d)):null;
+const round=(v,d=8)=>Number.isFinite(v)?Number(v.toFixed(d)):null; // preserve source 6-8dp m³ conservation before display rounding
 export function buildReviewLedger(model) {
  if(model?.project!=='INTAKE-20260826-HARISHARAN'||model.issueForConstruction!==false) throw Error('Unexpected/admitted source project');
  for(const st of Object.keys(OWNER_STAGE)) if(!Array.isArray(model.byStage?.[st]))throw Error('Missing source stage '+st);
