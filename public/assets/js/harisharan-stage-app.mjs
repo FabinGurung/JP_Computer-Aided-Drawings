@@ -80,7 +80,7 @@ function meterElevSegment(r){
   (err?'<p class="hs-warn">'+esc(err)+'</p>':'<p class="hs-metrics-inline">Segment '+fmt(scenario.segmentHeightM,3)+' m / '+fmt(scenario.heightFt,2)+' ft · Concrete geometry '+fmt(scenario.geometryConcreteM3,5)+' m³ · Straight vertical bar reference '+fmt(scenario.mainBarsTheoreticalKg,2)+' kg · **Ties/laps not apportioned or approved**.</p>')+'</section>';
 }
 function renderDetail(r){
- if(!r)return stage.id==='m80'?'<h2>M80 · Tank / services — source admission HOLD</h2><p class="hs-warn">No approved Harisharan tank footprint, tank location, foundation connection, concrete section or base/wall/cap reinforcement schedule was located in the current source register. A Narayani tank is unrelated and must not be reused here.</p><h3>Required to complete this workbench</h3><ul><li>Actual site position, plan dimensions, depths, capacity and groundwater/soil constraints</li><li>Engineer-accepted section, base/wall/cover and reinforcement bar schedule</li><li>Concrete class/mix, waterproofing, drain/overflow and structural interfaces</li><li>Permits, code applicability, safety inspections and accepted issue/revision</li></ul><p>All tank material quantities remain <strong>unknown</strong>, not zero.</p>':
+ if(!r)return stage.id==='m80'?'<h2>M80 · Tank / services — source admission HOLD</h2><p class="hs-warn">ARC-02 site plan labels an underground water tank, septic tank and soak pit, but no engineer-admitted surveyed tank position, foundation connection, capacity, concrete section or base/wall/cover reinforcement schedule is present. Architectural siting does not authorize a structural takeoff. A Narayani tank is unrelated and must not be reused here.</p><h3>Required to complete this workbench</h3><ul><li>Actual site position, plan dimensions, depths, capacity and groundwater/soil constraints</li><li>Engineer-accepted section, base/wall/cover and reinforcement bar schedule</li><li>Concrete class/mix, waterproofing, drain/overflow and structural interfaces</li><li>Permits, code applicability, safety inspections and accepted issue/revision</li></ul><p>All tank material quantities remain <strong>unknown</strong>, not zero.</p>':
  '<div class="hs-await">Choose a source member from the plan or member list.</div>';
  const g=r.geometry,rows=r.steelRows,primary=r.stage==='v03'||r.stage==='m50'?false:true;
  const concreteLabel=r.stage==='v03'?'Linked M40 footing concrete reference':r.stage==='m50'?'Linked M60 column concrete reference':'Concrete geometric estimate';
@@ -193,6 +193,7 @@ async function boot(){
  $('hs-title').textContent=stage.short+' — '+stage.name;
  $('hs-summary').textContent=stage.summary;
  $('hs-authority').textContent=stage.authority+' · '+stage.status;
+ $('hs-authority').insertAdjacentHTML('afterend','<p class="hs-context"><a href="'+new URL('projects/harisharan-adhikari/review/?stage='+stage.id,root).href+'">Open R1–R4 source review, linked 2D/3D study and provisional BOQ downloads</a> · NOT FOR CONSTRUCTION</p>');
  try{
   const response=await fetch(sourceUrl,{cache:'no-store'});if(!response.ok)throw Error('Project source not found ('+response.status+')');
   source=await response.json();model=buildHarisharanStages(source,scenario());
