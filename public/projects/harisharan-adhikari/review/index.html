@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Harisharan R1–R4 · Source review, linked members and draft BOQ</title>
+<meta name="description" content="Source-qualified, read-only Harisharan footing, column and beam review. Non-additive BOQ and provisional bar equivalent CSV exports. NOT FOR CONSTRUCTION.">
+<link rel="stylesheet" href="../../../assets/css/harisharan-review-dashboard.css"></head>
+<body>
+<a href="#review-main" class="skip-link">Skip to review</a>
+<header class="review-head">
+  <div class="review-brand"><a id="review-project" href="../">← Harisharan project workspace</a><span class="eyebrow">R1–R4 / ENGINEERING RESEARCH</span></div>
+  <h1>Source review &amp; member quantity studio</h1>
+  <p>One read-only source model drives reciprocal 2D/axonometric selection, quantity inspection, engineer-decision evidence and exports. The drawings, review register and structural report remain authoritative.</p>
+  <div class="review-risk" role="status">NOT FOR CONSTRUCTION · NO APPROVED FABRICATION BBS · CONFLICTING DETAILS STAY ON HOLD</div>
+</header>
+<main id="review-main" class="review-wrap">
+  <section class="review-section" aria-labelledby="r1"><div class="section-head"><span>R1</span><div><h2 id="r1">Source reconciliation</h2><p>Original September 2026 structural/architectural PDFs and revised torsion report. No silent source precedence or fabricated sign-off.</p></div></div>
+    <div class="review-intro">
+      <strong>New evidence correction</strong>
+      <p>Architectural site-plan ARC-02 labels an underground water tank, septic tank and soak pit. This is a siting candidate, not an engineer-accepted tank foundation, section or reinforcement design. M80 material quantities remain unknown.</p>
+    </div>
+    <div id="review-holds" class="review-holds"><p>Loading exact source cases…</p></div>
+  </section>
+  <section class="review-section" aria-labelledby="r2"><div class="section-head"><span>R2</span><div><h2 id="r2">Measured quantities and provisional BBS ledger</h2><p>Stage ownership avoids double-counting linked reinforcement and preserves unknowns rather than substituting zero.</p></div></div>
+    <div id="review-boq" aria-live="polite"><p>Reading governed takeoff…</p></div>
+    <div class="review-downloads" aria-label="Download draft schedules">
+      <button type="button" data-export="measurements">Member measurement CSV</button>
+      <button type="button" data-export="bars">178 theoretical bar lines CSV</button>
+      <button type="button" data-export="boq">Non-additive BOQ CSV</button>
+      <button type="button" data-export="holds">Engineering holds CSV</button>
+    </div>
+    <p class="review-note">All downloads are stamped NOT_FOR_CONSTRUCTION. Bar lengths are straight/equivalent comparisons, <strong>not</strong> checked cutting shapes, final splice details or procurement instructions. No approved prices are supplied.</p>
+  </section>
+  <section class="review-section" aria-labelledby="r4"><div class="section-head"><span>R3 / R4</span><div><h2 id="r4">Linked structural plan and spatial inspection</h2><p>Both views and the member list use the same source-coordinate support/beam IDs. 3D is a source-derived axonometric for investigation, not a certified full structural BIM.</p></div></div>
+    <div class="review-controls">
+      <label for="review-stage">Stage / member family<select id="review-stage">
+        <option value="v02">V02 · PCC / blinding</option><option value="v03">V03 · footing mesh</option>
+        <option value="m40">M40 · footing RCC</option><option value="m50">M50 · dowels</option>
+        <option value="m60">M60 · columns</option><option value="m70" selected>M70 · plinth and straps</option>
+        <option value="m80">M80 · tank source HOLD</option>
+      </select></label>
+      <label for="review-mats">Footing mat scenario<select id="review-mats"><option value="1">1 mat (alternative)</option><option value="2" selected>2 mats (STR-01 scenario)</option></select></label>
+      <label for="review-ties">Column tie scenario<select id="review-ties"><option value="8" selected>Ø8 @125 mm</option><option value="10">Ø10 @100 mm</option></select></label>
+    </div>
+    <p class="review-note" id="review-count">Loading model…</p>
+    <div class="review-views">
+      <section aria-labelledby="review-plan-title"><h3 id="review-plan-title">Plan X/Z — source grid</h3><div id="review-2d"></div></section>
+      <section aria-labelledby="review-axon-title"><h3 id="review-axon-title">Axonometric — same IDs</h3><div id="review-3d"></div></section>
+    </div>
+    <div class="review-inspection">
+      <aside><h3>Member selector</h3><div id="review-members" aria-live="polite"></div></aside>
+      <section><h3>Selected member's evidence and quantities</h3><div id="review-selected" aria-live="polite"></div></section>
+    </div>
+    <div class="review-scenario"><h3>Unresolved design variants — material sensitivity only</h3><div id="review-scenarios"></div></div>
+  </section>
+  <div class="review-error" role="alert" id="review-error"></div>
+  <p class="review-note" id="review-footnote"></p>
+</main>
+<footer><p>HAR-REVIEW-R000001 / Live 2026-11-07 governed source model. Original drawings and native Sheets remain unchanged by this read-only viewer. Engineer approval required for fabrication, procurement or construction.</p></footer>
+<script type="module" src="../../../assets/js/harisharan-review-dashboard.mjs"></script>
+</body></html>
