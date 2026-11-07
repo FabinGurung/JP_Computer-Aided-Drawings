@@ -382,10 +382,10 @@
         "style": "sliding",
         "swingSign": 1,
         "source": "OWNER_20261106",
-        "status": "CANDIDATE_ELDER_ACCESS__CLEAR_WIDTH_AND_FIXTURES_HOLD",
+        "status": "OWNER_CONFIRMED_LOUNGE_ONLY__ACCESSIBILITY_QA_HOLD",
         "provenance": {
           "sourceId": "GF-D-BATH-LOUNGE-V3",
-          "basis": "Owner-requested 2026-11-06 change; proposed bath door at lounge-side lower end near Bedroom2 junction, not upper kitchen end. Exact clear wheelchair circulation must be checked."
+          "basis": "Owner explicitly confirmed 2026-11-07 the enlarged common bathroom shall open ONLY to the lounge; candidate 950 mm slider position/accessible clear opening pending measured QA."
         }
       },
       {
