@@ -20,7 +20,26 @@ assert.equal(revision.impacts.boq.quantitative.grossBathroomZoneIncreaseM2,4.514
 for(const id of ['GF-D-BED1-KITCHEN-V3','GF-D-KITCHEN-LOUNGE-V3','GF-D-BATH-LOUNGE-V3','GF-D-BED2-LOUNGE-V3'])assert.ok(gf.floorGraph.openings.some(o=>o.id===id),id);
 for(const id of ['GF-D-BED1-HALL','GF-D-BED2-HALL','GF-D-BATH-HALL','GF-OPEN-KITCHEN'])assert.ok(!gf.floorGraph.openings.some(o=>o.id===id),'Retired opening remains: '+id);
 for(const id of ['FF-W001','FF-W002']){const o=ff.floorGraph.openings.find(x=>x.id===id);assert.equal(o.width,2.1);assert.equal(o.style,'aluminium-sliding');}
-for(const id of ['FF-W008-BED2-STAIR-V3','FF-W009-BED2-STAIR-V3']){const o=ff.floorGraph.openings.find(x=>x.id===id);assert.equal(o.wallId,'FF-STAIR-REAR-1');assert.match(o.status,/HOLD/);}
+const bathDoor=gf.floorGraph.openings.find(o=>o.id==='GF-D-BATH-LOUNGE-V3');
+assert.ok(bathDoor,'Missing owner-confirmed bathroom/lounge entrance');
+assert.match(bathDoor.status,/OWNER_CONFIRMED_LOUNGE_ONLY/);
+assert.deepEqual(gf.floorGraph.openings.filter(o=>o.kind==='door'&&o.id.includes('BATH')).map(o=>o.id),['GF-D-BATH-LOUNGE-V3'],'Exactly one bathroom entrance exists, opening only to the lounge');
+assert.match(gf.floorGraph.openings.find(o=>o.id==='GF-D-BED2-LOUNGE-V3').status,/OWNER_CONFIRMATION_REQUIRED/,'Bedroom 2 entry is still separately unresolved');
+const stairWindows=ff.floorGraph.openings.filter(o=>o.wallId==='FF-STAIR-REAR-1'&&o.kind==='window');
+assert.equal(stairWindows.length,1,'Owner allowed exactly one interior glazed opening on Bed 2 stair wall');
+assert.equal(stairWindows[0].id,'FF-W008-BED2-STAIR-V3');
+const stairWall=ff.floorGraph.walls.find(w=>w.id==='FF-STAIR-REAR-1');
+const stairNodes=Object.fromEntries(ff.floorGraph.nodes.map(n=>[n.id,n]));
+const stairA=stairNodes[stairWall.a],stairB=stairNodes[stairWall.b];
+const stairWallLength=Math.hypot(stairA.x-stairB.x,stairA.z-stairB.z);
+assert.ok(Math.abs(stairWindows[0].offset-(stairWallLength-stairWindows[0].width)/2)<1e-6,'Single stair glazing must be centred on host wall');
+assert.equal(ff.floorGraph.openings.some(o=>o.id==='FF-W009-BED2-STAIR-V3'),false,'Second glazing removed from current candidate, history remains in Git');
+assert.match(stairWindows[0].status,/FIRE_PRIVACY_HOLD/);
+const confirmedLoungeDoor=ff.floorGraph.openings.find(o=>o.id==='FF-D-LOUNGE-MAIN');
+assert.match(confirmedLoungeDoor.status,/OWNER_CONFIRMED_INTERNAL_SIDE_DOOR/);
+assert.equal(revision.currentDecisionState.groundBathEntrance,'LOUNGE_ONLY');
+assert.equal(revision.currentDecisionState.firstFloorBed2Glazing.count,1);
+assert.ok(manifest.presentation.ownerConfirmations.ffLoungeEntryInternalPositionConfirmed);
 assert.equal(ff.floorGraph.openings.find(x=>x.id==='FF-W005').style,'aluminium-sliding');
 for(const [level,m] of Object.entries({gf,ff})){
  const nodes=Object.fromEntries(m.floorGraph.nodes.map(n=>[n.id,n])),walls=Object.fromEntries(m.floorGraph.walls.map(w=>[w.id,w]));
