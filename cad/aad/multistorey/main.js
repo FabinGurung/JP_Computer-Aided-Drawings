@@ -496,6 +496,7 @@ function projectToWorld(p,t){
 function drawPlan(){
  const doc=$("viewer2d");doc.replaceChildren();
  if(!workspace)return;
+ if(typeof gridHud!=='undefined'){const cg=workspace.snapshot().manifest.presentation?.coordinateGrid;gridHud.hidden=!cg;}
  const state=workspace.snapshot(),models=state.models;
  const levels=activeLevel==="all"?state.manifest.levels:state.manifest.levels.filter(l=>l.id===activeLevel);
  const outlines=[],pts=[];
