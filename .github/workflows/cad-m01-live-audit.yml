@@ -213,7 +213,29 @@ jobs:
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
           PROJECT_SITE_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/
-        run: node tools/site/harisharan-review-ledger-browser.mjs
+        run: |
+          node tools/site/harisharan-review-ledger-browser.mjs
+          node tools/site/harisharan-upper-floor-browser.mjs
+      - name: Verify live Harisharan R3 upper-floor report source-register
+        if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
+        run: |
+          set -euo pipefail
+          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          curl -fsSL --max-time 30 "${BASE}projects/harisharan-adhikari/upper-floors/" -o /tmp/harisharan-upper-floor.html
+          grep -q 'NOT FOR CONSTRUCTION' /tmp/harisharan-upper-floor.html
+          grep -q 'id="plan"' /tmp/harisharan-upper-floor.html
+          curl -fsSL --max-time 30 "${BASE}data/projects/harisharan-adhikari/upper-floor-source-r000001.json" -o /tmp/harisharan-upper-floor.json
+          python - <<'PY'
+          import json
+          m=json.load(open('/tmp/harisharan-upper-floor.json'))
+          assert m['logicalId']=='HAR-UPPER-COLUMNS-001'
+          assert m['revision']=='R000001'
+          assert m['issueForConstruction'] is False
+          assert len(m['records'])==18
+          assert len(m['architecturalFloorIdentifiers'])==5
+          assert m['basis']['structuralReport']['sha256']=='8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35'
+          print('HARISHARAN_UPPER_FLOOR_R3_LIVE_REGISTER_PASS')
+          PY
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:

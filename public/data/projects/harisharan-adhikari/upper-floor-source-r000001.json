@@ -1,0 +1,377 @@
+{
+  "schema": "jp-cad://harisharan-upper-floor-source-ledger/1",
+  "projectId": "INTAKE-20260826-HARISHARAN",
+  "logicalId": "HAR-UPPER-COLUMNS-001",
+  "revision": "R000001",
+  "date": "2026-11-07",
+  "status": "SOURCE_REPORTED_REFERENCE_ONLY_NOT_FOR_CONSTRUCTION",
+  "issueForConstruction": false,
+  "basis": {
+    "structuralReport": {
+      "sourceId": "HAR-SRC-RPT-001",
+      "sha256": "8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35",
+      "locator": "Structural Report revised - Harisaran Adhikari for torsion.docx / Grid Column Name, Column Size, Ground Floor, 1st Floor, 2nd Floor, 3rd Floor and Above table"
+    },
+    "architectural": {
+      "sourceId": "HAR-SRC-ARC-001",
+      "sha256": "8429a256588c87c7f1cef5ae6a25006ee5f1e5b3ac7d6c5c27423efa4cc908e9",
+      "locator": "ARC-02 to ARC-04 Ground, First, Second, Third, Fourth and Roof plans"
+    },
+    "structural": {
+      "sourceId": "HAR-SRC-STR-001",
+      "sha256": "6ae8eaa70273b79a50ad28a2345da7966201efd5f4a32ea260cbece34f75b9c5",
+      "locator": "STR column schedule, beam-layout up-to-3rd/fourth, tie details"
+    },
+    "baseModel": {
+      "revision": "R000001",
+      "logicalId": "INTAKE-20260826-HARISHARAN"
+    }
+  },
+  "architecturalFloorIdentifiers": [
+    {
+      "id": "ground",
+      "title": "Ground floor",
+      "scheduleField": "ground"
+    },
+    {
+      "id": "first",
+      "title": "First floor",
+      "scheduleField": "first"
+    },
+    {
+      "id": "second",
+      "title": "Second floor",
+      "scheduleField": "second"
+    },
+    {
+      "id": "third",
+      "title": "Third floor",
+      "scheduleField": "thirdAndAbove"
+    },
+    {
+      "id": "fourth",
+      "title": "Fourth floor",
+      "scheduleField": "thirdAndAbove"
+    }
+  ],
+  "reportStoreyHeightScenarioM": 3,
+  "reportSlabNominalThicknessM": 0.125,
+  "reportBeamFamilies": [
+    {
+      "family": "B1",
+      "crossSectionMm": [
+        300,
+        550
+      ],
+      "top": "4Ø20 throughout +2Ø16 extra",
+      "bottom": "4Ø20 throughout",
+      "links": "Ø8@100 ends, Ø8@150 mid (report wording)",
+      "status": "SOURCE_CATALOGUE_NOT_MAPPED_TO_INDIVIDUAL_BEAM_IDS"
+    },
+    {
+      "family": "SECB",
+      "crossSectionMm": [
+        300,
+        400
+      ],
+      "top": "2Ø20 +1Ø16 throughout",
+      "bottom": "2Ø20 +1Ø16 throughout",
+      "links": "Ø8@125 throughout (report wording)",
+      "status": "SOURCE_CATALOGUE_NOT_MAPPED_TO_INDIVIDUAL_BEAM_IDS"
+    }
+  ],
+  "records": [
+    {
+      "grid": "A1",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "A2",
+      "type": "C4",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "8#-20mm & 4#-16 mm",
+        "second": "8#-20mm & 4#-16 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "A3",
+      "type": "C4",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "8#-20mm & 4#-16 mm",
+        "second": "8#-20mm & 4#-16 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "A4",
+      "type": "C4",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "8#-20mm & 4#-16 mm",
+        "second": "8#-20mm & 4#-16 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "A5",
+      "type": "C4",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "8#-20mm & 4#-16 mm",
+        "second": "8#-20mm & 4#-16 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "A6",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "B1",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "B2",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "B3",
+      "type": "C2",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "12#-20 mm"
+      }
+    },
+    {
+      "grid": "B4",
+      "type": "C1",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "6#-25mm & 6#-20 mm",
+        "first": "6#-25mm & 6#-20 mm",
+        "second": "6#-25mm & 6#-20 mm",
+        "thirdAndAbove": "6#-25mm & 6#-20 mm"
+      }
+    },
+    {
+      "grid": "B5",
+      "type": "C2",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "12#-20 mm"
+      }
+    },
+    {
+      "grid": "B6",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "C6",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "D5",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "E4",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "F3",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "F2",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    },
+    {
+      "grid": "F1",
+      "type": "C3",
+      "sectionMm": [
+        450,
+        450
+      ],
+      "reportBarNotation": {
+        "ground": "12#-20 mm",
+        "first": "12#-20 mm",
+        "second": "12#-20 mm",
+        "thirdAndAbove": "8#-20mm & 4#-16 mm"
+      }
+    }
+  ],
+  "unresolved": [
+    {
+      "id": "UF-01",
+      "topic": "Report G+5 versus architecture G+4 plus roof and 15m / 3m nominal",
+      "required": "Adopted floor count and signed level / column segment schedule"
+    },
+    {
+      "id": "UF-02",
+      "topic": "Column longitudinal BBS bars",
+      "required": "Issued floor by floor column steel with hooks/laps/cut lengths, actual storey heights, offsets and transition zone checks"
+    },
+    {
+      "id": "UF-03",
+      "topic": "Column hoop/cross-tie discrepancy",
+      "required": "Signed tie zone detail; STR-02/06 Ø8/Ø10 spacing conflict remains"
+    },
+    {
+      "id": "UF-04",
+      "topic": "Beam family versus exact floor-edge member map",
+      "required": "Registered STR structural edges, support grid, actual spans, section transitions and source-constrained bar marks"
+    },
+    {
+      "id": "UF-05",
+      "topic": "Slab and stair bars",
+      "required": "Verified bay geometry, openings/voids, top/bottom reinforcement, negative support bar layouts and stair detail"
+    },
+    {
+      "id": "UF-06",
+      "topic": "Shear/lift wall and roof/tank",
+      "required": "Signed wall/diaphragm, service shaft, tank/site and full seismic design interface"
+    }
+  ],
+  "limitations": [
+    "Do not add these upper-floor theoretical reference masses to existing through-plinth V02–M80 totals; this is a separate source-review scenario.",
+    "Per-metre vertical bars exclude lap, bend, anchorage and cutting waste; 3.0m length is a report scenario, not independently surveyed segment height.",
+    "Source report bar table contains 18 grid locations. Architectural fourth floor reuses '3rd Floor and Above' schedule category as a source-reference mapping, not signed member acceptance.",
+    "Concrete prisms are uncut nominal gross envelopes and are not quantities for pours, contracts or orders.",
+    "Beam family data has no independently accepted per-edge/topology assignment; do not silently create individual beam IDs or slab quantities.",
+    "Use applicable Nepal Building Codes, original source drawings and site data; no construction approval is asserted."
+  ]
+}
