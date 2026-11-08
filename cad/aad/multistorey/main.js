@@ -30,7 +30,7 @@ const standardProject=params.get("workspace")==="standard";
 function projectAllows(e){return projectPhase!=="substructure"||Boolean(e.previewOnly&&["footing","column","beam"].includes(e.kind));}
 function projectNotify(){if(standardProject)document.dispatchEvent(new Event("project-drawing-state"));}
 let selectedId=null,selectionOverlay=null;let auditInitialized=false;
-let cutaway=false,showDimensions=true,showPlanGrid=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
+let cutaway=false,showDimensions=true,showPlanGrid=true,showColumnAxes=true,showFurniture=true,roofAccessMode=false,mepMode=false,showMEP=true,showRoofCover=true;
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
@@ -213,6 +213,7 @@ function showAADSelectionDetails(picked){
   else if(picked.profile)line("meta","Plan polygon: "+picked.profile.length+" vertices (world X/Z)");
   line("meta","Evidence: "+d.evidence+(d.sourceId?" · source "+d.sourceId:"")+" · "+picked.status);
   if(picked.kind==="column"){
+   if(picked.axisReference)line("hint","Column-axis location "+picked.axisReference+" · PROVISIONAL display marker only; not a source-verified structural member or footing position.");
    const review=building.structuralAlignment?.columns.find(x=>x.elementId===picked.id);
    if(review)line("hint","Structural position NOT VERIFIED. Nearest drawn wall centreline: "+
     (review.distanceToWallCenterlineM??"unknown")+" m"+(review.nearestWallId?" ("+review.nearestWallId+")":"")+
@@ -496,7 +497,7 @@ function projectToWorld(p,t){
 function drawPlan(){
  const doc=$("viewer2d");doc.replaceChildren();
  if(!workspace)return;
- if(typeof gridHud!=='undefined'){const cg=workspace.snapshot().manifest.presentation?.coordinateGrid;gridHud.hidden=!cg;}
+ if(typeof gridHud!=='undefined'){const presentation=workspace.snapshot().manifest.presentation;gridHud.hidden=!presentation?.coordinateGrid;const axisToggle=$('aad-column-axes-label');if(axisToggle)axisToggle.hidden=!presentation?.columnAxisGrid;}
  const state=workspace.snapshot(),models=state.models;
  const levels=activeLevel==="all"?state.manifest.levels:state.manifest.levels.filter(l=>l.id===activeLevel);
  const outlines=[],pts=[];
@@ -589,9 +590,10 @@ function drawPlan(){
    const rect=el(roundColumn?"circle":"rect",{
     ...(roundColumn?{cx:col.x,cy:col.z,r:col.dx/2}:{x:col.x-col.dx/2,y:col.z-col.dz/2,width:col.dx,height:col.dz}),
     class:"aad-column"+(selectedId===col.id?" is-selected":""),
+    ...(col.axisReference?{"data-column-axis-id":col.axisReference}:{}),
     ...(col.colour?{fill:col.colour,stroke:'#b37c2e','fill-opacity':.65}:{}),
     "data-element-id":col.id,"data-world-x":col.x,"data-world-z":col.z,
-    "aria-label":"Column "+col.name+" plan footprint",tabindex:"0",role:"button"});
+    "aria-label":"Column "+(col.axisReference?"axis "+col.axisReference+" · ":"")+col.name+" plan footprint, engineering review only",tabindex:"0",role:"button"});
    rect.addEventListener("click",event=>{event.stopPropagation();if(drawMode){recordDrawPoint(event);return;}selectElement(col);});
    rect.addEventListener("keydown",event=>{if(event.key==="Enter"||event.key===" "){event.preventDefault();selectElement(col);}});
    doc.append(rect);
@@ -661,7 +663,7 @@ function drawPlan(){
    }
   }
  }
- if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,selectedId,onSelect:selectElement,roofOnly:roofAccessMode});
+ if(building.manifest.presentation)drawPresentationPlan(doc,building,activeLevel,{grid:showPlanGrid,dimensions:showDimensions,furniture:showFurniture,columnAxes:showColumnAxes,selectedId,onSelect:selectElement,roofOnly:roofAccessMode});
  if(showMEP&&!roofAccessMode)drawServicesPlan(doc,building);
  if(drawMode&&drawFirst&&activeLevel!=="all"){
   const l=state.manifest.levels.find(x=>x.id===activeLevel);
@@ -1195,10 +1197,11 @@ $('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg
 // Ashok's explicit grid-manifest only. This is LOCAL building model space, not GIS
 // latitude/longitude or a professionally registered structural grid.
 const gridHud=document.createElement('section');gridHud.id='aad-grid-hud';gridHud.hidden=true;
-gridHud.innerHTML='<strong>Building coordinate grid · 100 mm cells</strong><span id="aad-grid-current">Move the pointer on the plan to read exact X/Y millimetres and cell address.</span><button type="button" id="aad-grid-copy" title="Copy the last selected grid coordinate as a prompt">Copy coordinate</button><small>Plot X = local X + 1944 mm · Plot Y = local Y + 2000 mm. Zero is the building front-left outer corner. Blue BX036 = 3600 mm target wall; amber stair offset remains on HOLD.</small>';
-const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;align-items:center;padding:9px 12px;border-bottom:1px solid #c8d8d8;background:#eef6ff;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong,#aad-grid-hud small{grid-column:1/-1}#aad-grid-hud small{font-size:11px;color:#51677d;line-height:1.35}#aad-grid-current{font:650 12px ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}';
+gridHud.innerHTML='<strong>Building coordinate grid · 100 mm cells</strong><span id="aad-grid-current">Move the pointer on the plan to read exact X/Y millimetres and cell address.</span><button type="button" id="aad-grid-copy" title="Copy the last selected grid coordinate as a prompt">Copy coordinate</button><label id="aad-column-axes-label" hidden><input id="aad-column-axes" type="checkbox" checked> Show column axes A–C / 1–5 (proposed locations)</label><small>100 mm XY measurement grid is separate from the letter/number column axes. A/B/C and 1–5 label existing <em>provisional</em> column markers, not engineered members. Plot X = local X + 1944 mm · Plot Y = local Y + 2000 mm. Stair offset remains on HOLD.</small>';
+const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;align-items:center;padding:9px 12px;border-bottom:1px solid #c8d8d8;background:#eef6ff;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong,#aad-grid-hud small{grid-column:1/-1}#aad-grid-hud small{font-size:11px;color:#51677d;line-height:1.35}#aad-grid-current{font:650 12px ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-column-axes-label{display:flex;gap:7px;align-items:center;grid-column:1/-1;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}';
 document.head.append(gridStyle);
 $('viewport2d').insertBefore(gridHud,$('viewer2d'));
+$('aad-column-axes').addEventListener('change',e=>{showColumnAxes=e.target.checked;if(building)drawPlan();});
 let gridPrompt='';
 function onPlanCoordinate(ev,remember=false){
  if(!building?.manifest.presentation)return;
