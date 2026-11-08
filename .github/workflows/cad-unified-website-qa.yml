@@ -39,6 +39,7 @@ jobs:
           node tools/site/ashok-v3-owner-smoke.mjs
           node tools/site/ashok-grid-smoke.mjs
           node tools/site/ashok-v3-2-smoke.mjs
+          node tools/site/ashok-column-axes-smoke.mjs
           node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
           node tools/site/ashok-qa02-ifc.mjs
@@ -68,6 +69,7 @@ jobs:
           node tools/site/project-workspace-browser.mjs
           node tools/site/ashok-grid-browser.mjs
           node tools/site/ashok-v3-2-browser.mjs
+          node tools/site/ashok-column-axes-browser.mjs
           node tools/site/engineering-normalization-browser.mjs
           node tools/site/harisharan-rear-nine-browser.mjs
           node tools/site/harisharan-seven-stages-browser.mjs
