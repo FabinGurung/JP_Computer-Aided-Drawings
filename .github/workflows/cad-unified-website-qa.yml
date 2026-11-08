@@ -55,6 +55,7 @@ jobs:
           node tools/site/harisharan-seven-stages-smoke.mjs
           node tools/site/harisharan-review-ledger-smoke.mjs
           node tools/site/harisharan-upper-floor-smoke.mjs
+          node tools/site/cad-release-provenance-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
