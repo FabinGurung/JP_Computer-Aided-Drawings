@@ -3,12 +3,16 @@ on:
   pull_request:
     paths:
       - "public/projects/harisharan-adhikari/decisions/**"
+      - "public/projects/harisharan-adhikari/index.html"
+      - "public/projects/harisharan-adhikari/review/index.html"
       - "tools/site/harisharan-visual-holds-*.mjs"
       - ".github/workflows/harisharan-visual-holds-qa.yml"
   push:
     branches: [main]
     paths:
       - "public/projects/harisharan-adhikari/decisions/**"
+      - "public/projects/harisharan-adhikari/index.html"
+      - "public/projects/harisharan-adhikari/review/index.html"
       - "tools/site/harisharan-visual-holds-*.mjs"
       - ".github/workflows/harisharan-visual-holds-qa.yml"
   workflow_run:
