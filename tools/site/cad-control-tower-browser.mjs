@@ -19,6 +19,8 @@ try{
     edgeOverflow:document.documentElement.scrollWidth>innerWidth+2
    }));
    assert.equal(state.southChapters,0,'South duplicates top chapters');
+   assert.equal(await p.locator('#pw-rail [data-chapter]').count(),0,'West must not repeat north chapter navigation');
+   assert.equal(await p.locator('#pw-rail [data-west-chapter][data-current="true"]').count(),1,'West must display the selected subsection family only');
    assert.equal(state.southPackages,0,'South duplicates west package list');
    assert.equal(state.edgeOverflow,false,'Horizontal overflow '+slug+'/'+width);
    assert.ok(state.d&&state.axis);
@@ -35,11 +37,19 @@ try{
    }
    if(slug==='ashok-adhikari'){
     assert.equal(state.axis,'DISPLAY_REVIEW_ONLY');
+    const machine=await p.evaluate(()=>window.ProjectWorkspace.getLineage());
+    assert.equal(machine.projectSlug,'ashok-adhikari');
+    assert.equal(machine.axisStatus,'DISPLAY_REVIEW_ONLY');
+    assert.equal(machine.constructionApproved,false);
+    assert.ok(machine.axisIds.includes('A1')&&machine.axisIds.includes('C5'));
+    assert.equal(await p.evaluate(()=>window.ProjectWorkspace.getReviewGate()),'AX-01');
     assert.match(await p.locator('#pw-axis-proof').innerText(),/proposed display markers/);
     for(const id of ['boq','gantt','packages','sources','views']){
      await p.locator('#pw-tab-'+id).click();
      await p.waitForFunction(id=>document.getElementById('pw-axis-proof').dataset.chapter===id,id);
      assert.equal(await p.locator('#pw-axis-proof').getAttribute('data-axis-status'),'DISPLAY_REVIEW_ONLY');
+     const current=await p.evaluate(()=>window.ProjectWorkspace.getLineage());
+     assert.equal(current.chapter,id);assert.equal(current.axisStatus,'DISPLAY_REVIEW_ONLY');
      assert.equal(await p.locator('#pw-dock').getAttribute('data-review-id'),original);
     }
    }else assert.equal(state.axis,'AXES_NOT_ADMITTED',slug+' should fail closed when no matching standard axis registry');
