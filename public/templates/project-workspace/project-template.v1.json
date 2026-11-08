@@ -38,7 +38,7 @@
     "north": "project-and-chapters",
     "west": "versions-and-chapter-tree",
     "east": "evidence-and-actions-inspector",
-    "south": "package-dock"
+    "south": "review-gate-route (one unique unresolved issue at a time; no duplicate chapter/site-package list)"
   },
   "packages": [],
   "sourceBoundary": {
@@ -53,5 +53,46 @@
     "engineeringApproval": false,
     "requiredPackageSlots": 16,
     "memoryPosterPath": "projects/example-empty/memory-wall/"
+  },
+  "viewControlTower": {
+    "schema": "jp-cad://control-tower/view-lineage/1.0",
+    "controlTower": "data/cad/view-control-tower.v1.json",
+    "publicGuide": "templates/project-workspace/control-tower/",
+    "requiredAxisRule": "COLUMN_LETTER_NUMBER_AXES_REGISTERED_FROM_SOURCE_OR_AXES_NOT_ADMITTED",
+    "note": "Every newly admitted plan uses one source-backed axis registry across both views and five chapters. Empty model implies HOLD, never fabricated A1/B2 structural support.",
+    "axisRegistry": {
+      "sourceRef": null,
+      "revisionId": null,
+      "coordinateFrame": null,
+      "orientation": null,
+      "letters": null,
+      "numbers": null,
+      "intersections": null,
+      "levels": null,
+      "structuralAuthority": "NOT_ADMITTED",
+      "reviewHolds": [
+        "SOURCE_PENDING"
+      ]
+    },
+    "lineageFields": [
+      "projectId",
+      "editionId",
+      "revisionId",
+      "floorId",
+      "sourceRef",
+      "elementId",
+      "axisRef",
+      "axisStatus",
+      "units",
+      "quantityBasis",
+      "approvalStatus"
+    ],
+    "downstreamStates": {
+      "views": "SOURCE_PENDING",
+      "boq": "NO_ADMITTED_QUANTITIES",
+      "gantt": "NO_ADMITTED_DATES_OR_DEPENDENCIES",
+      "packages": "NO_ADMITTED_WORKBENCHES",
+      "sources": "ORIGINAL_FILES_PENDING"
+    }
   }
 }
