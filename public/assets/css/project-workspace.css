@@ -178,3 +178,12 @@
  .pw-axis-proof{padding:9px;font-size:11px}}
 @media(max-width:390px){.pw-review-controls{grid-template-columns:repeat(2,minmax(0,1fr))}
  .pw-review-progress strong{font-size:11px}.pw-review-progress p{display:none}}
+
+/* The west rail is now edition + active subsection tree only; chapters belong north. */
+.pw-current-sections-title{font-weight:750;font-size:11px;color:var(--muted);
+ letter-spacing:.05em;text-transform:uppercase;margin-top:16px;padding-bottom:7px;border-bottom:1px solid var(--line)}
+.pw-tree>li[data-west-chapter]{display:none;margin:0}
+.pw-tree>li[data-west-chapter][data-current="true"]{display:list-item}
+.pw-tree>li[data-west-chapter] .pw-subnav{margin:0;padding:5px 0;border-left:0}
+.pw-tree>li[data-west-chapter] .pw-subnav>button{border-left:2px solid #d3e0e0;border-radius:0 6px 6px 0}
+.pw-tree>li[data-west-chapter] .pw-subnav>button[aria-current="true"]{border-left-color:var(--accent)}
