@@ -1,0 +1,288 @@
+{
+  "schema": "jp-cad://gf-ff-coordination/1",
+  "project": "Ashok Adhikari Residence",
+  "dateNpt": "2026-11-08",
+  "version": "v3.2",
+  "status": "ARCHITECTURAL_PROPOSAL__NOT_FOR_CONSTRUCTION",
+  "sources": {
+    "gf": "aad-gf-model-v3-grid-review.json",
+    "originalFF": "aad-ff-model-v3-review.json",
+    "candidateFF": "aad-ff-model-v3-2-review.json",
+    "grid": "coordinate-grid-v1.json"
+  },
+  "grid": {
+    "baseCellMm": 100,
+    "majorMm": 1000,
+    "intermediateMm": 500,
+    "origin": "building front-left",
+    "plotOriginInPlotMm": [
+      1944,
+      2000
+    ],
+    "xTargetMm": 3600
+  },
+  "alignment": {
+    "gfXmm": 3600,
+    "oldFFXmm": 3300,
+    "newFFXmm": 3600,
+    "overlapZmetres": [
+      4.8,
+      12.2
+    ],
+    "overlapMm": 7400,
+    "stairExteriorGFandFFXmm": 4175,
+    "stairOuterFaceGFandFFXmm": 4290,
+    "stairOffsetFromPartitionMm": 575,
+    "structuralClassification": "UNKNOWN"
+  },
+  "nominalAreaChanges": {
+    "unit": "m2",
+    "basis": "model room rectangles, not finished usable measurements",
+    "rows": [
+      {
+        "id": "FF-MAIN",
+        "oldAreaM2": 34.56,
+        "newAreaM2": 34.56,
+        "deltaM2": 0,
+        "oldBBoxMm": [
+          0,
+          9600,
+          7200,
+          14400
+        ],
+        "newBBoxMm": [
+          0,
+          9600,
+          7200,
+          14400
+        ]
+      },
+      {
+        "id": "FF-ENS",
+        "oldAreaM2": 3.63,
+        "newAreaM2": 3.63,
+        "deltaM2": 0,
+        "oldBBoxMm": [
+          0,
+          7400,
+          1650,
+          9600
+        ],
+        "newBBoxMm": [
+          0,
+          7400,
+          1650,
+          9600
+        ]
+      },
+      {
+        "id": "FF-WIR",
+        "oldAreaM2": 3.63,
+        "newAreaM2": 4.29,
+        "deltaM2": 0.66,
+        "oldBBoxMm": [
+          1650,
+          7400,
+          3300,
+          9600
+        ],
+        "newBBoxMm": [
+          1650,
+          7400,
+          3600,
+          9600
+        ]
+      },
+      {
+        "id": "FF-BATH",
+        "oldAreaM2": 5.775,
+        "newAreaM2": 6.3,
+        "deltaM2": 0.525,
+        "oldBBoxMm": [
+          0,
+          5650,
+          3300,
+          7400
+        ],
+        "newBBoxMm": [
+          0,
+          5650,
+          3600,
+          7400
+        ]
+      },
+      {
+        "id": "FF-BED2",
+        "oldAreaM2": 11.385,
+        "newAreaM2": 12.42,
+        "deltaM2": 1.035,
+        "oldBBoxMm": [
+          0,
+          2200,
+          3300,
+          5650
+        ],
+        "newBBoxMm": [
+          0,
+          2200,
+          3600,
+          5650
+        ]
+      },
+      {
+        "id": "FF-LOUNGE",
+        "oldAreaM2": 28.86,
+        "newAreaM2": 26.64,
+        "deltaM2": -2.22,
+        "oldBBoxMm": [
+          3300,
+          2200,
+          7200,
+          9600
+        ],
+        "newBBoxMm": [
+          3600,
+          2200,
+          7200,
+          9600
+        ]
+      },
+      {
+        "id": "FF-STAIR",
+        "oldAreaM2": 9.438,
+        "newAreaM2": 9.438,
+        "deltaM2": 0,
+        "oldBBoxMm": [
+          0,
+          0,
+          4290,
+          2200
+        ],
+        "newBBoxMm": [
+          0,
+          0,
+          4290,
+          2200
+        ]
+      },
+      {
+        "id": "FF-BALC",
+        "oldAreaM2": 6.402,
+        "newAreaM2": 6.402,
+        "deltaM2": 0,
+        "oldBBoxMm": [
+          4290,
+          0,
+          7200,
+          2200
+        ],
+        "newBBoxMm": [
+          4290,
+          0,
+          7200,
+          2200
+        ]
+      }
+    ],
+    "netM2": 0,
+    "acceptedBOQ": null
+  },
+  "openingEffects": [
+    {
+      "id": "FF-D-LOUNGE-MAIN",
+      "beforeHostOffsetMm": 2500,
+      "afterHostOffsetMm": 2200,
+      "worldXbeforeMm": 5800,
+      "worldXafterMm": 5800,
+      "status": "STATION_PRESERVED__JAMB_CLEARANCE_HOLD"
+    },
+    {
+      "id": "FF-D-MAINBATH-LOUNGE",
+      "xShiftMm": 300,
+      "status": "HOST_GEOMETRY_PASS__FIXTURE_ACCESS_HOLD"
+    },
+    {
+      "id": "FF-D-BED2-LOUNGE",
+      "xShiftMm": 300,
+      "status": "HOST_GEOMETRY_PASS__SWING_CIRCULATION_HOLD"
+    },
+    {
+      "id": "FF-W008-BED2-STAIR-V3",
+      "oldHostLengthMm": 3185,
+      "newHostLengthMm": 3485,
+      "widthMm": 900,
+      "oldOffsetMm": 1142.5,
+      "newOffsetMm": 1292.5,
+      "xCentreShiftMm": 150,
+      "status": "CENTERED_GEOMETRY_PASS__GLAZING_FIRE_PRIVACY_HOLD"
+    }
+  ],
+  "independentStairReview": {
+    "floorToFloorRiseMm": 3048,
+    "riserCount": 18,
+    "nominalRiserMm": 169.333,
+    "nominalTreadMm": 250,
+    "nominalFlightWidthMm": 900,
+    "GFandFFFootprintMatches": true,
+    "landingClearanceMm": null,
+    "finishedHeadroomMm": null,
+    "slabVoid": null,
+    "guardDetail": null,
+    "conclusion": "GEOMETRY_ONLY_PASS__ENGINEERING_HOLD"
+  },
+  "independentLoadPathReview": {
+    "partitionVerticalGeometricAlignment": "PASS_OVER_7400MM",
+    "gravityVsNonBearingWall": "NOT_CLASSIFIED",
+    "slabLoadAdded": null,
+    "beamAndSlabSupport": "NOT_ADMITTED",
+    "frameColumnsAndFootings": "NOT_ADMITTED",
+    "seismicModelAndDiaphragm": "NOT_ADMITTED",
+    "transferLoads": null,
+    "conclusion": "LOAD_PATH_NOT_VERIFIED__ENGINEERING_HOLD"
+  },
+  "gates": [
+    {
+      "id": "A",
+      "check": "Shared coordinate grid, zero wall datum offset in overlap",
+      "status": "STATIC_QA_REQUIRED"
+    },
+    {
+      "id": "B",
+      "check": "Door host stations and one centered internal stair window",
+      "status": "STATIC_QA_REQUIRED"
+    },
+    {
+      "id": "C",
+      "check": "Landings, slab void, headroom, stair support and accessibility",
+      "status": "HOLD"
+    },
+    {
+      "id": "D",
+      "check": "Member support, slab transfer, seismic vertical irregularity and seismic code review",
+      "status": "HOLD"
+    },
+    {
+      "id": "E",
+      "check": "Linked GF/FF 2D/3D desktop/mobile and earlier edition preservation",
+      "status": "BROWSER_QA_REQUIRED"
+    },
+    {
+      "id": "F",
+      "check": "Approval, municipal permit, MEP, BOQ, issued drawing",
+      "status": "HOLD"
+    }
+  ],
+  "codeReferences": [
+    {
+      "name": "DUDBC Nepal National Building Code official index (NBC 206:2024; NBC 105 seismic)",
+      "url": "https://dudbc.gov.np/pages/24231978/",
+      "note": "Code review source, no compliance asserted"
+    },
+    {
+      "name": "NBC 105:2020 seismic code text (vertical irregularity)",
+      "url": "https://ebps.kathmandu.gov.np/UploadImage/Asset/ReferenceDoc/3/NBC_105_2020_SEISMIC_DESIGN_OF_BUILDINGS_IN_NEPAL.pdf",
+      "note": "Structural reviewer to verify applicable edition and actual source"
+    }
+  ],
+  "history": "v1, v2, v3 and v3.1 source files remain unchanged. v3.2 is separate review-only candidate."
+}
