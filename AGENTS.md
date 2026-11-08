@@ -48,3 +48,42 @@ rate may become a compliance pass. The CAD Memory Wall is `/memory-wall/`.
 - `JP_A7_System_Registry_and_Knowledge_Graph`: read-only catalogue/routing index for CAD.
 
 Never attempt to enforce these agent instructions as account-wide permissions: GitHub provider access is controlled independently. This file is a workflow rule for agents entering this repository.
+
+## CAD drawing control tower — mandatory source/axis lineage (adopted 2026-11-08)
+
+For every newly submitted plan, drawing, sheet or AI-derived architectural
+revision in this **CAD repository**, read:
+- `public/data/cad/view-control-tower.v1.json` (machine-readable governing
+  chapter and axis display contract);
+- `governance/aad/project-workspace-standard.md` (human-facing standard 1.3);
+- `public/assets/js/cad-view-control-tower.mjs` (read-only evaluator);
+- `public/templates/project-workspace/project-template.v1.json` (null-safe
+  empty source-intake template).
+
+Before editing a new plan, enumerate source file/revision and its vertical
+GF/FF relationships. Extract **real source-supported** column letter axes and
+number axes (e.g. A–C and 1–5) with unique intersection/member IDs, distances,
+orientations, and source/engineer status. Keep the independent 100 mm cursor
+grid separate. Missing, conflicting or only illustrative axes MUST be
+`AXES_NOT_ADMITTED` / `REVIEW_ONLY`; never create fictitious column positions,
+support paths or footing sizes to complete an otherwise nice grid.
+
+Maintain identical source and model IDs across the five owner-visible
+chapters: 2D/3D Views, Measurements/BOQ, Programme/Gantt, Packages/Site Modules,
+and Sources & records. Missing engineering quantities, accepted unit rates,
+durations, approvals, bar sizes and bearing capacities are explicit null/HOLD,
+not assumed zero. All derived data must carry project, edition, floor, revision,
+axis/source and units. If a peer Cost/Scheduling repo is the owning writer,
+record a pending handoff and do not claim remote changes without provider writes
+and readback.
+
+The north region owns chapter changes, west owns edition and active subsection,
+east owns contextual evidence, and south owns **unique review checkpoints**;
+never create duplicate navigation for the same purpose in cardinal directions.
+Run `node tools/site/cad-control-tower-smoke.mjs`, the control-tower browser QA,
+and repository CI; original editions, source-owned workbenches and engineering
+HOLDs remain intact.
+
+These instructions do not authorize A7 modifications or a construction
+approval. Actual source ingestion and client/provider publication require
+authenticated readback.
