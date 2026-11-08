@@ -168,3 +168,73 @@ peer ownership and source-preserving QA. This UI release does not copy Narayani
 modules, alter Ashok v1 geometry, accept Harisharan's provisional BBS as a shop
 schedule or create Ramachandra engineering details. No user-specific rod sizes
 were imported without a recovered authoritative schedule.
+
+
+## Standard 1.3 — drawing control tower and nonduplicating south review route (2026-11-08)
+
+**Scope:** all public project workspaces (Narayani, Harisharan, Ashok,
+Ramachandra) and the empty-template example. This replaces only the
+**south package shortcut dock**, not the original package records or workbenches.
+Project versions, drawings, Drive originals, frozen engineering workbenches,
+structural HOLDs and approvals remain unchanged.
+
+A single versioned human/machine contract is published at
+`public/data/cad/view-control-tower.v1.json`, with pure evaluator
+`public/assets/js/cad-view-control-tower.mjs`. Human documentation is at
+`public/templates/project-workspace/control-tower/index.html`.
+All five chapter states must carry the same project, edition, floor,
+element and source-revision identity.
+
+| Cardinal direction | Single responsibility | Explicitly not duplicated |
+| --- | --- | --- |
+| North | Project title, five chapter tabs, phase and drawing layout | No site package carousel |
+| West | Edition/source revision and chapter/section tree | No gate-step pager |
+| Centre | Source-based 2D plan, linked 3D and component-register content | No invented structural plan |
+| East | Current element/package, evidence qualification and source actions | No chapter/edition selector |
+| South | Distinct unresolved review checkpoints with previous/next and evidence link | No repeated package menu, edition tabs or chapter list |
+
+The south review route follows one stable per-project sequence of **issue IDs**,
+not site package or chapter IDs; it remains usable in each chapter on mobile
+and desktop. A card carries one status and its evidence reference. Missing
+source link navigates to the source chapter rather than constructing a URL.
+
+### Column axes versus 100 mm local cursor cells
+
+1. For every **new** project drawing edition, a drawing-axis registry must
+   identify source-supported letter axes and number axes, center coordinates,
+   floor registration, source revision and member/intersection IDs.
+2. The **100 mm building-local measurement** grid is an independent coordinate
+   and editing aid. It must never be passed off as column axes.
+3. Existing v3.2 Ashok `A/B/C × 1..5` positions are derived from 14 existing
+   provisional display column markers per floor, **not an authenticated
+   structural design**. C1 is a vacant intersection, never a new column.
+4. If no admitted axis evidence exists, return `AXES_NOT_ADMITTED` / HOLD.
+   Preserve any separate source-specific axes in the original workbench;
+   do not rename them through interpolation or grid guessing.
+5. The five chapters must retain stable axis/source references:
+   - Views: labels/markers and the linked 2D/3D element identity.
+   - BOQ: element, axis pair, floor, units, deductions and source quantity.
+   - Gantt: element/axis work scope, predecessor, accepted dates and evidence.
+   - Packages: exact source workbench/member range, status and inspector gate.
+   - Sources: raw authenticated source, revisions, original identity, hashes and
+     approval record.
+   Unknown source-based quantities, mix, member capacities and durations
+   stay null, not zero or fabricated.
+
+The source/axis status banner in every chapter is a **traceability indicator**;
+it does not claim a model has been physically recomputed. Each downstream
+compiler or connected Cost/Scheduling automation must read the versioned
+contract and enforce source admission at its output boundary. A browser/CI
+pass proves the interface and schema invariants, **not** professional
+engineering approval or authorization to build.
+
+### QA and acceptance
+
+CI must validate the human+JSON contract, all five chapter IDs,
+nonduplicated cardinal-navigation semantics, distinct per-project review gate
+IDs, source-registered Ashok v3.2 axis markers, a HOLD on historical editions
+that lack a new standard axis registry, and browser behavior at mobile and
+desktop breakpoints. Future publisher/source intake pipelines must additionally
+demonstrate authenticated provider readback and dimensional/source reconciliation
+before assigning an approved structural axis or exporting a construction BOQ.
+No changes have been made to other repositories in this standard.
