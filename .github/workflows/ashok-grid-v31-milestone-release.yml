@@ -25,12 +25,44 @@ jobs:
           fetch-depth: 0
           ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: true
+      - name: Verify frozen milestone and stop cleanly when already sealed
+        id: existing_seal
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          RELEASE_TAG: ashok-grid-v3.1.0-review.1
+          EXPECTED_FROZEN_SHA: d8b9518c418e7affbe83bbfbd8ab669e0e54d734
+        shell: bash
+        run: |
+          set -euo pipefail
+          tag_present="false"
+          if git ls-remote --exit-code --tags origin "refs/tags/$RELEASE_TAG" >/dev/null 2>&1; then
+            tag_present="true"
+            git fetch --no-tags origin "refs/tags/$RELEASE_TAG:refs/tags/$RELEASE_TAG"
+            recorded="$(git rev-parse "refs/tags/$RELEASE_TAG^{}")"
+            test "$recorded" = "$EXPECTED_FROZEN_SHA" || { echo "::error::Historical release tag changed: $RELEASE_TAG"; exit 1; }
+          fi
+          if gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            test "$tag_present" = "true" || { echo "::error::Release exists without its immutable tag"; exit 1; }
+            kind="$(gh release view "$RELEASE_TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease --jq '.isPrerelease')"
+            test "$kind" = "true" || { echo "::error::Existing milestone unexpectedly not prerelease"; exit 1; }
+            echo "already_sealed=true" >> "$GITHUB_OUTPUT"
+            echo "### Preserved prerelease — no work needed" >> "$GITHUB_STEP_SUMMARY"
+            echo "- $RELEASE_TAG is already published on $EXPECTED_FROZEN_SHA" >> "$GITHUB_STEP_SUMMARY"
+            echo "- Latest successful Pages/readback is separate from immutable historical release" >> "$GITHUB_STEP_SUMMARY"
+            echo "HISTORICAL_RELEASE_VERIFIED_NOOP $RELEASE_TAG $EXPECTED_FROZEN_SHA"
+          else
+            test "$tag_present" = "false" || { echo "::error::Tag exists without its GitHub Release. Manual reconciliation required."; exit 1; }
+            echo "already_sealed=false" >> "$GITHUB_OUTPUT"
+          fi
       - uses: actions/setup-node@v4
+        if: steps.existing_seal.outputs.already_sealed != 'true'
         with:
           node-version: '22'
           cache: npm
       - run: npm ci
+        if: steps.existing_seal.outputs.already_sealed != 'true'
       - name: Fail-closed release gate for geometry, source preservation, live site and HOLD
+        if: steps.existing_seal.outputs.already_sealed != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
@@ -66,6 +98,7 @@ jobs:
           done
           echo "ASHOK_GRID_V3_1_0_REVIEW_SOURCE_AND_LIVE_GATES_PASS $VERIFIED_SHA"
       - name: Create immutable annotated review tag and GitHub prerelease
+        if: steps.existing_seal.outputs.already_sealed != 'true'
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
