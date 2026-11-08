@@ -1,7 +1,8 @@
 /* Reusable architectural plan presentation, in the SAME world X/Z as the
  * editable floor graph. Dimensions are derived from project-owned bounds. */
+import {drawColumnAxisOverlay} from './aad-column-axis-grid.mjs';
 const NS='http://www.w3.org/2000/svg';
-export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=true,furniture=true,selectedId=null,onSelect=()=>{},roofOnly=false}={}){
+export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=true,furniture=true,columnAxes=true,selectedId=null,onSelect=()=>{},roofOnly=false}={}){
  const p=building.manifest.presentation;if(!p)return;
  const [x0,z0,x1,z1]=p.outerBounds,W=x1-x0,D=z1-z0,sourceDepth=p.sourceYLength||D;
  const [px0,pz0,px1,pz1]=p.plotBounds||p.outerBounds;
@@ -80,4 +81,5 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
   front.append(make('text',{x:x0+W/2,y:z0-1.65,'text-anchor':'middle',class:'aad-space-size'},p.wallLegend||''));
   front.append(make('text',{x:x0+W/2,y:z0-1.28,'text-anchor':'middle',class:'aad-space-size'},(p.coordinateGrid?'BUILDING X/Y · exact mm / ':'')+[p.grid?.minor||.1,p.grid?.medium||.5,p.grid?.major||1].map(n=>Math.round(n*1000)).join(' / ')+' mm grid · not an engineered structural grid'));
  }
+ if(columnAxes&&p.columnAxisGrid)drawColumnAxisOverlay(front,building.manifest,levelId,{outerBounds:p.outerBounds,roofOnly});
 }

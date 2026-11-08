@@ -284,5 +284,52 @@
       "note": "Structural reviewer to verify applicable edition and actual source"
     }
   ],
-  "history": "v1, v2, v3 and v3.1 source files remain unchanged. v3.2 is separate review-only candidate."
+  "history": "v1, v2, v3 and v3.1 source files remain unchanged. v3.2 is separate review-only candidate.",
+  "columnAxisReview": {
+    "dateNpt": "2026-11-08",
+    "status": "PROVISIONAL_MARKER_COORDINATE_NOMENCLATURE_ONLY",
+    "letterAxes": [
+      [
+        "A",
+        150
+      ],
+      [
+        "B",
+        4290
+      ],
+      [
+        "C",
+        7050
+      ]
+    ],
+    "numberAxes": [
+      [
+        "1",
+        14250
+      ],
+      [
+        "2",
+        12200
+      ],
+      [
+        "3",
+        8800
+      ],
+      [
+        "4",
+        5000
+      ],
+      [
+        "5",
+        150
+      ]
+    ],
+    "source": "14 identical-position but NON-ENGINEERED 300mm presentation proxies per GF / FF",
+    "excludedIntersection": "C1",
+    "gfMarkers": 14,
+    "ffMarkers": 14,
+    "structuralRegistration": "HOLD",
+    "independentLoadPathApproval": false,
+    "meaning": "Label grid positions e.g. A1, B3, C5. DOES NOT certify a concrete column, member support, footing, seismic load or structural axis approval."
+  }
 }
