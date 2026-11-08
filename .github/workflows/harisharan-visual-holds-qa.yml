@@ -1,0 +1,63 @@
+name: Harisharan Human Source-Decision Gallery QA
+on:
+  pull_request:
+    paths:
+      - "public/projects/harisharan-adhikari/decisions/**"
+      - "tools/site/harisharan-visual-holds-*.mjs"
+      - ".github/workflows/harisharan-visual-holds-qa.yml"
+  push:
+    branches: [main]
+    paths:
+      - "public/projects/harisharan-adhikari/decisions/**"
+      - "tools/site/harisharan-visual-holds-*.mjs"
+      - ".github/workflows/harisharan-visual-holds-qa.yml"
+  workflow_run:
+    workflows: ["CAD Main GitHub Pages (validated CAD publishing)"]
+    types: [completed]
+permissions: {contents: read}
+jobs:
+  source-preview:
+    if: github.event_name != 'workflow_run'
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22",cache: npm}
+      - run: npm ci
+      - name: Validate human-first source labels and audit trace
+        run: node tools/site/harisharan-visual-holds-smoke.mjs
+      - name: Render and QA real desktop/mobile gallery
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/harisharan-decisions-preview.log 2>&1 &)
+          for i in $(seq 1 30); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/harisharan-adhikari/decisions/ >/dev/null && break; sleep 2; done
+          node tools/site/harisharan-visual-holds-browser.mjs
+      - name: Save true browser screenshots for source comparison
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harisharan-visual-holds-render-qa
+          path: /tmp/harisharan-human-decisions-*.png
+          if-no-files-found: ignore
+  live-gallery-readback:
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Verify human gallery route, nine cards and source disclaimers
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          for n in $(seq 1 12); do
+            curl -fsSL --max-time 20 "$BASE"projects/harisharan-adhikari/decisions/ -o /tmp/harisharan-visual-live.html || true
+            if grep -q 'id="footing-mats"' /tmp/harisharan-visual-live.html; then break; fi
+            sleep 10
+          done
+          test "$(grep -o '<article class="decision"' /tmp/harisharan-visual-live.html | wc -l | tr -d ' ')" -eq 9
+          grep -q 'id="tank-design"' /tmp/harisharan-visual-live.html
+          grep -q 'id="upper-levels"' /tmp/harisharan-visual-live.html
+          grep -qi 'not approved drawing screenshots' /tmp/harisharan-visual-live.html
+          echo 'HARISHARAN_HUMAN_GALLERY_LIVE_READBACK_PASS'
