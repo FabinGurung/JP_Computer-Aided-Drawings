@@ -7,6 +7,11 @@ function insist(ok,message){if(!ok)throw Error('CAD control tower contract: '+me
 export function validateControlTower(t){
  insist(t?.schema==='jp-cad://control-tower/view-lineage/1.0','unknown schema');
  insist(t.axisContract?.mode==='REGISTERED_SOURCE_OR_FAIL_CLOSED','missing fail-closed axis requirement');
+ insist(t.viewTemplate?.render2d?.requiredOnRegisteredPlans?.includes('axis_end_bubbles_both_sides'),'drawing template must require two-ended axes');
+ insist(t.viewTemplate?.render3d?.selectionSynchronizedBothWays===true,'2D/3D selection linkage mandatory');
+ insist(t.viewTemplate?.render2d?.measurementGrid?.isStructuralGrid===false,'100mm measurement cells must never become structural axes');
+ insist(t.viewTemplate?.machineLineage?.clientApi==='window.ProjectWorkspace.getLineage()','machine lineage interface absent');
+ insist(new Set(t.viewTemplate.semanticLayers.map(x=>x.id)).size===t.viewTemplate.semanticLayers.length,'duplicate semantic layers');
  insist(t.axisContract?.requiredForNewPlanRevision===true,'axes cannot be optional on new review plans');
  insist(JSON.stringify(t.axisContract.displayIn)===JSON.stringify(REQUIRED_CHAPTERS),'axis context must cover all five chapters');
  insist(t.principles?.find(p=>p.id==='ONE_MEANING_PER_REGION')?.south?.includes('NOT a second chapter'),'south must have a distinct role');
