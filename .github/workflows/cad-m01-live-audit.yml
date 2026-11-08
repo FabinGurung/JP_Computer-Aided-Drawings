@@ -11,7 +11,7 @@ on:
 permissions: {contents: read}
 jobs:
   live-readback:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name != 'workflow_run' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_sha == github.sha)
     runs-on: ubuntu-latest
     steps:
       - name: Validate deployed CAD routes and real assets without writing
@@ -140,11 +140,11 @@ jobs:
           print('AAD_AI_GENERATED_PROJECT_LIVE_READBACK_PASS')
           PY
 
-      - name: Checkout exact M26 production revision for live browser parity
+      - name: Checkout pinned default-branch verifier (never trust stale Pages source for verification code)
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.workflow_run.head_sha }}
+          ref: ${{ github.sha }}
       - name: Verify exact deployed source SHA, Pages run identity and public asset hashes
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
