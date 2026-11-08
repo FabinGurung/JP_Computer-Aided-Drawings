@@ -2707,7 +2707,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 2.059,
-        "z": 14.25
+        "z": 14.25,
+        "axisReference": "A1",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2727,7 +2729,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 2.059,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "A2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2747,7 +2751,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 2.059,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "A3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2767,7 +2773,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 2.059,
-        "z": 5
+        "z": 5,
+        "axisReference": "A4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2787,7 +2795,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 2.059,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "A5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2807,7 +2817,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 2.059,
-        "z": 14.25
+        "z": 14.25,
+        "axisReference": "B1",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2827,7 +2839,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 2.059,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "B2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2847,7 +2861,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 2.059,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "B3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2867,7 +2883,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 2.059,
-        "z": 5
+        "z": 5,
+        "axisReference": "B4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2887,7 +2905,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 2.059,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "B5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2907,7 +2927,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 2.059,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "C2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2927,7 +2949,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 2.059,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "C3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2947,7 +2971,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 2.059,
-        "z": 5
+        "z": 5,
+        "axisReference": "C4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2967,7 +2993,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 2.059,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "C5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -2987,7 +3015,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 5.107,
-        "z": 14.25
+        "z": 14.25,
+        "axisReference": "A1",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3007,7 +3037,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 5.107,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "A2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3027,7 +3059,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 5.107,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "A3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3047,7 +3081,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 5.107,
-        "z": 5
+        "z": 5,
+        "axisReference": "A4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3067,7 +3103,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 0.15,
         "y": 5.107,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "A5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3087,7 +3125,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 5.107,
-        "z": 14.25
+        "z": 14.25,
+        "axisReference": "B1",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3107,7 +3147,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 5.107,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "B2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3127,7 +3169,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 5.107,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "B3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3147,7 +3191,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 5.107,
-        "z": 5
+        "z": 5,
+        "axisReference": "B4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3167,7 +3213,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 4.29,
         "y": 5.107,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "B5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3187,7 +3235,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 5.107,
-        "z": 12.2
+        "z": 12.2,
+        "axisReference": "C2",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3207,7 +3257,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 5.107,
-        "z": 8.8
+        "z": 8.8,
+        "axisReference": "C3",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3227,7 +3279,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 5.107,
-        "z": 5
+        "z": 5,
+        "axisReference": "C4",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#d7a14b",
@@ -3247,7 +3301,9 @@
         "status": "PROPOSED_COLUMN_LOCATION__300MM_DISPLAY_MARKER_NOT_A_DESIGNED_SECTION",
         "x": 7.05,
         "y": 5.107,
-        "z": 0.15
+        "z": 0.15,
+        "axisReference": "C5",
+        "axisAuthority": "DISPLAY_ONLY__COLUMN_MARKER_NOT_ENGINEERED"
       },
       {
         "colour": "#91b4b7",
@@ -7272,6 +7328,61 @@
         ]
       },
       "comparisonRecord": "coordination-20261108.json"
+    },
+    "columnAxisGrid": {
+      "schema": "jp-cad://review-column-axes/1",
+      "status": "PROPOSED_COLUMN_MARKERS_ONLY__STRUCTURAL_NOT_VERIFIED",
+      "dateNpt": "2026-11-08",
+      "basis": "Derived exactly from 14 existing 300 mm display-only column proxies on each of the GF and FF; no source-verified structural column drawing. Positions and nomenclature are design review references only.",
+      "coordinateSystem": "BUILDING_LOCAL_WORLD_XZ_METRES",
+      "units": "millimetres",
+      "letterAxes": [
+        {
+          "label": "A",
+          "xMm": 150
+        },
+        {
+          "label": "B",
+          "xMm": 4290
+        },
+        {
+          "label": "C",
+          "xMm": 7050
+        }
+      ],
+      "numberAxes": [
+        {
+          "label": "1",
+          "zMm": 14250
+        },
+        {
+          "label": "2",
+          "zMm": 12200
+        },
+        {
+          "label": "3",
+          "zMm": 8800
+        },
+        {
+          "label": "4",
+          "zMm": 5000
+        },
+        {
+          "label": "5",
+          "zMm": 150
+        }
+      ],
+      "levels": [
+        "gf",
+        "ff"
+      ],
+      "markerKind": "column",
+      "toleranceMm": 1,
+      "knownEmptyIntersections": [
+        "C1"
+      ],
+      "countPerLevel": 14,
+      "caution": "Grid letters/numbers identify proposed display markers, not approved member positions, structural loads, footings or beams. Z decreases toward the top of plan; row 1 is the front/bottom-most line."
     }
   },
   "projectId": "ashok-adhikari",
@@ -7345,6 +7456,10 @@
     {
       "code": "20261108_STRUCTURAL_LOAD_PATH",
       "message": "No authenticated frame, slabs, beam/column continuity, foundation support, wall bearing classification or analyzed gravity/seismic transfer demands in architectural-only source. Cannot certify load path, structural regularity, capacity or construction issue."
+    },
+    {
+      "code": "20261108_COLUMN_AXIS_REFERENCE_ONLY",
+      "message": "Column-axis bubbles A/B/C and 1–5 map to 14 provisional 300 mm presentation markers per floor (not project structural-source columns). Grid crossing C1 has no modeled marker. Member/footing registration, structural frame capacity and foundation layout remain on HOLD."
     }
   ],
   "revision": "AAD-ASHOK-V3-2-GF-FF-CROSS-FLOOR-CANDIDATE-20261108",
