@@ -304,5 +304,136 @@
         }
       ]
     }
+  },
+  "viewTemplate": {
+    "status": "REVIEW_TEMPLATE__APPLY_ONLY_WHEN_SOURCE_SUPPORTED",
+    "coordinateConvention": {
+      "plan": "building-local X east / Z plan depth in metres",
+      "elevation": "Y vertical metres",
+      "displayDimensions": "millimetres",
+      "consistentBetweenGFandFF": true,
+      "sourceToProjectTransform": "requires explicit revisioned registration; never guess"
+    },
+    "semanticLayers": [
+      {
+        "id": "GRID_MEASUREMENT",
+        "purpose": "Nonstructural 100 mm cursor/grid",
+        "authority": "LOCAL_MODEL_ONLY",
+        "canCreateMembers": false
+      },
+      {
+        "id": "COLUMN_AXES",
+        "purpose": "Letter-number extended structural-reference axes, circular end bubbles and crossing labels",
+        "authority": "SOURCE_REGISTERED_OR_PROVISIONAL_HOLD",
+        "canCreateMembers": false
+      },
+      {
+        "id": "MODEL_ARCHITECTURAL",
+        "purpose": "Walls, doors, windows, room envelopes and stair/landing plans",
+        "authority": "REVISIONED_SOURCE",
+        "canCreateMembers": false
+      },
+      {
+        "id": "STRUCTURAL_REVIEW",
+        "purpose": "Columns, beams, footings, slabs and reinforcement when independently sourced",
+        "authority": "ENGINEERING_SOURCE_REQUIRED",
+        "canCreateMembers": false
+      },
+      {
+        "id": "ISSUE_OVERLAY",
+        "purpose": "Review discrepancies, coordinate clashes and engineer approval HOLD",
+        "authority": "REVIEW_LEDGER",
+        "canCreateMembers": false
+      }
+    ],
+    "render2d": {
+      "order": [
+        "GRID_MEASUREMENT",
+        "COLUMN_AXES",
+        "MODEL_ARCHITECTURAL",
+        "STRUCTURAL_REVIEW",
+        "ISSUE_OVERLAY"
+      ],
+      "requiredOnRegisteredPlans": [
+        "continuous_axis_lines_through_real_source_centres",
+        "axis_end_bubbles_both_sides",
+        "letter_number_intersection_ID",
+        "actual_member_ID_only_at_occupied_intersections",
+        "major_minor_grid_independent",
+        "north_arrow",
+        "dimension_units",
+        "revision_and_hold_caption"
+      ],
+      "axisLine": {
+        "style": "dashed",
+        "stroke": "#846d9c",
+        "strokeWidthWorldM": 0.031,
+        "dashWorldM": [
+          0.2,
+          0.13
+        ],
+        "extendBeyondBuilding": true
+      },
+      "axisBubble": {
+        "shape": "circle",
+        "radiusWorldM": 0.235,
+        "fill": "#fffdf9",
+        "stroke": "#665082",
+        "labelColour": "#483467",
+        "labelFontSizeWorldM": 0.245
+      },
+      "markerLabel": {
+        "fontWeight": 750,
+        "colour": "#563b7e",
+        "whiteHalo": true,
+        "neverLabelUnoccupiedIntersection": true
+      },
+      "measurementGrid": {
+        "smallestCellMm": 100,
+        "mediumCellMm": 500,
+        "majorCellMm": 1000,
+        "isStructuralGrid": false
+      },
+      "displayStateWhenMissing": "AXES_NOT_ADMITTED"
+    },
+    "render3d": {
+      "sameWorldFrameAs2d": true,
+      "sameElementIDsAs2d": true,
+      "selectionSynchronizedBothWays": true,
+      "floorCutawaySupported": true,
+      "sourceStatusOnSelection": true,
+      "axisMetadata": "Show source/reference axis IDs in selected-object inspector; do not invent physical axis lines or column members when structural source unverified.",
+      "geometryIfUnverified": "Proxy / REVIEW ONLY",
+      "issuedStructuralIFCAllowed": false
+    },
+    "interaction": {
+      "floorToggleSharedWith2d": true,
+      "linkedSelection": true,
+      "coordinateCopy": "building-local millimetre grid cell code, never substituted for axis intersection",
+      "visibility": [
+        "view split/plan/3D",
+        "measurement-grid visibility",
+        "column-axis visibility when registered",
+        "dimensions visibility"
+      ],
+      "mobile": "2D then 3D stacked; buttons touch accessible; do not clip labels",
+      "export": "Preserve axis layer and provenance in exported SVG; no construction-approved issue without engineering gate"
+    },
+    "machineLineage": {
+      "required": [
+        "projectSlug",
+        "editionId",
+        "phase",
+        "chapter",
+        "modelRevision",
+        "axisStatus",
+        "axisIds",
+        "reviewOnly",
+        "constructionApproved"
+      ],
+      "unknownMember": "null_AND_HOLD",
+      "clientApi": "window.ProjectWorkspace.getLineage()",
+      "pointerIntegrity": "Same source IDs across five chapters; no rekey by names or positions"
+    }
   }
 }
