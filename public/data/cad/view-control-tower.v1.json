@@ -1,0 +1,308 @@
+{
+  "schema": "jp-cad://control-tower/view-lineage/1.0",
+  "version": "1.0.0",
+  "effectiveDate": "2026-11-08",
+  "status": "DRAFT_GOVERNED_STANDARD_NOT_ENGINEERING_APPROVAL",
+  "authority": {
+    "originals": "Google Drive or authenticated provider remains primary",
+    "geometry": "admitted and versioned project-model JSON from authenticated architectural source",
+    "derived": "GitHub versioned read-only data, graphics and CI outputs",
+    "construction": "Requires owner, responsible engineer and jurisdictional sign-off, not inferred by this template"
+  },
+  "principles": [
+    {
+      "id": "ONE_MEANING_PER_REGION",
+      "north": "Project identity, chapters, phase and view",
+      "west": "Edition and document-tree navigation",
+      "east": "Context and selected package/source qualification",
+      "south": "Unique unresolved review issues and sequential gate navigation, NOT a second chapter or package list",
+      "centre": "Linked floor plan and 3D, selected model objects and domain details"
+    },
+    {
+      "id": "NO_FABRICATED_AXES",
+      "requirement": "For every newly admitted plan, register source-evidenced letter/number axes (A, B, C... and 1, 2, 3...), with stable intersecting IDs A1, B2 ...; if no source-evidenced axes exist, render AXES_NOT_ADMITTED and block semantic structural coordinates. Coordinates are not structural approvals."
+    },
+    {
+      "id": "GEOMETRY_AND_REVIEW_SEPARATE",
+      "requirement": "100 mm local coordinate/cursor grid is a measurement aid, NOT column axes. A display-only proposed column marker can be axis-labelled but must retain unverified status; never create columns at unused intersections."
+    },
+    {
+      "id": "LINEAGE_OR_HOLD",
+      "requirement": "A chapter or derivative must carry one edition, source revision/fingerprint, floor, coordinate frame, axis register/status, object/element IDs, units, assumptions and holds; missing evidence is null / HOLD not zero or PASS."
+    },
+    {
+      "id": "SINGLE_RECORD_REFERENCE",
+      "requirement": "Views, BOQ, Gantt and site packages reference original member/axis IDs by sourceRef, no separate competing axis naming or unrelated approval."
+    }
+  ],
+  "axisContract": {
+    "requiredForNewPlanRevision": true,
+    "displayIn": [
+      "views",
+      "boq",
+      "gantt",
+      "packages",
+      "sources"
+    ],
+    "mode": "REGISTERED_SOURCE_OR_FAIL_CLOSED",
+    "sourceDependent": true,
+    "minProof": [
+      "sourceRef",
+      "revisionId",
+      "coordinateFrame",
+      "direction",
+      "letters",
+      "numbers",
+      "intersectionIds",
+      "sourceAndModelAlignment",
+      "structuralAuthority",
+      "floorRegistration"
+    ],
+    "displayRules": [
+      "2D: both-ended dashed line bubbles + actual existing element IDs, independent 100 mm coordinate layer",
+      "3D: same selected element ID and floor axis metadata in inspector",
+      "BOQ: per-member quantities reference axis pair, floor and calculation-source revision or remain UNKNOWN",
+      "Programme: activities link element IDs/axis range, predecessor IDs and source dates; never create durations",
+      "Packages: stage scope uses same axis range, inspection HOLD and source refs",
+      "Sources: show original file, fingerprint, edition, coordinate registration and approval evidence"
+    ],
+    "onMissing": "AXES_NOT_ADMITTED__DERIVATIONS_HOLD",
+    "approvedByDefault": false
+  },
+  "chapterContracts": {
+    "views": {
+      "chapter": "01",
+      "input": [
+        "admittedFloorGraph",
+        "levels",
+        "axisRegistryOrHold"
+      ],
+      "output": [
+        "2D",
+        "3D",
+        "elementIds",
+        "floorAxes",
+        "HOLDs"
+      ],
+      "blockIf": [
+        "unregistered axes described as engineered",
+        "inconsistent coordinate frame"
+      ]
+    },
+    "boq": {
+      "chapter": "02",
+      "input": [
+        "sourceElementIds",
+        "axisRegistryOrHold",
+        "units",
+        "geometryAndDeductionRules"
+      ],
+      "output": [
+        "perAxisMemberMeasurements",
+        "sourceLineage",
+        "unknownAwareQuantities"
+      ],
+      "blockIf": [
+        "unknown units",
+        "unapproved BBS or mixes passed as actual"
+      ]
+    },
+    "gantt": {
+      "chapter": "03",
+      "input": [
+        "workItemIds",
+        "elementAndAxisScope",
+        "dependencies",
+        "dateSource"
+      ],
+      "output": [
+        "admittedScheduleOrNoDates",
+        "dependencyStatus"
+      ],
+      "blockIf": [
+        "missing dates invented",
+        "blocked predecessor ignored"
+      ]
+    },
+    "packages": {
+      "chapter": "04",
+      "input": [
+        "frozenStageSourceRef",
+        "elementAndAxisScope",
+        "materialApprovals"
+      ],
+      "output": [
+        "workbenchOrUnadmitted",
+        "siteInspectionGate"
+      ],
+      "blockIf": [
+        "new package inferred from empty taxonomy",
+        "approval implied"
+      ]
+    },
+    "sources": {
+      "chapter": "05",
+      "input": [
+        "sourceFileId",
+        "originalLink",
+        "revision",
+        "checksums",
+        "provenance"
+      ],
+      "output": [
+        "evidenceInventory",
+        "authority",
+        "openHolds"
+      ],
+      "blockIf": [
+        "anonymous revision",
+        "public exposure of restricted originals"
+      ]
+    }
+  },
+  "projects": {
+    "ashok-adhikari": {
+      "axisEvidence": "V3_2_DISPLAY_ONLY",
+      "gateIds": [
+        "AX-01",
+        "ST-02",
+        "OPEN-03",
+        "STR-04"
+      ],
+      "gates": [
+        {
+          "id": "AX-01",
+          "title": "A–C / 1–5 axis provenance",
+          "status": "REVIEW_ONLY",
+          "detail": "v3.2 carries 14 proposed column markers on GF and FF; C1 remains empty. Structural-source registration is not admitted.",
+          "sourceRef": "data/projects/ashok-adhikari/coordination-20261108.json",
+          "focus": "source"
+        },
+        {
+          "id": "ST-02",
+          "title": "Stair offset / headroom",
+          "status": "HOLD",
+          "detail": "575 mm partition-to-stair datum offset, unverified landings, headroom, slab void and roof exit.",
+          "sourceRef": "data/projects/ashok-adhikari/coordination-20261108.json",
+          "focus": "source"
+        },
+        {
+          "id": "OPEN-03",
+          "title": "Door and stair glazing clearance",
+          "status": "HOLD",
+          "detail": "Shifted first-floor openings and accessibility/fire-safety remain preliminary; no approved jamb or egress proof.",
+          "sourceRef": "data/projects/ashok-adhikari/owner-revision-20261106.json",
+          "focus": "source"
+        },
+        {
+          "id": "STR-04",
+          "title": "Independent load-path admission",
+          "status": "HOLD",
+          "detail": "Authenticate and reconcile Ashok beam/slab/column/footing source; no structural sign-off from 2D/3D alignment.",
+          "sourceRef": "data/projects/ashok-adhikari/coordination-20261108.json",
+          "focus": "source"
+        }
+      ]
+    },
+    "narayani-parajuli": {
+      "axisEvidence": "PROJECT_SPECIFIC_SOURCE_REVIEW_PENDING_COMMON_TEMPLATE_REGISTRATION",
+      "gateIds": [
+        "SRC-01",
+        "AX-02",
+        "MEM-03"
+      ],
+      "gates": [
+        {
+          "id": "SRC-01",
+          "title": "Reconcile architectural/structural datum",
+          "status": "HOLD",
+          "detail": "Existing Narayani source-indexed workbenches remain frozen; a common plan-axis register is not yet admitted for this UI contract.",
+          "focus": "sources"
+        },
+        {
+          "id": "AX-02",
+          "title": "Source axis and support proof",
+          "status": "HOLD",
+          "detail": "Map existing member IDs/column evidence to stable alphabetic and numbered axes before publishing a new coordinated edition.",
+          "focus": "sources"
+        },
+        {
+          "id": "MEM-03",
+          "title": "Upper-floor member and quantity review",
+          "status": "HOLD",
+          "detail": "Unadmitted member quantities and reinforcements may not be filled from template defaults.",
+          "focus": "packages"
+        }
+      ]
+    },
+    "harisharan-adhikari": {
+      "axisEvidence": "SOURCE_REVIEW_PENDING_COMMON_TEMPLATE_REGISTRATION",
+      "gateIds": [
+        "SRC-01",
+        "AX-02",
+        "MAT-03"
+      ],
+      "gates": [
+        {
+          "id": "SRC-01",
+          "title": "Architectural and structural source revisions",
+          "status": "HOLD",
+          "detail": "Independent original drawing and engineering-report conflicts require source-reviewed registration.",
+          "focus": "sources"
+        },
+        {
+          "id": "AX-02",
+          "title": "Source axis and member mapping",
+          "status": "HOLD",
+          "detail": "Keep actual source grid/member identities; do not infer registered column axes from display coordinates.",
+          "focus": "sources"
+        },
+        {
+          "id": "MAT-03",
+          "title": "Upper-floor material/BBS evidence",
+          "status": "HOLD",
+          "detail": "Draft quantities remain qualified until supporting member and rebar evidence is authenticated.",
+          "focus": "packages"
+        }
+      ]
+    },
+    "ramachandra-devkota": {
+      "axisEvidence": "SOURCE_UNADMITTED",
+      "gateIds": [
+        "SRC-01",
+        "AX-02"
+      ],
+      "gates": [
+        {
+          "id": "SRC-01",
+          "title": "Native CAD source admission",
+          "status": "NOT_ADMITTED",
+          "detail": "The existing public workspace has no admitted architectural geometry or building quantities.",
+          "focus": "sources"
+        },
+        {
+          "id": "AX-02",
+          "title": "Register column axes from source",
+          "status": "HOLD",
+          "detail": "Do not render fake columns or invent A1/B2 coordinates while structural source is missing.",
+          "focus": "sources"
+        }
+      ]
+    },
+    "example-empty": {
+      "axisEvidence": "FICTIONAL_ZERO_DATA",
+      "gateIds": [
+        "SRC-01"
+      ],
+      "gates": [
+        {
+          "id": "SRC-01",
+          "title": "Empty template source gate",
+          "status": "NOT_ADMITTED",
+          "detail": "The example project has no real geometry, column axes, quantities, dates or materials.",
+          "focus": "sources"
+        }
+      ]
+    }
+  }
+}
