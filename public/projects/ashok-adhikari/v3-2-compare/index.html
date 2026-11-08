@@ -16,19 +16,20 @@ table{width:100%;border-collapse:collapse;background:white}td,th{border-bottom:1
 </style></head><body><header><small>Rohini Engineering and Builders · Ashok Adhikari · A7/A9 design-review edition</small>
 <h1>v3.2 — Ground / First Floor Coordination</h1>
 <div class="warning"><strong>REVIEW ONLY — NOT FOR CONSTRUCTION.</strong> A matching wall line does not verify structural load path, accessibility, stair headroom/landing, fire protection, glazing or local permit.</div>
-<p>The three floor plans use the same 100 mm local coordinate grid. Blue dashed = proposed wall X3600; amber dashed = previous first-floor wall X3300. Mouse or tap a plan to share the cursor coordinate across all three.</p>
-<p id="coord-readout" role="status">Shared cursor · 100 mm grid · select a position in any plan.</p>
+<p>The three floor plans use the same 100 mm measurement grid plus separate A–C / 1–5 letter-number column axes through existing provisional markers (no column at C1). Blue dashed = proposed wall X3600; amber dashed = previous first-floor wall X3300. Mouse or tap a plan to share the cursor coordinate across all three.</p>
+<p id="coord-readout" role="status">Shared cursor · 100 mm grid · select a position in any plan.</p><label style="display:flex;align-items:center;gap:8px;margin:8px 0 14px;font-weight:650"><input id="compare-axes" type="checkbox" checked> Column axes A–C / 1–5 · 14 provisional markers per floor (C1 is vacant)</label>
 <div class="links"><a href="../?edition=v3-2&amp;panel=views&amp;phase=gf&amp;layout=split#views">v3.2 Ground floor · linked 2D/3D</a><a href="../?edition=v3-2&amp;panel=views&amp;phase=ff&amp;layout=split#views">v3.2 First floor · linked 2D/3D</a><a href="../?edition=v3-grid&amp;panel=views&amp;phase=ff&amp;layout=split#views">v3.1 Original first floor · linked 2D/3D</a></div>
 </header><main><div class="cards">
-<section class="card"><h2>Ground floor — retained</h2><p>X3600 aligned partition; stair X4175 HOLD.</p><svg class="plan" data-grid-plan="gf" viewBox="-350 -450 7900 15300" aria-label="Ground floor plan" role="img"></svg></section>
-<section class="card"><h2>First floor — previous v3</h2><p>Original X3300 wall; preserved unchanged.</p><svg class="plan" data-grid-plan="old" viewBox="-350 -450 7900 15300" aria-label="Previous first floor plan" role="img"></svg></section>
-<section class="card"><h2>First floor — new v3.2 candidate</h2><p>X3600 proposed wall; 7,400 mm common run.</p><svg class="plan" data-grid-plan="ff" viewBox="-350 -450 7900 15300" aria-label="v3.2 first floor plan" role="img"></svg></section>
+<section class="card"><h2>Ground floor — retained</h2><p>X3600 aligned partition; stair X4175 HOLD.</p><svg class="plan" data-grid-plan="gf" viewBox="-2500 -2700 12200 20000" aria-label="Ground floor plan" role="img"></svg></section>
+<section class="card"><h2>First floor — previous v3</h2><p>Original X3300 wall; preserved unchanged.</p><svg class="plan" data-grid-plan="old" viewBox="-2500 -2700 12200 20000" aria-label="Previous first floor plan" role="img"></svg></section>
+<section class="card"><h2>First floor — new v3.2 candidate</h2><p>X3600 proposed wall; 7,400 mm common run.</p><svg class="plan" data-grid-plan="ff" viewBox="-2500 -2700 12200 20000" aria-label="v3.2 first floor plan" role="img"></svg></section>
 </div><section><h2>Nominal room-area reconciliation</h2><p>These are plan-space envelope rectangles, not measured finished clear areas. The floor footprint and aggregate zone area remain unchanged.</p>
 <table><thead><tr><th>Zone</th><th>Before m²</th><th>v3.2 m²</th><th>Delta m²</th></tr></thead><tbody id="areas"></tbody></table></section>
 <section><h2>Open engineering HOLDs</h2><p>GF/FF stair exterior line X4175 remains 575 mm from the internal X3600 datum. Landing and headroom, slab void, one internal stair window fire/privacy, shifted bath and bedroom door clearances, and frame/slab/column support are unverified. A geometric match alone is not a structural pass.</p>
 <p><a href="../../../data/projects/ashok-adhikari/coordination-20261108.json">Full v3.2 source/quantity/HOLD ledger</a> · <a href="../?edition=v3-2&amp;panel=sources#sources">Source chapter</a></p></section></main>
-<footer><small>Earlier v1, v2, v3, v3.1 geometry and model IDs remain unchanged. The page compares 2D evidence and links to the existing synchronized 2D/3D viewer for each floor.</small></footer>
+<footer><small>Axis grid references are NOT structurally engineered column designations. Earlier v1, v2, v3, v3.1 geometry and model IDs remain unchanged. The page compares 2D evidence and links to the existing synchronized 2D/3D viewer for each floor.</small></footer>
 <script type="module">
+import {drawColumnAxisOverlay} from '../../../assets/js/aad-column-axis-grid.mjs';
 const base=new URL('../../../',location.href),files={gf:'aad-gf-model-v3-grid-review.json',old:'aad-ff-model-v3-review.json',ff:'aad-ff-model-v3-2-review.json'};
 const ns='http://www.w3.org/2000/svg',svgList=[...document.querySelectorAll('svg[data-grid-plan]')];
 function el(parent,name,attrs,text){let x=document.createElementNS(ns,name);for(let[k,v]of Object.entries(attrs||{}))x.setAttribute(k,v);if(text!==undefined)x.textContent=text;parent.appendChild(x);return x;}
@@ -46,6 +47,9 @@ document.getElementById('coord-readout').textContent='Shared coordinate BX'+Stri
 for(const s of svgList){if(!s._cross)continue;const[h,v]=s._cross;h.setAttribute('y1',z);h.setAttribute('y2',z);v.setAttribute('x1',x);v.setAttribute('x2',x);h.style.display=v.style.display='';}};
 svg.addEventListener('pointermove',cursor);svg.addEventListener('click',cursor);}
 (async()=>{try{let out=await Promise.all(Object.values(files).map(async f=>{let r=await fetch(new URL('data/projects/ashok-adhikari/'+f,base));if(!r.ok)throw Error(f+' '+r.status);return r.json();}));svgList.forEach(svg=>draw(svg,out[Object.keys(files).indexOf(svg.dataset.gridPlan)],svg.dataset.gridPlan));
+const mr=await fetch(new URL('data/projects/ashok-adhikari/aad-building-v3-2-review.json',base));if(!mr.ok)throw Error('Column-axis manifest not published');const axisManifest=await mr.json();
+for(const svg of svgList){const g=document.createElementNS(ns,'g');g.setAttribute('transform','scale(1000)');g.setAttribute('data-axis-view','comparison');svg.appendChild(g);drawColumnAxisOverlay(g,axisManifest,svg.dataset.gridPlan==='gf'?'gf':'ff',{outerBounds:axisManifest.presentation.outerBounds});}
+document.getElementById('compare-axes').addEventListener('change',e=>{for(const g of document.querySelectorAll('[data-axis-view="comparison"]'))g.style.display=e.target.checked?'':'none';});
 let rr=await fetch(new URL('data/projects/ashok-adhikari/coordination-20261108.json',base));if(!rr.ok)throw Error('ledger unavailable');
 for(let a of(await rr.json()).nominalAreaChanges.rows){let tr=document.createElement('tr');for(let x of[a.id,a.oldAreaM2.toFixed(3),a.newAreaM2.toFixed(3),(a.deltaM2>0?'+':'')+a.deltaM2.toFixed(3)]){let td=document.createElement('td');td.textContent=x;tr.appendChild(td);}document.querySelector('#areas').appendChild(tr);}
 }catch(e){document.querySelector('#coord-readout').textContent='Failed to load source-backed comparison: '+String(e.message||e);}})();
