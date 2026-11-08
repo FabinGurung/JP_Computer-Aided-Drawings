@@ -34,7 +34,7 @@ const before=Object.fromEntries(old.roomEnvelopes.map(r=>[r.id,r])),after=Object
 const a=r=>(r.bbox[2]-r.bbox[0])*(r.bbox[3]-r.bbox[1])/1e6;
 const delta=id=>+(a(after[id])-a(before[id])).toFixed(3);
 for(const [id,expected] of [['FF-WIR',.66],['FF-BATH',.525],['FF-BED2',1.035],['FF-LOUNGE',-2.22]])assert.equal(delta(id),expected);
-assert.equal(Object.keys(before).reduce((sum,id)=>sum+delta(id),0),0);
+assert.ok(Math.abs(Object.keys(before).reduce((sum,id)=>sum+delta(id),0))<1e-9,'Nominal area conservation must tolerate binary floating-point residue');
 assert.equal(ledger.alignment.overlapMm,7400);
 assert.equal(ledger.alignment.stairOffsetFromPartitionMm,575);
 assert.equal(ledger.independentLoadPathReview.transferLoads,null);
