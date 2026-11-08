@@ -48,12 +48,14 @@ jobs:
           node tools/site/harisharan-material-smoke.mjs
           node tools/site/harisharan-workspace-smoke.mjs
           node tools/site/project-workspace-smoke.mjs
+          node tools/site/cad-control-tower-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
           node tools/site/harisharan-rear-nine-smoke.mjs
           node tools/site/harisharan-seven-stages-smoke.mjs
           node tools/site/harisharan-review-ledger-smoke.mjs
           node tools/site/harisharan-upper-floor-smoke.mjs
+          node tools/site/cad-release-provenance-smoke.mjs
       - name: Validate Narayani DXF provenance and three-floor AAD project payload
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
@@ -67,6 +69,7 @@ jobs:
           (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/ashok-preview.log 2>&1 &)
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/project-workspace-browser.mjs
+          node tools/site/cad-control-tower-browser.mjs
           node tools/site/ashok-grid-browser.mjs
           node tools/site/ashok-v3-2-browser.mjs
           node tools/site/ashok-column-axes-browser.mjs
