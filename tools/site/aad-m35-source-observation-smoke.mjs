@@ -1,0 +1,50 @@
+/** M35 source-only regression: do not equate duplicated sheet linework to structural approval. */
+import assert from "node:assert/strict";
+import {readFileSync} from "node:fs";
+const register=JSON.parse(readFileSync("public/data/projects/narayani-parajuli/aad-m35-native-upper-floor-source-observation.v0.json","utf8"));
+const prior=JSON.parse(readFileSync("public/data/projects/narayani-parajuli/aad-engineering-current-register.json","utf8"));
+const m30=JSON.parse(readFileSync("public/data/projects/narayani-parajuli/aad-m30-original-dxf-full-source-index.json","utf8"));
+const m32=JSON.parse(readFileSync("public/data/projects/narayani-parajuli/aad-m32-beam-strip-source-register.json","utf8"));
+assert.equal(register.projectId,"PRJ-000007");
+assert.equal(register.stage,"M35_PRE_SOURCE_OBSERVATION");
+assert.equal(register.issuedForConstruction,false);
+assert.equal(register.originalSource.sha256,m30.originals.structure.sha256);
+assert.equal(register.originalSource.bytes,m30.originals.structure.sizeBytes);
+assert.equal(register.originalSource.modelspaceEntities,m30.originals.structure.modelspaceEntities);
+assert.equal(register.originalSource.originalUnmodified,true);
+assert.equal(register.statusGates.sourceFloorsReadIndependently,true);
+assert.equal(register.statusGates.ffSfIndependentColumnPositionProof,false);
+assert.equal(register.statusGates.gfFfSfColumnContinuityVerified,false);
+assert.equal(register.statusGates.newStructuralIFCMembersAdded,0);
+assert.equal(register.statusGates.engineerCertified,false);
+assert.equal(register.statusGates.remainingSevenEngineeringGates,"OPEN");
+assert.equal(register.statusGates.m34SourceUnchanged,true);
+for(const level of ["gf","ff","sf"]){
+  const f=register.floorPlans[level], old=m32.floorSource[level];
+  assert.equal(f.sheetXAnchorMm,old.sheetAnchorXMM);
+  assert.equal(f.wallLinePrimitives,old.originalWallLines);
+  assert.equal(f.strictPairedStripCandidatesPerM32,old.pairedHandles.length);
+  assert.equal(f.beamSectionLabelOccurrences,m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor[level].sheetBeamMTEXT);
+  assert.equal(f.gridCenterlineCrossingRegion,m30.upperFloorStructuralSheetEvidence.sourceNativeByFloor[level].centerlineLines);
+  assert.equal(f.verifiedBuildingMemberBeams,null);
+  if(level!=="gf")assert.equal(f.independentFloorColumnPositions,null);
+}
+const comp=register.nativeSourceTranslation;
+assert.equal(comp.gfVsFF.exactMatchingNormalizedWallLines,113);
+assert.equal(comp.gfVsFF.exactMatchingNormalizedBeamLabelOccurrences,34);
+assert.equal(comp.ffVsSF.matchingNormalizedWallLines,104);
+assert.equal(comp.ffVsSF.matchingNormalizedBeamLabelOccurrences,31);
+assert.equal(comp.ffVsSF.firstOnlyLineHandles.length,9);
+assert.equal(comp.ffVsSF.secondOnlyLineHandles.length,3);
+assert.deepEqual(new Set(comp.ffVsSF.ffOnlyLabels.map(x=>x.handle)),new Set(["B01DB","B01DC","B01FB"]));
+assert.equal(comp.ffVsSF.sfOnlyBeamLabels.length,0);
+const summary=register.columnDesignSummary;
+assert.equal(summary.originalFamilyRows.length,4);
+assert.equal(summary.unqualifiedScheduleNumberSum,23);
+assert.equal(summary.originalFamilyRows.reduce((n,x)=>n+Number(x.numberLiteral),0),23);
+assert.equal(summary.originalFamilyRows.find(x=>x.family==="C2").bandText.sf[1],"4 TMT -16Ø");
+assert.equal(summary.originalFamilyRows.find(x=>x.family==="C2").bandText.gf[1],"4 TMT -20Ø");
+for(const row of summary.originalFamilyRows){for(const f of ["gf","ff","sf"]){assert.equal(row.bands[f].length,2);assert.equal(row.bandText[f].length,2);}}
+assert.match(prior.currentVersion,/^M34/);
+assert.equal(prior.issues.filter(x=>x.engineeringGate==="OPEN").length,7);
+console.log("AAD_M35_PRE_SOURCE_ONLY_PASS: original SHA, drawing differences, column schedule transcription, and seven engineering gates preserved");
