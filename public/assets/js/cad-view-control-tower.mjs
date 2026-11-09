@@ -28,10 +28,29 @@ export function validateControlTower(t){
  }
  return t;
 }
-export function inspectAxisEvidence(t,manifest,{slug,editionId}={}){
+export function inspectNativeSourceAxisRegistry(registry,{phase}={}){
+ if(!registry)return null;
+ insist(registry.schema==='jp-cad://source-axis-register/1','unrecognized source axis registry');
+ insist(registry.displayPolicy?.notForConstruction===true&&registry.displayPolicy?.createLinesFromBareMarks===false,'source marks must not be declared construction axes');
+ insist(registry.fileAuthority&&registry.sourceFileSha256&&registry.sourceSourceRef,'missing source axis provenance');
+ insist(Array.isArray(registry.letters)&&Array.isArray(registry.numbers)&&registry.members.length>0,'missing source member marks');
+ insist(new Set(registry.members.map(m=>m.workingAxisRef||m.axisReference)).size===registry.members.length,'duplicate working axis references');
+ insist(registry.members.length===registry.sourceCount,'source column count drift');
+ insist(registry.members.every(m=>registry.letters.some(a=>(m.workingAxisRef||m.axisReference).startsWith(a))&&registry.numbers.some(n=>(m.workingAxisRef||m.axisReference).endsWith(String(n)))),'source mark outside axis family');
+ const level=registry.availableLevels?.find(l=>l.levelId===phase);
+ const registered=!!level&&level.memberCount!==null;
+ const activeIds=registry.members.map(m=>m.workingAxisRef||m.axisReference).sort();
+ const status=registered?'SOURCE_MARKS_REGISTERED_REVIEW_ONLY':'AXES_NOT_ADMITTED';
+ return {status,axisIds:registered?activeIds:[],sourceStatus:level?.status||'LEVEL_UNVERIFIED',sourceRef:registry.sourceSourceRef,registryRevision:registry.revision,
+  floorRegistration:level?.levelId||false,units:registry.coordinateFrame.unit,sourceFileSha256:registry.sourceFileSha256,globalLinesAdmitted:false,
+  description:registered?registry.letters.join('–')+' / '+registry.numbers.join('–')+' · '+activeIds.length+' source-marked locations ('+phase+'), no approved member-support / 2D–3D registration.':'Source column marks recorded but '+(phase||'selected level')+' has no verified structural-to-architectural axis registration; derived quantities remain on HOLD.'};
+}
+
+export function inspectAxisEvidence(t,manifest,{slug,editionId,phase,nativeRegister}={}){
  const standard=t.axisContract,project=t.projects[slug];
  const known=manifest?.presentation?.columnAxisGrid;
  if(!manifest||!known){
+  const native=inspectNativeSourceAxisRegistry(nativeRegister,{phase});if(native)return {...native,editionId};
   return{status:'AXES_NOT_ADMITTED',axisIds:[],description:'No governed A/B/C × 1/2/3 column-axis registry for this selected edition; new plan-derived engineering quantities remain blocked.',sourceStatus:project?.axisEvidence||'UNKNOWN',floorRegistration:false,units:'mm',editionId};
  }
  const x=known.letterAxes||[],z=known.numberAxes||[];
@@ -51,9 +70,9 @@ export function reviewGate(t,slug,index=0){
  const at=((index%p.gates.length)+p.gates.length)%p.gates.length;
  return{gate:p.gates[at],index:at,count:p.gates.length,project:p};
 }
-export function modelLineage(t,{slug,editionId,phase,panel,manifest}={}){
+export function modelLineage(t,{slug,editionId,phase,panel,manifest,nativeRegister}={}){
  insist(REQUIRED_CHAPTERS.includes(panel),'invalid chapter');
- const axes=inspectAxisEvidence(t,manifest,{slug,editionId});
+ const axes=inspectAxisEvidence(t,manifest,{slug,editionId,phase,nativeRegister});
  const reviewed=manifest?.release?.reviewOnly||manifest?.representation==='ARCHITECTURAL_REVIEW_ONLY';
- return{schema:t.schema,projectSlug:slug,editionId,phase,chapter:panel,axisStatus:axes.status,axisIds:axes.axisIds,axisLabel:axes.description,axisSourceStatus:axes.sourceStatus,modelRevision:manifest?.revision||null,reviewOnly:Boolean(reviewed),constructionApproved:false,sourceAuthority:t.authority.originals};
+ return{schema:t.schema,projectSlug:slug,editionId,phase,chapter:panel,axisStatus:axes.status,axisIds:axes.axisIds,axisLabel:axes.description,axisSourceStatus:axes.sourceStatus,modelRevision:manifest?.revision||nativeRegister?.revision||null,axisSourceRef:axes.sourceRef||null,axisSourceFileSha256:axes.sourceFileSha256||null,reviewOnly:Boolean(reviewed||nativeRegister),constructionApproved:false,sourceAuthority:t.authority.originals};
 }
