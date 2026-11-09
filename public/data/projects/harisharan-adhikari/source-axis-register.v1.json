@@ -1,0 +1,432 @@
+{
+  "schema": "jp-cad://source-axis-register/1",
+  "revision": "R000001",
+  "date": "2026-11-09",
+  "projectLogicalId": "INTAKE-20260826-HARISHARAN",
+  "project": "Harisharan Adhikari",
+  "fileAuthority": "PDF_VECTOR_SOURCE_AND_REPORT_COLUMN_GRID_READ_ONLY",
+  "sourceFileSha256": "6ae8eaa70273b79a50ad28a2345da7966201efd5f4a32ea260cbece34f75b9c5",
+  "sourceSourceRef": "public/data/projects/harisharan-adhikari/takeoff.json",
+  "revisionRefs": [
+    "upper-floor-source-r000001.json",
+    "rear-nine-governing-report.v0.2.json"
+  ],
+  "publishedSourceIsOriginal": false,
+  "axisEvidence": "18_SOURCE_REFERENCED_COLUMN_MARKS_WITH_PROVISIONAL_POSITIONS",
+  "coordinateFrame": {
+    "native": "HARISHARAN_TAKEOFF_BUILDING_LOCAL_XZ_METRES",
+    "unit": "m",
+    "xDirection": "from A towards right marked boundary",
+    "zDirection": "rows 1→6",
+    "nativeToAadBuildingTransform": "SOURCE_INTERPRETED_COORDINATE_GRID",
+    "sameFloorCrossLevelValidated": false
+  },
+  "letters": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F"
+  ],
+  "numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "members": [
+    {
+      "axisReference": "A1",
+      "xM": 0,
+      "zM": 0,
+      "row": 1,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B1",
+      "xM": 5.722,
+      "zM": 0,
+      "row": 1,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "F1",
+      "xM": 11.384,
+      "zM": 0,
+      "row": 1,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "A2",
+      "xM": 0,
+      "zM": 5,
+      "row": 2,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C4",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B2",
+      "xM": 5.722,
+      "zM": 5,
+      "row": 2,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "F2",
+      "xM": 11.384,
+      "zM": 5,
+      "row": 2,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "A3",
+      "xM": 0,
+      "zM": 10,
+      "row": 3,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C4",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B3",
+      "xM": 5.722,
+      "zM": 10,
+      "row": 3,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C2",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "F3",
+      "xM": 11.384,
+      "zM": 10,
+      "row": 3,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "A4",
+      "xM": 0,
+      "zM": 15,
+      "row": 4,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C4",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B4",
+      "xM": 5.722,
+      "zM": 15,
+      "row": 4,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C1",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "E4",
+      "xM": 11.316986,
+      "zM": 15,
+      "row": 4,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "A5",
+      "xM": 0,
+      "zM": 20,
+      "row": 5,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C4",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B5",
+      "xM": 5.722,
+      "zM": 20,
+      "row": 5,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C2",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "D5",
+      "xM": 11.085184,
+      "zM": 20,
+      "row": 5,
+      "sourceBasis": "PDF_VECTOR_SCALED_CANDIDATE",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "A6",
+      "xM": 0,
+      "zM": 25,
+      "row": 6,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "B6",
+      "xM": 5.722,
+      "zM": 25,
+      "row": 6,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    },
+    {
+      "axisReference": "C6",
+      "xM": 10.837,
+      "zM": 25,
+      "row": 6,
+      "sourceBasis": "DIMENSIONED_END_OR_STRAIGHT_SEGMENT",
+      "structuralSourceStatus": "DRAWING_OR_REPORT_MARK_REVIEW_NOT_IFC",
+      "sourceColumnType": "C3",
+      "reportSectionMm": [
+        450,
+        450
+      ],
+      "reportHasRebarByFloor": [
+        "ground",
+        "first",
+        "second",
+        "thirdAndAbove"
+      ]
+    }
+  ],
+  "sourceCount": 18,
+  "proposedWorkingCount": 18,
+  "nonRectangularBoundary": {
+    "row1to3RightAxis": "F",
+    "row4RightAxis": "E",
+    "row5RightAxis": "D",
+    "row6RightAxis": "C",
+    "straightContinuousRightAxisAssumed": false
+  },
+  "availableLevels": [
+    {
+      "levelId": "ground",
+      "status": "SOURCE_INTERPRETED_GRID_POSITIONS_NOT_IFC",
+      "memberCount": 18
+    },
+    {
+      "levelId": "first",
+      "status": "REPORT_MEMBER_MARKS_PRESENT_BUT_VERTICAL_ALIGNMENT_NEEDS_STRUCTURAL_APPROVAL",
+      "memberCount": 18
+    },
+    {
+      "levelId": "second",
+      "status": "REPORT_MEMBER_MARKS_PRESENT_BUT_VERTICAL_ALIGNMENT_NEEDS_STRUCTURAL_APPROVAL",
+      "memberCount": 18
+    },
+    {
+      "levelId": "third",
+      "status": "REPORT_MEMBER_MARKS_PRESENT_BUT_VERTICAL_ALIGNMENT_NEEDS_STRUCTURAL_APPROVAL",
+      "memberCount": 18
+    },
+    {
+      "levelId": "fourth",
+      "status": "REPORT_MEMBER_MARKS_PRESENT_BUT_VERTICAL_ALIGNMENT_NEEDS_STRUCTURAL_APPROVAL",
+      "memberCount": 18
+    }
+  ],
+  "displayPolicy": {
+    "mode": "SOURCE_LABELS_READ_ONLY__NO_AUTO_COLUMN_ADDITION",
+    "displaySourceMarks": true,
+    "createLinesFromBareMarks": false,
+    "createUnoccupiedIntersections": false,
+    "notForConstruction": true
+  },
+  "holds": [
+    "The variable right-hand C6/D5/E4/F1–F3 marks are distinct original source axes, NOT one straight right-hand C line",
+    "BBS, structural member continuity, support reactions and final concrete/rebar approval remain held",
+    "Source vector-calibrated candidates must retain precision and original drawing citation"
+  ]
+}
