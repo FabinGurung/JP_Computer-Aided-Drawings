@@ -18,6 +18,17 @@ const towerPromise=fetch(new URL('data/cad/view-control-tower.v1.json',root))
  .catch(()=>null);
 const modelByEdition=new Map();
 let reviewIndex=0,reviewUpdateToken=0,currentLineage=null;
+const axisCache=new Map();
+async function readNativeAxisRegister(tower){
+ const path=tower?.projects?.[slug]?.axisRegisterRef;
+ if(!path)return null;
+ if(!axisCache.has(path))axisCache.set(path,fetch(new URL(path,root)).then(async r=>{
+   if(!r.ok)throw Error('Source axis register '+r.status);
+   return await r.json();
+ }).catch(()=>null));
+ return axisCache.get(path);
+}
+
 async function readEditionModel(){
  if(!edition.manifest)return null;
  if(!modelByEdition.has(edition.manifest)){
@@ -29,6 +40,7 @@ async function readEditionModel(){
 async function renderReviewNavigation(){
  const token=++reviewUpdateToken;
  const [tower,manifest]=await Promise.all([towerPromise,readEditionModel()]);
+ const nativeRegister=await readNativeAxisRegister(tower);
  if(token!==reviewUpdateToken)return;
  const bar=$('pw-axis-proof'),dock=$('pw-dock');
  if(!tower){
@@ -38,13 +50,13 @@ async function renderReviewNavigation(){
   dock.innerHTML='<p role="status">Review queue unavailable. This page cannot certify plan-derived quantities or structural axes.</p>';
   return;
  }
- const lineage=modelLineage(tower,{slug,editionId:edition.id,phase,panel,manifest});currentLineage=lineage;
- const axis=inspectAxisEvidence(tower,manifest,{slug,editionId:edition.id});
+ const lineage=modelLineage(tower,{slug,editionId:edition.id,phase,panel,manifest,nativeRegister});currentLineage=lineage;
+ const axis=inspectAxisEvidence(tower,manifest,{slug,editionId:edition.id,phase,nativeRegister});
  bar.dataset.axisStatus=lineage.axisStatus;
  bar.dataset.edition=edition.id;
  bar.dataset.chapter=panel;
  bar.dataset.phase=phase;
- bar.innerHTML='<span class="pw-axis-tag">'+(axis.status==='DISPLAY_REVIEW_ONLY'?'AXIS REVIEW':'AXES HOLD')+'</span><strong>'+esc(axis.description)+'</strong><small>Applies to '+esc(edition.name)+' · '+esc(phase)+' · '+esc(panel)+'. Source/member references must be carried to every derived chapter. '+(axis.status==='DISPLAY_REVIEW_ONLY'?'Provisional markers only.':'No invented A1/B2 positions.')+'</small>';
+ bar.innerHTML='<span class="pw-axis-tag">'+(['DISPLAY_REVIEW_ONLY','SOURCE_MARKS_REGISTERED_REVIEW_ONLY'].includes(axis.status)?'AXIS REVIEW':'AXES HOLD')+'</span><strong>'+esc(axis.description)+'</strong><small>Applies to '+esc(edition.name)+' · '+esc(phase)+' · '+esc(panel)+'. Source/member references must be carried to every derived chapter. '+(axis.status==='DISPLAY_REVIEW_ONLY'?'Provisional markers only.':axis.status==='SOURCE_MARKS_REGISTERED_REVIEW_ONLY'?'Documented source marks only; 2D/3D source registration and engineering acceptance remain separate.':'No invented A1/B2 positions.')+'</small>'+(nativeRegister?'<a href="'+esc(new URL(tower.projects[slug].axisRegisterRef,root).href)+'" target="_blank" rel="noopener">Read project axis register</a>':'');
  const {gate,index,count}=reviewGate(tower,slug,reviewIndex);
  reviewIndex=index;
  const sourceLink=gate.sourceRef?new URL(gate.sourceRef,root).href:null;
