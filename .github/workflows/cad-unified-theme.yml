@@ -26,7 +26,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   portal-product-and-preservation:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 17
     steps:
       - uses: actions/checkout@v4

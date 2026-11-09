@@ -45,7 +45,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   linked-studio:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 16
     steps:
       - uses: actions/checkout@v4

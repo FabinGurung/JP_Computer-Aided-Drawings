@@ -52,7 +52,14 @@ try{
      assert.equal(current.chapter,id);assert.equal(current.axisStatus,'DISPLAY_REVIEW_ONLY');
      assert.equal(await p.locator('#pw-dock').getAttribute('data-review-id'),original);
     }
-   }else assert.equal(state.axis,'AXES_NOT_ADMITTED',slug+' should fail closed when no matching standard axis registry');
+   }else if(slug==='harisharan-adhikari'||slug==='narayani-parajuli'){
+    assert.equal(state.axis,'SOURCE_MARKS_REGISTERED_REVIEW_ONLY',slug+' must retain the existing source-native grid reference');
+    const machine=await p.evaluate(()=>window.ProjectWorkspace.getLineage());
+    assert.equal(machine.axisStatus,'SOURCE_MARKS_REGISTERED_REVIEW_ONLY');
+    assert.equal(machine.axisIds.length,slug==='harisharan-adhikari'?18:23);
+    assert.equal(machine.constructionApproved,false);
+    assert.ok(machine.axisSourceFileSha256,'source fingerprint missing');
+   }else assert.equal(state.axis,'AXES_NOT_ADMITTED',slug+' has no admitted original source-axis registry');
    assert.deepEqual(errors,[],'page JS errors '+slug+'/'+width);
    await p.close();
    console.log('CAD_CONTROL_TOWER_WORKSPACE_BROWSER_PASS',slug,width);
