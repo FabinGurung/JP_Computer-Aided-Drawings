@@ -295,5 +295,50 @@
     "Resolve source C2 floor reinforcement-label differences with designer-issued schedule/sections; do not compute reinforcement quantity or safety from chart literals.",
     "Independently verify upper storey vertical support and structural approval before model promotion or construction drawings."
   ],
-  "issuedForConstruction": false
+  "issuedForConstruction": false,
+  "m34DrawingAxisCrossCheck": {
+    "geometryFrame": "GF ORIGINAL STRUCTURAL DXF NATIVE MODELSPACE MILLIMETRES",
+    "c6F6HorizontalGridAxis": {
+      "handle": "AFB3C",
+      "layer": "centerline",
+      "lineSourceEndpointsMm": [
+        [
+          822847.728,
+          -118833.74
+        ],
+        [
+          851658.69,
+          -118833.74
+        ]
+      ],
+      "totalEntityLengthMm": 28810.962,
+      "ownerC6ToF6SpanMm": 4823.853,
+      "interpretation": "FULL_SHEET_GRID_CENTERLINE_CROSSES_C6_F6_BUT_IS_NOT_A_UNIQUE_STRUCTURAL_BEAM_ENTITY"
+    },
+    "strip016VerticalGridAxis": {
+      "handle": "AFB5C",
+      "layer": "centerline",
+      "lineSourceEndpointsMm": [
+        [
+          835388.078,
+          -134233.74
+        ],
+        [
+          835388.078,
+          -112608.7
+        ]
+      ],
+      "totalEntityLengthMm": 21625.041,
+      "interpretation": "FULL_SHEET_GRID_CENTERLINE_CROSSES_016_BUT_IS_NOT_A_UNIQUE_STRUCTURAL_MEMBER"
+    },
+    "g2GridCrossing": {
+      "handles": [
+        "AFB31",
+        "AFB4A"
+      ],
+      "interpretation": "SHEET_CENTERLINE_INTERSECTION_NOT_PROOF_OF_ADDED_G2_COLUMN_OR_JUNCTION_CAPACITY"
+    },
+    "sourceProvenance": "Read directly from exact original DXF handle records in M35 source probe; M34 original owner drawing interpretation preserved.",
+    "memberCountPromoted": 0
+  }
 }
