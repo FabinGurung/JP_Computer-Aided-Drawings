@@ -20,7 +20,7 @@ permissions:
   contents: read
 jobs:
   build-and-audit:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -49,6 +49,7 @@ jobs:
           node tools/site/harisharan-workspace-smoke.mjs
           node tools/site/project-workspace-smoke.mjs
           node tools/site/cad-control-tower-smoke.mjs
+          node tools/site/cad-source-axis-contract-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
           node tools/site/harisharan-rear-nine-smoke.mjs
@@ -70,6 +71,7 @@ jobs:
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
+          node tools/site/cad-source-axis-contract-browser.mjs
           node tools/site/ashok-grid-browser.mjs
           node tools/site/ashok-v3-2-browser.mjs
           node tools/site/ashok-column-axes-browser.mjs
