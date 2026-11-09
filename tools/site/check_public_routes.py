@@ -14,7 +14,7 @@ required=[
 "research/open-architecture-engine-v0.2/dimensions.json","research/open-architecture-engine-v0.1/index.html",
 "projects/index.html","projects/narayani-parajuli/index.html","projects/ramachandra-devkota/index.html","projects/ashok-adhikari/index.html",
 "releases/index.html","guide/index.html","source/index.html",
-"memory-wall/index.html","codes/pokhara/index.html","data/codes/nepal-pokhara.json","data/document-control.json",
+"memory-wall/index.html","knowledge-centre/index.html","assets/css/cad-knowledge-centre.css","codes/pokhara/index.html","data/codes/nepal-pokhara.json","data/document-control.json",
 "data/projects.json","data/navigation.json","stages/m80/index.html",
 "templates/project-workspace/index.html","templates/project-workspace/project-template.v1.json","assets/js/project-site-packages.mjs",
 "assets/js/project-engineering-normalization.mjs","assets/js/engineering-quantity-guardrails.mjs",
