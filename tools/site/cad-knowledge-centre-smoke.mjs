@@ -15,7 +15,7 @@ for(const m of html.matchAll(/<a\b[^>]*href="([^"]+)"/g)){
   const href=m[1];if(href.startsWith("#")||/^https:\/\//.test(href))continue;
   assert(!href.startsWith("/"),"avoid root-relative CAD Pages links: "+href);
   const rel=resolve(dirname(page),href);
-  assert(rel.startsWith(root+"/"),"link escapes public: "+href);
+  assert(rel===root||rel.startsWith(root+"/"),"link escapes public: "+href);
   const expected=rel===root?resolve("index.html"):(extname(rel)?rel:join(rel,"index.html"));
   assert(existsSync(expected),"broken local link "+href);
   dest.push(href);
