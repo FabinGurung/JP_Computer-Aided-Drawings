@@ -14,7 +14,7 @@
  const skip=document.createElement("a");skip.className="cad-global-skip";skip.href="#cad-main-content";skip.textContent="Skip to content";nav.append(skip);
  const brand=link("◈ CAD · Design Studio","");brand.className="cad-global-brand";nav.append(brand);
  const menu=document.createElement("div");menu.className="cad-global-links";
- for(const [title,slug] of [["Home",""],["Design Studio","cad/aad/"],["Projects","projects/"],["How It Works","guide/"],["Memory Wall","memory-wall/"]])menu.append(link(title,slug));
+ for(const [title,slug] of [["Home",""],["Design Studio","cad/aad/"],["Projects","projects/"],["How It Works","guide/"],["Knowledge Centre","knowledge-centre/"]])menu.append(link(title,slug));
  const more=document.createElement("details");more.className="cad-global-more";
  const trigger=document.createElement("summary");trigger.textContent="More";more.append(trigger);
  const popup=document.createElement("div");popup.className="cad-global-popover";
