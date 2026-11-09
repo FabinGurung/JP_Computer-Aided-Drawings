@@ -16,7 +16,7 @@ concurrency:
 jobs:
   validate-and-build:
     if: (github.event_name == 'workflow_dispatch' && github.ref == 'refs/heads/main') || (github.event_name == 'workflow_run' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.conclusion == 'success')
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,6 +47,7 @@ jobs:
         run: |
           node tools/site/project-workspace-smoke.mjs
           node tools/site/cad-control-tower-smoke.mjs
+          node tools/site/cad-source-axis-contract-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
           node tools/site/harisharan-rear-nine-smoke.mjs
@@ -128,6 +129,7 @@ jobs:
           ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
+          node tools/site/cad-source-axis-contract-browser.mjs
           node tools/site/ashok-grid-browser.mjs
           node tools/site/ashok-v3-2-browser.mjs
           node tools/site/ashok-column-axes-browser.mjs
@@ -196,7 +198,7 @@ jobs:
         with: {path: dist}
   deploy:
     needs: validate-and-build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
