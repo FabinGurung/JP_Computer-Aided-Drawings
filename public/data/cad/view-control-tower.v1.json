@@ -67,7 +67,10 @@
       "Sources: show original file, fingerprint, edition, coordinate registration and approval evidence"
     ],
     "onMissing": "AXES_NOT_ADMITTED__DERIVATIONS_HOLD",
-    "approvedByDefault": false
+    "approvedByDefault": false,
+    "sourceNativeRegistry": "jp-cad://source-axis-register/1",
+    "sourceAxisStorage": "Project-specific data/projects/<slug>/source-axis-register.v1.json, never A7 and never a single inferred universal grid",
+    "sourceProjectionRule": "Source-marked label identities may be surfaced in all five chapters; 2D/3D geometry overlay requires separately admitted source-to-model transform. Never auto-create columns/axes solely from the label catalogue."
   },
   "chapterContracts": {
     "views": {
@@ -205,7 +208,7 @@
       ]
     },
     "narayani-parajuli": {
-      "axisEvidence": "PROJECT_SPECIFIC_SOURCE_REVIEW_PENDING_COMMON_TEMPLATE_REGISTRATION",
+      "axisEvidence": "GF_ORIGINAL_DXF_23_MARKS__I3_OWNER_WORKING_CORRECTION__UPPER_HOLD",
       "gateIds": [
         "SRC-01",
         "AX-02",
@@ -221,10 +224,11 @@
         },
         {
           "id": "AX-02",
-          "title": "Source axis and support proof",
-          "status": "HOLD",
-          "detail": "Map existing member IDs/column evidence to stable alphabetic and numbered axes before publishing a new coordinated edition.",
-          "focus": "sources"
+          "title": "23 original DXF marks; I3 working exception",
+          "status": "REVIEW_ONLY",
+          "detail": "Ground-floor source marks A–I / 1–7 are registered individually. Owner I3 replaces historic I4 in the working 23-column scope; FF/SF support continuity and common architectural datum remain on HOLD.",
+          "focus": "sources",
+          "sourceRef": "data/projects/narayani-parajuli/source-axis-register.v1.json"
         },
         {
           "id": "MEM-03",
@@ -233,10 +237,11 @@
           "detail": "Unadmitted member quantities and reinforcements may not be filled from template defaults.",
           "focus": "packages"
         }
-      ]
+      ],
+      "axisRegisterRef": "data/projects/narayani-parajuli/source-axis-register.v1.json"
     },
     "harisharan-adhikari": {
-      "axisEvidence": "SOURCE_REVIEW_PENDING_COMMON_TEMPLATE_REGISTRATION",
+      "axisEvidence": "18_SOURCE_REPORT_MATCHED_GRID_MARKS__IFC_APPROVAL_HOLD",
       "gateIds": [
         "SRC-01",
         "AX-02",
@@ -252,10 +257,11 @@
         },
         {
           "id": "AX-02",
-          "title": "Source axis and member mapping",
-          "status": "HOLD",
-          "detail": "Keep actual source grid/member identities; do not infer registered column axes from display coordinates.",
-          "focus": "sources"
+          "title": "18 original A–F / 1–6 grid marks",
+          "status": "REVIEW_ONLY",
+          "detail": "Drawing/report ledger matches all 18 named source positions, including offset right-edge C6/D5/E4/F1–F3. Upper-floor member vertical alignment, BBS and engineer approval remain on HOLD; do not straighten the irregular right boundary.",
+          "focus": "sources",
+          "sourceRef": "data/projects/harisharan-adhikari/source-axis-register.v1.json"
         },
         {
           "id": "MAT-03",
@@ -264,7 +270,8 @@
           "detail": "Draft quantities remain qualified until supporting member and rebar evidence is authenticated.",
           "focus": "packages"
         }
-      ]
+      ],
+      "axisRegisterRef": "data/projects/harisharan-adhikari/source-axis-register.v1.json"
     },
     "ramachandra-devkota": {
       "axisEvidence": "SOURCE_UNADMITTED",
