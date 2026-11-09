@@ -1,0 +1,401 @@
+{
+  "schema": "jp-cad://source-axis-register/1",
+  "revision": "R000001",
+  "date": "2026-11-09",
+  "projectLogicalId": "PRJ-000007",
+  "project": "Narayani Parajuli",
+  "fileAuthority": "ORIGINAL_STRUCTURAL_DXF_PUBLIC_DERIVED_REGISTER_ONLY",
+  "sourceFileSha256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+  "sourceSourceRef": "public/data/projects/narayani-parajuli/aad-source-gf-review-v1.json",
+  "revisionRefs": [
+    "aad-m28-reconciliation-20261027.json",
+    "aad-m33-gf-sheet-registration-audit.json",
+    "aad-m34-owner-geometry-reconciliation-20261101.json"
+  ],
+  "publishedSourceIsOriginal": false,
+  "axisEvidence": "SOURCE_GROUND_FLOOR_MEMBER_MARKS_WITH_OWNER_I3_WORKING_CORRECTION",
+  "coordinateFrame": {
+    "native": "ORIGINAL_DXF_MODELSPACE_XY_MILLIMETRES",
+    "architecturalToStructural": "M33_GROUND_FLOOR_TRANSLATION_ONLY__NOT_SURVEYED",
+    "xDirection": "source DXF X",
+    "yDirection": "source DXF Y",
+    "nativeToAadBuildingTransform": null,
+    "unit": "mm",
+    "sameFloorCrossLevelValidated": false
+  },
+  "letters": [
+    "A",
+    "B",
+    "C",
+    "D",
+    "E",
+    "F",
+    "G",
+    "H",
+    "I"
+  ],
+  "numbers": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7
+  ],
+  "members": [
+    {
+      "sourceElementId": "SC-D7",
+      "sourceAxisRef": "D7",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 761490.891,
+        "y": -116983.7
+      },
+      "columnEntityHandle": "AE94B",
+      "footingEntityHandle": "ACE74",
+      "workingAxisRef": "D7",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-E7",
+      "sourceAxisRef": "E7",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 764754.077,
+        "y": -116983.7
+      },
+      "columnEntityHandle": "AE94D",
+      "footingEntityHandle": "ACE77",
+      "workingAxisRef": "E7",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-C6",
+      "sourceAxisRef": "C6",
+      "sourceColumnFamily": "C2",
+      "sourceNativeXYmm": {
+        "x": 760905.038,
+        "y": -118833.74
+      },
+      "columnEntityHandle": "AEB5B",
+      "footingEntityHandle": "ACE7A",
+      "workingAxisRef": "C6",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-F6",
+      "sourceAxisRef": "F6",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 765728.891,
+        "y": -118833.387
+      },
+      "columnEntityHandle": "AEA7C",
+      "footingEntityHandle": "ACE95",
+      "workingAxisRef": "F6",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-G6",
+      "sourceAxisRef": "G6",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 770693.9,
+        "y": -118833.201
+      },
+      "columnEntityHandle": "AEAA1",
+      "footingEntityHandle": "ACEA7",
+      "workingAxisRef": "G6",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-H6",
+      "sourceAxisRef": "H6",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 775505.038,
+        "y": -118833.74
+      },
+      "columnEntityHandle": "AEAEB",
+      "footingEntityHandle": "ACE98",
+      "workingAxisRef": "H6",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-B5",
+      "sourceAxisRef": "B5",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 758989.538,
+        "y": -119489.144
+      },
+      "columnEntityHandle": "AE94E",
+      "footingEntityHandle": "ACE7D",
+      "workingAxisRef": "B5",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-B4",
+      "sourceAxisRef": "B4",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 758989.538,
+        "y": -122453.74
+      },
+      "columnEntityHandle": "AE94F",
+      "footingEntityHandle": "ACE83",
+      "workingAxisRef": "B4",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-I4",
+      "sourceAxisRef": "I4",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 777005.039,
+        "y": -122453.74
+      },
+      "columnEntityHandle": "AE950",
+      "footingEntityHandle": "AD0BC",
+      "workingAxisRef": "I3",
+      "workingStatus": "OWNER_RELOCATED__I3_20261027"
+    },
+    {
+      "sourceElementId": "SC-C3",
+      "sourceAxisRef": "C3",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 760905.038,
+        "y": -123108.74
+      },
+      "columnEntityHandle": "AEA0D",
+      "footingEntityHandle": "ACE89",
+      "workingAxisRef": "C3",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-F3",
+      "sourceAxisRef": "F3",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 765728.891,
+        "y": -123109.093
+      },
+      "columnEntityHandle": "AEA57",
+      "footingEntityHandle": "ACEA4",
+      "workingAxisRef": "F3",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-G3",
+      "sourceAxisRef": "G3",
+      "sourceColumnFamily": "C3",
+      "sourceNativeXYmm": {
+        "x": 770693.9,
+        "y": -123108.201
+      },
+      "columnEntityHandle": "AEBA5",
+      "footingEntityHandle": "AD0B6",
+      "workingAxisRef": "G3",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-H3",
+      "sourceAxisRef": "H3",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 775505.039,
+        "y": -123108.74
+      },
+      "columnEntityHandle": "AEB10",
+      "footingEntityHandle": "AD0BC",
+      "workingAxisRef": "H3",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-A2",
+      "sourceAxisRef": "A2",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 756005.038,
+        "y": -125933.74
+      },
+      "columnEntityHandle": "AE9C3",
+      "footingEntityHandle": "ACE80",
+      "workingAxisRef": "A2",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-C2",
+      "sourceAxisRef": "C2",
+      "sourceColumnFamily": "C2",
+      "sourceNativeXYmm": {
+        "x": 760905.038,
+        "y": -125933.74
+      },
+      "columnEntityHandle": "AEB36",
+      "footingEntityHandle": "ACE8C",
+      "workingAxisRef": "C2",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-F2",
+      "sourceAxisRef": "F2",
+      "sourceColumnFamily": "C3",
+      "sourceNativeXYmm": {
+        "x": 765728.891,
+        "y": -125934.093
+      },
+      "columnEntityHandle": "AEBEF",
+      "footingEntityHandle": "ACEA1",
+      "workingAxisRef": "F2",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-H2",
+      "sourceAxisRef": "H2",
+      "sourceColumnFamily": "C3",
+      "sourceNativeXYmm": {
+        "x": 775505.039,
+        "y": -125933.74
+      },
+      "columnEntityHandle": "AEBCA",
+      "footingEntityHandle": "AD0BE",
+      "workingAxisRef": "H2",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-I2",
+      "sourceAxisRef": "I2",
+      "sourceColumnFamily": "C4",
+      "sourceNativeXYmm": {
+        "x": 777005.039,
+        "y": -125933.74
+      },
+      "columnEntityHandle": "AE951",
+      "footingEntityHandle": "AD0BE",
+      "workingAxisRef": "I2",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-A1",
+      "sourceAxisRef": "A1",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 756004.876,
+        "y": -129533.578
+      },
+      "columnEntityHandle": "AE99E",
+      "footingEntityHandle": "ACE92",
+      "workingAxisRef": "A1",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-C1",
+      "sourceAxisRef": "C1",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 760905.038,
+        "y": -129533.74
+      },
+      "columnEntityHandle": "AE9E8",
+      "footingEntityHandle": "ACE8F",
+      "workingAxisRef": "C1",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-F1",
+      "sourceAxisRef": "F1",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 765728.891,
+        "y": -129534.093
+      },
+      "columnEntityHandle": "AEA32",
+      "footingEntityHandle": "ACE9B",
+      "workingAxisRef": "F1",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-G1",
+      "sourceAxisRef": "G1",
+      "sourceColumnFamily": "C3",
+      "sourceNativeXYmm": {
+        "x": 770693.9,
+        "y": -129534.279
+      },
+      "columnEntityHandle": "AEB80",
+      "footingEntityHandle": "ACE9E",
+      "workingAxisRef": "G1",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    },
+    {
+      "sourceElementId": "SC-H1",
+      "sourceAxisRef": "H1",
+      "sourceColumnFamily": "C1",
+      "sourceNativeXYmm": {
+        "x": 775505.038,
+        "y": -129533.74
+      },
+      "columnEntityHandle": "AEAC6",
+      "footingEntityHandle": "ACE86",
+      "workingAxisRef": "H1",
+      "workingStatus": "SOURCE_GEOMETRY_REFERENCED_ONLY"
+    }
+  ],
+  "sourceCount": 23,
+  "proposedWorkingCount": 23,
+  "workingException": {
+    "replaces": "SC-I4",
+    "originalAxis": "I4",
+    "workingAxis": "I3",
+    "workingElementId": "PRJ-000007:gf:QA-COL:I3",
+    "workingCenterAadM": {
+      "x": 21.000162,
+      "z": 6.12504
+    },
+    "relocationM": 0.655,
+    "authority": "OWNER_VERIFIED_WORKING_GEOMETRY_NOT_INDEPENDENTLY_APPROVED_SUPPORT"
+  },
+  "availableLevels": [
+    {
+      "levelId": "gf",
+      "status": "ORIGINAL_DXF_GF_MARKERS_RECONCILED_WORKING_I3_EXCEPTION",
+      "memberCount": 23
+    },
+    {
+      "levelId": "ff",
+      "status": "STRUCTURAL_VERTICAL_MEMBER_AXIS_REGISTRATION_HOLD",
+      "memberCount": null
+    },
+    {
+      "levelId": "sf",
+      "status": "STRUCTURAL_VERTICAL_MEMBER_AXIS_REGISTRATION_HOLD",
+      "memberCount": null
+    }
+  ],
+  "projection": {
+    "sourceToSourceSheetRegistrationM": {
+      "x": -762.364891,
+      "z": 0
+    },
+    "sourceMaxHeldOutResidualMm": -0.852,
+    "structuralMemberContinuityVerified": false,
+    "originalStructuralGridLinesCertified": false
+  },
+  "displayPolicy": {
+    "mode": "SOURCE_LABELS_READ_ONLY__NO_AUTO_COLUMN_ADDITION",
+    "displaySourceMarks": true,
+    "createLinesFromBareMarks": false,
+    "createUnoccupiedIntersections": false,
+    "missingStructuralUpperFloors": "AXES_NOT_ADMITTED",
+    "notForConstruction": true
+  },
+  "holds": [
+    "Original model 4×3 structural grid remains AI-INFERRED and is not replaced by these source marks",
+    "Exact structural-to-architectural shared datum and FF/SF member load path remain unverified",
+    "Existing I4 source historic position and owner I3 working correction must stay separate",
+    "CF1, G1 and footing/support approval retained"
+  ]
+}
