@@ -61,6 +61,8 @@ try{
  const p=await b.newPage({viewport:{width:390,height:850}});
  const r=await p.goto(base+'templates/project-workspace/control-tower/',{waitUntil:'domcontentloaded'});assert.equal(r.status(),200);
  await p.locator('#ct-gates li').first().waitFor({timeout:20000});
+ assert.equal(await p.locator('a[href="../../../memory-wall/"]').count(),1);
+ assert.equal(await p.locator('a[href="../../../projects/ashok-adhikari/memory-wall/"]').count(),1);
  assert.equal(await p.locator('#ct-project option').count(),5);
  await p.locator('#ct-project').selectOption('ashok-adhikari');
  assert.equal(await p.locator('#ct-gates li').count(),4);
