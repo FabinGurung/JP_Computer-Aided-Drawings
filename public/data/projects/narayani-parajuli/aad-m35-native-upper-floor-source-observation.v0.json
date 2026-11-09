@@ -1,0 +1,299 @@
+{
+  "schema": "jp-cad://narayani-m35-independent-source-observation/1",
+  "projectId": "PRJ-000007",
+  "stage": "M35_PRE_SOURCE_OBSERVATION",
+  "recordDate": "2026-11-09",
+  "scope": "Verified read-only original DXF extraction of native beam plans and column design summary; not an M35 release, approved member plan, or IFC promotion.",
+  "originalSource": {
+    "name": "narayani str drg revised plan.dxf",
+    "sha256": "55a4b9828f569ece9c78063a60d56484c71e13563d9e73faf76a701bc182d1cf",
+    "bytes": 36050950,
+    "dxfVersion": "AC1021",
+    "modelspaceEntities": 13834,
+    "method": "ezdxf 1.4.4 original-source read; source lines by native modelspace coordinates. Geometry compared after translation only.",
+    "originalUnmodified": true
+  },
+  "frame": "DXF_NATIVE_MM_SHEET_RELATIVE_ONLY_NOT_SURVEYED",
+  "floorPlans": {
+    "gf": {
+      "sourceTitleHandle": "B000D",
+      "sourceTitle": "GROUND FLOOR BEAM LAYOUT PLAN",
+      "sheetXAnchorMm": 832998.5,
+      "wallLinePrimitives": 113,
+      "beamSectionLabelOccurrences": 34,
+      "gridCenterlineCrossingRegion": 20,
+      "strictPairedStripCandidatesPerM32": 17,
+      "sourceGFColumnMarkers": 23,
+      "verifiedBuildingMemberBeams": null
+    },
+    "ff": {
+      "sourceTitleHandle": "B0452",
+      "sourceTitle": "FIRST FLOOR BEAM LAYOUT PLAN",
+      "sheetXAnchorMm": 869172.5,
+      "wallLinePrimitives": 113,
+      "beamSectionLabelOccurrences": 34,
+      "gridCenterlineCrossingRegion": 20,
+      "strictPairedStripCandidatesPerM32": 17,
+      "independentFloorColumnPositions": null,
+      "verifiedBuildingMemberBeams": null
+    },
+    "sf": {
+      "sourceTitleHandle": "B084F",
+      "sourceTitle": "SECOND FLOOR BEAM LAYOUT PLAN",
+      "sheetXAnchorMm": 907281.5,
+      "wallLinePrimitives": 107,
+      "beamSectionLabelOccurrences": 31,
+      "gridCenterlineCrossingRegion": 20,
+      "strictPairedStripCandidatesPerM32": 17,
+      "independentFloorColumnPositions": null,
+      "verifiedBuildingMemberBeams": null
+    }
+  },
+  "nativeSourceTranslation": {
+    "gfToFFXmm": 36174,
+    "ffToSFXmm": 38109,
+    "gfVsFF": {
+      "exactMatchingNormalizedWallLines": 113,
+      "originalWallLineCountEach": 113,
+      "exactMatchingNormalizedBeamLabelOccurrences": 34,
+      "originalLabelOccurrencesEach": 34,
+      "status": "DRAWING_COPY_GEOMETRY_ONLY_NOT_PROOF_OF_FF_MEMBER_CONTINUITY"
+    },
+    "ffVsSF": {
+      "matchingNormalizedWallLines": 104,
+      "firstOnlyLineHandles": [
+        "B018B",
+        "B0190",
+        "B018C",
+        "B018A",
+        "B018F",
+        "B018D",
+        "B0191",
+        "B0192",
+        "B018E"
+      ],
+      "secondOnlyLineHandles": [
+        "B0590",
+        "B0591",
+        "B058D"
+      ],
+      "matchingNormalizedBeamLabelOccurrences": 31,
+      "ffOnlyLabels": [
+        {
+          "handle": "B01FB",
+          "literal": "MB 230X300",
+          "sourceSheetRelativeMm": [
+            -3190,
+            -119068.439
+          ]
+        },
+        {
+          "handle": "B01DC",
+          "literal": "MB 230X300",
+          "sourceSheetRelativeMm": [
+            -3186,
+            -122634.939
+          ]
+        },
+        {
+          "handle": "B01DB",
+          "literal": "MB 230X405",
+          "sourceSheetRelativeMm": [
+            -3135,
+            -121753.5
+          ]
+        }
+      ],
+      "sfOnlyBeamLabels": [],
+      "status": "DIFFERENT_DRAWING_REGIONS_UNASSIGNED_TO_STRUCTURAL_MEMBERS"
+    }
+  },
+  "columnDesignSummary": {
+    "titleHandle": "AE35B",
+    "floorHeaderHandles": {
+      "gf": "AE353",
+      "ff": "AE358",
+      "sf": "AE35A"
+    },
+    "concreteGradeLabel": {
+      "handle": "AE355",
+      "literal": "CONCRETE GRADE = M20"
+    },
+    "steelGradeLabel": {
+      "handle": "AE356",
+      "literal": "STEEL GRADE = Fe500"
+    },
+    "columnLayoutPlanTitleHandle": "ADFFA",
+    "originalFamilyRows": [
+      {
+        "family": "C1",
+        "familyHandle": "AE384",
+        "sectionLiteral": "400X400",
+        "sizeHandle": "AE4DB",
+        "numberLiteral": "11",
+        "numberHandle": "AE4DC",
+        "bands": {
+          "gf": [
+            "AE3F6",
+            "AE3FC"
+          ],
+          "ff": [
+            "AEC15",
+            "AEC16"
+          ],
+          "sf": [
+            "AEC3C",
+            "AEC3D"
+          ]
+        },
+        "bandText": {
+          "gf": [
+            "4 TMT -16Ø",
+            "4 TMT -16Ø"
+          ],
+          "ff": [
+            "4 TMT -16Ø",
+            "4 TMT -16Ø"
+          ],
+          "sf": [
+            "4 TMT -16Ø",
+            "4 TMT -16Ø"
+          ]
+        }
+      },
+      {
+        "family": "C2",
+        "familyHandle": "AE4DF",
+        "sectionLiteral": "400X400",
+        "sizeHandle": "AE4E0",
+        "numberLiteral": "2",
+        "numberHandle": "AE4E1",
+        "bands": {
+          "gf": [
+            "AE43D",
+            "AE43E"
+          ],
+          "ff": [
+            "AEC63",
+            "AEC64"
+          ],
+          "sf": [
+            "AE48B",
+            "AE48C"
+          ]
+        },
+        "bandText": {
+          "gf": [
+            "4 TMT -16Ø",
+            "4 TMT -20Ø"
+          ],
+          "ff": [
+            "4 TMT -16Ø",
+            "4 TMT -20Ø"
+          ],
+          "sf": [
+            "4 TMT -16Ø",
+            "4 TMT -16Ø"
+          ]
+        }
+      },
+      {
+        "family": "C4",
+        "familyHandle": "AE4E4",
+        "sectionLiteral": "350",
+        "sizeHandle": "AE4E5",
+        "numberLiteral": "6",
+        "numberHandle": "AE4E6",
+        "bands": {
+          "gf": [
+            "AE4A8",
+            "AE4A9"
+          ],
+          "ff": [
+            "AEEAC",
+            "AEEAD"
+          ],
+          "sf": [
+            "AEEAF",
+            "AEEB0"
+          ]
+        },
+        "bandText": {
+          "gf": [
+            "4 TMT -12Ø",
+            "4 TMT -12Ø"
+          ],
+          "ff": [
+            "4 TMT -12Ø",
+            "4 TMT -12Ø"
+          ],
+          "sf": [
+            "4 TMT -12Ø",
+            "4 TMT -12Ø"
+          ]
+        }
+      },
+      {
+        "family": "C3",
+        "familyHandle": "AEDF1",
+        "sectionLiteral": "400X400",
+        "sizeHandle": "AEDF2",
+        "numberLiteral": "4",
+        "numberHandle": "AEDF3",
+        "bands": {
+          "gf": [
+            "AEDA4",
+            "AEEB2"
+          ],
+          "ff": [
+            "AEEB3",
+            "AEEB4"
+          ],
+          "sf": [
+            "AEEB5",
+            "AEEB6"
+          ]
+        },
+        "bandText": {
+          "gf": [
+            "4 TMT -20Ø",
+            "4 TMT -20Ø"
+          ],
+          "ff": [
+            "4 TMT -20Ø",
+            "4 TMT -20Ø"
+          ],
+          "sf": [
+            "4 TMT -20Ø",
+            "4 TMT -20Ø"
+          ]
+        }
+      }
+    ],
+    "unqualifiedScheduleNumberSum": 23,
+    "warning": "NOS is one family schedule column, NOT separate proven GF/FF/SF node counts. The three floor bands show reinforcement labels only; they do not provide a signed source coordinate-to-upper-floor-member map.",
+    "sourceTextObservation": "C2 SF two labels read 4 TMT -16Ø, whereas GF and FF each show one 4 TMT -16Ø and one 4 TMT -20Ø. This is source transcription, not approved rebar redesign.",
+    "reinforcementMeaning": "Raw source literals only; no anchorage, section association, capacity, bar takeoff or professional approval inferred."
+  },
+  "statusGates": {
+    "originalDXFShaVerified": true,
+    "sourceFloorsReadIndependently": true,
+    "sectionAnnotationSourceHandlesRecorded": true,
+    "ffSfIndependentColumnPositionProof": false,
+    "gfFfSfColumnContinuityVerified": false,
+    "sectionLabelsMappedToStructuralBeamMembers": false,
+    "newStructuralIFCMembersAdded": 0,
+    "engineerCertified": false,
+    "remainingSevenEngineeringGates": "OPEN",
+    "sourceOwnerClarificationM34Preserved": true,
+    "m34SourceUnchanged": true
+  },
+  "nextEvidence": [
+    "Locate independent FF/SF column position symbols, schedules and support/transfer dimensions in the original source, if any; explicitly mark MISSING_SOURCE when absent.",
+    "Map each source beam annotation and wall-line pair to unique structural member endpoints only after independent grid support confirmation.",
+    "Investigate three absent SF annotation occurrences and 9/3 wall-line differences; do not infer beam removals from source text count.",
+    "Resolve source C2 floor reinforcement-label differences with designer-issued schedule/sections; do not compute reinforcement quantity or safety from chart literals.",
+    "Independently verify upper storey vertical support and structural approval before model promotion or construction drawings."
+  ],
+  "issuedForConstruction": false
+}
