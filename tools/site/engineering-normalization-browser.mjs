@@ -1,6 +1,6 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-const base=process.env.PROJECT_SITE_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/';
+const base=process.env.PROJECT_SITE_URL||'http://127.0.0.1:5191/jp-drawing-coordination/';
 const widths=(process.env.PROJECT_WIDTHS||'390,1440').split(',').map(Number);
 const sites=['narayani-parajuli','harisharan-adhikari','ashok-adhikari','ramachandra-devkota','example-empty'];
 const count={'narayani-parajuli':7,'harisharan-adhikari':10,'ashok-adhikari':1,'ramachandra-devkota':0,'example-empty':0};
