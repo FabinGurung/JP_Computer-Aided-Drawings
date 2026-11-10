@@ -22,7 +22,7 @@ assert.ok(Math.abs(register.totals.theoreticalOwnedSteelKg-11521.11765)<0.005,'O
 assert.ok(Math.abs(register.totals.cementPlanningBags-712.95633528)<0.05,'Per-member planning bag scenarios rounded to 3 decimals in public source');
 assert.ok(REVIEW_HOLDS.find(x=>x.id==='HAR-09')?.sources.includes('ARC-02'),'Architectural sheet ID is a source reference, not inserted into narrative text');
 assert.ok(REVIEW_HOLDS.find(x=>x.id==='HAR-09')?.sources.includes('septic tank'),'Architectural site labels reside in evidence source field');
-assert.ok(REVIEW_HOLDS.every(x=>x.issueUrl.includes('github.com/FabinGurung/JP_Computer-Aided-Drawings/issues/')));
+assert.ok(REVIEW_HOLDS.every(x=>x.issueUrl.includes('github.com/FabinGurung/jp-drawing-coordination/issues/')));
 assert.ok(register.measurements.filter(x=>x.stage==='v03').every(x=>x.concreteM3===null));
 assert.ok(register.measurements.filter(x=>x.stage==='m40').every(x=>x.steelKg===null));
 assert.ok(register.measurements.filter(x=>x.stage==='m50').every(x=>x.steelKg===null&&x.concreteM3===null&&x.cementPlanningBags===null));
