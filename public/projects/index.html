@@ -1,13 +1,61 @@
 <!doctype html>
-<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="description" content="Projects — public-safe architecture and project research website.">
-<title>Projects · Project Drawings</title><link rel="stylesheet" href="../assets/css/consolidated-site.css"><link rel="stylesheet" href="../assets/css/cad-unified-theme.css"></head>
-<body><div class="shell">
-<nav class="topnav" aria-label="Primary navigation"><a class="brand" href="../">Project Drawings</a><a href="../research/">Research</a><a href="../projects/">Projects</a><a href="../releases/">Releases</a><a href="../source/">Source registry</a><a href="../guide/">Guide</a></nav>
-<main><section class="hero"><div class="eyebrow">Project instances · Public-safe publication</div><h1>Projects</h1><p>Project-specific webpages are separate from the reusable engine. Existing project status and engineering gates remain unchanged.</p><div class="grid">
-<article class="tile"><span class="tag">PRJ-000007 · preserved</span><h2>Narayani Parajuli Residence</h2><p>Existing V02/V03 and M40–M80 governed stage viewers. M80 stays CODAL_NOT_VERIFIED / HOLD.</p><a class="action" href="./narayani-parajuli/">Open Narayani →</a></article>
-<article class="tile"><span class="tag">PRJ-000029 · project page</span><h2>Ramachandra Devkota</h2><p>Public-safe landing page for the existing planned project. Governed data remains with its project owner.</p><a class="action" href="./ramachandra-devkota/">Open project →</a></article>
-<article class="tile"><span class="tag">Residence 14 · REV04 working QA</span><h2>Ashok Adhikari</h2><p>Rohini Engineering and Builders. Latest shared AAD studio, exact REV04 plans and approved GF c016 / FF c012 visuals. Engineering HOLD.</p><a class="action" href="./ashok-adhikari/">Open working studio →</a></article>
-<article class="tile"><span class="tag">Fishtail Builders · provisional takeoff</span><h2>Harisharan Adhikari</h2><p>Five-floor source-based 2D/3D workspace, component table and editable planning Gantt. Foundation-to-plinth materials remain a separate subpage.</p><a class="action" href="./harisharan-adhikari/">Open project workspace →</a></article>
-</div></section></main>
-<footer>Research and project navigation only. Engineering and private Drive records remain governed separately. <a href="../">Home</a></footer></div><script defer src="../assets/js/cad-site-shell.js" data-cad-root="../"></script></body></html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Open real client CAD project workspaces and their source-linked drawings, reviews and revision histories.">
+<title>Client Projects · CAD/AAD</title>
+<link rel="stylesheet" href="../assets/css/cad-unified-theme.css">
+<style>
+:root{font:15px/1.5 system-ui,-apple-system,Segoe UI,sans-serif;background:#f4f7fa;color:#1b344a}*{box-sizing:border-box}body{margin:0}
+a{color:#205d90;text-underline-offset:3px}a:focus-visible,input:focus-visible{outline:3px solid #276da2;outline-offset:3px}
+main{max-width:1250px;padding:clamp(16px,3vw,40px);margin:auto}
+.hero{background:linear-gradient(125deg,#f1f6fb,#fff 75%);border:1px solid #d5e2ed;border-radius:18px;padding:clamp(22px,4vw,40px)}
+.eyebrow{text-transform:uppercase;letter-spacing:.1em;font-size:.74rem;color:#59758f;font-weight:850}
+h1{font-size:clamp(2rem,4vw,3.4rem);letter-spacing:-.05em;line-height:1.1;margin:10px 0 14px}.hero p{color:#506880;max-width:730px;line-height:1.7}
+.search{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:20px}.search label{font-weight:730}.search input{padding:12px 14px;border:1px solid #b7cad9;border-radius:10px;min-width:230px;max-width:100%;flex:1;font:inherit;background:#fff}
+.head{display:flex;justify-content:space-between;gap:15px;align-items:baseline;flex-wrap:wrap;margin:27px 0 15px}.head h2{font-size:1.3rem;margin:0}.head p{font-size:.88rem;color:#62768a;margin:0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.tile{background:#fff;border:1px solid #d4e1eb;border-radius:13px;padding:24px;display:flex;flex-direction:column;gap:8px;min-width:0}.tile h3{margin:4px 0;font-size:1.2rem}.tile p{font-size:.91rem;line-height:1.6;color:#597084;margin:0}.tag{font-size:.74rem;font-weight:750;text-transform:uppercase;letter-spacing:.05em;color:#446d8b}
+.tile .links{display:flex;gap:12px;flex-wrap:wrap;margin-top:auto;padding-top:15px}.tile .links a{display:inline-flex;align-items:center;text-decoration:none;padding:10px 13px;border:1px solid #c4d7e5;border-radius:8px;font-size:.86rem;font-weight:730}.tile .links a.primary{background:#245780;color:white;border-color:#245780}
+.source-note{border-left:4px solid #b5894f;background:#fff9ef;padding:14px 17px;border-radius:7px;font-size:.86rem;color:#695330;margin-top:22px;line-height:1.6}
+footer{margin-top:27px;color:#667d91;font-size:.83rem}.empty{padding:17px;color:#526c83;border:1px dashed #c7d5e2;border-radius:8px}
+@media(max-width:720px){.grid{grid-template-columns:1fr}.tile{padding:19px}.search{align-items:stretch}.search input{width:100%;flex-basis:100%}}
+</style></head><body>
+<main id="cad-main-content">
+<header class="hero">
+<div class="eyebrow">CAD / AAD · Client workspaces</div>
+<h1>Projects are for real buildings.</h1>
+<p>Each project keeps its own drawings, revisions, evidence, calculations and review status. Open the project to inspect linked 2D/3D views and public-safe source records. Original client files are retained in their governed Drive rooms, not copied into this public library.</p>
+<div class="search"><label for="project-filter">Find a project</label><input id="project-filter" type="search" placeholder="Search by client or project name…" autocomplete="off"></div>
+</header>
+<div class="head"><h2>Available project workspaces</h2><p id="project-count" aria-live="polite">4 listed</p></div>
+<section class="grid" id="project-grid" aria-label="Client project directory">
+<article class="tile" data-keywords="narayani parajuli PRJ-000007 residence">
+<div class="tag">PRJ-000007 · Source and engineering review</div><h3>Narayani Parajuli Residence</h3><p>Ground-floor source coordination, preserved V02–M80 construction packages and an M34 owner geometry overlay. Seven independent engineering checks remain open.</p>
+<div class="links"><a class="primary" href="./narayani-parajuli/">Open project</a><a href="./narayani-parajuli/aad/">Open 2D/3D studio</a></div></article>
+<article class="tile" data-keywords="ashok adhikari residence">
+<div class="tag">Architectural coordination · Review edition</div><h3>Ashok Adhikari</h3><p>Ground- and first-floor layout, staircase and source-axis coordination. These are project-specific working views, not construction approval.</p>
+<div class="links"><a class="primary" href="./ashok-adhikari/">Open project</a><a href="./ashok-adhikari/memory-wall/">Revision history</a></div></article>
+<article class="tile" data-keywords="harisharan adhikari residence">
+<div class="tag">Source-derived packages · Provisional</div><h3>Harisharan Adhikari</h3><p>Linked floor views, work-package records, quantities and site-stage evidence. Unsupported source/design details retain their review gates.</p>
+<div class="links"><a class="primary" href="./harisharan-adhikari/">Open project</a><a href="./harisharan-adhikari/review/">Open 2D/3D review</a></div></article>
+<article class="tile" data-keywords="ramachandra devkota residence">
+<div class="tag">Project information · Source status varies</div><h3>Ramachandra Devkota</h3><p>Public-safe project entry and existing records. Consult the project page for which original files and engineering evidence are admitted.</p>
+<div class="links"><a class="primary" href="./ramachandra-devkota/">Open project</a><a href="./ramachandra-devkota/memory-wall/">Revision history</a></div></article>
+</section>
+<p class="empty" id="project-empty" hidden>No matching project. Try another client or project name.</p>
+<p class="source-note"><b>Working on a new drawing?</b> Use <a href="../cad/aad/">Design Studio</a> for a synthetic sandbox. It never edits these client projects. <b>Looking for original DWG/DXF/PDF files?</b> Use the source references within the authorized project room; this public website is not an open Drive file server.</p>
+<footer><a href="../knowledge-centre/">Knowledge Centre</a> explains source authority, versioning and engineering approval boundaries.</footer>
+</main>
+<script>
+(()=>{
+ const input=document.getElementById("project-filter");
+ const cards=[...document.querySelectorAll("#project-grid .tile")];
+ const count=document.getElementById("project-count"),empty=document.getElementById("project-empty");
+ input.addEventListener("input",()=>{
+  const term=input.value.toLowerCase().trim();let visible=0;
+  for(const card of cards){const yes=!term||card.dataset.keywords.includes(term)||card.textContent.toLowerCase().includes(term);card.hidden=!yes;if(yes)visible++;}
+  count.textContent=visible+" of "+cards.length+" listed";empty.hidden=visible>0;
+ });
+})();
+</script>
+<script defer src="../assets/js/cad-site-shell.js" data-cad-root="../"></script>
+</body></html>
