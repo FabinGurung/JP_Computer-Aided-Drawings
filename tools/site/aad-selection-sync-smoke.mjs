@@ -10,7 +10,7 @@ try{
  deepLink.searchParams.set("manifest",manifest.pathname);
  await page.goto(deepLink.href,{waitUntil:"networkidle",timeout:70000});
  await page.waitForURL(/\/cad\/aad\/multistorey\//,{timeout:15000});
- assert.match(page.url(),/narayani-parajuli\/aad-building-v1\.json/);
+ assert.equal(new URL(page.url()).searchParams.get("manifest"),manifest.pathname);
  await page.locator("#viewer2d .aad-wall").first().waitFor({state:"attached",timeout:35000});
  await page.locator("#viewer3d canvas").waitFor({timeout:35000});
  await page.waitForFunction(()=>Boolean(window.AADStudio?.getSnapshot()?.assembly?.elements.length),null,{timeout:30000});
