@@ -75,7 +75,8 @@ iframe{display:block;border:0;width:100%;min-height:1200px;height:1460px;backgro
  }
  target.searchParams.set("manifest",new URL("../../data/projects/design-studio-sandbox/aad-building-v1.json",location.href).pathname);
  target.searchParams.set("sandbox","1");
- document.querySelector("#ds-editor").src=target.href;
+ const embedded=new URL(target.href);embedded.searchParams.set("embed","1");
+ document.querySelector("#ds-editor").src=embedded.href;
  document.querySelector("#ds-fullscreen").href=target.href;
 })();
 </script>
