@@ -16,12 +16,20 @@ export async function loadAADReviewedStructure(manifest,manifestURL,fetchJSON){
   throw Error("M26 invalid structural review mode or approval");
  if(typeof fetchJSON!=="function")throw Error("M26 source JSON fetcher required");
  const base=new URL("./",manifestURL),origin=base.origin;
+ // The frozen stage ledger intentionally retains legacy Pages absolute paths.
+ // Rebase ONLY that audited historical prefix to this manifest's live site root.
+ // Do not rewrite or mutate preserved source ledger files.
+ const siteRoot=new URL("../../../",base);
+ const historicalBase="/JP_Computer-Aided-Drawings/";
+ const stageRoot=new URL("stages/",siteRoot).pathname;
  const load=async (path,from=base)=>{
   if(typeof path!=="string"||!path.endsWith(".json")||path.includes(".."))
    throw Error("Invalid structural reference path");
-  const url=new URL(path,from);
-  if(url.origin!==origin||!url.pathname.includes("/JP_Computer-Aided-Drawings/"))
-   throw Error("Structural review reference is not same-origin project source");
+  const url=path.startsWith(historicalBase)?
+   new URL(path.slice(historicalBase.length),siteRoot):new URL(path,from);
+  if(url.origin!==origin||
+    !(url.pathname.startsWith(base.pathname)||url.pathname.startsWith(stageRoot)))
+   throw Error("Structural review reference is not a permitted same-origin project or frozen stage source");
   return await fetchJSON(url);
  };
  const [raw,stageLinks]=await Promise.all([
