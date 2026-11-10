@@ -51,7 +51,7 @@ jobs:
       - name: Build browser CAD app without unverified content
         run: |
           npm ci
-          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          npm run build -- --base=/jp-drawing-coordination/
       - name: Browser WebIFC and Three.js import acceptance
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
