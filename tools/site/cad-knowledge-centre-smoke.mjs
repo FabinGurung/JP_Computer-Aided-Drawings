@@ -28,7 +28,7 @@ for(const p of [
 assert(!html.includes("PRJ-000007__")&&!html.includes("1mosr2gahKr4j7xj6BmrIjz4vdCxBYetF"),"do not publish Drive folder IDs");
 const shell=readFileSync(resolve(root,"assets/js/cad-site-shell.js"),"utf8");
 assert(shell.includes('["Knowledge Centre","knowledge-centre/"]'),"Knowledge Centre must be in global primary menu");
-assert(shell.includes('["CAD Memory Wall","memory-wall/"]'),"old CAD Memory Wall must remain discoverable");
+assert(shell.includes('["Shared CAD rules","memory-wall/"]'),"old CAD Memory Wall must remain discoverable");
 for(const p of [
  "index.html","memory-wall/index.html","memory-wall/pages/index.html",
  "templates/project-workspace/control-tower/index.html"
