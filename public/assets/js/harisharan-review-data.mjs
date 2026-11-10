@@ -12,7 +12,7 @@ export const SOURCE_FINGERPRINTS = Object.freeze({
   architectural: '8429a256588c87c7f1cef5ae6a25006ee5f1e5b3ac7d6c5c27423efa4cc908e9',
   report: '8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35'
 });
-const repository = 'https://github.com/FabinGurung/JP_Computer-Aided-Drawings';
+const repository = 'https://github.com/FabinGurung/jp-drawing-coordination';
 export const REVIEW_HOLDS = Object.freeze([
  {id:'HAR-01',stage:'m40',title:'Concrete grade and mixing',sources:'STR-01/03/05 vs revised structural report (Materials)',finding:'M20 appears on structural drawings; revised report design tables apply M25. 350 kg/m³ is only a planning scenario, never a tested mix.',state:'ENGINEERING HOLD',required:'Signed adopted grade and approved concrete mix design, batch-test evidence.',issue:101},
  {id:'HAR-02',stage:'m40',title:'Footing casting profile',sources:'STR-02 footing section vs 600 mm SAFE analysis property',finding:'F1/F2 geometric volumes use full rectangular prisms. Drawn slopes lack sufficient dimensions for net as-built casting quantities.',state:'ENGINEERING HOLD',required:'Engineer-issued edge thickness, plateau/slope break coordinates, founding levels and intersections.',issue:97},
