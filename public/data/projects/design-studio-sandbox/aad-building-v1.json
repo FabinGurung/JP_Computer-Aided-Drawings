@@ -1,0 +1,70 @@
+{
+  "schema": "jp-cad://aad-building/1",
+  "projectId": "AAD-SANDBOX-001",
+  "name": "Design Studio · Your private drawing sandbox",
+  "revision": "SANDBOX_V01",
+  "representation": "ARCHITECTURAL_REVIEW_ONLY",
+  "coordinateSystem": {
+    "axes": "Local X and Z plan metres; Y vertical metres",
+    "units": "m",
+    "worldOrigin": "SYNTHETIC_UNSURVEYED_ORIGIN"
+  },
+  "levels": [
+    {
+      "id": "gf",
+      "name": "Drawing floor",
+      "elevation": 0,
+      "height": 3,
+      "model": "drawing-floor.json",
+      "sourceArea": 48,
+      "transform": {
+        "x": 0,
+        "z": 0,
+        "rotationDeg": 0
+      },
+      "status": "SYNTHETIC_EDITABLE_SAMPLE"
+    },
+    {
+      "id": "ff",
+      "name": "Optional upper floor",
+      "elevation": 3,
+      "height": 3,
+      "model": "upper-floor.json",
+      "sourceArea": 48,
+      "transform": {
+        "x": 0,
+        "z": 0,
+        "rotationDeg": 0
+      },
+      "status": "SYNTHETIC_EDITABLE_SAMPLE"
+    }
+  ],
+  "sourceAuthority": {
+    "authority": "SYNTHETIC_DEMO_ONLY",
+    "noClientFiles": true,
+    "noSourceDrawings": true
+  },
+  "reviewHolds": [
+    {
+      "code": "DRAWING_SANDBOX_NOT_ENGINEERING",
+      "message": "All drawing geometry is a user-editable demo. No permit, structural loads, reinforcement, survey or engineering signoff."
+    }
+  ],
+  "restrictions": {
+    "engineeringApproval": "NOT_APPLICABLE_DEMO",
+    "issueForConstruction": false,
+    "sourceAuthority": "SYNTHETIC_ONLY"
+  },
+  "assumptions": [
+    {
+      "code": "ROOM_DIMENSIONS",
+      "status": "EXAMPLE_ONLY",
+      "decision": "8 m × 6 m sample rectangle for demonstrating pointer drawing."
+    },
+    {
+      "code": "EXTRUSION",
+      "status": "VISUALIZATION_ONLY",
+      "decision": "Wall height 3 m is synthetic and not structural design."
+    }
+  ]
+}
