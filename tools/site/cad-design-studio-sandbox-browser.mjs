@@ -28,7 +28,12 @@ try{
  assert(await editor.locator("#viewer3d canvas").count()===1,"shared 3D renderer must be available in desktop QA");
  const initial=await countWalls(page);
  assert.equal(initial,4);
+ await editor.locator("#viewer2d").scrollIntoViewIfNeeded();
  const first=await point(page,2,3),last=await point(page,6,3);
+ const canvasRect=await editor.locator("#viewer2d").boundingBox();
+ console.log("CAD_SANDBOX_MOUSE_POINTER",JSON.stringify({first,last,canvasRect,viewport:{width:1400,height:900}}));
+ assert(first.outerX>0&&first.outerX<1400&&first.outerY>0&&first.outerY<900,"draw start must be inside viewport");
+ assert(last.outerX>0&&last.outerX<1400&&last.outerY>0&&last.outerY<900,"draw end must be inside viewport");
  await page.mouse.move(first.outerX,first.outerY);
  await page.mouse.down();
  await page.mouse.move(last.outerX,last.outerY,{steps:12});
