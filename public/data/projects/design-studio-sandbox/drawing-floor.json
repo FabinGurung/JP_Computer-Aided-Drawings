@@ -1,0 +1,93 @@
+{
+  "schema": "jp-cad://linked-one-bay-demo/0.5",
+  "length": 8,
+  "width": 6,
+  "height": 3,
+  "door": 0.9,
+  "window": 1.2,
+  "bed": false,
+  "wallThickness": 0.16,
+  "doorX": 1.4,
+  "windowX": 2.5,
+  "roomCount": 1,
+  "floorGraph": {
+    "nodes": [
+      {
+        "id": "GF-N1",
+        "x": 0,
+        "z": 0
+      },
+      {
+        "id": "GF-N2",
+        "x": 8,
+        "z": 0
+      },
+      {
+        "id": "GF-N3",
+        "x": 8,
+        "z": 6
+      },
+      {
+        "id": "GF-N4",
+        "x": 0,
+        "z": 6
+      }
+    ],
+    "walls": [
+      {
+        "id": "GF-E1",
+        "a": "GF-N1",
+        "b": "GF-N2",
+        "thickness": 0.16
+      },
+      {
+        "id": "GF-E2",
+        "a": "GF-N2",
+        "b": "GF-N3",
+        "thickness": 0.16
+      },
+      {
+        "id": "GF-E3",
+        "a": "GF-N3",
+        "b": "GF-N4",
+        "thickness": 0.16
+      },
+      {
+        "id": "GF-E4",
+        "a": "GF-N4",
+        "b": "GF-N1",
+        "thickness": 0.16
+      }
+    ],
+    "openings": [
+      {
+        "id": "GF-D1",
+        "wallId": "GF-E1",
+        "kind": "door",
+        "offset": 1.1,
+        "width": 0.9,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "GF-W1",
+        "wallId": "GF-E3",
+        "kind": "window",
+        "offset": 2.5,
+        "width": 1.2,
+        "sill": 0.9,
+        "height": 1.2
+      }
+    ],
+    "labels": {
+      "GF-R1": "Sample open room"
+    },
+    "perimeter": [
+      "GF-E1",
+      "GF-E2",
+      "GF-E3",
+      "GF-E4"
+    ]
+  },
+  "projectNote": "SYNTHETIC_PUBLIC_DEMO_ONLY. No client evidence or construction approval; save edits locally or export working JSON."
+}
