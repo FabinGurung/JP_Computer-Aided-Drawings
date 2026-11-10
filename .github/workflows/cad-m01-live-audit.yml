@@ -1,17 +1,14 @@
 name: CAD M01 Live Pages Readback
 on:
-  push:
-    branches: [main]
-    paths: [.github/workflows/cad-m01-live-audit.yml]
-  pull_request:
-    paths: [.github/workflows/cad-m01-live-audit.yml]
+  # Validate only the actual published site after a successful deployment.
+  # PRs or source pushes must never probe an as-yet-unpublished new Pages base.
   workflow_run:
     workflows: ["CAD Main GitHub Pages (validated CAD publishing)"]
     types: [completed]
 permissions: {contents: read}
 jobs:
   live-readback:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - name: Validate deployed CAD routes and real assets without writing
