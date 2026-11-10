@@ -1,0 +1,50 @@
+name: Harisharan R5 Owner Direction and Research QA
+on:
+  pull_request:
+    paths:
+      - "public/projects/harisharan-adhikari/owner-review/**"
+      - "public/data/projects/harisharan-adhikari/owner-research-r000001.json"
+      - "public/assets/js/harisharan-r5-owner-review.mjs"
+      - "tools/site/harisharan-r5-owner-*.mjs"
+      - ".github/workflows/harisharan-r5-owner-qa.yml"
+  push:
+    branches: [main]
+    paths:
+      - "public/projects/harisharan-adhikari/owner-review/**"
+      - "public/data/projects/harisharan-adhikari/owner-research-r000001.json"
+      - "public/assets/js/harisharan-r5-owner-review.mjs"
+      - "tools/site/harisharan-r5-owner-*.mjs"
+      - ".github/workflows/harisharan-r5-owner-qa.yml"
+permissions: {contents: read}
+jobs:
+  source-and-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: "22", cache: npm}
+      - run: npm ci
+      - name: Verify nine owner directions against immutable source SHA and scenario math
+        run: |
+          node --check public/assets/js/harisharan-r5-owner-review.mjs
+          node tools/site/harisharan-r5-owner-smoke.mjs
+      - name: Verify mobile and desktop R5 pages and render evidence
+        run: |
+          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          python tools/site/check_public_routes.py dist
+          npm install --no-save --no-package-lock playwright@1.55.0
+          npx playwright install --with-deps chromium
+          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/har-r5-preview.log 2>&1 &)
+          for attempt in $(seq 1 35); do
+            if curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/harisharan-adhikari/owner-review/ >/dev/null; then break; fi
+            sleep 2
+          done
+          node tools/site/harisharan-r5-owner-browser.mjs
+      - name: Preserve real R5 source-review screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: harisharan-r5-scenario-qa-previews
+          path: /tmp/harisharan-r5-owner-scenarios-*.png
+          if-no-files-found: ignore
