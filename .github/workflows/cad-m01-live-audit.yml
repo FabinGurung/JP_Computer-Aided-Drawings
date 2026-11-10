@@ -11,13 +11,13 @@ on:
 permissions: {contents: read}
 jobs:
   live-readback:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - name: Validate deployed CAD routes and real assets without writing
         run: |
           set -euo pipefail
-          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          BASE="https://fabingurung.github.io/jp-drawing-coordination/"
           for attempt in $(seq 1 12); do
             if curl --max-time 15 -fsSL "${BASE}cad/" -o /tmp/cad-live.html &&
                grep -q 'OPEN ARCHITECTURE' /tmp/cad-live.html; then break; fi
@@ -56,18 +56,29 @@ jobs:
           p=AssetParser();p.feed(open("/tmp/cad-live.html").read())
           assert p.assets, "No Vite application script found"
           for asset in p.assets:
-              url=urljoin("https://fabingurung.github.io/JP_Computer-Aided-Drawings/cad/",asset)
+              url=urljoin("https://fabingurung.github.io/jp-drawing-coordination/cad/",asset)
               with urlopen(url,timeout=20) as response:
                   assert response.status==200
                   assert "javascript" in response.headers.get("Content-Type","") or url.endswith(".js")
               print("LIVE_CAD_SCRIPT_PASS",url)
+          PY
+          curl -fsSL "${BASE}cad/aad/" -o /tmp/cad-design-studio-live.html
+          grep -q 'Draw a wall in 2D' /tmp/cad-design-studio-live.html
+          curl -fsSL "${BASE}data/projects/design-studio-sandbox/aad-building-v1.json" -o /tmp/cad-sandbox-live.json
+          python - <<'PY'
+          import json
+          model=json.load(open("/tmp/cad-sandbox-live.json"))
+          assert model["projectId"]=="AAD-SANDBOX-001"
+          assert model["representation"]=="ARCHITECTURAL_REVIEW_ONLY"
+          assert model["restrictions"]["issueForConstruction"] is False
+          print("CAD_PUBLIC_STUDIO_SANDBOX_READBACK_PASS")
           PY
           echo "CAD_M01_PUBLIC_LIVE_READBACK_PASS"
 
       - name: Independently read back canonical AAD, project adapter, shared model, and exported IFC4
         run: |
           set -euo pipefail
-          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          BASE="https://fabingurung.github.io/jp-drawing-coordination/"
           for attempt in $(seq 1 15); do
             if curl -fsSL --max-time 20 "${BASE}cad/aad/" -o /tmp/aad-template-live.html &&
                grep -q "Canonical AI-Aided Building Design Studio" /tmp/aad-template-live.html; then break; fi
@@ -114,14 +125,14 @@ jobs:
         run: |
           set -euo pipefail
           for attempt in $(seq 1 14); do
-            if curl -fsSL --max-time 20 "https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/" -o /tmp/aad-ai-live-page.html &&
+            if curl -fsSL --max-time 20 "https://fabingurung.github.io/jp-drawing-coordination/projects/aad-ai-demo/aad/" -o /tmp/aad-ai-live-page.html &&
                grep -q 'id="aad-unified-engine"' /tmp/aad-ai-live-page.html; then break; fi
             sleep 10
           done
           grep -q 'id="aad-unified-engine"' /tmp/aad-ai-live-page.html
-          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/aad-building-v1.json" -o /tmp/aad-ai-live-manifest.json
-          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/aad-ai-qa.json" -o /tmp/aad-ai-live-qa.json
-          curl -fsSL "https://fabingurung.github.io/JP_Computer-Aided-Drawings/data/projects/aad-ai-demo/AAD-DEMO-001_AAD_CONCEPTUAL_2STOREY_IFC4.ifc" -o /tmp/aad-ai-live-ifc.ifc
+          curl -fsSL "https://fabingurung.github.io/jp-drawing-coordination/data/projects/aad-ai-demo/aad-building-v1.json" -o /tmp/aad-ai-live-manifest.json
+          curl -fsSL "https://fabingurung.github.io/jp-drawing-coordination/data/projects/aad-ai-demo/aad-ai-qa.json" -o /tmp/aad-ai-live-qa.json
+          curl -fsSL "https://fabingurung.github.io/jp-drawing-coordination/data/projects/aad-ai-demo/AAD-DEMO-001_AAD_CONCEPTUAL_2STOREY_IFC4.ifc" -o /tmp/aad-ai-live-ifc.ifc
           python - <<'PY'
           import json
           from pathlib import Path
@@ -160,14 +171,14 @@ jobs:
       - name: Independently verify LIVE SVG Three.js component register and IFC4 from one source model
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
-          AAD_M26_PROJECT_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/
+          AAD_M26_PROJECT_URL: https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/
         run: |
           node tools/site/aad-m26-primary-studio-browser-smoke.mjs
-          AAD_M29_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m29-primary-studio-browser-smoke.mjs
-          AAD_M30_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m30-source-browser-smoke.mjs
-          AAD_M32_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m32-native-strip-browser-smoke.mjs
-          AAD_M33_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m33-source-registration-browser-smoke.mjs
-          AAD_M34_PROJECT_URL="https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/" node tools/site/aad-m34-owner-source-browser-smoke.mjs
+          AAD_M29_PROJECT_URL="https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/" node tools/site/aad-m29-primary-studio-browser-smoke.mjs
+          AAD_M30_PROJECT_URL="https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/" node tools/site/aad-m30-source-browser-smoke.mjs
+          AAD_M32_PROJECT_URL="https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/" node tools/site/aad-m32-native-strip-browser-smoke.mjs
+          AAD_M33_PROJECT_URL="https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/" node tools/site/aad-m33-source-registration-browser-smoke.mjs
+          AAD_M34_PROJECT_URL="https://fabingurung.github.io/jp-drawing-coordination/projects/narayani-parajuli/aad/" node tools/site/aad-m34-owner-source-browser-smoke.mjs
       - name: Archive evidence screenshot of live M26 primary studio
         if: always() && github.event_name == 'workflow_run'
         uses: actions/upload-artifact@v4
@@ -184,17 +195,17 @@ jobs:
       - name: Verify live Ashok route and shared model on phone tablet and desktop
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
-          ASHOK_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/projects/ashok-adhikari/
+          ASHOK_URL: https://fabingurung.github.io/jp-drawing-coordination/projects/ashok-adhikari/
         run: |
           node tools/site/ashok-rev04-browser.mjs
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
-          PROJECT_SITE_URL=https://fabingurung.github.io/JP_Computer-Aided-Drawings/ node tools/site/ashok-grid-browser.mjs
+          PROJECT_SITE_URL=https://fabingurung.github.io/jp-drawing-coordination/ node tools/site/ashok-grid-browser.mjs
       - name: Verify live Harisharan R1-R4 source, routes, and approved-status gates
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         run: |
           set -euo pipefail
-          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          BASE="https://fabingurung.github.io/jp-drawing-coordination/"
           curl -fsSL --max-time 25 "${BASE}projects/harisharan-adhikari/review/" -o /tmp/harisharan-review-live.html
           grep -q 'id="review-2d"' /tmp/harisharan-review-live.html
           grep -q 'id="review-3d"' /tmp/harisharan-review-live.html
@@ -218,7 +229,7 @@ jobs:
       - name: Verify LIVE Harisharan source-linked 2D-axonometric and member exports
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
-          PROJECT_SITE_URL: https://fabingurung.github.io/JP_Computer-Aided-Drawings/
+          PROJECT_SITE_URL: https://fabingurung.github.io/jp-drawing-coordination/
         run: |
           node tools/site/harisharan-review-ledger-browser.mjs
           node tools/site/harisharan-upper-floor-browser.mjs
@@ -226,7 +237,7 @@ jobs:
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         run: |
           set -euo pipefail
-          BASE="https://fabingurung.github.io/JP_Computer-Aided-Drawings/"
+          BASE="https://fabingurung.github.io/jp-drawing-coordination/"
           curl -fsSL --max-time 30 "${BASE}projects/harisharan-adhikari/upper-floors/" -o /tmp/harisharan-upper-floor.html
           grep -q 'NOT FOR CONSTRUCTION' /tmp/harisharan-upper-floor.html
           grep -q 'id="plan"' /tmp/harisharan-upper-floor.html
@@ -245,7 +256,7 @@ jobs:
       - name: Verify live Code Library and CAD Memory Wall
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         env:
-          CAD_REFERENCE_BASE: https://fabingurung.github.io/JP_Computer-Aided-Drawings/
+          CAD_REFERENCE_BASE: https://fabingurung.github.io/jp-drawing-coordination/
         run: node tools/site/aad-code-library-browser.mjs
       - name: Archive live Ashok working studio QA
         if: always() && github.event_name == 'workflow_run'

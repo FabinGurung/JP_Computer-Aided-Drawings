@@ -1,0 +1,93 @@
+{
+  "schema": "jp-cad://linked-one-bay-demo/0.5",
+  "length": 8,
+  "width": 6,
+  "height": 3,
+  "door": 0.9,
+  "window": 1.2,
+  "bed": false,
+  "wallThickness": 0.16,
+  "doorX": 1.4,
+  "windowX": 2.5,
+  "roomCount": 1,
+  "floorGraph": {
+    "nodes": [
+      {
+        "id": "FF-N1",
+        "x": 0,
+        "z": 0
+      },
+      {
+        "id": "FF-N2",
+        "x": 8,
+        "z": 0
+      },
+      {
+        "id": "FF-N3",
+        "x": 8,
+        "z": 6
+      },
+      {
+        "id": "FF-N4",
+        "x": 0,
+        "z": 6
+      }
+    ],
+    "walls": [
+      {
+        "id": "FF-E1",
+        "a": "FF-N1",
+        "b": "FF-N2",
+        "thickness": 0.16
+      },
+      {
+        "id": "FF-E2",
+        "a": "FF-N2",
+        "b": "FF-N3",
+        "thickness": 0.16
+      },
+      {
+        "id": "FF-E3",
+        "a": "FF-N3",
+        "b": "FF-N4",
+        "thickness": 0.16
+      },
+      {
+        "id": "FF-E4",
+        "a": "FF-N4",
+        "b": "FF-N1",
+        "thickness": 0.16
+      }
+    ],
+    "openings": [
+      {
+        "id": "FF-D1",
+        "wallId": "FF-E1",
+        "kind": "door",
+        "offset": 1.1,
+        "width": 0.9,
+        "sill": 0,
+        "height": 2.1
+      },
+      {
+        "id": "FF-W1",
+        "wallId": "FF-E3",
+        "kind": "window",
+        "offset": 2.5,
+        "width": 1.2,
+        "sill": 0.9,
+        "height": 1.2
+      }
+    ],
+    "labels": {
+      "FF-R1": "Sample open room"
+    },
+    "perimeter": [
+      "FF-E1",
+      "FF-E2",
+      "FF-E3",
+      "FF-E4"
+    ]
+  },
+  "projectNote": "SYNTHETIC_PUBLIC_DEMO_ONLY. No client evidence or construction approval; save edits locally or export working JSON."
+}

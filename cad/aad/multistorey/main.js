@@ -765,6 +765,7 @@ function setDrawMode(next){
  drawMode=Boolean(next);drawFirst=null;
  $("aad-draw-wall").classList.toggle("is-active",drawMode);
  $("aad-draw-wall").setAttribute("aria-pressed",String(drawMode));
+ const quick=$("aad-sandbox-draw");if(quick){quick.setAttribute("aria-pressed",String(drawMode));quick.textContent=drawMode?"Drawing wall · on":"Draw wall";}
  $("viewer2d").style.cursor=drawMode?"crosshair":"default";
  $("aad-topology-help").textContent=drawMode?
  "Draw mode: choose GF/FF/SF and click two points inside the plan. Existing walls and junctions snap/split automatically. Escape cancels.":
@@ -1178,6 +1179,15 @@ async function main(){
    select:id=>window.AADStudio.selectElementById(id)
   });
  }
+ if(isDrawingSandbox){
+  const toolbar=document.createElement("button");
+  toolbar.id="aad-sandbox-draw";toolbar.type="button";
+  toolbar.textContent="Draw wall";toolbar.setAttribute("aria-pressed","false");
+  document.querySelector("#viewport2d .viewport-title")?.append(toolbar);
+  toolbar.addEventListener("click",()=>setDrawMode(!drawMode));
+  setLevel("gf");setViewMode("split");setDrawMode(true);
+  status("Sandbox ready: drag a 2D wall with a finger/mouse, or tap two points. 3D updates from the same working model.");
+ }
  document.dispatchEvent(new Event("aad-studio-ready"));
 }
 for(const [id,stateKey]of [['aad-cutaway','cutaway'],['aad-dimensions','dimensions'],['aad-plan-grid','grid'],['aad-furniture','furniture']]){
@@ -1250,7 +1260,70 @@ $("download-ifc").addEventListener("click",()=>{
 $("download-json").addEventListener("click",()=>{if(building)download(building.projectId+"_AAD_MULTISTOREY_A01.json",JSON.stringify(building,null,2),"application/json");});
 
 
-$("viewer2d").addEventListener("click",e=>{if(drawMode&&e.target===$("viewer2d"))recordDrawPoint(e);});
+// Draw-mode pointer controls belong to the SAME AAD topology/2D/3D engine.
+// Tap/click two points, or drag one stroke on the isolated synthetic sandbox.
+const drawingSvg=$("viewer2d");
+const isDrawingSandbox=params.get("sandbox")==="1"&&chosen?.includes("/design-studio-sandbox/");
+let drawGesture=null,ignoreDrawClick=false;
+const svgPointForPointer=event=>{
+ const transform=drawingSvg.getScreenCTM();
+ if(!transform)return null;
+ return new DOMPoint(event.clientX,event.clientY).matrixTransform(transform.inverse());
+};
+const removeStrokePreview=()=>drawingSvg.querySelector("[data-draw-stroke-preview]")?.remove();
+drawingSvg.addEventListener("pointerdown",event=>{
+ if(!isDrawingSandbox||!drawMode||!workspace||activeLevel==="all"||event.isPrimary===false)return;
+ if(event.pointerType==="mouse"&&event.button!==0)return;
+ const local=planLocalPoint(event),view=svgPointForPointer(event);
+ if(!view)return;
+ drawGesture={pointerId:event.pointerId,startX:event.clientX,startY:event.clientY,local,view};
+ try{drawingSvg.setPointerCapture(event.pointerId);}catch(_){}
+});
+drawingSvg.addEventListener("pointermove",event=>{
+ const d=drawGesture;
+ if(!d||event.pointerId!==d.pointerId||!drawMode)return;
+ if(Math.hypot(event.clientX-d.startX,event.clientY-d.startY)<12){removeStrokePreview();return;}
+ const p=svgPointForPointer(event);
+ if(!p)return;
+ let line=drawingSvg.querySelector("[data-draw-stroke-preview]");
+ if(!line){
+  line=document.createElementNS(svgNS,"line");
+  line.setAttribute("data-draw-stroke-preview","true");
+  line.setAttribute("pointer-events","none");
+  line.setAttribute("stroke","#dc7140");
+  line.setAttribute("stroke-width",".11");
+  line.setAttribute("stroke-dasharray",".22 .12");
+  drawingSvg.append(line);
+ }
+ for(const [key,value] of Object.entries({x1:d.view.x,y1:d.view.y,x2:p.x,y2:p.y}))line.setAttribute(key,String(value));
+});
+drawingSvg.addEventListener("pointerup",event=>{
+ const d=drawGesture;
+ if(!d||event.pointerId!==d.pointerId)return;
+ drawGesture=null;removeStrokePreview();
+ try{drawingSvg.releasePointerCapture(event.pointerId);}catch(_){}
+ if(!drawMode||Math.hypot(event.clientX-d.startX,event.clientY-d.startY)<14)return;
+ try{
+  const end=planLocalPoint(event);
+  if(Math.hypot(end.x-d.local.x,end.z-d.local.z)<.25)return;
+  ignoreDrawClick=true;
+  setTimeout(()=>{ignoreDrawClick=false;},100);
+  event.preventDefault();
+  setDrawMode(false);
+  applyTopology(activeLevel,"addWall",{start:d.local,end,thickness:.15});
+ }catch(error){status("Wall stroke rejected: "+error.message);}
+});
+drawingSvg.addEventListener("pointercancel",()=>{
+ drawGesture=null;removeStrokePreview();
+});
+drawingSvg.addEventListener("click",event=>{
+ if(ignoreDrawClick){ignoreDrawClick=false;event.preventDefault();event.stopImmediatePropagation();return;}
+ if(drawMode){
+  // Capture ensures floor background, existing wall footprints and SVG children
+  // all allow an exact single tap/click, without double-handling bubbled events.
+  event.preventDefault();event.stopImmediatePropagation();recordDrawPoint(event);
+ }
+},true);
 $("aad-draw-wall").addEventListener("click",()=>setDrawMode(!drawMode));
 $("aad-split-wall").addEventListener("click",()=>topologyButton("splitWall"));
 $("aad-delete-wall").addEventListener("click",()=>topologyButton("removeWall"));

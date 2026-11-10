@@ -48,6 +48,7 @@ jobs:
           node tools/site/project-workspace-smoke.mjs
           node tools/site/cad-control-tower-smoke.mjs
           node tools/site/cad-knowledge-centre-smoke.mjs
+          node tools/site/cad-design-studio-sandbox-smoke.mjs
           node tools/site/cad-source-axis-contract-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
@@ -97,7 +98,7 @@ jobs:
             slug=$(node -e 'console.log(JSON.parse(require("fs").readFileSync(process.argv[1],"utf8")).project.slug)' "$spec")
             node tools/site/aad-validate-project.mjs "public/data/projects/$slug/aad-building-v1.json"
           done
-      - run: npm run build -- --base=/JP_Computer-Aided-Drawings/
+      - run: npm run build -- --base=/jp-drawing-coordination/
       - run: python tools/site/check_public_routes.py dist
       - name: Build deterministic Narayani IFC4 and unified AAD multistorey model
         run: node tools/site/aad-building-build.mjs
@@ -113,21 +114,21 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
           npx playwright install --with-deps chromium
-          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/cad-release-preview.log 2>&1 &)
-          for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ >/dev/null && break; sleep 2; done
-          CAD_AAD_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
-          AAD_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
-          AAD_M26_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
-          AAD_M29_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m29-primary-studio-browser-smoke.mjs
-          AAD_M30_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m30-source-browser-smoke.mjs
-          AAD_M32_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m32-native-strip-browser-smoke.mjs
-          AAD_M33_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m33-source-registration-browser-smoke.mjs
-          AAD_M34_PROJECT_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/narayani-parajuli/aad/ node tools/site/aad-m34-owner-source-browser-smoke.mjs
-          AAD_BUILDING_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
-          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
-          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
-          AAD_AI_DEMO_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
-          ASHOK_URL=http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
+          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/jp-drawing-coordination/ > /tmp/cad-release-preview.log 2>&1 &)
+          for i in $(seq 1 35); do curl -fsS http://127.0.0.1:5191/jp-drawing-coordination/cad/aad/ >/dev/null && break; sleep 2; done
+          CAD_AAD_URL=http://127.0.0.1:5191/jp-drawing-coordination/cad/aad/legacy/ node tools/site/cad-aad-linked-smoke.mjs
+          AAD_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-narayani-browser-smoke.mjs
+          AAD_M26_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m26-primary-studio-browser-smoke.mjs
+          AAD_M29_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m29-primary-studio-browser-smoke.mjs
+          AAD_M30_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m30-source-browser-smoke.mjs
+          AAD_M32_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m32-native-strip-browser-smoke.mjs
+          AAD_M33_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m33-source-registration-browser-smoke.mjs
+          AAD_M34_PROJECT_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/narayani-parajuli/aad/ node tools/site/aad-m34-owner-source-browser-smoke.mjs
+          AAD_BUILDING_URL=http://127.0.0.1:5191/jp-drawing-coordination/cad/aad/multistorey/ node tools/site/aad-building-browser-smoke.mjs
+          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/jp-drawing-coordination/cad/aad/ node tools/site/aad-selection-sync-smoke.mjs
+          CAD_AAD_TEMPLATE_URL=http://127.0.0.1:5191/jp-drawing-coordination/cad/aad/ node tools/site/aad-topology-browser-smoke.mjs
+          AAD_AI_DEMO_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
+          ASHOK_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
           node tools/site/cad-source-axis-contract-browser.mjs

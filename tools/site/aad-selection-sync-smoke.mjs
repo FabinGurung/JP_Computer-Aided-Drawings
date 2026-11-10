@@ -5,9 +5,12 @@ const page=await browser.newPage({viewport:{width:1560,height:930}});
 const errors=[];page.on("pageerror",e=>errors.push(e.message));
 try{
  const canonical=process.env.CAD_AAD_TEMPLATE_URL||"http://127.0.0.1:5191/JP_Computer-Aided-Drawings/cad/aad/";
- await page.goto(canonical,{waitUntil:"networkidle",timeout:70000});
+ const deepLink=new URL(canonical);
+ const manifest=new URL("../../data/projects/narayani-parajuli/aad-building-v1.json",deepLink);
+ deepLink.searchParams.set("manifest",manifest.pathname);
+ await page.goto(deepLink.href,{waitUntil:"networkidle",timeout:70000});
  await page.waitForURL(/\/cad\/aad\/multistorey\//,{timeout:15000});
- assert.match(page.url(),/example=narayani/);
+ assert.equal(new URL(page.url()).searchParams.get("manifest"),manifest.pathname);
  await page.locator("#viewer2d .aad-wall").first().waitFor({state:"attached",timeout:35000});
  await page.locator("#viewer3d canvas").waitFor({timeout:35000});
  await page.waitForFunction(()=>Boolean(window.AADStudio?.getSnapshot()?.assembly?.elements.length),null,{timeout:30000});
