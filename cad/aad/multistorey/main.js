@@ -765,6 +765,7 @@ function setDrawMode(next){
  drawMode=Boolean(next);drawFirst=null;
  $("aad-draw-wall").classList.toggle("is-active",drawMode);
  $("aad-draw-wall").setAttribute("aria-pressed",String(drawMode));
+ const quick=$("aad-sandbox-draw");if(quick){quick.setAttribute("aria-pressed",String(drawMode));quick.textContent=drawMode?"Drawing wall · on":"Draw wall";}
  $("viewer2d").style.cursor=drawMode?"crosshair":"default";
  $("aad-topology-help").textContent=drawMode?
  "Draw mode: choose GF/FF/SF and click two points inside the plan. Existing walls and junctions snap/split automatically. Escape cancels.":
