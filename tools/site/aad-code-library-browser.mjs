@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import {chromium} from 'playwright';
-const base=process.env.CAD_REFERENCE_BASE||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/';
+const base=process.env.CAD_REFERENCE_BASE||'http://127.0.0.1:5191/jp-drawing-coordination/';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
 try{for(const width of [320,360,390,768,1440]){
  const page=await browser.newPage({viewport:{width,height:950}}),errors=[];page.on('pageerror',e=>errors.push(e.message));

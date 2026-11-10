@@ -8,9 +8,9 @@ const read=x=>JSON.parse(fs.readFileSync(base+x,"utf8"));
 const m=read("aad-building-v1.json"),ev=read("aad-m28-owner-verification-20261027.json"),
  report=read("aad-m28-reconciliation-20261027.json"),
  dxf=read("aad-source-gf-review-v1.json"),qa=read("aad-user-qa-decisions-v1.json");
-const url=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const url=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(m,url,async u=>
- JSON.parse(fs.readFileSync("public/"+u.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ JSON.parse(fs.readFileSync("public/"+u.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 assert.equal(ev.exactStatement,"i verify and approve it. now get to the next stage.");
 assert.equal(review.ownerVerificationEventId,ev.eventId);
 assert.equal(report.ownerVerificationEventId,ev.eventId);

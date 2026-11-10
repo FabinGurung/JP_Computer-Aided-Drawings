@@ -56,9 +56,9 @@ assert.equal(ledger.currentVersion,"M34-20261101_OWNER_OBSERVATION_RECONCILED");
 assert.equal(ledger.issues.filter(i=>i.engineeringGate==="OPEN").length,7);
 assert.equal(ledger.noFurtherOwnerLayoutApprovalRequired,true);
 const models=Object.fromEntries(manifest.levels.map(x=>[x.id,read(x.model)]));
-const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const root=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,root,async u=>JSON.parse(
- fs.readFileSync("public/"+u.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ fs.readFileSync("public/"+u.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 const building=assembleBuilding(manifest,models,{reviewStructure:review});
 assert.deepEqual([building.counts.column,building.counts.footing,building.counts.beam],[23,21,16]);
 assert.equal(building.elements.filter(x=>["ff","sf"].includes(x.level)&&

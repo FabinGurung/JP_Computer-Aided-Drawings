@@ -9,9 +9,9 @@ const read=n=>JSON.parse(fs.readFileSync(dir+n,"utf8"));
 const manifest=read("aad-building-v1.json"),ledger=read("aad-source-gf-review-v1.json"),
  control=read("aad-m29-datum-upper-projection-20261027.json");
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,read(l.model)]));
-const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const root=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,root,async url=>
- JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 const ev=deriveM29DatumEvidence(ledger,manifest,models,review);
 assert.equal(ev.schema,"jp-cad://aad-m29-partial-dxf-datum-projection/1");
 assert.equal(ev.sourceSegments.length,control.sourceEdgeEvidence.edgeSegments);

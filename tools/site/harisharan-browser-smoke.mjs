@@ -1,5 +1,5 @@
 import {chromium} from 'playwright';import assert from 'node:assert/strict';
-const url=process.env.HARISHARAN_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/harisharan-adhikari/plinth/';
+const url=process.env.HARISHARAN_URL||'http://127.0.0.1:5191/jp-drawing-coordination/projects/harisharan-adhikari/plinth/';
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
 try{for(const [name,width,height] of [['desktop',1440,1000],['mobile',390,844]]){
  const page=await browser.newPage({viewport:{width,height}}),errors=[];page.on('pageerror',e=>errors.push(e.message));const response=await page.goto(url);assert.equal(response.status(),200);await page.waitForFunction(()=>document.getElementById('steel-net')?.textContent.includes('t'));

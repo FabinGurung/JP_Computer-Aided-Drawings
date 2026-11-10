@@ -13,12 +13,12 @@ const project="public/data/projects/narayani-parajuli/";
 const parse=p=>JSON.parse(fs.readFileSync(p,"utf8"));
 const manifest=parse(project+"aad-building-v1.json");
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,parse(project+l.model)]));
-const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const root=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const loads=[];
 const review=await loadAADReviewedStructure(manifest,root,async url=>{
  assert.equal(url.origin,"https://example.test");
- assert.ok(url.pathname.startsWith("/JP_Computer-Aided-Drawings/"));
- const path="public/"+url.pathname.slice("/JP_Computer-Aided-Drawings/".length);
+ assert.ok(url.pathname.startsWith("/jp-drawing-coordination/"));
+ const path="public/"+url.pathname.slice("/jp-drawing-coordination/".length);
  loads.push(path);return parse(path);
 });
 assert.equal(review.elements.length,60);

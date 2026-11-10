@@ -10,11 +10,11 @@ const manifest=JSON.parse(fs.readFileSync(path.join(source,"aad-building-v1.json
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,JSON.parse(fs.readFileSync(path.join(source,l.model),"utf8"))]));
 // The published prebuilt IFC must be derived from the SAME source-selected
 // structural model as the primary Narayani multistorey 2D/3D/table application.
-const sourceURL=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const sourceURL=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,sourceURL,async url=>{
  if(url.origin!=="https://example.test"||
-    !url.pathname.startsWith("/JP_Computer-Aided-Drawings/"))throw Error("Untrusted CAD source path");
- return JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8"));
+    !url.pathname.startsWith("/jp-drawing-coordination/"))throw Error("Untrusted CAD source path");
+ return JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/jp-drawing-coordination/".length),"utf8"));
 });
 const building=assembleBuilding(manifest,models,{reviewStructure:review});
 const check=verifyAssembly(building);

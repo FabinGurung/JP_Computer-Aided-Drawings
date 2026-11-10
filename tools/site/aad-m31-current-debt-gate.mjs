@@ -77,9 +77,9 @@ assert.equal(live.extractionAudit.remoteCIRecomputedArchive,false,
 assert.equal(live.extractionAudit.archiveSha256,
  "c89a0d54cda341794ebb0db750cd153f8a68febc39f63fcfac4477209d57d9b6");
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,read(l.model)]));
-const base=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const base=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,base,async url=>
- JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ JSON.parse(fs.readFileSync("public/"+url.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 assert.equal(review.userAuthorization,"M28_OWNER_VERIFIED");
 const building=assembleBuilding(manifest,models,{reviewStructure:review});
 assert.deepEqual([building.counts.column,building.counts.footing,building.counts.beam],[23,21,16]);

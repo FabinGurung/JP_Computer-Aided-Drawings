@@ -20,7 +20,7 @@ export async function loadAADReviewedStructure(manifest,manifestURL,fetchJSON){
   if(typeof path!=="string"||!path.endsWith(".json")||path.includes(".."))
    throw Error("Invalid structural reference path");
   const url=new URL(path,from);
-  if(url.origin!==origin||!url.pathname.includes("/JP_Computer-Aided-Drawings/"))
+  if(url.origin!==origin||!url.pathname.includes("/jp-drawing-coordination/"))
    throw Error("Structural review reference is not same-origin project source");
   return await fetchJSON(url);
  };

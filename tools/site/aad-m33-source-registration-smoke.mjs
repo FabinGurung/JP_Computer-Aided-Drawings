@@ -55,9 +55,9 @@ assert.equal(ledger.latestTechnicalEvidence.engineeredSupportMembersVerified,0);
 assert.equal(ledger.latestTechnicalEvidence.sourceSurveyRegistration,false);
 assert.equal(ledger.latestTechnicalEvidence.verifiedUpperFloorStructuralMembers,0);
 const models=Object.fromEntries(manifest.levels.map(l=>[l.id,read(l.model)]));
-const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const root=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(manifest,root,async u=>JSON.parse(
- fs.readFileSync("public/"+u.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ fs.readFileSync("public/"+u.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 assert.equal(review.userAuthorization,"M28_OWNER_VERIFIED");
 const building=assembleBuilding(manifest,models,{reviewStructure:review});
 assert.deepEqual([building.counts.column,building.counts.footing,building.counts.beam],[23,21,16]);
