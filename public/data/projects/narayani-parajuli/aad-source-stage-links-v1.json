@@ -6,8 +6,8 @@
     {
       "kind": "plinth-beam",
       "stage": "M70",
-      "dataPath": "/JP_Computer-Aided-Drawings/stages/m70/stage-data.json",
-      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m70/meta.json",
+      "dataPath": "/jp-drawing-coordination/stages/m70/stage-data.json",
+      "metadataPath": "/jp-drawing-coordination/stages/m70/meta.json",
       "sourceStageName": "Narayani M70 Plinth Beam Network v0.5",
       "policy": "FROZEN_PUBLIC_STAGE_PLINTH_EVIDENCE_ONLY",
       "changePolicy": "COMPARE_DISPLAY_ONLY_NO_SOURCE_OVERWRITE"
@@ -22,26 +22,26 @@
   },
   "governedStages": {
     "m60": {
-      "dataPath": "/JP_Computer-Aided-Drawings/stages/m60/stage-data.json",
-      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m60/meta.json"
+      "dataPath": "/jp-drawing-coordination/stages/m60/stage-data.json",
+      "metadataPath": "/jp-drawing-coordination/stages/m60/meta.json"
     },
     "m40": {
-      "dataPath": "/JP_Computer-Aided-Drawings/stages/m40/stage-data.json",
-      "metadataPath": "/JP_Computer-Aided-Drawings/stages/m40/meta.json"
+      "dataPath": "/jp-drawing-coordination/stages/m40/stage-data.json",
+      "metadataPath": "/jp-drawing-coordination/stages/m40/meta.json"
     },
     "v03": {
-      "dataPath": "/JP_Computer-Aided-Drawings/stages/v03/stage-data.json",
-      "metadataPath": "/JP_Computer-Aided-Drawings/stages/v03/meta.json"
+      "dataPath": "/jp-drawing-coordination/stages/v03/stage-data.json",
+      "metadataPath": "/jp-drawing-coordination/stages/v03/meta.json"
     }
   },
   "optionalUserQA": {
     "schema": "jp-cad://narayani-user-reviewed-qa/1",
-    "dataPath": "/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json",
+    "dataPath": "/jp-drawing-coordination/data/projects/narayani-parajuli/aad-user-qa-decisions-v1.json",
     "requiresExplicitQuery": "qa=user-reviewed",
     "policy": "DERIVED_WORKING_GEOMETRY_PREVIEW_ONLY",
     "sourceNeverMutated": true,
     "constructionApproval": false,
-    "messageApprovalPath": "/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-user-message-approval-20261024.json",
+    "messageApprovalPath": "/jp-drawing-coordination/data/projects/narayani-parajuli/aad-user-message-approval-20261024.json",
     "messageApprovalPolicy": "USER_AUTHORIZED_PROJECT_QA__ENGINEERING_HOLD_UNCHANGED"
   }
 }
