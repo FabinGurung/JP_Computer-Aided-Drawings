@@ -22,7 +22,7 @@
   ["Earlier design tools",[["Older CAD editor · prototype","cad/"],["Words → building mass · prototype","cad/brief/"]]],
   ["Research & prototypes",[["Research catalogue","research/"],["Canonical geometry v0.2","research/open-architecture-engine/v0.2/"],["Original geometry proof","research/open-architecture-engine/"]]],
   ["Projects & history",[["Project library","projects/"],["Release history","releases/"],["Source catalogue","source/"]]],
-  ["Guides & reference",[["How the system works","guide/"],["Shared CAD rules","memory-wall/"],["Website publishing rules","memory-wall/pages/"],["Control Tower","templates/project-workspace/control-tower/"],["Nepal / Pokhara codes","codes/pokhara/"],["AI Design Studio","cad/aad/"]]]
+  ["Guides & reference",[["How the system works","guide/"],["Shared CAD rules","memory-wall/"],["Website publishing rules","memory-wall/pages/"],["Drawing standard · Control Tower","templates/project-workspace/control-tower/"],["Nepal / Pokhara codes","codes/pokhara/"],["AI Design Studio","cad/aad/"]]]
  ];
  for(const [groupName,entries] of groups){
   const section=document.createElement("details");section.className="cad-more-group";
