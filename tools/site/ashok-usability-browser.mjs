@@ -2,7 +2,7 @@ import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 // Retained interface regression: current project shell has its own four-project browser test.
-const url=new URL('record.html',process.env.ASHOK_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/').href;
+const url=new URL('record.html',process.env.ASHOK_URL||'http://127.0.0.1:5191/jp-drawing-coordination/projects/ashok-adhikari/').href;
 const key='aad-site-pins-v2:ashok-adhikari';
 const seed=[{xMm:1130,yMm:17053,label:'Soak pit'},{xMm:1746,yMm:8281,label:'Septic tank'}];
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--use-gl=angle','--use-angle=swiftshader']});
