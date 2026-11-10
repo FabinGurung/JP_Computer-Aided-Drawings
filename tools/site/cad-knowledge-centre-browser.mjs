@@ -1,7 +1,7 @@
 /** CAD Knowledge Centre browser QA: accessible navigation and mobile/desktop layout. */
 import {chromium} from "playwright";
 import assert from "node:assert/strict";
-const prefix=process.env.CAD_SITE_URL||"http://127.0.0.1:5191/JP_Computer-Aided-Drawings/";
+const prefix=process.env.CAD_SITE_URL||"http://127.0.0.1:5191/jp-drawing-coordination/";
 const browser=await chromium.launch({headless:true,args:["--no-sandbox"]});
 try{
  for(const [device,width,height] of [["desktop",1366,900],["mobile",390,840]]){
