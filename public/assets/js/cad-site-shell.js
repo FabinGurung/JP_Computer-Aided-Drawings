@@ -19,7 +19,7 @@
  const trigger=document.createElement("summary");trigger.textContent="More";more.append(trigger);
  const popup=document.createElement("div");popup.className="cad-global-popover";
  const groups=[
-  ["Earlier design tools",[["Older CAD editor · prototype","cad/"],["Words-to-mass prototype","cad/brief/"]]],
+  ["Earlier design tools",[["Older CAD editor · prototype","cad/"],["Words → building mass · prototype","cad/brief/"]]],
   ["Research & prototypes",[["Research catalogue","research/"],["Canonical geometry v0.2","research/open-architecture-engine/v0.2/"],["Original geometry proof","research/open-architecture-engine/"]]],
   ["Projects & history",[["Project library","projects/"],["Release history","releases/"],["Source catalogue","source/"]]],
   ["Guides & reference",[["How the system works","guide/"],["CAD Memory Wall","memory-wall/"],["Publishing Memory","memory-wall/pages/"],["Control Tower","templates/project-workspace/control-tower/"],["Nepal / Pokhara codes","codes/pokhara/"],["AI Design Studio","cad/aad/"]]]
