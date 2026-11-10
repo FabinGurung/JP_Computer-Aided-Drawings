@@ -11,7 +11,7 @@ on:
 permissions: {contents: read}
 jobs:
   live-readback:
-    if: github.event_name != 'workflow_run' || github.event.workflow_run.conclusion == 'success'
+    if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
     runs-on: ubuntu-24.04
     steps:
       - name: Validate deployed CAD routes and real assets without writing
@@ -61,6 +61,17 @@ jobs:
                   assert response.status==200
                   assert "javascript" in response.headers.get("Content-Type","") or url.endswith(".js")
               print("LIVE_CAD_SCRIPT_PASS",url)
+          PY
+          curl -fsSL "${BASE}cad/aad/" -o /tmp/cad-design-studio-live.html
+          grep -q 'Draw a wall in 2D' /tmp/cad-design-studio-live.html
+          curl -fsSL "${BASE}data/projects/design-studio-sandbox/aad-building-v1.json" -o /tmp/cad-sandbox-live.json
+          python - <<'PY'
+          import json
+          model=json.load(open("/tmp/cad-sandbox-live.json"))
+          assert model["projectId"]=="AAD-SANDBOX-001"
+          assert model["representation"]=="ARCHITECTURAL_REVIEW_ONLY"
+          assert model["restrictions"]["issueForConstruction"] is False
+          print("CAD_PUBLIC_STUDIO_SANDBOX_READBACK_PASS")
           PY
           echo "CAD_M01_PUBLIC_LIVE_READBACK_PASS"
 
