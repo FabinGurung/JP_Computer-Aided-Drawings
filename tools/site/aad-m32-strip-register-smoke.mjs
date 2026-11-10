@@ -76,9 +76,9 @@ assert.equal(reg.latestTechnicalEvidence.strictCandidates,51);
 assert.equal(reg.latestTechnicalEvidence.engineeredSupportMembersVerified,0);
 assert.equal(reg.latestTechnicalEvidence.constructionApproval,false);
 const models=Object.fromEntries(model.levels.map(l=>[l.id,read(l.model)]));
-const root=new URL("https://example.test/JP_Computer-Aided-Drawings/data/projects/narayani-parajuli/aad-building-v1.json");
+const root=new URL("https://example.test/jp-drawing-coordination/data/projects/narayani-parajuli/aad-building-v1.json");
 const review=await loadAADReviewedStructure(model,root,async u=>
- JSON.parse(fs.readFileSync("public/"+u.pathname.slice("/JP_Computer-Aided-Drawings/".length),"utf8")));
+ JSON.parse(fs.readFileSync("public/"+u.pathname.slice("/jp-drawing-coordination/".length),"utf8")));
 const assembly=assembleBuilding(model,models,{reviewStructure:review});
 assert.deepEqual([assembly.counts.column,assembly.counts.footing,assembly.counts.beam],[23,21,16]);
 assert.equal(assembly.elements.filter(e=>["ff","sf"].includes(e.level)&&
