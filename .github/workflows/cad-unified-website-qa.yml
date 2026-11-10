@@ -62,14 +62,14 @@ jobs:
         run: node tools/site/aad-narayani-source-smoke.mjs
       - name: Verify GitHub Pages base build and static routes
         run: |
-          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          npm run build -- --base=/jp-drawing-coordination/
           python tools/site/check_public_routes.py dist
       - name: Verify standardized project workspaces and retained Ashok geometry across devices
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0
           npx playwright install --with-deps chromium
-          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/JP_Computer-Aided-Drawings/ > /tmp/ashok-preview.log 2>&1 &)
-          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
+          (npm run preview -- --host 127.0.0.1 --port 5191 --base=/jp-drawing-coordination/ > /tmp/ashok-preview.log 2>&1 &)
+          for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/jp-drawing-coordination/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
           node tools/site/cad-knowledge-centre-browser.mjs
