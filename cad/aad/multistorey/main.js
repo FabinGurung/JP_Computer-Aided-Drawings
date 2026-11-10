@@ -1179,6 +1179,11 @@ async function main(){
   });
  }
  if(isDrawingSandbox){
+  const toolbar=document.createElement("button");
+  toolbar.id="aad-sandbox-draw";toolbar.type="button";
+  toolbar.textContent="Draw wall";toolbar.setAttribute("aria-pressed","false");
+  document.querySelector("#viewport2d .viewport-title")?.append(toolbar);
+  toolbar.addEventListener("click",()=>setDrawMode(!drawMode));
   setLevel("gf");setViewMode("split");setDrawMode(true);
   status("Sandbox ready: drag a 2D wall with a finger/mouse, or tap two points. 3D updates from the same working model.");
  }
