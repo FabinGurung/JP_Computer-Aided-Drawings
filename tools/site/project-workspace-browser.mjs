@@ -1,6 +1,6 @@
 import {chromium} from 'playwright';
 import assert from 'node:assert/strict';
-const base=process.env.PROJECT_SITE_URL||'http://127.0.0.1:5191/JP_Computer-Aided-Drawings/';
+const base=process.env.PROJECT_SITE_URL||'http://127.0.0.1:5191/jp-drawing-coordination/';
 const widths=(process.env.PROJECT_WIDTHS||'390,1440').split(',').map(Number);
 const browser=await chromium.launch({headless:true,args:['--no-sandbox','--enable-unsafe-swiftshader']});
 async function ready(p,slug){if(slug==='ramachandra-devkota')return;await p.waitForFunction(()=>window.ProjectWorkspace?.getDrawing()?.getState().ready,null,{timeout:60000});await p.waitForFunction(()=>document.querySelector('iframe')?.contentDocument?.body?.dataset.projectEngine);}
