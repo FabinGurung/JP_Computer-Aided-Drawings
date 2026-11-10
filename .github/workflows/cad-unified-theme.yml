@@ -37,7 +37,7 @@ jobs:
       - run: npm ci
       - name: Build all current CAD product routes and verify immutable stages
         run: |
-          npm run build -- --base=/JP_Computer-Aided-Drawings/
+          npm run build -- --base=/jp-drawing-coordination/
           python tools/site/check_public_routes.py dist
       - name: Exercise site shell, 13 routes, responsive disclosure and registry
         run: |
