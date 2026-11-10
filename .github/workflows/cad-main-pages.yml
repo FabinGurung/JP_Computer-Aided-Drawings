@@ -111,6 +111,11 @@ jobs:
       - name: Verify advanced AAD topology drafting and four-room IFC non-regression
         run: node tools/site/aad-topology-smoke.mjs
       - name: Pre-publish visual acceptance on built Pages bundle
+        env:
+          PROJECT_SITE_URL: http://127.0.0.1:5191/jp-drawing-coordination/
+          CAD_SITE_URL: http://127.0.0.1:5191/jp-drawing-coordination/
+          CAD_REFERENCE_BASE: http://127.0.0.1:5191/jp-drawing-coordination/
+          ASHOK_URL: http://127.0.0.1:5191/jp-drawing-coordination/projects/ashok-adhikari/
         run: |
           npm install --no-save --no-package-lock playwright@1.55.0 pngjs@7.0.0
           npx playwright install --with-deps chromium
