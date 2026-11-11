@@ -167,6 +167,18 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 
 .studio-contents{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.studio-contents a{padding:10px 12px;border:1px solid #bfd3d8;border-radius:7px;background:white;min-height:44px}.studio-contents a[hidden]{display:none}.control-heading{flex-basis:100%}.control-group{display:flex;flex-wrap:wrap;gap:10px;align-items:end;border:1px solid #d4e2e7;border-radius:8px;padding:12px;min-width:0;margin:0}.control-group legend{font-weight:750;font-size:13px;padding:0 5px;color:#244d59}.control-group label{min-width:0}.control-hint{font-size:13px;line-height:1.6;color:#4b6874;margin:4px 0 12px}.register-help{padding:0 14px}#aad-presentation-controls{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch}#aad-presentation-controls .control-group label{flex:1 1 180px}#aad-audit-filters{align-items:stretch}.register-find{flex:3 1 580px}.register-sort{flex:1 1 290px}#aad-audit-filters .control-group label{flex:1 1 160px;min-width:0}#aad-audit-filters input,#aad-audit-filters select{width:100%;min-width:0;min-height:44px;font:inherit}#aad-audit-filters label{font-size:13px}.register-actions{display:flex;gap:8px;flex-wrap:wrap;flex-basis:100%}.register-actions button{min-height:44px;white-space:normal}#aad-active-filters{display:flex;flex-wrap:wrap;gap:7px;padding:10px 14px;font-size:13px}#aad-active-filters button{min-height:44px;text-align:left}#aad-audit-count{font-size:13px;line-height:1.6}#aad-audit-register,#aad-inspector,#aad-view-controls,#aad-services-controls,#aad-derived-room-panel{scroll-margin-top:16px}
 @media(max-width:660px){#aad-presentation-controls{grid-template-columns:1fr}#aad-audit-filters{padding:10px;display:grid;grid-template-columns:minmax(0,1fr)}#aad-audit-filters .control-group{display:grid;grid-template-columns:minmax(0,1fr);padding:10px}.control-group{gap:8px}.register-actions{display:grid;grid-template-columns:minmax(0,1fr)}.studio-contents a{flex:1 1 40%}}
+
+/* Local review workflow: same underlying 2D/3D/IFC model; no repository writes. */
+#aad-edit-history-panel{border:1px solid #c8d9e2;border-radius:11px;padding:14px;margin:10px 0;background:#fff;min-width:0}
+#aad-edit-history-panel summary{font-weight:750;cursor:pointer;min-height:34px;display:flex;gap:8px;align-items:center}
+#aad-edit-history-panel .edit-history-actions{display:flex;flex-wrap:wrap;gap:9px;align-items:center;margin:12px 0}
+#aad-edit-history-panel textarea{display:block;max-width:100%;width:100%;min-height:130px;padding:10px;font:12px/1.45 ui-monospace,SFMono-Regular,Consolas,monospace;color:#304b5e;background:#f8fafc;border:1px solid #c4d6e0;border-radius:7px;resize:vertical}
+#aad-edit-history-list{max-height:180px;overflow:auto;padding-left:22px;font-size:12px;color:#455d6c}
+#aad-edit-history-list li{margin:4px 0}
+#aad-edit-mode[aria-pressed="false"]{background:#edf1f5;color:#3c596a}
+#aad-edit-mode[aria-pressed="true"]{background:#0d7467;color:white;border-color:#0d7467}
+#aad-edit-history-status{font-size:12px;line-height:1.5;color:#546e7d}
+#aad-edit-history-warning{font-size:12px;color:#86561b;line-height:1.5}
 </style>
 </head>
 <body>
@@ -186,12 +198,25 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
 <strong class="control-heading">Drawing scope</strong><label for="aad-storey">Drawing storey <select id="aad-storey"><option value="all">All levels</option></select></label>
 <label for="aad-view-mode">View <select id="aad-view-mode"><option value="split">2D left · 3D right</option><option value="plan">2D plan only</option><option value="building">3D building only</option></select></label>
 <button id="aad-show-all" type="button">Show all levels</button>
-<span id="aad-edit-version" class="dirty-chip">Canonical source · no edits</span><span class="spacer"></span>
+<span id="aad-edit-version" class="dirty-chip">Canonical source · no edits</span><button id="aad-edit-mode" type="button" aria-pressed="true">Edit draft: ON</button><span class="spacer"></span>
 <button id="aad-undo" type="button" disabled>Undo</button>
 <button id="aad-reset" type="button">Reset to source</button>
 <button id="aad-save-working" class="btn-primary" type="button">Save editable BIM draft</button>
 <button id="aad-import-working" type="button">Open BIM draft</button><input id="aad-import-file" type="file" accept=".json,application/json" hidden>
 </div>
+<details id="aad-edit-history-panel" open>
+<summary><span id="aad-edit-history-count">Edit History · 0 recorded changes</span> <span style="font-weight:400;color:#667f90">· local draft only</span></summary>
+<p id="aad-edit-history-status" role="status">Select a wall, door or window in 2D, 3D or the component list. Edit dimensions or delete eligible items. The history below records only accepted changes.</p>
+<div class="edit-history-actions">
+<button id="aad-edit-delete-selected" type="button">Delete selected draft item</button>
+<button id="aad-edit-copy-handover" class="btn-primary" type="button">Copy edit log for ChatGPT</button>
+<button id="aad-edit-download-handover" type="button">Download change-set JSON</button>
+</div>
+<ol id="aad-edit-history-list" aria-label="Chronological editing history"><li>No accepted edits yet</li></ol>
+<label style="display:block;font-size:12px;font-weight:700" for="aad-edit-handover">Reviewable change log (select and copy manually if Clipboard is unavailable)</label>
+<textarea id="aad-edit-handover" readonly spellcheck="false" aria-label="Machine-readable change history for ChatGPT handover"></textarea>
+<p id="aad-edit-history-warning" role="alert">Changes are browser-local and not engineering approval. Exterior/perimeter walls and source-backed structural objects cannot be deleted here. Export and paste your log into this chat for source comparison, independent QA, and a reviewed GitHub release.</p>
+</details>
 <p id="aad-renderer-status" class="alert" role="status" hidden></p>
 <section id="aad-services-controls" class="panel" hidden style="padding:12px;margin:12px 0;overflow-wrap:anywhere"><h2>v2 · MEP and site locations</h2><button id="aad-mep-view" type="button">MEP / underground view</button> <label><input id="aad-mep-visible" type="checkbox" checked> Show MEP routes</label><p>Brown: sanitary · violet: full-bore vent · teal: septic effluent · green: fan exhaust · gold: electrical conduit. Select objects for their system names. Stormwater stays separate.</p><p id="aad-mep-conflicts" role="status"></p><details><summary>Design basis and source notes</summary><p id="aad-mep-summary"></p><a href="../../../codes/pokhara/#house-meaning">Read the interpreted code rules and MEP sources</a></details><p>Hover for location. On touch screens, enable pin mode and tap. Plot origin is the front-left plot corner; building coordinates are shown separately.</p><label><input id="aad-pin-mode" type="checkbox"> Pin location feedback (does not move design objects)</label> <label>Pin label <select id="aad-pin-label"><option>Soak pit</option><option>Septic tank</option><option>Other correction</option></select></label><p id="aad-pin-status" role="status"></p><ul id="aad-site-pins"></ul><button id="aad-export-pins" type="button">Download pins to share in chat</button> <button id="aad-clear-pins" type="button">Clear my pins</button></section><div class="workspace">
 <div id="aad-presentation-controls" class="unified-toolbar" hidden style="grid-column:1/-1">

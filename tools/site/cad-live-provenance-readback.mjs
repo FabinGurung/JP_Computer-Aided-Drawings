@@ -1,5 +1,5 @@
 import {createHash} from 'node:crypto';
-const base=process.env.CAD_PUBLIC_BASE||'https://fabingurung.github.io/JP_Computer-Aided-Drawings/';
+const base=process.env.CAD_PUBLIC_BASE||'https://fabingurung.github.io/jp-drawing-coordination/';
 const expectedSha=process.env.VERIFIED_SOURCE_SHA;
 const expectedRun=process.env.PAGES_WORKFLOW_RUN_ID;
 if(!/^[a-f0-9]{40}$/.test(expectedSha||'')||!/^\d+$/.test(expectedRun||''))throw Error('Missing source/deployment binding for audit');

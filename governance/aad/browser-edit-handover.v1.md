@@ -1,0 +1,68 @@
+# AAD Browser Edit History → reviewed GitHub publication
+
+**System contract v1 · 11 November 2026 · public-safe documentation**
+
+This extends the **existing** unified 2D/3D AAD editor, rather than creating another source registry, engineering authority or backend. It is a user-initiated **local-only** authoring and handover workflow.
+
+## Cross-project inheritance and Drive ownership — 11 Nov 2026
+
+The shared editor lives in `cad/aad/multistorey/`; project-entry routing uses `public/assets/js/project-workspace.mjs` and the **selected design edition's** registered manifest. No client-specific engine fork or duplicate source model is created.
+
+| Existing project page | Mode offered | Source gate |
+| --- | --- | --- |
+| Narayani Parajuli | Open model editor + edit history | Admitted AAD model; source-review overlay and engineering HOLDs preserved |
+| Ashok Adhikari | Open model editor + edit history | The selected v1/v2/v3/v3.1/v3.2 architectural-review manifest, not another project's edition |
+| Harisharan Adhikari | Project-scoped change-request form | Linked source/axonometric engineering viewer, not admitted as shared editable AAD floorGraph |
+| Ramachandra Devkota | Project-scoped change-request form | DWG/DXF source family, but public editable building model not admitted |
+| Example-empty template | Project-scoped change-request form | Empty template, not a client model |
+
+**Change requests** use a separate `jp-cad://aad-project-change-requests/1` format: project slug, selected edition, source manifest when available, floor/phase, object/source ID, action, reason and explicit `REVIEW_REQUIRED_NOT_APPLIED`. This record is not an executed deletion or a JSON Patch.
+
+**Google Drive governance reference:** [CAD-AAD-EDIT-HANDOVER-STD-001-R000001 — Shared Project Edit History, Review and GitHub Publication](https://docs.google.com/document/d/1nB_IDhdD4HNvjFSf-1ekrBlozGvZz6Ot3-o9ReOYqfA/edit), saved under the verified `01_JP / 01 Useful References` Drive hierarchy. It is one shared operational reference, not a new authority for original project drawings. Send approved evidence to the correct pre-existing project room after verifying actual source file and folder IDs.
+
+## Use it
+
+1. Open the [Design Studio](../../cad/aad/index.html) synthetic sample or an actual project AAD workspace. Choose the relevant floor.
+2. The **Edit draft: ON** button allows local work. Switch to **View only** when merely inspecting; it disables authoring controls and direct semantic/topology edits. Editing remains the default for compatibility with existing project toolchains.
+3. Select a working wall, door or window in 2D, 3D or the component table, edit its parameters, or choose **Delete selected draft item**. Only eligible interior connected walls and hosted openings can be removed. Exterior walls, source-backed structural members and supports are not universally deletable. Remove a hosted opening first before removing its host interior wall.
+4. **Edit History** records successful additions, removals, parameter edits, undo, reset-to-source and draft imports. Rejected edits are not logged as successful. Existing unlogged browser drafts are marked **recovered-untracked-draft**, not falsely represented as full historical operations.
+5. Choose **Copy edit log for ChatGPT** or **Download change-set JSON**. This button does not send anything to a remote service.
+6. Paste or attach the change set in the matching project chat, with the instruction: "Review this AAD change set against the current authoritative model and Drive sources, replay its object operations, show differences, preserve engineering HOLDs, then open a scoped GitHub PR and verify Actions and Pages."
+7. The receiving assistant must inspect current source revision, project identity, original Drive ownership and A7 records before any edit. After a successful replay, run model/IFC QA, preserve PRE/POST where applicable, and use a reviewed versioned PR. A successful browser edit is not professional engineering acceptance.
+
+## Repository-side replay (read-only)
+
+For an exported file available inside an authorized checkout, run:
+
+    node tools/site/aad-review-change-set.mjs /path/to/AAD_LOCAL_EDIT_CHANGESET.json
+
+This loads the exact project manifest and floor models, rejects stale identities/fingerprints and invalid patches, replays all events, rechecks AAD graph and assembly validity, and reports original vs proposed floor object counts and unchanged structural member counts. It writes **zero** source files. The log/report is a review aid, not a construction approval or permission to merge. A human or assistant must then inspect the project evidence, make approved scoped model edits and submit a normal tested PR.
+
+## Change-set contract
+
+Schema: **jp-cad://aad-edit-change-set/1**.
+
+Export fields: projectId, baselineRevision, sourceManifestPath, baselineFingerprint, finalFingerprint, approval, sourceStatus and sequential events. Each accepted event has an ID, ISO timestamp, action kind, floor and object identity where available, a descriptive message, pre/post model fingerprints and RFC 6902 JSON Patch operations.
+
+Patch paths are limited to the editable floorGraph of the project models. Replay rejects unsupported operations, invalid paths, changed project IDs, revision mismatches, stale baselines and incorrect before/after fingerprints. Each replace or remove operation carries a JSON Patch test condition. The existing AAD engine independently validates geometric integrity and assembly/IFC invariants when accepting any subsequent reviewed change.
+
+The FNV-1a64 fingerprint is a **non-cryptographic accidental divergence check**, not source authentication. A reviewer must separately verify provider evidence, real file hashes and the exact current Git commit SHA.
+
+A previously existing local draft without individual journal entries becomes one flagged recovery diff; the original sequence cannot be recovered. If an old journal diverges from the local draft, the old raw record is archived separately in browser storage.
+
+## Boundaries
+
+- Browser storage is local to the device/browser and can be erased. Export your JSON file.
+- This is a static GitHub Pages site; no repository token or automatic source write is available.
+- A deletion changes the **working draft only**. Authoritative source drawings, approved quantities, source-backed structure and historical releases are unchanged.
+- Existing single-step Undo is supported and journalled; this is not a collaborative live-sync editor.
+- Derived 3D items not represented by editable graph walls/openings deliberately have no generic delete action in this release.
+- No independent engineering HOLD is closed by the history, local edits or Pages publication.
+
+## References
+
+- tldraw [selection and deletion](https://tldraw.dev/sdk-features/editor), plus [undo/redo and history](https://tldraw.dev/sdk-features/history).
+- [RFC 6902 JSON Patch](https://www.rfc-editor.org/rfc/rfc6902.html).
+- [GitHub pull request review](https://docs.github.com/en/pull-requests/how-tos/review-pull-requests/reviewing-proposed-changes-in-a-pull-request).
+
+The A7/A9 workflow combines established techniques: human browser edits → machine-readable journal → ChatGPT review → controlled GitHub PR → QA → live publication.
