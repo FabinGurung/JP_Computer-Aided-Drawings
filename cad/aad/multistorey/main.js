@@ -15,11 +15,13 @@ const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await 
 const {wallSolidCells}=await import(/* @vite-ignore */moduleURL("aad-wall-voids.mjs"));
 const {drawPresentationPlan}=await import(/* @vite-ignore */moduleURL("aad-dimensioned-plan.mjs"));
 const {drawServicesPlan,installSitePicker,siteConflicts}=await import(/* @vite-ignore */moduleURL("aad-services-plan.mjs"));
+const {createAADEditJournal}=await import(/* @vite-ignore */moduleURL("aad-edit-journal.mjs"));
 const params=new URLSearchParams(location.search);
 const chosen=params.get("manifest");
 if(params.get('embed')==='1')document.body.dataset.aadEmbed='true';
 let building=null,renderer=null,camera=null,orbit=null,scene=null,geometryGroup=null;
 let workspace=null,activeLevel="all",activeEdit=null,lastUndo=null,baseUrl=null;
+let editJournal=null,editMode=true,editJournalError="";
 let m29Evidence=null,showM29SourceEdges=false,showM29UpperProjection=false;
 let m30Evidence=null;
 let m32Evidence=null;
@@ -42,6 +44,54 @@ function download(name,text,mime){
  const a=document.createElement("a");a.href=url;a.download=name;document.body.append(a);a.click();a.remove();
  setTimeout(()=>URL.revokeObjectURL(url),1500);
 }
+
+function refreshEditHistory(){
+ if(!editJournal)return;
+ const entries=editJournal.getEvents();
+ $("aad-edit-history-count").textContent="Edit History · "+entries.length+" recorded change"+(entries.length===1?"":"s");
+ const history=$("aad-edit-history-list");history.replaceChildren();
+ if(!entries.length){const item=document.createElement("li");item.textContent="No accepted edits yet";history.append(item);}
+ for(const e of entries.slice(-20)){
+  const item=document.createElement("li");
+  item.textContent=e.time+" · "+e.kind+(e.level?" ["+e.level+"]":"")+(e.objectId?" · "+e.objectId:"")+(e.kind==="recovered-untracked-draft"?" · REVIEW REQUIRED":"");
+  history.append(item);
+ }
+ $("aad-edit-handover").value=editJournal.handover();
+ const warning=[editJournal.getWarning(),editJournalError].filter(Boolean);
+ if(warning.length)$("aad-edit-history-warning").textContent=warning.join(" · ")+" · DO NOT APPLY AUTOMATICALLY: review source against this log.";
+ const txt=entries.length?
+  entries.length+" accepted local edit(s); copy the JSON handover for reviewed GitHub publication. No server write occurred.":
+  "No accepted edits. Select editable graph walls or hosted doors/windows; source-backed structural elements are protected.";
+ $("aad-edit-history-status").textContent=txt;
+}
+function journalAcceptedEdit(beforeModels,details){
+ if(!editJournal)return;
+ try{
+  editJournal.record(beforeModels,workspace.snapshot().models,details);
+  editJournalError="";
+ }catch(error){
+  editJournalError="WARNING: change was accepted locally but could NOT be recorded: "+error.message;
+  status(editJournalError);
+ }
+ refreshEditHistory();
+}
+function syncEditMode(){
+ const button=$("aad-edit-mode");
+ button.setAttribute("aria-pressed",String(editMode));
+ button.textContent=editMode?"Edit draft: ON":"View only · switch to edit";
+ const ids=["aad-draw-wall","aad-split-wall","aad-delete-wall","aad-add-door","aad-add-window",
+  "aad-delete-opening","aad-join-walls","aad-apply-edit","aad-undo","aad-reset",
+  "aad-import-working","aad-edit-delete-selected","aad-sandbox-draw"];
+ for(const id of ids){
+  const control=$(id);
+  if(control)control.disabled=!editMode||(id==="aad-undo"&&!lastUndo);
+ }
+ if(!editMode&&drawMode)setDrawMode(false);
+ $("aad-edit-history-status").textContent=editMode?
+  "Editing LOCAL draft only. Select a graph wall, door or window; changes are journalled. Original client sources stay read-only.":
+  "View-only mode. Selection, inspection, 2D/3D and exports still work. Switch to Edit draft to make local changes.";
+}
+
 function shapeSolid(e){
  const p=e.profile,shape=new THREE.Shape();
  const contour=[...p],signed=contour.reduce((sum,v,i)=>{const q=contour[(i+1)%contour.length];return sum+v.x*q.z-q.x*v.z;},0);
