@@ -75,6 +75,7 @@ jobs:
           for i in $(seq 1 20); do curl -fsS http://127.0.0.1:5191/JP_Computer-Aided-Drawings/projects/ashok-adhikari/ >/dev/null && break; sleep 2; done
           node tools/site/cad-design-studio-sandbox-browser.mjs
           node tools/site/aad-edit-handover-browser-smoke.mjs
+          node tools/site/aad-cross-project-edit-browser.mjs
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
           node tools/site/cad-knowledge-centre-browser.mjs
