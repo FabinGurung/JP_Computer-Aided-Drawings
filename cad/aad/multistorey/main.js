@@ -1195,6 +1195,11 @@ async function main(){
   const stored=localStorage.getItem(storageKey);
   if(stored){workspace.restore(JSON.parse(stored));status("Recovered locally saved working draft · canonical sources unchanged");}
  }catch(err){status("Saved draft ignored: "+err.message);}
+ editJournal=createAADEditJournal({
+  manifest,sourceModels:models,manifestPath:url.pathname,initialModels:workspace.snapshot().models,
+  storage:typeof localStorage==="undefined"?null:localStorage
+ });
+ refreshEditHistory();syncEditMode();
  building=workspace.snapshot().assembly;
  for(const l of building.levels){
   const option=document.createElement("option");option.value=l.id;option.textContent=l.name+" · "+l.elevation.toFixed(2)+"m";
@@ -1406,14 +1411,22 @@ $("aad-apply-edit").addEventListener("click",()=>{
  applyModelEdit(activeEdit.level,activeEdit.kind,activeEdit.id,patch);
 });
 $("aad-undo").addEventListener("click",()=>{
- if(!lastUndo)return;
- try{workspace.restore(lastUndo);lastUndo=null;persistDraft();refreshAll();status("Undid last edit");}
+ if(!editMode||!lastUndo)return;
+ try{
+  const beforeModels=workspace.snapshot().models;
+  workspace.restore(lastUndo);lastUndo=null;
+  journalAcceptedEdit(beforeModels,{kind:"undo",description:"Undo previous accepted edit"});
+  persistDraft();refreshAll();status("Undid last edit in local draft and history");
+ }
  catch(err){status("Undo failed: "+err.message);}
 });
 $("aad-reset").addEventListener("click",()=>{
- if(!workspace)return;lastUndo=workspace.bundle();workspace.reset();activeEdit=null;selectedId=null;
+ if(!workspace||!editMode)return;
+ const beforeModels=workspace.snapshot().models;
+ lastUndo=workspace.bundle();workspace.reset();activeEdit=null;selectedId=null;
+ journalAcceptedEdit(beforeModels,{kind:"reset-to-source",description:"Reset local working geometry to canonical source"});
  try{localStorage.removeItem(draftStorageKey(workspace.snapshot().manifest));}catch(_){}
- refreshAll();status("Restored canonical source geometry; source data unchanged.");
+ refreshAll();status("Restored canonical source geometry; source data unchanged and reset journalled.");
 });
 $("aad-save-working").addEventListener("click",()=>{
  if(workspace)download(workspace.snapshot().manifest.projectId+"_AAD_EDITABLE_BUILDING_DRAFT.json",
@@ -1423,8 +1436,10 @@ $("aad-import-working").addEventListener("click",()=>$("aad-import-file").click(
 $("aad-import-file").addEventListener("change",async e=>{
  try{
   const file=e.target.files?.[0];if(!file||file.size>200000)throw Error("Select a valid draft JSON under 200KB");
+  if(!editMode)throw Error("Switch to Edit draft before importing a working model");
   const parsed=JSON.parse(await file.text());lastUndo=workspace.bundle();workspace.restore(parsed);
-  persistDraft();refreshAll();status("Restored editable building draft into shared linked viewports.");
+  journalAcceptedEdit(lastUndo.models,{kind:"import-draft",description:"Imported external same-project local working draft"});
+  persistDraft();refreshAll();status("Imported local draft, history entry recorded; canonical source unchanged.");
  }catch(err){status("Import failed: "+err.message);}
  e.target.value="";
 });
