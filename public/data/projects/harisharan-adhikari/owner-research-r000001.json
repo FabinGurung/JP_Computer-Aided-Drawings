@@ -1,0 +1,276 @@
+{
+  "schema": "jp-cad://harisharan-r5-source-review/1",
+  "projectId": "INTAKE-20260826-HARISHARAN",
+  "id": "HAR-OWNER-ENG-RESEARCH-R000001",
+  "revision": "R000001",
+  "date": "2026-11-10",
+  "status": "RESEARCH_OWNER_DIRECTIONS_NOT_FOR_CONSTRUCTION",
+  "issueForConstruction": false,
+  "approvedByEngineer": false,
+  "sources": [
+    {
+      "id": "HAR-SRC-STR-001",
+      "sha256": "6ae8eaa70273b79a50ad28a2345da7966201efd5f4a32ea260cbece34f75b9c5",
+      "description": "Harisharan str without basement.pdf, original 17 sheets",
+      "pages": {
+        "footingSchedule": 1,
+        "footingSection": 2,
+        "columnSchedule": 3,
+        "beamGeneral": 5,
+        "strapSection": 6,
+        "shearWall": 9,
+        "tank": 15
+      }
+    },
+    {
+      "id": "HAR-SRC-ARC-001",
+      "sha256": "8429a256588c87c7f1cef5ae6a25006ee5f1e5b3ac7d6c5c27423efa4cc908e9",
+      "description": "Harisharan cad without basement.pdf, original 7 sheets",
+      "pages": {
+        "architecturalRoof": 5,
+        "architecturalElevation": 7
+      }
+    },
+    {
+      "id": "HAR-SRC-RPT-001",
+      "sha256": "8aa9e0a67817c3d00382f910d3b293cdf172dbda7bda3ea4144308fee4942b35",
+      "description": "Structural Report revised - Harisaran Adhikari for torsion.docx"
+    }
+  ],
+  "codeReferences": [
+    {
+      "code": "IS 456:2000",
+      "purpose": "research footing edge thickness and rebar development, not Nepal-specific adoption",
+      "url": "https://wriddodoti.gov.np/uploads/blog/20230331071217_IS-456-with-all-ammendments.pdf",
+      "sections": [
+        "26.2.1",
+        "26.2.2",
+        "26.2.5",
+        "34.1.2"
+      ]
+    },
+    {
+      "code": "NBC 110:1994",
+      "purpose": "Nepal plain and reinforced concrete authority; original refers to amended IS 456:1978",
+      "url": "https://giwmscdnone.gov.np/media/app/public/54/posts/1679824202_6.pdf"
+    },
+    {
+      "code": "NBC 105:2025",
+      "purpose": "seismic load/soil classification and ductile detailing review",
+      "url": "https://ebps.kathmandu.gov.np/UploadFiles/NBC_105_2025_Sesmic_Design.pdf"
+    },
+    {
+      "code": "IS 3370 (Part 2):2021",
+      "purpose": "water-retaining crack/leakage/structural design reference subject to Nepal jurisdictional adoption",
+      "url": "https://standards.bis.gov.in/website/standard-details?encryptedId=eyJpdiI6ImtPbmRaZEN3QlgwR1dSSnZuNUZvY0E9PSIsInZhbHVlIjoialRRb1lqWXlVWllxcWpZU1hCTG44Zz09IiwibWFjIjoiMzljY2UzMTc3ZTcwNDg0MjhhZDQxOTFmMmJjYWYyYzdkZDNmNWZiZTcwYWNlNjY3NTBmY2MwY2JlZTA1OTUwZiIsInRhZyI6IiJ9"
+    }
+  ],
+  "ownerDirections": [
+    {
+      "id": "OD1",
+      "topic": "F1/F2 footing mat layers",
+      "choice": "TOP_AND_BOTTOM",
+      "source": "STR-01 footing reinforcement schedule",
+      "sourceConflicts": [
+        "STR-02 typical section depicts bottom mesh only"
+      ],
+      "status": "OWNER_SELECTED_NOT_ISSUED"
+    },
+    {
+      "id": "OD2",
+      "topic": "Sloped footing concrete",
+      "choice": "RECOMPUTE_SCENARIOS",
+      "source": "STR-02 footing sections",
+      "status": "DIMENSIONS_PARTIAL_EDGE_AND_PLATEAU_NOT_DIMENSIONED"
+    },
+    {
+      "id": "OD3",
+      "topic": "Column confinement ties",
+      "choice": "SOURCE_RECONCILIATION_REQUIRED",
+      "source": "STR-02 Ø8@125 to plinth vs STR-06 Ø10@100 to plinth, STR-05 Ø8@100 joints/Ø8@150 middle",
+      "status": "SIGNED_SELECTION_MISSING"
+    },
+    {
+      "id": "OD4",
+      "topic": "L-shaped column-footing dowel",
+      "choice": "L_ANCHOR_WITH_50D_OWNER_LAP_COMPARISON",
+      "source": "STR-06 L details and report",
+      "status": "CODE_AND_ENGINEER_ACCEPTANCE_REQUIRED"
+    },
+    {
+      "id": "OD5",
+      "topic": "Beam bars and joints",
+      "choice": "RESEARCH_AND_MEMBER_BBS",
+      "source": "STR-05/07/08, report beam table",
+      "status": "SIGNED_BAR_SHAPES_AND_DESIGN_STRESSES_MISSING"
+    },
+    {
+      "id": "OD6",
+      "topic": "Materials and soil",
+      "choice": {
+        "concreteGrade": "M25",
+        "soilTypeAForSensitivity": true
+      },
+      "source": "Revised report M25 and conflicting Soil A/C sections; STR structural drawings M20",
+      "status": "M25_OWNER_DIRECTION_SOIL_A_UNVERIFIED_NO_GEO"
+    },
+    {
+      "id": "OD7",
+      "topic": "Tank",
+      "choice": {
+        "requiredUsableLitres": 16000,
+        "minimumDepthFt": 6,
+        "wallAndSlabDesign": "FOUR_RCWALLS_PLUS_BASE_AND_COVER"
+      },
+      "source": "STR-15 existing tank design and schedule",
+      "status": "RESIZE_AND_RECALCULATE_NO_BAR_COPY"
+    },
+    {
+      "id": "OD8",
+      "topic": "Floors and roof",
+      "choice": {
+        "numberOfStoreys": 5,
+        "designation": "G+4",
+        "roof": "FLAT_REINFORCED_CONCRETE_SLAB",
+        "roofElevationScenarioMm": 15000
+      },
+      "source": "ARC-05 flat terrace/roof plans; ARC-07 +15000 fifth floor level; report nominal 3m and slab 125mm",
+      "status": "OWNER_DIRECTION_ROOF_REBAR_MUST_BE_CHECKED"
+    },
+    {
+      "id": "OD9",
+      "topic": "Software and governance",
+      "choice": "CAD_VERSIONED_RESEARCH_AND_A7_MEMORY_WALL_CROSSLINK",
+      "status": "OPEN_REVIEWED_PR_PUBLIC_SAFE"
+    }
+  ],
+  "footings": {
+    "source": "STR-01 (sheet 1) and STR-02 (sheet 2)",
+    "families": [
+      {
+        "mark": "F1",
+        "count": 12,
+        "baseMm": [
+          2550,
+          2550
+        ],
+        "sourceCentralThicknessMm": 600
+      },
+      {
+        "mark": "F2",
+        "count": 6,
+        "baseMm": [
+          2100,
+          2700
+        ],
+        "sourceCentralThicknessMm": 600
+      }
+    ],
+    "known": {
+      "centralDepthMm": 600,
+      "minimumEdgeThicknessCodeReferenceMm": 150
+    },
+    "uncertain": [
+      "Footing sloped edge depth not dimensioned",
+      "F1/F2 top plateau size/offset and actual slope start not dimensioned",
+      "Sharp/smooth transitions and actual pour volumes require verified shop profiles"
+    ],
+    "comparisonInputs": {
+      "edgeHeightsMm": [
+        150,
+        200,
+        250,
+        300
+      ],
+      "topPlateauSideMm": [
+        450,
+        650
+      ],
+      "preferredResearchCase": {
+        "edgeHeightMm": 250,
+        "topPlateauSideMm": 650
+      },
+      "slopesLinearInTwoDimensions": true
+    },
+    "model": "base_prism_plus_rectangular_transition_exact_integration_not_as_built",
+    "notAddedToBOQ": true
+  },
+  "dowels": {
+    "materialScenario": {
+      "concrete": "M25",
+      "steel": "Fe500",
+      "deformedBars": true,
+      "fullyStressedLimitStateTensionMPa": 435,
+      "bondStressDeformedTensionMPa": 2.24
+    },
+    "verticalReview": {
+      "footingCentralThicknessMm": 600,
+      "assumedBottomCoverMm": 75,
+      "availableStraightMm": 525
+    },
+    "barDiameterMm": [
+      16,
+      20,
+      25
+    ],
+    "ownerLapComparisonMultiplier": 50,
+    "bendResearch": {
+      "nominal90DegreeAnchorageValueDiameters": 8,
+      "caveat": "Not a permitted stand-alone 8d cut leg; must satisfy detailing, bending radius and seismic anchorage"
+    },
+    "fabricationBBS": null,
+    "approval": false
+  },
+  "tank": {
+    "source": "STR-15 (sheet 15) original water tank structural drawing",
+    "originalReportedInternalPlanM": [
+      2,
+      2.7
+    ],
+    "originalReportedWaterDepthM": 1.8,
+    "originalNominalUsableM3": 9.72,
+    "hasSourceRebarSchedule": true,
+    "hasCoverBaseWallSections": true,
+    "ownerTargetM3": 16,
+    "minimumDepthM": 1.8288,
+    "freeboardResearchScenariosM": [
+      0,
+      0.2,
+      0.3
+    ],
+    "illustrationFixedDimensionM": 2.7,
+    "expectedDesignReview": [
+      "Tank location vs site and foundations",
+      "4-wall/top and bottom slab bending and crack control",
+      "Hydrostatic water and earth pressure plus groundwater uplift",
+      "Joint waterstops, waterproofing, permeability and roof loads",
+      "Actual operating water level, sump unusable volume, outlet/inlet, clear cover and seismic loads"
+    ],
+    "barDesignForResizedTank": null,
+    "issueForConstruction": false
+  },
+  "roof": {
+    "drawing": "ARC-05 (roof plan), ARC-07 (+12000 fourth-floor and +15000 labelled fifth-floor level)",
+    "owner": "G+4 = five storeys; flat roof slab at nominal +15m as separate top surface",
+    "baseFloorLevelMm": [
+      0,
+      3000,
+      6000,
+      9000,
+      12000
+    ],
+    "roofSlabLevelMm": 15000,
+    "reportSlabThicknessScenarioMm": 125,
+    "reportPreliminarySlabBarCategories": [
+      "Short span Ø10@150 with extra supports up to L/3",
+      "Long span Ø8@150 with extra supports up to L/3"
+    ],
+    "verifyAgainst": [
+      "Actual roof bay edges and openings",
+      "Solar/water tank/roof live/rain loads",
+      "Two-way design and seismic diaphragm",
+      "Roof drainage falls are not a sloping structural roof"
+    ]
+  },
+  "safetyBoundary": "OWNER_DIRECTION is not a signed design revision, no quantity/BBS release; maintain ENGINEERING HOLD for construction, fabrication, procurement and soil classification."
+}
