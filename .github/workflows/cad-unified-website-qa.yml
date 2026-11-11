@@ -51,6 +51,7 @@ jobs:
           node tools/site/cad-control-tower-smoke.mjs
           node tools/site/cad-knowledge-centre-smoke.mjs
           node tools/site/cad-design-studio-sandbox-smoke.mjs
+          node tools/site/aad-edit-handover-smoke.mjs
           node tools/site/cad-source-axis-contract-smoke.mjs
           node tools/site/site-package-standard-smoke.mjs
           node tools/site/engineering-normalization-smoke.mjs
