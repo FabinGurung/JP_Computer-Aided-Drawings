@@ -137,6 +137,7 @@ jobs:
           AAD_AI_DEMO_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/aad-ai-demo/aad/ node tools/site/aad-ai-demo-browser-smoke.mjs
           ASHOK_URL=http://127.0.0.1:5191/jp-drawing-coordination/projects/ashok-adhikari/ node tools/site/ashok-rev04-browser.mjs
           node tools/site/aad-edit-handover-browser-smoke.mjs
+          node tools/site/aad-cross-project-edit-browser.mjs
           node tools/site/project-workspace-browser.mjs
           node tools/site/cad-control-tower-browser.mjs
           node tools/site/cad-source-axis-contract-browser.mjs
