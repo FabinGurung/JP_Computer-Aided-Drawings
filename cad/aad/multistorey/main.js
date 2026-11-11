@@ -780,9 +780,11 @@ function refreshEditPanel(){
  $("selection").textContent=selection.level.toUpperCase()+" / "+selection.id+" · "+selection.kind+" (floor-local coordinates, m)\nEdit parameters or drag node circles. All linked views and BIM exports use the same model.";
 }
 function applyModelEdit(level,kind,id,patch){
+ if(!editMode){status("View only: select Edit draft before changing geometry");return;}
  try{
   lastUndo=workspace.bundle();
   workspace.change(level,{kind,id},patch);
+  journalAcceptedEdit(lastUndo.models,{kind:"change",level,objectId:id,description:JSON.stringify({entityKind:kind,patch})});
   activeEdit={level,kind,id};selectedId=workspace.snapshot().manifest.projectId+":"+level+":"+(kind==="node"?"NODE:":"")+id;persistDraft();
   refreshAll();setLevel(level);
   $("edit-notice").textContent="Updated "+id+" across plan, 3D, quantities, IFC4 and component table.";
@@ -812,6 +814,7 @@ function refreshRooms(){
  " storeys · total area "+sum.toFixed(3)+" m² (topological, not certified architectural net room areas)";
 }
 function setDrawMode(next){
+ if(next&&!editMode){status("Select Edit draft to draw a wall");return;}
  drawMode=Boolean(next);drawFirst=null;
  $("aad-draw-wall").classList.toggle("is-active",drawMode);
  $("aad-draw-wall").setAttribute("aria-pressed",String(drawMode));
@@ -845,10 +848,12 @@ function recordDrawPoint(evt){
  }catch(e){status("Wall drawing rejected: "+e.message);drawFirst=null;drawPlan();}
 }
 function applyTopology(level,action,args){
+ if(!editMode)throw Error("View only: switch to Edit draft before changing geometry");
  if(!workspace||!level||level==="all")throw Error("Select GF, FF or SF before topology editing");
  const before=workspace.bundle();
  try{
   const out=workspace.topology(level,action,args);
+  journalAcceptedEdit(before.models,{kind:"topology:"+action,level,objectId:args?.wallId||args?.id||args?.firstId||null,description:JSON.stringify(args)});
   lastUndo=before;activeEdit=null;selectedId=null;
   persistDraft();refreshAll();setLevel(level);
   const created=out.result?.ids?.[0]||out.result?.id||out.result?.wallId||out.result?.nodeId||"";
@@ -899,7 +904,7 @@ function refreshAll(){
  building=workspace.snapshot().assembly;
  renderModel();drawPlan();addStats();addRows();refreshRooms();runQa();refreshEditPanel();paintSelection();
  $("aad-edit-version").textContent="Working BIM draft v"+workspace.snapshot().version+(workspace.snapshot().lastEdit?" · unsent to source":"");
- $("aad-undo").disabled=!lastUndo;
+ $("aad-undo").disabled=!lastUndo||!editMode;
 }
 function draftStorageKey(manifest){return "aad:unified:draft:"+manifest.projectId+(manifest.presentation?":"+(manifest.revision||"presentation-v1"):"");}
 function persistDraft(){
