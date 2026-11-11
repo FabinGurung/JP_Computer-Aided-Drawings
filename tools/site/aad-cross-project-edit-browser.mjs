@@ -56,7 +56,7 @@ try{
   const result=await download;
   assert(result.suggestedFilename().startsWith(slug+"_"),"Wrong project export");
   await page.reload({waitUntil:"domcontentloaded"});
-  await page.locator("#pw-request-list li").first().waitFor({timeout:30000});
+  await page.locator("#pw-request-list li").first().waitFor({state:"attached",timeout:30000});
   assert.equal(await page.locator("#pw-request-list li").count(),1,"Request log should persist across reload");
  }
  const mobile=await browser.newPage({viewport:{width:390,height:844},hasTouch:true,isMobile:true});
