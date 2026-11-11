@@ -37,6 +37,8 @@ try{
   await open(page,slug);
   assert.equal(await page.locator("#pw-edit-direct").isVisible(),false,"Source-only project must not claim live editable model: "+slug);
   assert.match(await page.locator("#pw-edit-readiness").textContent(),/SOURCE REVIEW HOLD/);
+  await page.locator("#pw-edit-request-open").click();
+  assert.equal(await page.locator("#pw-change-request").evaluate(node=>node.open),true);
   await page.locator("#pw-request-type").selectOption("request-remove");
   await page.locator("#pw-request-object").fill("WALL-REF-17");
   await page.locator("#pw-request-note").fill("Please verify this wall against source drawings and review proposed removal.");
