@@ -14,6 +14,14 @@ This extends the **existing** unified 2D/3D AAD editor, rather than creating ano
 6. Paste or attach the change set in the matching project chat, with the instruction: "Review this AAD change set against the current authoritative model and Drive sources, replay its object operations, show differences, preserve engineering HOLDs, then open a scoped GitHub PR and verify Actions and Pages."
 7. The receiving assistant must inspect current source revision, project identity, original Drive ownership and A7 records before any edit. After a successful replay, run model/IFC QA, preserve PRE/POST where applicable, and use a reviewed versioned PR. A successful browser edit is not professional engineering acceptance.
 
+## Repository-side replay (read-only)
+
+For an exported file available inside an authorized checkout, run:
+
+    node tools/site/aad-review-change-set.mjs /path/to/AAD_LOCAL_EDIT_CHANGESET.json
+
+This loads the exact project manifest and floor models, rejects stale identities/fingerprints and invalid patches, replays all events, rechecks AAD graph and assembly validity, and reports original vs proposed floor object counts and unchanged structural member counts. It writes **zero** source files. The log/report is a review aid, not a construction approval or permission to merge. A human or assistant must then inspect the project evidence, make approved scoped model edits and submit a normal tested PR.
+
 ## Change-set contract
 
 Schema: **jp-cad://aad-edit-change-set/1**.
