@@ -1,7 +1,7 @@
 /** Project workspace link and local request history: all currently listed projects. */
 import assert from "node:assert/strict";
 import {chromium} from "playwright";
-const root=process.env.CAD_SITE_URL||"http://127.0.0.1:5191/jp-drawing-coordination/";
+const root=process.env.CAD_SITE_URL||"http://127.0.0.1:5191/JP_Computer-Aided-Drawings/"; // staging preview; production passes CAD_SITE_URL explicitly
 const browser=await chromium.launch({headless:true,args:["--no-sandbox","--disable-dev-shm-usage","--use-gl=angle","--use-angle=swiftshader"]});
 async function open(page,slug){
  const url=new URL("projects/"+slug+"/",root);
