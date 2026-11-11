@@ -161,6 +161,8 @@ jobs:
         env:
           VERIFIED_SOURCE_SHA: ${{ github.event.workflow_run.head_sha }}
           PAGES_WORKFLOW_RUN_ID: ${{ github.event.workflow_run.id }}
+        env:
+          CAD_PUBLIC_BASE: https://fabingurung.github.io/jp-drawing-coordination/
         run: node tools/site/cad-live-provenance-readback.mjs
       - name: Install browser parity runner for real public Narayani studio
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
