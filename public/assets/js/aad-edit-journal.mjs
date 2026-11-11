@@ -118,7 +118,8 @@ export function createAADEditJournal({manifest,sourceModels,manifestPath,initial
  let warning="";
  if(storage){
   try{
-   const saved=JSON.parse(storage.getItem(key)||"null");
+   const previousRaw=storage.getItem(key);
+   const saved=JSON.parse(previousRaw||"null");
    if(saved&&saved.schema===base.schema&&saved.projectId===base.projectId&&
      saved.baselineFingerprint===baselineFingerprint&&saved.baselineRevision===base.baselineRevision){
     replayAADChangeSet(sourceModels,saved,{projectId:base.projectId,revision:base.baselineRevision});
@@ -128,7 +129,7 @@ export function createAADEditJournal({manifest,sourceModels,manifestPath,initial
   }catch(e){warning="Saved journal invalid; preserved in browser storage: "+e.message;}
  }
  if(!data.events.length&&!same(initialModels,sourceModels)){
-  const patch=diffAADModels({models:sourceModels},{models:initialModels});
+  const patch=diffAADModels(sourceModels,initialModels);
   data.events.push({id:"prior-local-draft",time:now(),kind:"recovered-untracked-draft",level:null,
    objectId:null,description:"Earlier edits were recovered from local storage without individual operation history",
    preFingerprint:baselineFingerprint,postFingerprint:aadFingerprint(initialModels),patch});
@@ -147,7 +148,7 @@ export function createAADEditJournal({manifest,sourceModels,manifestPath,initial
   if(pre===post)return null;
   if(pre!==data.finalFingerprint)throw Error("Working model diverged from edit history; export existing history before continuing");
   if(data.events.length>=800)throw Error("Change history limit reached; export it before editing");
-  const patch=diffAADModels({models:before},{models:after});
+  const patch=diffAADModels(before,after);
   if(!patch.length)throw Error("No auditable floor-graph change to record");
   const event={id:"edit-"+String(data.events.length+1).padStart(4,"0"),time:now(),
    kind,level,objectId,description,preFingerprint:pre,postFingerprint:post,patch};
