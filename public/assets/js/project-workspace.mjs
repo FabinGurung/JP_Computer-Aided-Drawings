@@ -88,9 +88,70 @@ $('project-app').innerHTML=`<header class="pw-top"><a class="pw-brand" href="${r
 <button type="button" id="pw-request-copy">Copy requests for ChatGPT</button>
 <button type="button" id="pw-request-export">Download request JSON</button>
 </div>
-<ol id="pw-request-list" aria-label="Pending change requests" style="font-size:.86rem"></ol>
+<ol id="pw-request-list" aria-label="Pending change requests" style="font-size:.86rem"></ol><label for="pw-request-export-preview" style="display:block;font-weight:700">Copyable request log</label><textarea id="pw-request-export-preview" readonly rows="4" style="width:100%;max-width:100%;font:12px/1.45 ui-monospace,monospace;padding:10px;border:1px solid #bfd1de;border-radius:8px"></textarea>
 <p id="pw-request-status" aria-live="polite">No requests recorded. This does not edit GitHub or Google Drive.</p>
 </details><div class="pw-context" role="status" id="pw-context">Preparing the selected project edition…</div><div class="pw-axis-proof" id="pw-axis-proof" role="status" aria-label="Source-evidenced column-axis and derived-data status">Checking axis/source lineage…</div><section id="pw-owner-revision" class="pw-card" hidden aria-label="Owner revision and chapter impact" style="margin:12px 0;padding:15px;border-left:4px solid #bb8440"></section><div class="pw-stage-shortcut" id="pw-stage-shortcut"><div><strong>Packages / Site Modules</strong><span>Open the original material workbenches and site package records</span></div><button type="button" id="pw-open-stages">Open site packages</button></div><div class="pw-work-area"><div class="pw-body" id="pw-body" role="tabpanel" tabindex="0"><iframe class="pw-frame" id="${slug==='ashok-adhikari'?'ashok-engine':'project-engine'}" title="${esc(config.name)} linked plan, model and component register" allow="fullscreen"></iframe><div id="pw-content" hidden></div></div><aside class="pw-inspector" id="pw-inspector" aria-label="East · contextual package inspector"></aside></div><nav class="pw-dock" id="pw-dock" aria-label="South · unique review checkpoint navigator"></nav><footer class="pw-footer"><span>Source-linked review workspace · engineering qualifications remain visible</span><span>Project workspace standard 1.3 · source control tower</span></footer></main></div>`;
+
+/* Shared project-entry edit permissions: admit graph edits only when a current AAD manifest exists.
+ * Review requests are not JSON Patch or approved geometry changes.
+ * Works for Narayani/Ashok model editions and Harisharan/Ramachandra source-only rooms.
+ */
+let projectReviewRequests=[];
+const requestKey=()=>["cad:aad:project-change-requests",slug,edition.id].join(":");
+const requestBundle=()=>({
+ schema:"jp-cad://aad-project-change-requests/1",
+ projectSlug:slug,projectName:config.name,editionId:edition.id,editionBasis:edition.basis,
+ sourceManifestPath:edition.manifest?new URL(edition.manifest,root).pathname:null,
+ reviewStatus:"PROPOSAL_ONLY_NOT_APPLIED_TO_GEOMETRY",
+ engineeringApproval:"HOLD",
+ requests:projectReviewRequests.map(x=>({...x}))
+});
+function requestHandover(){
+ return "CAD_AAD_PROJECT_CHANGE_REQUEST_HANDOVER_V1\n"+
+  "Review this project-scoped request log against current GitHub/Drive sources and do not treat it as applied geometry.\n"+
+  "When an admitted AAD model is available, use its exported jp-cad://aad-edit-change-set/1 for actual working geometry operations.\n"+
+  JSON.stringify(requestBundle(),null,2);
+}
+function requestStatus(message){
+ $('pw-request-status').textContent=message;
+}
+function restoreRequestHistory(){
+ projectReviewRequests=[];
+ try{
+  const source=JSON.parse(localStorage.getItem(requestKey())||"null");
+  if(source?.schema==="jp-cad://aad-project-change-requests/1"&&
+    source.projectSlug===slug&&source.editionId===edition.id&&Array.isArray(source.requests))
+    projectReviewRequests=source.requests.slice(0,100);
+ }catch(_){}
+ renderRequestHistory();
+}
+function renderRequestHistory(){
+ const list=$('pw-request-list');list.replaceChildren();
+ for(const r of projectReviewRequests){
+  const item=document.createElement('li');
+  item.textContent=r.createdAt+" · "+r.action+" · "+(r.objectId||"unidentified object")+" · "+r.description;
+  list.append(item);
+ }
+ $('pw-request-export-preview').value=requestHandover();
+ requestStatus(projectReviewRequests.length+" local request(s) for "+edition.name+
+  ". These are NOT implemented changes and do not modify original source files.");
+}
+function refreshProjectEditEntry(){
+ const link=$('pw-edit-direct'),readiness=$('pw-edit-readiness');
+ if(edition.manifest){
+  const url=new URL('cad/aad/multistorey/',root);
+  url.searchParams.set('manifest',new URL(edition.manifest,root).pathname);
+  url.searchParams.set('workspace','standard');
+  if(edition.structure)url.searchParams.set('structure',edition.structure);
+  link.href=url.href;link.hidden=false;
+  readiness.textContent="This edition has an admitted AAD manifest. Open the shared full-screen editor to select/edit/delete eligible WORKING graph items and export its change history. Protected/source-backed structure is not freely deletable.";
+ }else{
+  link.hidden=true;link.removeAttribute('href');
+  readiness.textContent="SOURCE REVIEW HOLD: this edition has no admitted shared AAD editable manifest. Record a source-qualified change REQUEST below. Do not claim walls, beams or columns were deleted.";
+ }
+ restoreRequestHistory();
+}
+
 const frame=document.querySelector('iframe.pw-frame');
 $('pw-edition').value=edition.id;$('pw-layout').value=layout;
 const validPhase=()=>phase==='all'||edition.levels.some(l=>l.id===phase);
@@ -128,13 +189,44 @@ async function ensureEngine(){if(!edition.manifest&&!edition.engine)return false
 function emptyViews(){return `<div class="pw-card"><h2>1 · Views · ${esc(edition.name)}</h2><p>${esc(edition.basis)}</p><div class="pw-empty-grid"><div class="pw-empty"><strong>2D plan</strong><p>Current private CAD sources have not been admitted as a public plan.</p></div><div class="pw-empty"><strong>3D model</strong><p>No admitted public geometry for this phase. An empty view does not imply zero work.</p></div></div><p><a href="?panel=sources#sources" data-open="sources">Open source and access records →</a></p></div>`;}
 async function sources(){let groups=config.sourceGroups.map(g=>({...g,links:[...g.links]}));if(slug==='harisharan-adhikari'){const r=await fetch(new URL('data/projects/harisharan-adhikari/building.json',root));if(r.ok){const d=await r.json();groups.find(g=>g.harisharanSources).links=d.levels.map(l=>({title:l.name+' · original plan',href:new URL('data/projects/harisharan-adhikari/'+l.sourceSvg,root).href,image:true}));}}
  return `<div class="pw-card"><h2>5 · Sources & records</h2><p>${esc(edition.basis)}</p><details class="pw-help"><summary>Design editions, checkpoints and interface releases</summary><p>A design edition names a project alternative or accepted design baseline. Source revisions identify evidence; checkpoints, software releases and document archives record its history. They do not become additional design editions.</p></details></div>`+groups.map((g,i)=>`<section class="pw-card" id="pw-source-${i}"><h2>${esc(g.title)}</h2><div class="pw-resource-grid">${g.links.map(l=>`<article class="pw-resource">${l.action?`<button data-engine-section="${l.action}">${esc(l.title)}</button>`:`<a href="${esc(new URL(l.href,location.href).href)}" target="_blank" rel="noopener">${esc(l.title)} ↗</a>${l.image?`<a href="${esc(new URL(l.href,location.href).href)}" target="_blank" rel="noopener"><img loading="lazy" src="${esc(new URL(l.href,location.href).href)}" alt="${esc(l.title)}"></a>`:''}`}<p>${esc(l.note||'Existing source evidence. Publication is not engineering approval.')}</p></article>`).join('')}</div></section>`).join('');}
-async function choose(next,push=true){panel=next;section=(panel==='sources'||panel==='views')?section:'';if(panel==='packages'&&!packageById(slug,stage))stage=firstPackageId(slug);share(push);closeMenu();$('pw-edition-basis').textContent=edition.basis;$('pw-chapter-title').textContent=CHAPTERS.find(c=>c[0]===panel)[2]+' / '+edition.name;document.querySelectorAll('[data-west-chapter]').forEach(n=>{n.dataset.current=String(n.dataset.westChapter===panel);});document.querySelectorAll('[data-chapter]').forEach(b=>{const on=b.dataset.chapter===panel;b.setAttribute(b.getAttribute('role')==='tab'?'aria-selected':'aria-current',String(on));if(b.classList.contains('pw-link'))on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current');});phaseOptions();$('pw-sub-sources').innerHTML=config.sourceGroups.map((g,i)=>`<button data-source="${i}">${esc(g.title)}</button><small>5.${i+1}.1 · Source evidence entries</small>`).join('');$('pw-sub-sources').querySelectorAll('button').forEach(b=>b.onclick=async()=>{section='';await choose('sources');$('pw-source-'+b.dataset.source)?.scrollIntoView({block:'start'});});$('pw-sub-boq').innerHTML='<small>2.1 · Phase measurements<br>2.1.1 · Measurement source/units<br>2.2 · Component register<br>2.2.1 · Floor member rows</small>';$('pw-sub-gantt').innerHTML='<small>3.1 · Activity sequence<br>3.1.1 · Calendar and durations<br>3.2 · Dependencies and basis<br>3.2.1 · Source planning assumptions</small>';$('pw-sub-packages').innerHTML='<strong class="pw-tree-section">4.1 · Original workbenches</strong>'+(packageRecords(slug).length?packageRecords(slug).map((r,i)=>`<button data-rail-package="${esc(r.id)}" aria-current="${panel==='packages'&&stage===r.id}">4.1.${i+1} · ${esc(r.title)}</button>`).join(''):'<small>4.1.1 · No original admitted modules</small>')+'<details class="pw-stage-tree"><summary>4.2 · Engineering normalization</summary>'+NORMALIZED_PACKAGE_CATALOG.map(x=>`<button data-normal-slot="${esc(x.id)}">${esc(x.number)} · ${esc(x.title)}</button>`).join('')+'</details>';$('pw-sub-packages').querySelectorAll('[data-rail-package]').forEach(b=>b.onclick=()=>{stage=b.dataset.railPackage;choose('packages');});$('pw-sub-packages').querySelectorAll('[data-normal-slot]').forEach(b=>b.onclick=async()=>{await choose('packages');const node=$('package-slot-'+b.dataset.normalSlot);if(node){node.open=true;node.scrollIntoView({block:'start'});}});
+async function choose(next,push=true){panel=next;section=(panel==='sources'||panel==='views')?section:'';if(panel==='packages'&&!packageById(slug,stage))stage=firstPackageId(slug);share(push);closeMenu();$('pw-edition-basis').textContent=edition.basis;$('pw-chapter-title').textContent=CHAPTERS.find(c=>c[0]===panel)[2]+' / '+edition.name;document.querySelectorAll('[data-west-chapter]').forEach(n=>{n.dataset.current=String(n.dataset.westChapter===panel);});document.querySelectorAll('[data-chapter]').forEach(b=>{const on=b.dataset.chapter===panel;b.setAttribute(b.getAttribute('role')==='tab'?'aria-selected':'aria-current',String(on));if(b.classList.contains('pw-link'))on?b.setAttribute('aria-current','page'):b.removeAttribute('aria-current');});phaseOptions();refreshProjectEditEntry();$('pw-sub-sources').innerHTML=config.sourceGroups.map((g,i)=>`<button data-source="${i}">${esc(g.title)}</button><small>5.${i+1}.1 · Source evidence entries</small>`).join('');$('pw-sub-sources').querySelectorAll('button').forEach(b=>b.onclick=async()=>{section='';await choose('sources');$('pw-source-'+b.dataset.source)?.scrollIntoView({block:'start'});});$('pw-sub-boq').innerHTML='<small>2.1 · Phase measurements<br>2.1.1 · Measurement source/units<br>2.2 · Component register<br>2.2.1 · Floor member rows</small>';$('pw-sub-gantt').innerHTML='<small>3.1 · Activity sequence<br>3.1.1 · Calendar and durations<br>3.2 · Dependencies and basis<br>3.2.1 · Source planning assumptions</small>';$('pw-sub-packages').innerHTML='<strong class="pw-tree-section">4.1 · Original workbenches</strong>'+(packageRecords(slug).length?packageRecords(slug).map((r,i)=>`<button data-rail-package="${esc(r.id)}" aria-current="${panel==='packages'&&stage===r.id}">4.1.${i+1} · ${esc(r.title)}</button>`).join(''):'<small>4.1.1 · No original admitted modules</small>')+'<details class="pw-stage-tree"><summary>4.2 · Engineering normalization</summary>'+NORMALIZED_PACKAGE_CATALOG.map(x=>`<button data-normal-slot="${esc(x.id)}">${esc(x.number)} · ${esc(x.title)}</button>`).join('')+'</details>';$('pw-sub-packages').querySelectorAll('[data-rail-package]').forEach(b=>b.onclick=()=>{stage=b.dataset.railPackage;choose('packages');});$('pw-sub-packages').querySelectorAll('[data-normal-slot]').forEach(b=>b.onclick=async()=>{await choose('packages');const node=$('package-slot-'+b.dataset.normalSlot);if(node){node.open=true;node.scrollIntoView({block:'start'});}});
  const enginePanel=(panel==='views'||panel==='boq'||panel==='gantt'&&slug==='harisharan-adhikari'||panel==='sources'&&['evidence','scenarios'].includes(section))&&Boolean(edition.manifest||edition.engine);frame.hidden=!enginePanel;$('pw-content').hidden=enginePanel;$('pw-stage-shortcut').hidden=!['views','boq'].includes(panel);$('pw-toolbar').hidden=panel==='packages'||panel==='sources'&&!enginePanel;$('pw-layout').closest('label').hidden=panel!=='views';$('pw-fit').hidden=panel!=='views';const phaseInfo=edition.levels.find(l=>l.id===phase);$('pw-scope').textContent=phaseInfo?.note||(panel==='gantt'?config.programme:panel==='boq'?config.quantities:'Same phase and selected object in the plan, model and register.');
  if(enginePanel){await ensureEngine();syncEngine();}else{$('pw-content').innerHTML=panel==='packages'?renderPackages({slug,root,editionId:edition.id,selected:stage,query:packageQuery,filter:packageFilter,mode:packageMode,escape:esc}):panel==='sources'?await sources():panel==='views'?emptyViews():panel==='boq'?`<section class="pw-card"><h2>2 · Quantities / BOQ</h2><p>${esc(config.quantities)}</p><p class="pw-note">Measurement values are pending. No zero quantities or prices are implied.</p><a href="?panel=sources#sources" data-open="sources">Open existing estimate and source records →</a></section>`:`<section class="pw-card"><h2>3 · Programme / Gantt</h2><p>${esc(config.programme)}</p><div class="pw-note">Schedule not admitted · start date unknown · no live scheduling integration claimed</div></section>`;context();}
  $('pw-content').querySelectorAll('[data-package-id]').forEach(b=>b.onclick=()=>{stage=b.dataset.packageId;choose('packages');});if(panel==='packages'){const refresh=()=>{const rows=packageRecords(slug);$('pw-package-cards').innerHTML=renderPackageCards({records:rows,selected:stage,query:packageQuery,filter:packageFilter,escape:esc});$('pw-package-cards').querySelectorAll('[data-package-id]').forEach(b=>b.onclick=()=>{stage=b.dataset.packageId;choose('packages');});$('pw-package-result-count').textContent=String(filterPackageRecords(rows,packageQuery,packageFilter).length);};$('pw-package-search').oninput=()=>{packageQuery=$('pw-package-search').value;refresh();};$('pw-package-filter').onchange=()=>{packageFilter=$('pw-package-filter').value;refresh();};$('pw-content').querySelectorAll('[data-package-mode]').forEach(b=>b.onclick=()=>{packageMode=b.dataset.packageMode;$('pw-package-cards').classList.toggle('grid',packageMode==='grid');$('pw-content').querySelectorAll('[data-package-mode]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));});const preview=$('pw-package-preview');if(preview)preview.ontoggle=()=>{const iframe=preview.querySelector('[data-package-preview-src]');if(preview.open&&iframe&&!iframe.src)iframe.src=iframe.dataset.packagePreviewSrc;};}$('pw-content').querySelectorAll('[data-open]').forEach(b=>b.onclick=e=>{e.preventDefault();choose(b.dataset.open);});$('pw-content').querySelectorAll('[data-engine-section]').forEach(b=>b.onclick=()=>{section=b.dataset.engineSection;choose('sources');});$('pw-inspector').innerHTML=renderPackageInspector({slug,root,editionId:edition.id,selected:stage,panel,phase,escape:esc});await renderReviewNavigation();const cp=$('pw-copy-package');if(cp)cp.onclick=async()=>{try{await navigator.clipboard.writeText(cp.dataset.copyPackage);cp.textContent='Link copied';}catch{cp.textContent='Copy unavailable — use browser share';}};await renderOwnerRevision();return true;}
 document.querySelectorAll('[data-chapter]').forEach(b=>b.onclick=()=>{section='';choose(b.dataset.chapter);});const chapterTabs=[...document.querySelectorAll('.pw-chapter-bar button')];chapterTabs.forEach((b,i)=>b.onkeydown=e=>{const count=chapterTabs.length,n=e.key==='ArrowRight'?(i+1)%count:e.key==='ArrowLeft'?(i+count-1)%count:e.key==='Home'?0:e.key==='End'?count-1:null;if(n!==null){e.preventDefault();chapterTabs[n].focus();section='';choose(chapterTabs[n].dataset.chapter);}});
-$('pw-phase').onchange=()=>{phase=$('pw-phase').value;share();phaseOptions();syncEngine();context();renderReviewNavigation();$('pw-scope').textContent=edition.levels.find(l=>l.id===phase)?.note||config.quantities;};$('pw-layout').onchange=()=>{layout=$('pw-layout').value;share();api?.setLayout(layout);setTimeout(resizeFrame,50);};$('pw-fit').onclick=()=>api?.fit();$('pw-open-stages').onclick=()=>{stage=stage||firstPackageId(slug);choose('packages');};$('pw-edition').onchange=()=>{edition=config.editions.find(e=>e.id===$('pw-edition').value);reviewIndex=0;engineKey='';mounted=false;epoch++;section='';choose(panel);};$('pw-project').onchange=()=>location.assign(new URL('projects/'+$('pw-project').value+'/',root));$('pw-menu').onclick=()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'closed';$('pw-menu').setAttribute('aria-expanded',String(open));};addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});addEventListener('popstate',()=>{const p=new URL(location.href).searchParams;edition=config.editions.find(e=>e.id===p.get('edition'))||config.editions[0];$('pw-edition').value=edition.id;phase=p.get('phase')||config.defaultLevel;layout=p.get('layout')||'split';$('pw-layout').value=layout;section=p.get('section')||'';stage=p.get('package')||p.get('stage')||firstPackageId(slug);const next=p.get('panel')==='views'&&section==='stages'?'packages':p.get('panel')||'views';if(next==='packages')section='';choose(next,false);});
-frame.addEventListener('load',resizeFrame);window.ProjectWorkspace={getState:()=>({slug,edition:edition.id,phase,layout,panel,section,stage,package:stage,ready:!!api}),getDrawing:()=>api,getLineage:()=>currentLineage?JSON.parse(JSON.stringify(currentLineage)):null,getReviewGate:()=>document.getElementById('pw-dock')?.dataset.reviewId||null};choose(panel,false);
+$('pw-phase').onchange=()=>{phase=$('pw-phase').value;share();phaseOptions();syncEngine();context();renderReviewNavigation();$('pw-scope').textContent=edition.levels.find(l=>l.id===phase)?.note||config.quantities;};$('pw-layout').onchange=()=>{layout=$('pw-layout').value;share();api?.setLayout(layout);setTimeout(resizeFrame,50);};$('pw-fit').onclick=()=>api?.fit();
+$('pw-edit-request-open').onclick=()=>{
+ const area=$('pw-change-request');area.open=true;area.scrollIntoView({block:'start',behavior:'smooth'});
+};
+$('pw-request-record').onclick=()=>{
+ const note=$('pw-request-note').value.trim(),id=$('pw-request-object').value.trim();
+ if(note.length<10){requestStatus("Describe the proposed change in at least ten characters; nothing recorded.");return;}
+ if(projectReviewRequests.length>=100){requestStatus("Export existing request history before adding more.");return;}
+ const action=$('pw-request-type').value;
+ if(!["request-remove","request-modify","request-add","question"].includes(action))return;
+ const request={
+  id:"request-"+String(projectReviewRequests.length+1).padStart(4,'0'),
+  createdAt:new Date().toISOString(),action,phase,objectId:id||null,description:note,
+  applied:false,status:"REVIEW_REQUIRED_NOT_APPLIED"
+ };
+ projectReviewRequests.push(request);
+ try{localStorage.setItem(requestKey(),JSON.stringify(requestBundle()));}catch(_){}
+ $('pw-request-note').value='';renderRequestHistory();
+};
+$('pw-request-copy').onclick=async()=>{
+ const value=requestHandover();
+ try{await navigator.clipboard.writeText(value);requestStatus("Copied local project change request log to clipboard; source unchanged.");}
+ catch(_){$('pw-request-export-preview').focus();$('pw-request-export-preview').select();requestStatus("Clipboard unavailable. Select/copy the request log below manually.");}
+};
+$('pw-request-export').onclick=()=>{
+ const json=JSON.stringify(requestBundle(),null,2);
+ const file=new Blob([json],{type:'application/json'}),url=URL.createObjectURL(file);
+ const a=document.createElement('a');a.href=url;a.download=slug+"_"+edition.id+"_AAD_CHANGE_REQUESTS.json";
+ document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500);
+ requestStatus("Downloaded proposal-only request history. Nothing has been written to GitHub or Drive.");
+};
+$('pw-open-stages').onclick=()=>{stage=stage||firstPackageId(slug);choose('packages');};$('pw-edition').onchange=()=>{edition=config.editions.find(e=>e.id===$('pw-edition').value);reviewIndex=0;engineKey='';mounted=false;epoch++;section='';choose(panel);};$('pw-project').onchange=()=>location.assign(new URL('projects/'+$('pw-project').value+'/',root));$('pw-menu').onclick=()=>{const open=document.body.dataset.menu!=='open';document.body.dataset.menu=open?'open':'closed';$('pw-menu').setAttribute('aria-expanded',String(open));};addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});addEventListener('popstate',()=>{const p=new URL(location.href).searchParams;edition=config.editions.find(e=>e.id===p.get('edition'))||config.editions[0];$('pw-edition').value=edition.id;phase=p.get('phase')||config.defaultLevel;layout=p.get('layout')||'split';$('pw-layout').value=layout;section=p.get('section')||'';stage=p.get('package')||p.get('stage')||firstPackageId(slug);const next=p.get('panel')==='views'&&section==='stages'?'packages':p.get('panel')||'views';if(next==='packages')section='';choose(next,false);});
+frame.addEventListener('load',resizeFrame);window.ProjectWorkspace={getState:()=>({slug,edition:edition.id,phase,layout,panel,section,stage,package:stage,ready:!!api}),getDrawing:()=>api,getLineage:()=>currentLineage?JSON.parse(JSON.stringify(currentLineage)):null,getReviewGate:()=>document.getElementById('pw-dock')?.dataset.reviewId||null,getChangeRequests:()=>requestBundle(),getEditableManifest:()=>edition.manifest||null};choose(panel,false);
 
 addEventListener('message',e=>{if(e.origin===location.origin&&e.source===frame.contentWindow&&e.data?.type==='project-workspace-section'&&['scenarios','evidence'].includes(e.data.section)){section=e.data.section;choose('sources');}});
 
