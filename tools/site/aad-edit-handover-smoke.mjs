@@ -1,5 +1,8 @@
 /** AAD local edit audit contract: log, replay, source protection, and stale baseline. */
 import fs from "node:fs";
+import {execFileSync} from "node:child_process";
+import {tmpdir} from "node:os";
+import {join} from "node:path";
 import assert from "node:assert/strict";
 import {createAADWorkspace} from "../../public/assets/js/aad-unified-workspace.mjs";
 import {createAADEditJournal,aadFingerprint,diffAADModels,replayAADChangeSet} from "../../public/assets/js/aad-edit-journal.mjs";
@@ -42,6 +45,15 @@ assert.deepEqual(sourceModels,sourceCopy,"original source models must remain imm
 assert.match(journal.handover(),/AAD_BROWSER_EDIT_HANDOVER_V1/);
 assert.match(journal.handover(),/Do NOT treat this text as engineering approval/);
 assert.equal(aadFingerprint(sourceModels),changeSet.baselineFingerprint);
+const temp=fs.mkdtempSync(join(tmpdir(),"aad-review-"));
+try{
+ const changePath=join(temp,"review.json");
+ fs.writeFileSync(changePath,JSON.stringify(changeSet));
+ const output=execFileSync(process.execPath,["tools/site/aad-review-change-set.mjs",changePath],{encoding:"utf8"});
+ assert.match(output,/AAD_EDIT_CHANGESET_READONLY_REPLAY_PASS/);
+ assert.match(output,/"originalStructuralCountsUnchanged": true/);
+ assert.match(output,/"sourceFilesWritten": 0/);
+}finally{fs.rmSync(temp,{recursive:true,force:true});}
 const remembered=init();
 assert.equal(remembered.getEvents().length,4,"browser history must survive reload with same source fingerprint");
 assert.deepEqual(replayAADChangeSet(sourceModels,remembered.exportChangeSet()),updated);
