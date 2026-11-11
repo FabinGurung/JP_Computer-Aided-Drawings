@@ -4,6 +4,22 @@
 
 This extends the **existing** unified 2D/3D AAD editor, rather than creating another source registry, engineering authority or backend. It is a user-initiated **local-only** authoring and handover workflow.
 
+## Cross-project inheritance and Drive ownership — 11 Nov 2026
+
+The shared editor lives in `cad/aad/multistorey/`; project-entry routing uses `public/assets/js/project-workspace.mjs` and the **selected design edition's** registered manifest. No client-specific engine fork or duplicate source model is created.
+
+| Existing project page | Mode offered | Source gate |
+| --- | --- | --- |
+| Narayani Parajuli | Open model editor + edit history | Admitted AAD model; source-review overlay and engineering HOLDs preserved |
+| Ashok Adhikari | Open model editor + edit history | The selected v1/v2/v3/v3.1/v3.2 architectural-review manifest, not another project's edition |
+| Harisharan Adhikari | Project-scoped change-request form | Linked source/axonometric engineering viewer, not admitted as shared editable AAD floorGraph |
+| Ramachandra Devkota | Project-scoped change-request form | DWG/DXF source family, but public editable building model not admitted |
+| Example-empty template | Project-scoped change-request form | Empty template, not a client model |
+
+**Change requests** use a separate `jp-cad://aad-project-change-requests/1` format: project slug, selected edition, source manifest when available, floor/phase, object/source ID, action, reason and explicit `REVIEW_REQUIRED_NOT_APPLIED`. This record is not an executed deletion or a JSON Patch.
+
+**Google Drive governance reference:** [CAD-AAD-EDIT-HANDOVER-STD-001-R000001 — Shared Project Edit History, Review and GitHub Publication](https://docs.google.com/document/d/1nB_IDhdD4HNvjFSf-1ekrBlozGvZz6Ot3-o9ReOYqfA/edit), saved under the verified `01_JP / 01 Useful References` Drive hierarchy. It is one shared operational reference, not a new authority for original project drawings. Send approved evidence to the correct pre-existing project room after verifying actual source file and folder IDs.
+
 ## Use it
 
 1. Open the [Design Studio](../../cad/aad/index.html) synthetic sample or an actual project AAD workspace. Choose the relevant floor.
