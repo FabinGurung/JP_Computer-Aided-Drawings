@@ -54,6 +54,7 @@ function patchOne(document,op){
  if(!["test","add","remove","replace"].includes(op?.op)||typeof op.path!=="string")
   throw Error("Unsupported edit operation");
  const parts=op.path.split("/").slice(1).map(pointerUnescape);
+ if(parts.some(x=>["__proto__","constructor","prototype"].includes(x)))throw Error("Unsafe patch path");
  if(parts[0]!=="models"||parts.length<4||parts[2]!=="floorGraph"||
   !["nodes","walls","openings","perimeter","labels"].includes(parts[3]))
   throw Error("Change outside editable floor graph: "+op.path);
@@ -123,7 +124,7 @@ export function createAADEditJournal({manifest,sourceModels,manifestPath,initial
    if(saved&&saved.schema===base.schema&&saved.projectId===base.projectId&&
      saved.baselineFingerprint===baselineFingerprint&&saved.baselineRevision===base.baselineRevision){
     replayAADChangeSet(sourceModels,saved,{projectId:base.projectId,revision:base.baselineRevision});
-    if(saved.finalFingerprint===aadFingerprint(initialModels))data=saved;
+    if(saved.sourceManifestPath===manifestPath&&saved.finalFingerprint===aadFingerprint(initialModels))data=saved;
     else {storage.setItem(key+":recovery:"+Date.now(),previousRaw);
      warning="Previous history archived separately because the working draft diverged; exported changes need reconciliation."; }
    }
