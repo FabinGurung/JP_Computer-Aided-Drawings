@@ -1444,6 +1444,40 @@ $("aad-import-file").addEventListener("change",async e=>{
  e.target.value="";
 });
 
+
+$("aad-edit-mode").addEventListener("click",()=>{
+ editMode=!editMode;syncEditMode();
+ status(editMode?"Local Edit draft enabled; source files still read-only":"View-only mode: model edits disabled");
+});
+$("aad-edit-delete-selected").addEventListener("click",()=>{
+ if(!editMode){status("Choose Edit draft first");return;}
+ const picked=selectedGraphObject();
+ if(picked?.opening)topologyButton("removeOpening");
+ else if(picked?.wall)topologyButton("removeWall");
+ else {
+  $("aad-edit-history-status").textContent="This item is not an editable graph wall or hosted door/window. Source-backed structural objects are protected.";
+  status("Deletion blocked: select an eligible working graph wall or hosted opening");
+ }
+});
+$("aad-edit-copy-handover").addEventListener("click",async()=>{
+ if(!editJournal)return;
+ const txt=editJournal.handover();
+ try{
+  if(!navigator.clipboard?.writeText)throw Error("Clipboard API unavailable");
+  await navigator.clipboard.writeText(txt);
+  status("Copied "+editJournal.getEvents().length+" source-qualified local edit event(s) for ChatGPT review; no publication occurred.");
+ }catch(_){
+  const area=$("aad-edit-handover");area.focus();area.select();
+  status("Copy not available here. The edit log is selected; use Copy manually.");
+ }
+});
+$("aad-edit-download-handover").addEventListener("click",()=>{
+ if(!editJournal)return;
+ const data=editJournal.exportChangeSet();
+ download(data.projectId+"_AAD_LOCAL_EDIT_CHANGESET.json",JSON.stringify(data,null,2),"application/json");
+ status("Downloaded local change-set JSON. It is not a GitHub commit or engineering approval.");
+});
+
 // Stable command adapter for browser automation and external AI agents.
 // An AI decides/constructs the action; the shared engine validates and commits
 // it to the local working model. No raw-language interpreter is claimed here.
@@ -1473,7 +1507,7 @@ window.AADStudio=Object.freeze({
   return{openingId:id,host:wall.id,wallTriangleHitsThroughAperture:ray.intersectObject(mesh,false).length,solidVolume:mesh.userData.wallVoidProof?.solidVolume,grossVolume:mesh.userData.wallVoidProof?.grossVolume};
  },
  getCapabilities:()=>({schema:"jp-cad://aad-studio-capabilities/1",editor:"shared-multistorey",
-   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft"],coordinates:"metres",ifc:"IFC4_CONCEPTUAL_ENGINEERING_HOLD",sourceReviewedStructure:Boolean(building?.sourceStructuralReview),topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
+   actions:["selectElementById","change","topology","getRooms","setLevel","getSnapshot","getDraft","getChangeSet","getEditHandover","setEditMode"],coordinates:"metres",ifc:"IFC4_CONCEPTUAL_ENGINEERING_HOLD",sourceReviewedStructure:Boolean(building?.sourceStructuralReview),topology:["addWall","splitWall","joinWalls","removeWall","addOpening","removeOpening"]}),
  selectElementById:(id)=>{
   if(!building)return false;
   const e=building.elements.find(x=>x.id===id);
@@ -1575,7 +1609,11 @@ window.AADStudio=Object.freeze({
   issuedForConstruction:false,sourceMode:"PARTIAL_DXF_GEOMETRY_NOT_SURVEY_REGISTRATION"
  }:null,
  getSnapshot:()=>workspace?workspace.snapshot():null,
- getDraft:()=>workspace?workspace.bundle():null
+ getDraft:()=>workspace?workspace.bundle():null,
+ getChangeSet:()=>editJournal?editJournal.exportChangeSet():null,
+ getEditHandover:()=>editJournal?editJournal.handover():null,
+ getEditMode:()=>editMode,
+ setEditMode:(enabled)=>{editMode=Boolean(enabled);syncEditMode();return editMode;}
 });
 main().catch(e=>{status("Unable to assemble this project: "+e.message);$("qa-result").textContent="ERROR: "+e.message;});
 
