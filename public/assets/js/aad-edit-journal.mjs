@@ -124,7 +124,8 @@ export function createAADEditJournal({manifest,sourceModels,manifestPath,initial
      saved.baselineFingerprint===baselineFingerprint&&saved.baselineRevision===base.baselineRevision){
     replayAADChangeSet(sourceModels,saved,{projectId:base.projectId,revision:base.baselineRevision});
     if(saved.finalFingerprint===aadFingerprint(initialModels))data=saved;
-    else warning="Saved journal did not match this browser's working draft; a separate recovery event is required.";
+    else {storage.setItem(key+":recovery:"+Date.now(),previousRaw);
+     warning="Previous history archived separately because the working draft diverged; exported changes need reconciliation."; }
    }
   }catch(e){warning="Saved journal invalid; preserved in browser storage: "+e.message;}
  }
