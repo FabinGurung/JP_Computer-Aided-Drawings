@@ -912,6 +912,7 @@ function persistDraft(){
 }
 function setLevel(level){
  if(standardProject&&!["substructure","roof"].includes(projectPhase))projectPhase=level;
+ if(activeLevel!==level)clearPinnedGrid();
  activeLevel=level;drawFirst=null;
  for(const l of building.levels)floorFlags.set(l.id,level==="all"||l.id===level);
  for(const [idx,label] of [...$("storeys").querySelectorAll("label")].entries())
@@ -1227,6 +1228,20 @@ async function main(){
   if(manifest.services){$('aad-mep-summary').textContent=manifest.services.notes.join(' ');$('aad-mep-conflicts').textContent=siteConflicts(manifest.services.assets,manifest.services.siteFrame).map(a=>a.id+': '+(a.outsidePlot?'outside plot; ':'')+(a.plinthOverlap?'excavation envelope crosses house outline; ':'')+(a.wcOverlap?'overlaps outside WC; ':'')).join(' | ');}
   cutaway=true;$("aad-presentation-controls").hidden=false;setKindVisibility('roof',false);
   setLevel(manifest.presentation.defaultLevel||'gf');setViewMode(manifest.presentation.defaultView||'split');renderModel();drawPlan();centerView();
+ }
+ // A standalone editor respects the project page's chosen floor and layout.
+ // The embedded editor still listens to the parent workspace without changing its URL.
+ const launchPhase=params.get('phase');
+ if(launchPhase){
+  const requested=launchPhase==='roof'?'ff':launchPhase;
+  if(requested==='all'||building.levels.some(l=>l.id===requested)){
+   roofAccessMode=launchPhase==='roof';
+   setLevel(requested);
+   if(launchPhase==='roof')setKindVisibility('roof',true);
+   const launchLayout=params.get('layout');
+   if(['split','plan','building'].includes(launchLayout))setViewMode(launchLayout);
+   renderModel();drawPlan();centerView();
+  }
  }
  if(standardProject){
   const {installProjectEngine}=await import(/* @vite-ignore */moduleURL('project-engine-layout.mjs'));
