@@ -1299,7 +1299,7 @@ function renderStairSchedule(presentation){
  const landingB=stairElements.find(e=>e.id==='GF-STAIR-SIDE-LANDING')?.dx*1000||900;
  const footprint=goings*going+landingA+landingB,available=bay[0]*1000;
  const preferred=279.4,preferredEnvelope=goings*preferred+landingA+landingB;
- const num=n=>Number(n).toFixed(1).replace(/\\.0$/,'');
+ const num=n=>Number(n).toFixed(1).replace(/\.0$/,'');
  const row=(label,value)=>'<tr><td>'+label+'</td><td>'+value+'</td></tr>';
  host.innerHTML='<table aria-label="Derived stair dimensions">'+
  row('Floor rise',num(rise)+' mm')+
