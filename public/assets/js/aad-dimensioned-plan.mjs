@@ -35,7 +35,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
    front.append(make('text',{x:targetX,y:z0-.61,'text-anchor':'middle',class:'aad-grid-label',style:'font-weight:750;fill:#2459b4'},'BX036 · 3600 mm'));
    // A distinct amber leader exposes, rather than hides, the incompatible staircase.
    back.append(make('path',{d:`M${stairX} 12.20 V14.285`,stroke:'#c17b24','stroke-width':.042,'stroke-dasharray':'.12 .09',fill:'none','pointer-events':'none','data-unresolved-stair-datum-mm':coord.unresolvedStairCentrelineXmm}));
-   front.append(make('text',{x:x0+W/2,y:z1+1.64,'text-anchor':'middle',class:'aad-grid-label',style:'font-weight:700;fill:#976221'},'STAIR OFFSET HOLD · '+coord.stairHoldOffsetMm+' mm between wall centrelines'));
+   // The stair-datum separation is reported in the east-coordinate inspector; no extra text across the plan.
   }
  }
  const levels=roofOnly?[]:levelId==='all'?['GF','FF']:[levelId.toUpperCase()];
@@ -79,7 +79,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
   for(const z of [z0,z1-bayD,z1])front.append(make('path',{d:`M${x0} ${z}H${x0-1.65}`,class:'aad-dim'}));
   dim(x0-1.45,z0,x0-1.45,z1,mm(D)+' overall');dim(x0-.85,z1-bayD,x0-.85,z1,mm(bayD)+' stair bay');
   front.append(make('text',{x:x0+W/2,y:z0-1.65,'text-anchor':'middle',class:'aad-space-size'},p.wallLegend||''));
-  front.append(make('text',{x:x0+W/2,y:z0-1.28,'text-anchor':'middle',class:'aad-space-size'},(p.coordinateGrid?'BUILDING X/Y · exact mm / ':'')+[p.grid?.minor||.1,p.grid?.medium||.5,p.grid?.major||1].map(n=>Math.round(n*1000)).join(' / ')+' mm grid · not an engineered structural grid'));
+  if(!p.coordinateGrid)front.append(make('text',{x:x0+W/2,y:z0-1.28,'text-anchor':'middle',class:'aad-space-size'},[p.grid?.minor||.1,p.grid?.medium||.5,p.grid?.major||1].map(n=>Math.round(n*1000)).join(' / ')+' mm grid'));
  }
  if(columnAxes&&p.columnAxisGrid)drawColumnAxisOverlay(front,building.manifest,levelId,{outerBounds:p.outerBounds,roofOnly});
 }
