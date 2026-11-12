@@ -34,7 +34,9 @@ try {
    return{current,after:doc.getElementById('aad-grid-current').textContent,enabled,
     preview:doc.getElementById('aad-coordinate-readout').textContent};
   });
-  assert.match(pin.current,/Pinned: Ashok FF BX036-BY074/);
+  assert.match(pin.current,/Pinned: Ashok FF BX0(35|36)-BY074/);
+  const sampledX=Number(pin.current.match(/building X=(\\d+) mm/)?.[1]);
+  assert.ok(Number.isFinite(sampledX)&&Math.abs(sampledX-3600)<100,'Coordinate cell must match the actual sampled SVG point, allowing pointer pixel quantization');
   assert.equal(pin.after,pin.current);
   assert.equal(pin.enabled,true);
   assert.match(pin.preview,/Preview \(not pinned\)/);
