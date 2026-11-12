@@ -1,0 +1,122 @@
+{
+  "schema": "jp-cad://ashok-staircase-drawing-calculation/1",
+  "project": "Ashok Adhikari Residence",
+  "edition": "v3.3",
+  "dateNpt": "2026-11-12",
+  "classification": "ARCHITECTURAL_DIMENSION_CHECK_ONLY__DESIGN_GEOMETRY_UNCHANGED",
+  "drawnSources": {
+    "manifest": "aad-building-v3-3-review.json",
+    "groundFloorModel": "aad-gf-model-v3-grid-review.json",
+    "firstFloorModel": "aad-ff-model-v3-3-review.json",
+    "elements": [
+      "GF-STAIR-FLIGHTS",
+      "GF-STAIR-MID-LANDING",
+      "GF-STAIR-SIDE-LANDING",
+      "FF-STAIR-SIDE-LANDING",
+      "FF-ROOF-STAIR-FLIGHTS",
+      "FF-ROOF-STAIR-MID-LANDING",
+      "ROOF-ARRIVAL-LANDING"
+    ],
+    "modelledHeadroomAlgorithm": "AADStudio.getModelledHeadroomProof; modelled obstacle samples are not finish-surface verification"
+  },
+  "elevationsMm": {
+    "groundFloor": 610,
+    "firstFloor": 3658,
+    "roofFloor": 6706
+  },
+  "drawnConfiguration": {
+    "risePerStoreyMm": 3048,
+    "riserCount": 18,
+    "flightCount": 2,
+    "risersPerFlight": 9,
+    "riserHeightMm": 169.333,
+    "goingsPerFlight": 8,
+    "goingMm": 250,
+    "horizontalRunPerFlightMm": 2000,
+    "flightVerticalRiseMm": 1524,
+    "landingRiseMm": 1524,
+    "sideLandingWidthMm": 900,
+    "midLandingWidthMm": 900,
+    "flightWidthMm": 900,
+    "nominalBayDimensionsMm": {
+      "longitudinal": 4290,
+      "lateral": 2200
+    },
+    "longitudinalEnvelopeMm": 3800,
+    "nominalLongitudinalResidualMm": 490,
+    "nominalTwoFlightWidthMm": 1800,
+    "nominalInterFlightGapMm": 100,
+    "documentedPlanMarginsMm": {
+      "near": 50,
+      "far": 250
+    },
+    "modelledNosingLineSlopeDeg": 34.111,
+    "twoRisersPlusGoingMm": 588.667,
+    "landingSlabBottomVsModelledFinishedSurface": "150 mm presentation/waist and guard geometry are display proxies; finish thickness unknown"
+  },
+  "ownerPreviouslyRequestedOption": {
+    "status": "DIMENSIONAL_OPTION_ONLY__NOT_DRAWN_OR_INSTALLED",
+    "goingMm": 279.4,
+    "goingsPerFlight": 8,
+    "horizontalRunPerFlightMm": 2235.2,
+    "nominalEnvelopeMm": 4035.2,
+    "nominalResidualMm": 254.8,
+    "twoRisersPlusGoingMm": 618.067,
+    "nosingLineSlopeDeg": 31.218,
+    "warning": "Theoretical gross-bay fit only; landings must move or the usable finished run must be verified. Do not silently replace current 250 mm 3D components."
+  },
+  "coordinateReconciliation": {
+    "existingInternalPartitionXmm": 3600,
+    "proposedDisplayAxisBXmm": 3600,
+    "stairEnvelopeOuterFaceXmm": 4290,
+    "stairDatumXmm": 4175,
+    "wallToStairDatumOffsetMm": 575,
+    "displayMarkerB1Xmm": 3600,
+    "sideLandingCenterXmm": 3600,
+    "sideLandingExtentXmm": [
+      3150,
+      4050
+    ],
+    "finding": "B1 proposed display marker intersects the drawn landing XY envelope. Do not treat the marker as an accepted structural column; transfer beam/column support placement to structural analysis."
+  },
+  "architecturalReference": {
+    "title": "Nepal NBC 206:2024 Architectural Design Requirements — Tables 3 and 4",
+    "officialSource": "https://giwmscdnone.gov.np/media/pdf_upload/NBC_206_ARCHITECTURAL_DESIGN_REQUIREMENTS-signed.pdf",
+    "residentialMinimumGoingMm": 250,
+    "residentialMaximumRiserMm": 190,
+    "maximumRisersPerFlight": 15,
+    "minimumStairHeadroomMm": 2000,
+    "minimumHandrailHeightMm": 900,
+    "typicalResidentialWidthMm": 900,
+    "scope": "Code-table comparison of modelled dimensions; no claim that as-built dimensions, clear width, headroom, fire route or municipality approvals have been verified."
+  },
+  "drawingDebtStatus": [
+    {
+      "id": "STAIR-MATH",
+      "state": "CALCULATED",
+      "notes": "18 x 169.333 mm; 9+9 risers; 8 goings per flight at 250 mm; roof repeat audited."
+    },
+    {
+      "id": "STAIR-PROPORTION",
+      "state": "DRAWN_MODEL_RETAINED",
+      "notes": "250 mm drawn; 279.4 mm prior owner preference calculated separately without moving accepted rooms."
+    },
+    {
+      "id": "B1-STAIR-OVERLAP",
+      "state": "TRANSFERRED_TO_STRUCTURAL_ANALYSIS",
+      "notes": "B-axis X3600 overlaps side landing; any physical column/beam placement requires a separate support graph."
+    },
+    {
+      "id": "HEADROOM-FINISHED",
+      "state": "PENDING_SOURCE_FINISH_DIMENSIONS",
+      "notes": "No independently measured finished underside/soffit or ceiling datum in drawing data."
+    },
+    {
+      "id": "STAIR-GUARD",
+      "state": "DRAWN_PROXY_ONLY",
+      "notes": "Guard 900 mm illustrative model; later external engineering/layout review."
+    }
+  ],
+  "geometryMutationsApplied": 0,
+  "issuedForConstruction": false
+}
