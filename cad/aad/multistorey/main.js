@@ -1278,16 +1278,21 @@ for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEven
  const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
 });
 $('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg=$('viewer2d').cloneNode(true);svg.setAttribute('xmlns',svgNS);download(building.projectId+'_'+activeLevel+'_DIMENSIONED_PLAN.svg',new XMLSerializer().serializeToString(svg),'image/svg+xml');});
-// Source-neutral coordinate feedback, with an owner-addressable 100 mm cell code for
-// Ashok's explicit grid-manifest only. This is LOCAL building model space, not GIS
-// latitude/longitude or a professionally registered structural grid.
+// The coordinate inspector lives below the plan. Hover previews; click/tap pins.
 const gridHud=document.createElement('section');gridHud.id='aad-grid-hud';gridHud.hidden=true;
-gridHud.innerHTML='<strong>Building coordinate grid · 100 mm cells</strong><span id="aad-grid-current">Move the pointer on the plan to read exact X/Y millimetres and cell address.</span><button type="button" id="aad-grid-copy" title="Copy the last selected grid coordinate as a prompt">Copy coordinate</button><label id="aad-column-axes-label" hidden><input id="aad-column-axes" type="checkbox" checked> Show column axes A–C / 1–5 (proposed locations)</label><small>100 mm XY measurement grid is separate from the letter/number column axes. A/B/C and 1–5 label existing <em>provisional</em> column markers, not engineered members. Plot X = local X + 1944 mm · Plot Y = local Y + 2000 mm. Stair offset remains on HOLD.</small>';
-const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:5px 12px;align-items:center;padding:9px 12px;border-bottom:1px solid #c8d8d8;background:#eef6ff;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong,#aad-grid-hud small{grid-column:1/-1}#aad-grid-hud small{font-size:11px;color:#51677d;line-height:1.35}#aad-grid-current{font:650 12px ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-column-axes-label{display:flex;gap:7px;align-items:center;grid-column:1/-1;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}';
+gridHud.innerHTML='<strong>Coordinate inspector · pinned point</strong><span id="aad-grid-current">Tap or click a point on the 2D plan to pin its coordinate.</span><button type="button" id="aad-grid-copy" disabled>Copy pinned coordinate</button><button type="button" id="aad-grid-clear" disabled>Clear pin</button><label id="aad-column-axes-label" hidden><input id="aad-column-axes" type="checkbox" checked> Show column axes A–C / 1–5 (proposed)</label><details id="aad-grid-help"><summary>Grid reference and limits</summary><small>100 mm building-local XY cell codes BX/BY are different from provisional column axes A–C / 1–5. Plot X = building X + 1944 mm · plot Y = building Y + 2000 mm. This is not a surveyed grid or structural approval. Stair offset remains on HOLD.</small></details>';
+const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center;margin:6px 0;padding:9px;border:1px solid #c8d8d8;border-radius:7px;background:#f5f9fc;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong{flex:1 1 100%}#aad-grid-current{flex:1 1 220px;font:600 12px/1.5 ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy,#aad-grid-clear{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-grid-hud button:disabled{opacity:.5;cursor:not-allowed}#aad-column-axes-label{display:flex;gap:7px;align-items:center;flex:1 1 100%;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}#aad-grid-help{flex:1 1 100%;font-size:11px;color:#51677d}#aad-grid-help summary{cursor:pointer;font-weight:650}#aad-grid-help small{display:block;line-height:1.55;margin:5px 0}@media(max-width:600px){#aad-grid-copy,#aad-grid-clear{min-height:44px}}';
 document.head.append(gridStyle);
-$('viewport2d').insertBefore(gridHud,$('viewer2d'));
+$('viewport2d').querySelector('.view-foot').prepend(gridHud);
 $('aad-column-axes').addEventListener('change',e=>{showColumnAxes=e.target.checked;if(building)drawPlan();});
-let gridPrompt='';
+let pinnedGridCoordinate='';
+function clearPinnedGrid(){
+ pinnedGridCoordinate='';
+ $('aad-grid-current').textContent='Tap or click a point on the 2D plan to pin its coordinate.';
+ $('aad-grid-copy').disabled=true;$('aad-grid-clear').disabled=true;
+ $('aad-grid-copy').textContent='Copy pinned coordinate';
+ $('aad-coordinate-readout').textContent='Move pointer to preview · tap/click to pin.';
+}
 function onPlanCoordinate(ev,remember=false){
  if(!building?.manifest.presentation)return;
  const svg=$('viewer2d'),m=svg.getScreenCTM();if(!m)return;
@@ -1300,22 +1305,28 @@ function onPlanCoordinate(ev,remember=false){
   const inBounds=x>=0&&x<=7200&&y>=0&&y<=14400;
   const label=inBounds?('BX'+String(Math.floor(x/100)).padStart(3,'0')+'-BY'+String(Math.floor(y/100)).padStart(3,'0')):'OUTSIDE BUILDING';
   const plotX=x+coord.plotOriginMm[0],plotY=y+coord.plotOriginMm[1];
-  gridPrompt='Ashok '+activeLevel.toUpperCase()+' '+label+' · building X='+x+' mm, Y='+y+' mm · plot X='+plotX+' mm, Y='+plotY+' mm · model precision 1 mm / grid 100 mm';
-  $('aad-grid-current').textContent=gridPrompt;
-  $('aad-coordinate-readout').textContent=gridPrompt;
-  if(remember){$('aad-grid-copy').dataset.coords=gridPrompt;}
+  const preview='Ashok '+activeLevel.toUpperCase()+' '+label+' · building X='+x+' mm, Y='+y+' mm · plot X='+plotX+' mm, Y='+plotY+' mm · model precision 1 mm / grid 100 mm';
+  $('aad-coordinate-readout').textContent='Preview (not pinned): '+preview+' · tap/click to pin';
+  if(remember&&inBounds&&!drawMode){
+   pinnedGridCoordinate=preview;
+   $('aad-grid-current').textContent='Pinned: '+preview;
+   $('aad-grid-copy').disabled=false;$('aad-grid-clear').disabled=false;
+   $('aad-grid-copy').textContent='Copy pinned coordinate';
+   $('aad-coordinate-readout').textContent='Pinned for copying: '+preview;
+  }
  }else{
   $('aad-coordinate-readout').textContent='Building '+activeLevel.toUpperCase()+' · X '+x+' mm · Y '+y+' mm · cell '+Math.floor(x/cell)+','+Math.floor(y/cell);
   gridHud.hidden=true;
  }
 }
 $('viewer2d').addEventListener('pointermove',ev=>onPlanCoordinate(ev));
-$('viewer2d').addEventListener('click',ev=>onPlanCoordinate(ev,true));
+// Capture phase preserves coordinate pinning when a wall/door click stops bubbling.
+$('viewer2d').addEventListener('click',ev=>onPlanCoordinate(ev,true),true);
+$('aad-grid-clear').addEventListener('click',clearPinnedGrid);
 $('aad-grid-copy').addEventListener('click',async()=>{
- const s=$('aad-grid-copy').dataset.coords||gridPrompt;
- if(!s)return;
- try{await navigator.clipboard.writeText(s);$('aad-grid-copy').textContent='Copied';}
- catch{$('aad-grid-copy').textContent='Select coordinate text to copy';}
+ if(!pinnedGridCoordinate)return;
+ try{await navigator.clipboard.writeText(pinnedGridCoordinate);$('aad-grid-copy').textContent='Pinned coordinate copied';}
+ catch{$('aad-grid-copy').textContent='Select pinned text to copy';}
 });
 $("fit").addEventListener("click",centerView);
 $("isolate").addEventListener("click",()=>{
