@@ -1,0 +1,135 @@
+{
+  "schema": "jp-cad://ashok-v3-3-owner-revision/1",
+  "project": "Ashok Adhikari Residence",
+  "dateNpt": "2026-11-12",
+  "edition": "v3.3",
+  "status": "OWNER_REQUEST__ARCHITECTURAL_CANDIDATE__NOT_FOR_CONSTRUCTION",
+  "predecessor": {
+    "manifest": "aad-building-v3-2-review.json",
+    "firstFloor": "aad-ff-model-v3-2-review.json",
+    "ledger": "coordination-20261108.json"
+  },
+  "candidates": {
+    "manifest": "aad-building-v3-3-review.json",
+    "firstFloor": "aad-ff-model-v3-3-review.json"
+  },
+  "originalAuthority": "v3.2 retained unchanged; no private DWG/DXF or Google Drive source overwritten",
+  "ownerInstructions": [
+    {
+      "id": "AX-B",
+      "raw": "B1 through B5 align with internal partition walls, not in front",
+      "action": "MOVE_PROPOSED_DISPLAY_MARKERS_ONLY",
+      "floorScope": [
+        "gf",
+        "ff"
+      ],
+      "beforeXmm": 4290,
+      "afterXmm": 3600,
+      "shiftMm": -690,
+      "markersPerFloor": 5,
+      "fullStructuralMemberChanges": 0,
+      "notes": "B1 intersects unresolved stair zone and must be checked with architectural stair/landing clearance, member load path and foundation locations."
+    },
+    {
+      "id": "FF-W01",
+      "raw": "A big window at center between C4 and C2",
+      "action": "ADD_ARCHITECTURAL_WINDOW_PROPOSAL",
+      "level": "ff",
+      "hostWall": "FF-EXT-04-1",
+      "axisSpan": {
+        "from": "C4",
+        "to": "C2",
+        "xMm": 7050,
+        "zFromMm": 5000,
+        "zToMm": 12200,
+        "midpointZmm": 8600
+      },
+      "conceptual": {
+        "widthMm": 2100,
+        "heightMm": 1500,
+        "sillMm": 900,
+        "hostOffsetMm": 2435
+      },
+      "sourceModelId": "FF-W009-C4-C2-OWNER-20261112",
+      "hold": "RIGHT_ZERO_BOUNDARY_OPENING_APPROVAL__MUNICIPAL_FIRE_AND_PRIVACY"
+    },
+    {
+      "id": "FF-D01",
+      "raw": "Main bedroom door right of B4 rather than near C4",
+      "action": "RELOCATE_EXISTING_INTERIOR_HOSTED_DOOR",
+      "level": "ff",
+      "sourceModelId": "FF-D-LOUNGE-MAIN",
+      "hostWall": "FF-MAIN-BAND-3",
+      "beforeOffsetMm": 2200,
+      "afterOffsetMm": 550,
+      "proposedDoorXStartMm": 4150,
+      "widthMm": 914,
+      "hold": "JAMB_SWING_CIRCULATION_AND_FURNITURE_REVIEW"
+    },
+    {
+      "id": "STAIR",
+      "raw": "Want whole staircase considered together",
+      "action": "RECONCILE_GF_FF_STAIRCASE_NOT_REMODEL_BY_ASSUMPTION",
+      "levelScope": [
+        "gf",
+        "ff",
+        "roof"
+      ],
+      "currentCenterlineXmm": 4175,
+      "ownerInternalWallXmm": 3600,
+      "deltaMm": 575,
+      "geometryChange": false,
+      "hold": "Riser/tread, landing, slab void, headroom, guard, stair column/beam support and seismic load path engineering checks required"
+    }
+  ],
+  "geometricProof": {
+    "coordinateSystem": "BUILDING_LOCAL_X_Z",
+    "axisBbeforeMm": 4290,
+    "axisBafterMm": 3600,
+    "proposedCenterOfC4C2Zmm": 8600,
+    "firstFloorWallFFEXT041": {
+      "xMm": 7085,
+      "zStartMm": 12085,
+      "zEndMm": 4800,
+      "hostLengthMm": 7285
+    },
+    "mainBedroomDoorWorldStationBeforeXmm": 5800,
+    "mainBedroomDoorWorldStationAfterXmm": 4150
+  },
+  "provisionalDimensions": "All new window sizes, door station, sills and jambs are review assumptions pending final owner confirmation and code/engineering review",
+  "engineeringGates": [
+    {
+      "id": "C-01",
+      "item": "Right zero-setback boundary — eligibility of large exterior FF opening",
+      "status": "HOLD_MUNICIPAL_FIRE"
+    },
+    {
+      "id": "C-02",
+      "item": "Column B GF/FF structural support graph, beam/footing offsets and seismic continuity",
+      "status": "HOLD_NOT_ADMITTED"
+    },
+    {
+      "id": "C-03",
+      "item": "B1 stair and stair/landing clearances / roof continuation / headroom",
+      "status": "HOLD"
+    },
+    {
+      "id": "C-04",
+      "item": "Door swing and main-bedroom/landing furnishing clearances",
+      "status": "HOLD"
+    },
+    {
+      "id": "C-05",
+      "item": "Window lintel/frames/wind-water/safety/privacy",
+      "status": "HOLD"
+    },
+    {
+      "id": "C-06",
+      "item": "Professional approved architectural/structural drawings, permit, quantities and construction issue",
+      "status": "HOLD"
+    }
+  ],
+  "engineeringApproval": false,
+  "issueForConstruction": false,
+  "authoringPolicy": "Presentation-only candidate for review, NOT engineered column displacement; A9/GDrive source authority retained; new immutable v3.3 candidate separate from v3.2"
+}
