@@ -7,6 +7,18 @@ export function installProjectEngine(adapter,kind='aad'){
  const main=document.querySelector('main');
  function disclosure(title,node,open=false){const d=document.createElement('details');d.className='pe-disclosure';d.open=open;const s=document.createElement('summary');s.textContent=title;d.append(s,node);return d;}
  if(kind==='aad'){
+  // Standalone editors need floor/view controls; embeds already have parent controls.
+  if(document.body.dataset.aadEmbed!=='true'){
+   const scope=document.createElement('nav');scope.id='pe-standalone-scope';
+   scope.setAttribute('aria-label','Editor floor and drawing view');
+   for(const id of ['aad-storey','aad-view-mode']){
+    const label=$(id)?.closest('label');if(label)scope.append(label);
+   }
+   $('aad-edit-history-panel').before(scope);
+   const style=document.createElement('style');
+   style.textContent='#pe-standalone-scope{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid #d6e2e5;background:#f3f8fa}#pe-standalone-scope label{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:750}#pe-standalone-scope select{min-height:38px;max-width:210px;border-radius:6px;border:1px solid #b7cbd2;background:white;padding:6px 10px;color:#21424e}@media(max-width:600px){#pe-standalone-scope{gap:8px}#pe-standalone-scope label{width:100%}#pe-standalone-scope select{flex:1;max-width:none}}';
+   document.head.append(style);
+  }
   const aside=$('aad-inspector'),selection=$('selection').closest('section');aside.prepend(selection);
   const presentation=$('aad-presentation-controls'),groups=[...presentation.querySelectorAll('fieldset')];
   if(groups[2])aside.insertBefore(disclosure('Drawing layers',groups[2],true),selection.nextSibling);

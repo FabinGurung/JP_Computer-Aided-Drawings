@@ -19,7 +19,43 @@ try {
    return{xs:['FF-N014','FF-N016','FF-N017','FF-N018'].map(id=>n[id].x),grid:s.manifest.presentation.coordinateGrid.baseCellMm,issue:s.manifest.restrictions.issueForConstruction};
   });
   assert.deepEqual(proof.xs,[3.6,3.6,3.6,3.6]);assert.equal(proof.grid,100);assert.equal(proof.issue,false);
+  // The coordinate inspector must not cover the floor plan.
+  assert.equal(await frame.locator('#aad-grid-hud').evaluate(el=>el.parentElement.classList.contains('view-foot')),true);
+  const pin=await p.locator('#ashok-engine').evaluate(el=>{
+   const doc=el.contentDocument,svg=doc.getElementById('viewer2d');
+   const point=svg.createSVGPoint();point.x=3.6;point.y=7.0;
+   const screen=point.matrixTransform(svg.getScreenCTM());
+   svg.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:screen.x,clientY:screen.y}));
+   const current=doc.getElementById('aad-grid-current').textContent;
+   const enabled=!doc.getElementById('aad-grid-copy').disabled;
+   point.x=4.4;point.y=6.0;
+   const other=point.matrixTransform(svg.getScreenCTM());
+   svg.dispatchEvent(new PointerEvent('pointermove',{bubbles:true,clientX:other.x,clientY:other.y}));
+   return{current,after:doc.getElementById('aad-grid-current').textContent,enabled,
+    preview:doc.getElementById('aad-coordinate-readout').textContent};
+  });
+  assert.match(pin.current,/Pinned: Ashok FF BX0(35|36)-BY074/);
+  const sampledX=Number(pin.current.match(/building X=(\d+) mm/)?.[1]);
+  assert.ok(Number.isFinite(sampledX)&&Math.abs(sampledX-3600)<100,'Coordinate cell must match the actual sampled SVG point, allowing pointer pixel quantization');
+  assert.equal(pin.after,pin.current);
+  assert.equal(pin.enabled,true);
+  assert.match(pin.preview,/Preview \(not pinned\)/);
+  const editorHref=await p.locator('#pw-edit-direct').getAttribute('href');
+  assert.equal(new URL(editorHref).searchParams.get('phase'),'ff');
+  const [editor]=await Promise.all([p.waitForEvent('popup'),p.locator('#pw-edit-direct').click()]);
+  editor.on('pageerror',e=>errors.push(e.message));
+  await editor.waitForFunction(()=>window.AADStudio?.getSnapshot()&&document.getElementById('aad-storey')?.value==='ff',null,{timeout:65000});
+  assert.equal(await editor.locator('#aad-storey').inputValue(),'ff');
+  await editor.locator('#pe-standalone-scope').waitFor({state:'visible',timeout:20000});
+  assert.equal(await editor.locator('#pe-standalone-scope').isVisible(),true);
+  assert.equal(await editor.locator('#aad-storey').isVisible(),true);
+  await editor.locator('#aad-storey').selectOption('gf');
+  assert.equal(await editor.evaluate(()=>window.AADStudio.getViewportProof().activeLevel),'gf');
+  await editor.locator('#aad-storey').selectOption('ff');
+  assert.equal(await editor.evaluate(()=>window.AADStudio.getViewportProof().activeLevel),'ff');
+  await editor.close();
   await p.locator('#pw-phase').selectOption('gf');
+  assert.equal(new URL(await p.locator('#pw-edit-direct').getAttribute('href')).searchParams.get('phase'),'gf');
   await p.waitForFunction(()=>window.ProjectWorkspace.getDrawing().getState().phase==='gf');
   const gfX=await p.locator('#ashok-engine').evaluate(el=>el.contentWindow.AADStudio.getSnapshot().models.gf.floorGraph.nodes.find(v=>v.id==='GF-N017').x);
   assert.equal(gfX,3.6);
