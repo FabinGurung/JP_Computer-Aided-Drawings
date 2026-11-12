@@ -1,0 +1,103 @@
+{
+  "schema": "jp-cad://architectural-view-colour-review/1",
+  "dateNpt": "2026-11-12",
+  "project": "Ashok Adhikari Residence",
+  "edition": "v3.3",
+  "scope": "PRESENTATION_ONLY",
+  "request": "Visually distinguish windows in 2D and 3D and QA whether other components need recolouring before tagging an immutable milestone",
+  "window": {
+    "previous": {
+      "svg": "#62A2AD",
+      "threeDimensionalFrame": "#5A6B64",
+      "threeDimensionalGlazing": "#B7D4D4",
+      "glazingOpacity": 0.22
+    },
+    "approvedVisualConvention": {
+      "svgStroke": "#0B4F9E",
+      "svgPane": "#66D4F5",
+      "threeDimensionalFrame": "#0B4F9E",
+      "threeDimensionalGlazing": "#4EC3EB",
+      "glazingOpacity": 0.72
+    },
+    "symbol": "Distinct two-track opening in 2D and blue perimeter frame / cyan glass in 3D",
+    "canvasBackground": "#FAF8EF",
+    "wcagAaNonTextMinimum": 3,
+    "originalSVGContrast": 2.71,
+    "newSVGContrast": 7.52,
+    "materialDeclaration": "Display-only. Does not change material schedules, IFC geometry, source model colors or engineering statuses"
+  },
+  "categoryAudit": [
+    {
+      "kind": "window",
+      "action": "RECOLOUR_2D_AND_3D",
+      "reason": "Existing pale teal 2D stroke is low contrast against cream, similar to wall, and 3D glazing opacity .22 weakly visible"
+    },
+    {
+      "kind": "door",
+      "action": "RETAIN",
+      "reason": "Warm brown opening and door-swing arc provide hue and geometry distinction from new sapphire window"
+    },
+    {
+      "kind": "wall",
+      "action": "RETAIN",
+      "reason": "Dark teal thick wall segments are distinguishable by thickness and continuous boundary geometry"
+    },
+    {
+      "kind": "column",
+      "action": "RETAIN",
+      "reason": "Green positional/axis markers differ from window horizontal/vertical hosted openings and retain IDs"
+    },
+    {
+      "kind": "beam",
+      "action": "RETAIN",
+      "reason": "Warm ochre beam members retain their structural-view context and labelled layer; do not recolour to window blue"
+    },
+    {
+      "kind": "slab",
+      "action": "RETAIN",
+      "reason": "Pale sage floor surfaces remain identifiable by large planar geometry, transparency and legend; no new window/door ambiguity"
+    },
+    {
+      "kind": "stair",
+      "action": "RETAIN",
+      "reason": "Violet flights, treads and railings remain distinct from blue glazing and are identifiable by shape"
+    },
+    {
+      "kind": "roof",
+      "action": "RETAIN",
+      "reason": "Slate-sage roof controls retain cutaway/roof visibility semantics"
+    }
+  ],
+  "accessibility": "Use color plus distinct two-line window symbol, existing textual labels, element IDs, selection state and 13px bordered legend swatches; colors are not the sole identifier.",
+  "governance": {
+    "unchanged": [
+      "all source architectural floor nodes and walls",
+      "hosted opening positions and widths",
+      "existing v3.3 door/window geometry",
+      "B-axis x=3600 display positions",
+      "3D local transforms",
+      "IFC export geometry",
+      "structural approval/HOLD values"
+    ],
+    "futureMaterialControl": "Source-backed IFC SurfaceColour / material specifications are not overridden by this view palette",
+    "release": "ashok-v3.3.0-window-visibility-review.1"
+  },
+  "sources": [
+    {
+      "title": "W3C WCAG 2.2 SC 1.4.11 Non-text Contrast",
+      "url": "https://www.w3.org/TR/WCAG22/#non-text-contrast"
+    },
+    {
+      "title": "W3C Understanding Non-text Contrast",
+      "url": "https://www.w3.org/WAI/WCAG22/Understanding/non-text-contrast.html"
+    },
+    {
+      "title": "Autodesk Revit About View Filters",
+      "url": "https://help.autodesk.com/cloudhelp/2026/ENU/Revit-DocumentPresent/files/GUID-87A63C25-99A6-428D-A0FF-112E4FC9C3D7.htm"
+    },
+    {
+      "title": "buildingSMART IFC4 IfcSurfaceStyleShading",
+      "url": "https://standards.buildingsmart.org/IFC/RELEASE/IFC4/ADD2_TC1/HTML/schema/ifcpresentationappearanceresource/lexical/ifcsurfacestyleshading.htm"
+    }
+  ]
+}
