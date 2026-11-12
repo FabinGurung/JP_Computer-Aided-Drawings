@@ -1,6 +1,7 @@
 /* Reusable architectural plan presentation, in the SAME world X/Z as the
  * editable floor graph. Dimensions are derived from project-owned bounds. */
 import {drawColumnAxisOverlay} from './aad-column-axis-grid.mjs';
+import {AAD_WINDOW_COLOURS} from './aad-view-colours.mjs';
 const NS='http://www.w3.org/2000/svg';
 export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=true,furniture=true,columnAxes=true,selectedId=null,onSelect=()=>{},roofOnly=false}={}){
  const p=building.manifest.presentation;if(!p)return;
@@ -12,7 +13,7 @@ export function drawPresentationPlan(svg,building,levelId,{grid=true,dimensions=
  svg.prepend(back);svg.append(front);svg.setAttribute('viewBox',[x0-2.5,z0-2.7,W+5,D+5.6].join(' '));
  const style=make('style',{},'.aad-dim{stroke:#627d78;stroke-width:.018;fill:none}.aad-dim-text{font:500 .21px system-ui;fill:#335d59;paint-order:stroke;stroke:#fcfaf3;stroke-width:.06}.aad-space-title{font:650 .23px system-ui;fill:#35554c;paint-order:stroke;stroke:#fffdf6;stroke-width:.07}.aad-space-size{font:400 .19px system-ui;fill:#64736a;paint-order:stroke;stroke:#fffdf6;stroke-width:.055}.aad-grid-label{font:400 .16px system-ui;fill:#7c9690}');
  back.append(style);
- style.textContent+='.aad-door{stroke:#a77848;fill:none}.aad-window{stroke:#62a2ad;fill:none}.aad-opening-swing{stroke:#a77848;stroke-width:.025;fill:none;pointer-events:none}.aad-column{stroke:#b37c2e;stroke-width:.025}.is-selected{stroke:#ef831b!important;stroke-width:.10!important}.aad-furnishing{cursor:pointer}.aad-furnishing.is-selected rect{stroke:#ef831b;stroke-width:.08}';
+ style.textContent+=`.aad-door{stroke:#a77848;fill:none}.aad-window{stroke:${AAD_WINDOW_COLOURS.planStroke};fill:none}.aad-window-pane{stroke:${AAD_WINDOW_COLOURS.planPane};fill:none;pointer-events:none}.aad-opening-swing{stroke:#a77848;stroke-width:.025;fill:none;pointer-events:none}.aad-column{stroke:#b37c2e;stroke-width:.025}.is-selected{stroke:#ef831b!important;stroke-width:.10!important}.aad-furnishing{cursor:pointer}.aad-furnishing.is-selected rect{stroke:#ef831b;stroke-width:.08}`;
  // Override the studio's generic #viewer2d text rule, also in exported SVG.
  style.textContent=style.textContent.replaceAll('.aad-','#viewer2d .aad-');
  const plot=make('rect',{x:px0,y:pz0,width:px1-px0,height:pz1-pz0,fill:'#eff1e3',stroke:'#8d9d7e','stroke-width':.035});back.append(plot);

@@ -5,7 +5,7 @@ import * as THREE from "three";
 import {OrbitControls} from "three/addons/controls/OrbitControls.js";
 import {mergeGeometries} from "three/addons/utils/BufferGeometryUtils.js";
 const $=id=>document.getElementById(id);
-const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261029-v2-navigation');return u.href;};
+const moduleURL=file=>{const u=new URL("../../../assets/js/"+file,location.href);u.searchParams.set('aad','20261112-window-visibility-review1');return u.href;};
 const {assembleBuilding,verifyAssembly}=await import(/* @vite-ignore */moduleURL("aad-building-core.mjs"));
 const {writeIFC4,checkIfcReferences}=await import(/* @vite-ignore */moduleURL("aad-building-ifc4.mjs"));
 const {createAADWorkspace}=await import(/* @vite-ignore */moduleURL("aad-unified-workspace.mjs"));
@@ -14,6 +14,7 @@ const {deriveM29DatumEvidence}=await import(/* @vite-ignore */moduleURL("aad-m29
 const {buildAADComponentGroups,describeAADSelection,classifyAADComponent}=await import(/* @vite-ignore */moduleURL("aad-component-register.mjs"));
 const {wallSolidCells}=await import(/* @vite-ignore */moduleURL("aad-wall-voids.mjs"));
 const {drawPresentationPlan}=await import(/* @vite-ignore */moduleURL("aad-dimensioned-plan.mjs"));
+const {AAD_VIEW_COLOURS,AAD_WINDOW_COLOURS}=await import(/* @vite-ignore */moduleURL("aad-view-colours.mjs"));
 const {drawServicesPlan,installSitePicker,siteConflicts}=await import(/* @vite-ignore */moduleURL("aad-services-plan.mjs"));
 const {createAADEditJournal}=await import(/* @vite-ignore */moduleURL("aad-edit-journal.mjs"));
 const params=new URLSearchParams(location.search);
@@ -36,7 +37,7 @@ let cutaway=false,showDimensions=true,showPlanGrid=true,showColumnAxes=true,show
 let drawMode=false,drawFirst=null; // two-click wall drafting; engine handles snapping/intersections // one selection shared by plan, 3D and component schedule
 const svgNS="http://www.w3.org/2000/svg";
 const raycaster=new THREE.Raycaster(),mouse=new THREE.Vector2(),hitMeshes=[],floorFlags=new Map(),kindFlags=new Map(),rowsById=new Map();
-const palettes={wall:0x4d7889,door:0xc28d72,window:0x63b4e0,slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,footing:0x926aae,stair:0x9386bb,landing:0xa48cc9};
+const palettes={wall:0x4d7889,door:0xc28d72,window:parseInt(AAD_VIEW_COLOURS.window.slice(1),16),slab:0x96bba8,roof:0x9db9b0,column:0x40997d,beam:0xcea365,footing:0x926aae,stair:0x9386bb,landing:0xa48cc9};
 Object.assign(palettes,{floor:0xd8c7a5,furniture:0xb49d7d,fixture:0xd9e3de,guard:0x91b4b7,site:0xc4c4ae,landscape:0x708b62});
 const status=txt=>$("action-status").textContent=txt;
 function download(name,text,mime){
@@ -129,11 +130,11 @@ function openingMesh(e){
   {x:-w/2+t/2,y:0,z:0,dx:t,dy:h,dz:.09},{x:w/2-t/2,y:0,z:0,dx:t,dy:h,dz:.09},
   {x:0,y:h/2-t/2,z:0,dx:w,dy:t,dz:.09}];
  if(e.kind==='window')parts.push({x:0,y:-h/2+t/2,z:0,dx:w,dy:t,dz:.09},{x:0,y:0,z:0,dx:.035,dy:h,dz:.07});
- const geometry=mergedBoxes(parts),frame=new THREE.Mesh(geometry,coordinatedMaterial(e,e.kind==='window'?'#5a6b64':'#a57d55'));
+ const geometry=mergedBoxes(parts),frame=new THREE.Mesh(geometry,coordinatedMaterial(e,e.kind==='window'?AAD_WINDOW_COLOURS.frame3D:'#a57d55'));
  const meshes=[frame],graph=workspace.snapshot().models[e.level].floorGraph;
  const o=graph.openings.find(o=>e.id.endsWith(':'+o.id));
  if(e.kind==='window'){
-  const glass=new THREE.Mesh(new THREE.BoxGeometry(w-.09,h-.09,.015),new THREE.MeshPhysicalMaterial({color:'#b7d4d4',roughness:.12,transparent:true,opacity:.22,metalness:.02,side:THREE.DoubleSide}));
+  const glass=new THREE.Mesh(new THREE.BoxGeometry(w-.09,h-.09,.015),new THREE.MeshPhysicalMaterial({color:AAD_WINDOW_COLOURS.glass3D,roughness:.14,transparent:true,opacity:AAD_WINDOW_COLOURS.glassOpacity,metalness:.02,depthWrite:false,side:THREE.DoubleSide}));
   glass.material.clippingPlanes=frame.material.clippingPlanes;
   meshes.push(glass);
  }else if(o?.style!=='passage'){
@@ -375,6 +376,14 @@ function selectElement(e){
  drawPlan();paintSelection();
  revealSelectedAuditRow(e.id);
  paintSelection();
+}
+function synchronizeViewLegend(){
+ // Match human-readable category swatches with actual shared rendering tokens.
+ const legend=document.querySelector('.legend');if(!legend)return;
+ for(const item of legend.querySelectorAll('[data-aad-legend-kind]')){
+  const swatch=item.querySelector('i'),colour=AAD_VIEW_COLOURS[item.dataset.aadLegendKind];
+  if(swatch&&colour)swatch.style.backgroundColor=colour;
+ }
 }
 function addStoreys(){
  const node=$("storeys");node.replaceChildren();
@@ -627,12 +636,22 @@ function drawPlan(){
    }
    const item=el("line",{
     x1:a.x+(b.x-a.x)*from,y1:a.z+(b.z-a.z)*from,x2:a.x+(b.x-a.x)*to,y2:a.z+(b.z-a.z)*to,
+    'data-aad-opening-kind':o.kind,
     class:(o.kind==="door"?"aad-door":"aad-window")+(selectedId===building.projectId+":"+l.id+":"+o.id?" is-selected":""),
     "stroke-width":building.manifest.presentation?(o.kind==='door'?.045:.07):(o.kind==="door"?.21:.28)
    });
    item.dataset.part=l.id+":"+o.id;
    item.addEventListener("click",evt=>{evt.stopPropagation();if(drawMode){recordDrawPoint(evt);return;}focusEditor(l.id,"opening",o.id);});
    doc.append(item);
+   if(o.kind==='window'){
+    // Visible blue glazing track; pointer events stay on the original hosted opening.
+    const pane=el('line',{x1,y1:z1,x2,y2:z2,
+     class:'aad-window-pane','data-aad-window-pane':o.id,
+     stroke:AAD_WINDOW_COLOURS.planPane,
+     'stroke-width':building.manifest.presentation?.028:.075,
+     'pointer-events':'none'});
+    doc.append(pane);
+   }
   }
   // WORLD_XZ column solids, the same exact assembly instances as 3D and table.
   for(const col of building.elements.filter(e=>e.kind==="column"&&e.level===l.id)){
@@ -1207,6 +1226,7 @@ async function main(){
   $("aad-storey").append(option);
  }
  $("building-name").textContent=building.name;
+ synchronizeViewLegend();
  initAADRegister();
  $("building-subtitle").textContent=manifest.presentation?
   (manifest.presentation.outerBounds[2]-manifest.presentation.outerBounds[0]).toFixed(2)+' × '+(manifest.presentation.outerBounds[3]-manifest.presentation.outerBounds[1]).toFixed(2)+' m outer envelope · '+building.levels.map(l=>l.id.toUpperCase()).join(' + ')+' · '+Math.round(manifest.presentation.plinth*1000)+' mm plinth · '+Math.round(manifest.presentation.floorToFloor*1000)+' mm storeys · architectural coordination candidate':
@@ -1555,6 +1575,16 @@ window.AADStudio=Object.freeze({
    const ray=new THREE.Raycaster(new THREE.Vector3(s.x,s.surfaceY+.001,s.z),new THREE.Vector3(0,1,0),0,12),hit=ray.intersectObjects(candidates,false)[0];
    return{id:s.id,clearanceM:hit?hit.distance+.001:null,obstructionId:hit?.object.userData.element.id||null};});
   return{scope:'MODELLED_ARCHITECTURAL_GEOMETRY_ONLY',finishedEngineeringVerified:false,samples:rows,minimumM:Math.min(...rows.filter(x=>x.clearanceM!==null).map(x=>x.clearanceM))};
+ },
+ getViewColourProof:()=>{
+  // Read-only view QA: physical rendering materials, not model/IFC semantics.
+  const windows3D=hitMeshes.filter(m=>m.userData?.element?.kind==='window')
+   .map(m=>({id:m.userData.element.id,colour:'#'+m.material.color.getHexString().toUpperCase(),opacity:m.material.opacity,visible:m.visible}));
+  const legend=Array.from(document.querySelectorAll('[data-aad-legend-kind]'))
+   .map(x=>({kind:x.dataset.aadLegendKind,swatch:x.querySelector('i')?.style.backgroundColor||''}));
+  return{planStroke:AAD_WINDOW_COLOURS.planStroke,planPane:AAD_WINDOW_COLOURS.planPane,
+   frame3D:AAD_WINDOW_COLOURS.frame3D,glass3D:AAD_WINDOW_COLOURS.glass3D,
+   glassOpacity:AAD_WINDOW_COLOURS.glassOpacity,windows3D,legend};
  },
  getViewportProof:()=>{
   // Complete the current WebGL frame before a screenshot/export reads pixels.

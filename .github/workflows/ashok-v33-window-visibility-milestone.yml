@@ -1,0 +1,111 @@
+name: Ashok v3.3 Window Visibility — Immutable Review Milestone
+
+on:
+  workflow_run:
+    workflows: ["CAD M01 Live Pages Readback"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: ashok-v33-window-visibility-review-release
+  cancel-in-progress: false
+
+jobs:
+  seal-review-milestone:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact read-back production commit including tag history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - name: Verify existing milestone seal is immutable
+        id: already
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: ashok-v3.3.0-window-visibility-review.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            git fetch --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"
+            recorded="$(git rev-parse "refs/tags/$TAG^{}")"
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              kind="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease --jq '.isPrerelease')"
+              test "$kind" = "true" || { echo "::error::Expected a historical review-only prerelease"; exit 1; }
+              test "$(git cat-file -p "$TAG" | grep -c 'Ashok v3.3 window')" -ge 1 || { echo "::error::Unexpected tag annotation"; exit 1; }
+              echo "already_sealed=true" >> "$GITHUB_OUTPUT"
+              echo "ASHOK_WINDOW_REVIEW_TAG_ALREADY_SEALED $TAG $recorded"
+            else
+              echo "::error::Tag exists without its immutable release"; exit 1
+            fi
+          else
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "::error::Release exists without annotated tag"; exit 1
+            fi
+            echo "already_sealed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.already.outputs.already_sealed != 'true'
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+        if: steps.already.outputs.already_sealed != 'true'
+      - name: Fail-closed exact-source, contrast, drawing integrity and live release gates
+        if: steps.already.outputs.already_sealed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          FROZEN_V33_SHA: 0e35481eb7368c91be341d4495fdfd9507526449
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          main_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          test "$main_sha" = "$VERIFIED_SHA" || { echo "::error::main moved after live readback"; exit 1; }
+          git cat-file -e "$FROZEN_V33_SHA^{commit}"
+          git merge-base --is-ancestor "$FROZEN_V33_SHA" "$VERIFIED_SHA"
+          # Preserve EXACT v3.3 architectural source JSON, including stairs and openings.
+          git diff --quiet "$FROZEN_V33_SHA" "$VERIFIED_SHA" -- \
+            public/data/projects/ashok-adhikari/aad-building-v3-3-review.json \
+            public/data/projects/ashok-adhikari/aad-ff-model-v3-3-review.json \
+            public/data/projects/ashok-adhikari/aad-gf-model-v3-grid-review.json
+          test -s governance/aad/releases/ASHOK_V3_3_WINDOW_VISIBILITY_REVIEW.md
+          grep -q 'NOT FOR CONSTRUCTION' governance/aad/releases/ASHOK_V3_3_WINDOW_VISIBILITY_REVIEW.md
+          node tools/site/ashok-v3-3-smoke.mjs
+          node tools/site/ashok-window-colours-smoke.mjs
+          for workflow_name in "CAD Unified Website Staging QA" "CAD Main GitHub Pages (validated CAD publishing)" "CAD M01 Live Pages Readback"; do
+            count="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_SHA&per_page=100" \
+              --jq "[.workflow_runs[] | select(.name == \"$workflow_name\" and .head_sha == \"$VERIFIED_SHA\" and .conclusion == \"success\")] | length")"
+            test "$count" -ge 1 || { echo "::error::Missing successful same-commit gate: $workflow_name"; exit 1; }
+          done
+          echo "ASHOK_V33_WINDOW_VISIBILITY_EXACT_SHA_LIVE_GATES_PASS $VERIFIED_SHA"
+      - name: Create annotated immutable tag and review prerelease
+        if: steps.already.outputs.already_sealed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          TAG: ashok-v3.3.0-window-visibility-review.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Unexpected tag race; refuse to overwrite tag"; exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "Ashok v3.3 window visibility review · source geometry unchanged · NOT FOR CONSTRUCTION" "$VERIFIED_SHA"
+          git push origin "refs/tags/$TAG"
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease \
+            --title "Ashok v3.3 — 2D/3D Window Visibility (Review Milestone)" \
+            --notes-file governance/aad/releases/ASHOK_V3_3_WINDOW_VISIBILITY_REVIEW.md
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,isPrerelease,publishedAt,targetCommitish
+          echo "ASHOK_V33_WINDOW_VISIBILITY_ANNOTATED_TAG_AND_RELEASE_PASS $VERIFIED_SHA"

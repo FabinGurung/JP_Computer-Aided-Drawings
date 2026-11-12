@@ -202,6 +202,7 @@ jobs:
           node tools/site/ashok-usability-browser.mjs
           node tools/site/ashok-navigation-browser.mjs
           PROJECT_SITE_URL=https://fabingurung.github.io/jp-drawing-coordination/ node tools/site/ashok-grid-browser.mjs
+          PROJECT_SITE_URL=https://fabingurung.github.io/jp-drawing-coordination/ node tools/site/ashok-window-colours-browser.mjs
       - name: Verify live Harisharan R1-R4 source, routes, and approved-status gates
         if: github.event_name == 'workflow_run' && github.event.workflow_run.conclusion == 'success'
         run: |
@@ -269,6 +270,7 @@ jobs:
             /tmp/ashok-qa02-*.png
             /tmp/ashok-roof-access-*.png
             /tmp/ashok-headroom-*.json
+            /tmp/ashok-v33-window-visual-*.png
             /tmp/ashok-navigation-*.png
             /tmp/cad-code-library-*.png
             /tmp/cad-memory-wall-*.png

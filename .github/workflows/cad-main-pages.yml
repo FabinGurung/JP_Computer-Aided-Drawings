@@ -69,6 +69,7 @@ jobs:
           node tools/site/ashok-grid-smoke.mjs
           node tools/site/ashok-v3-2-smoke.mjs
           node tools/site/ashok-v3-3-smoke.mjs
+          node tools/site/ashok-window-colours-smoke.mjs
           node tools/site/ashok-column-axes-smoke.mjs
           node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
@@ -145,6 +146,7 @@ jobs:
           node tools/site/ashok-grid-browser.mjs
           node tools/site/ashok-v3-2-browser.mjs
           node tools/site/ashok-v3-3-browser.mjs
+          node tools/site/ashok-window-colours-browser.mjs
           node tools/site/ashok-column-axes-browser.mjs
           node tools/site/engineering-normalization-browser.mjs
           node tools/site/harisharan-rear-nine-browser.mjs
@@ -177,6 +179,7 @@ jobs:
             /tmp/ashok-qa02-*.png
             /tmp/ashok-roof-access-*.png
             /tmp/ashok-headroom-*.json
+            /tmp/ashok-v33-window-visual-*.png
             /tmp/cad-code-library-*.png
             /tmp/cad-memory-wall-*.png
           if-no-files-found: ignore

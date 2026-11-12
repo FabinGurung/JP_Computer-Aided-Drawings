@@ -27,7 +27,7 @@ main{max-width:1850px;margin:auto;padding:14px}
 #viewer3d canvas{display:block;width:100%;height:100%}
 .viewhud{position:absolute;top:10px;left:12px;background:#fffdf1e9;border:1px solid #e8e8d4;border-radius:8px;padding:6px 10px;font-size:11px;pointer-events:none}
 .legend{display:flex;gap:8px;flex-wrap:wrap;padding:9px 11px;border-top:1px solid #dbe5e7;font-size:10px;color:#536977}
-.legend i{display:inline-block;width:9px;height:9px;border-radius:3px;margin-right:4px}
+.legend i{display:inline-block;width:13px;height:13px;border:1px solid #455e69;border-radius:3px;margin-right:5px;vertical-align:-2px}.legend [data-aad-legend-kind=window]{font-weight:750;color:#174b8a}.legend [data-aad-legend-kind=window] i{box-shadow:inset 0 0 0 2px #86dfff}
 aside{max-height:840px;overflow:auto}
 aside section{padding:13px;border-bottom:1px solid #dee9ec}
 aside h2{margin:0 0 10px;font-size:14px}
@@ -74,7 +74,7 @@ body[data-view-mode="building"] #viewport2d{display:none}
 #selection{white-space:pre-wrap;line-height:1.55}
 #viewer2d .aad-wall{stroke:#2d7484;stroke-width:.14;stroke-linecap:round;cursor:pointer}
 #viewer2d .aad-wall.active{stroke:#d16b43;stroke-width:.24}
-#viewer2d .aad-window{stroke:#2a9fc2;stroke-width:.27;cursor:pointer}
+#viewer2d .aad-window{stroke:#0B4F9E;stroke-width:.27;cursor:pointer}#viewer2d .aad-window-pane{stroke:#66D4F5;stroke-linecap:round;pointer-events:none}
 #viewer2d .aad-door{stroke:#bf856a;stroke-width:.22;cursor:pointer}
 #viewer2d .aad-column{fill:#42987e;fill-opacity:.73;stroke:#195f4d;stroke-width:.045;cursor:pointer;vector-effect:non-scaling-stroke}
 #viewer2d .aad-column:hover{fill:#eca559;fill-opacity:.92}
@@ -239,7 +239,7 @@ button:focus-visible,select:focus-visible,input:focus-visible,summary:focus-visi
     <div class="view-foot">Columns, walls and hosted openings highlight actual plan geometry. Other components show a world-coordinate locator until their footprints are supported.</div>
    </div>
   </div>
-  <div class="legend"><span><i style="background:#507d91"></i>Walls</span><span><i style="background:#4b997e"></i>Columns</span><span><i style="background:#d4a75e"></i>Beams</span><span><i style="background:#a5c9bb"></i>Floor slabs</span><span><i style="background:#51a9d4"></i>Windows</span><span><i style="background:#c38b70"></i>Doors</span><span><i style="background:#9186c3"></i>Stairs</span></div>
+  <div class="legend" aria-label="Drawing component colors; shapes and labels remain authoritative"><span data-aad-legend-kind="wall"><i style="background:#4D7889"></i>Walls</span><span data-aad-legend-kind="column"><i style="background:#40997D"></i>Columns</span><span data-aad-legend-kind="beam"><i style="background:#CEA365"></i>Beams</span><span data-aad-legend-kind="slab"><i style="background:#96BBA8"></i>Floor slabs</span><span data-aad-legend-kind="window" title="Sapphire frame and cyan glazing in linked views"><i style="background:#0B4F9E"></i>Windows · glazing</span><span data-aad-legend-kind="door"><i style="background:#C28D72"></i>Doors</span><span data-aad-legend-kind="stair"><i style="background:#9386BB"></i>Stairs</span></div>
  </div>
  <aside class="panel" id="aad-inspector">
  <section><h2>Storeys · whole-building alignment</h2><div id="storeys" class="level-control"></div></section>
@@ -356,7 +356,7 @@ Show owner-intended geometry as a **separate read-only overlay** on GF source dr
 </div>
 <div class="foot">IFC4 download uses the common AAD IFC writer and requires external parse validation. IFC hierarchy/classification does not certify assumed structural elements. Archived V02–M80 engineering packages remain untouched.</div>
 </main>
-<script type="module" src="./main.js"></script>
+<script type="module" src="./main.js?v=20261112-window-visibility-review1"></script>
 <script defer src="../../../assets/js/cad-site-shell.js" data-cad-root="../../../"></script>
 </body>
 </html>
