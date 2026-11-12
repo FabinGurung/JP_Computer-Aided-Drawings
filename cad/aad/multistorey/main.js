@@ -547,7 +547,7 @@ function projectToWorld(p,t){
 function drawPlan(){
  const doc=$("viewer2d");doc.replaceChildren();
  if(!workspace)return;
- if(typeof gridHud!=='undefined'){const presentation=workspace.snapshot().manifest.presentation;gridHud.hidden=!presentation?.coordinateGrid;$('aad-coordinate-readout').hidden=Boolean(presentation?.coordinateGrid);const axisToggle=$('aad-column-axes-label');if(axisToggle)axisToggle.hidden=!presentation?.columnAxisGrid;}
+ if(typeof gridHud!=='undefined'){const presentation=workspace.snapshot().manifest.presentation;gridHud.hidden=!presentation?.coordinateGrid;$('aad-coordinate-readout').hidden=Boolean(presentation?.coordinateGrid);$('aad-site-readout').hidden=Boolean(presentation?.coordinateGrid);if(presentation?.coordinateGrid)renderStairSchedule(presentation);const axisToggle=$('aad-column-axes-label');if(axisToggle)axisToggle.hidden=!presentation?.columnAxisGrid;}
  const state=workspace.snapshot(),models=state.models;
  const levels=activeLevel==="all"?state.manifest.levels:state.manifest.levels.filter(l=>l.id===activeLevel);
  const outlines=[],pts=[];
@@ -1278,12 +1278,43 @@ for(const[id,factor]of [['aad-plan-in',.78],['aad-plan-out',1.28]])$(id).addEven
  const svg=$('viewer2d'),v=svg.viewBox.baseVal;svg.setAttribute('viewBox',[v.x+v.width*(1-factor)/2,v.y+v.height*(1-factor)/2,v.width*factor,v.height*factor].join(' '));
 });
 $('aad-plan-export').addEventListener('click',()=>{if(!building)return;const svg=$('viewer2d').cloneNode(true);svg.setAttribute('xmlns',svgNS);download(building.projectId+'_'+activeLevel+'_DIMENSIONED_PLAN.svg',new XMLSerializer().serializeToString(svg),'image/svg+xml');});
-// The coordinate inspector lives below the plan. Hover previews; click/tap pins.
+// The coordinate inspector lives in the EAST tools pane, OUTSIDE the 2D canvas and its footer. Hover previews; click/tap pins.
 const gridHud=document.createElement('section');gridHud.id='aad-grid-hud';gridHud.hidden=true;
-gridHud.innerHTML='<strong>100 mm coordinate inspector · pinned point</strong><span id="aad-grid-preview">Preview: move the pointer across the plan</span><span id="aad-grid-current">Tap or click a point on the 2D plan to pin its coordinate.</span><button type="button" id="aad-grid-copy" disabled>Copy pinned coordinate</button><button type="button" id="aad-grid-clear" disabled>Clear pin</button><label id="aad-column-axes-label" hidden><input id="aad-column-axes" type="checkbox" checked> Show column axes A–C / 1–5 (proposed)</label><details id="aad-grid-help"><summary>Grid reference and limits</summary><small>100 mm building-local XY cell codes BX/BY are different from provisional column axes A–C / 1–5. Plot X = building X + 1944 mm · plot Y = building Y + 2000 mm. This is not a surveyed grid or structural approval. Stair offset remains on HOLD.</small></details>';
-const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center;margin:6px 0;padding:9px;border:1px solid #c8d8d8;border-radius:7px;background:#f5f9fc;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong{flex:1 1 100%}#aad-grid-preview{flex:1 1 100%;font:500 11px/1.4 ui-monospace,monospace;overflow-wrap:anywhere;color:#557084}#aad-grid-current{flex:1 1 220px;font:600 12px/1.5 ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy,#aad-grid-clear{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-grid-hud button:disabled{opacity:.5;cursor:not-allowed}#aad-column-axes-label{display:flex;gap:7px;align-items:center;flex:1 1 100%;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}#aad-grid-help{flex:1 1 100%;font-size:11px;color:#51677d}#aad-grid-help summary{cursor:pointer;font-weight:650}#aad-grid-help small{display:block;line-height:1.55;margin:5px 0}@media(max-width:600px){#aad-grid-copy,#aad-grid-clear{min-height:44px}}';
+gridHud.innerHTML='<strong>Coordinate tools · 100 mm grid</strong><span id="aad-grid-preview">Preview: move the pointer across the plan</span><span id="aad-grid-current">Tap or click a point on the 2D plan to pin its coordinate.</span><button type="button" id="aad-grid-copy" disabled>Copy pinned coordinate</button><button type="button" id="aad-grid-clear" disabled>Clear pin</button><label id="aad-column-axes-label" hidden><input id="aad-column-axes" type="checkbox" checked> Show column axes A–C / 1–5 (proposed)</label><details id="aad-grid-help"><summary>Coordinates and axis meanings</summary><small id="aad-coordinate-basis">Building-local 100 mm BX/BY cells are distinct from the provisional A–C / 1–5 column markers. Click or tap to pin a building point; plot coordinates are derived from the registered plot origin.</small></details><details id="aad-stair-report" open><summary>Staircase · dimension audit</summary><div id="aad-stair-values" aria-live="off">Stair schedule loads with the selected model.</div></details>';
+const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center;margin:6px 0;padding:9px;border:1px solid #c8d8d8;border-radius:7px;background:#f5f9fc;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong{flex:1 1 100%}#aad-grid-preview{flex:1 1 100%;font:500 11px/1.4 ui-monospace,monospace;overflow-wrap:anywhere;color:#557084}#aad-grid-current{flex:1 1 220px;font:600 12px/1.5 ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy,#aad-grid-clear{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-grid-hud button:disabled{opacity:.5;cursor:not-allowed}#aad-column-axes-label{display:flex;gap:7px;align-items:center;flex:1 1 100%;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}#aad-grid-help{flex:1 1 100%;font-size:11px;color:#51677d}#aad-grid-help summary{cursor:pointer;font-weight:650}#aad-grid-help small{display:block;line-height:1.55;margin:5px 0}#aad-stair-report{flex:1 1 100%;border-top:1px solid #d9e2e9;padding-top:8px}#aad-stair-report summary{font-size:12px;font-weight:750;cursor:pointer}#aad-stair-values{font-size:11px;line-height:1.6}#aad-stair-values table{border-collapse:collapse;width:100%;margin:6px 0}#aad-stair-values td{padding:3px 4px;border-bottom:1px solid #e3ecf1;vertical-align:top}#aad-stair-values td:first-child{font-weight:650;white-space:nowrap}#aad-stair-values p{margin:6px 0}@media(max-width:600px){#aad-grid-copy,#aad-grid-clear{min-height:44px}}';
 document.head.append(gridStyle);
-$('viewport2d').querySelector('.view-foot').prepend(gridHud);
+$('aad-inspector').prepend(gridHud);
+function renderStairSchedule(presentation){
+ const host=$('aad-stair-values'),basis=$('aad-coordinate-basis');
+ const grid=presentation.coordinateGrid;
+ if(!host||!grid)return;
+ const plot=grid.plotOriginMm||[0,0],x=grid.targetXmm||0,stairX=grid.unresolvedStairCentrelineXmm;
+ const axis=presentation.columnAxisGrid?.letterAxes?.find(a=>a.label==='B');
+ basis.textContent='100 mm BX/BY cells show building-local X/Y. Plot origin adds X '+plot[0]+' mm and Y '+plot[1]+' mm. '+(axis?'Proposed B axis X='+axis.xMm+' mm. ':'')+'Column axes A–C / 1–5 are separate plan references.';
+ const stair=presentation.roofAccess, bay=presentation.stairBay;
+ if(!stair||!bay){host.textContent='No computed stair geometry registered for this edition.';return;}
+ const rise=stair.riseM*1000,risers=stair.risers,perFlight=risers/2,goings=perFlight-1,going=stair.treadM*1000;
+ const stairElements=presentation.elements||[];
+ const landingA=stairElements.find(e=>e.id==='GF-STAIR-MID-LANDING')?.dx*1000||900;
+ const landingB=stairElements.find(e=>e.id==='GF-STAIR-SIDE-LANDING')?.dx*1000||900;
+ const footprint=goings*going+landingA+landingB,available=bay[0]*1000;
+ const preferred=279.4,preferredEnvelope=goings*preferred+landingA+landingB;
+ const num=n=>Number(n).toFixed(1).replace(/\\.0$/,'');
+ const row=(label,value)=>'<tr><td>'+label+'</td><td>'+value+'</td></tr>';
+ host.innerHTML='<table aria-label="Derived stair dimensions">'+
+ row('Floor rise',num(rise)+' mm')+
+ row('Risers',risers+' total · '+num(perFlight)+' per flight')+
+ row('Riser height',num(rise/risers)+' mm')+
+ row('Treads',num(goings)+' goings / flight · '+num(going)+' mm')+
+ row('Flight width',num(stair.flightWidthM*1000)+' mm')+
+ row('Landings',num(landingA)+' / '+num(landingB)+' mm')+
+ row('Plan envelope',num(footprint)+' of '+num(available)+' mm bay ('+num(available-footprint)+' mm spare)')+
+ row('2R + going',num(2*rise/risers+going)+' mm')+
+ row('11-inch option',num(preferred)+' mm tread · '+num(preferredEnvelope)+' mm envelope ('+num(available-preferredEnvelope)+' mm nominal spare)')+
+ row('Wall / stair datum',stairX===undefined?'Not registered':num(Math.abs(stairX-x))+' mm separation')+
+ '</table><p>The drawn stair retains its current geometry. The 11-inch alternative is a space calculation, not a changed or clearance-verified 2D/3D model.</p>';
+}
+
 $('aad-column-axes').addEventListener('change',e=>{showColumnAxes=e.target.checked;if(building)drawPlan();});
 let pinnedGridCoordinate='';
 function clearPinnedGrid(){
