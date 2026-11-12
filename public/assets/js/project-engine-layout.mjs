@@ -26,7 +26,7 @@ export function installProjectEngine(adapter,kind='aad'){
   const presentation=$('aad-presentation-controls'),groups=[...presentation.querySelectorAll('fieldset')];
   if(groups[2])aside.insertBefore(disclosure('Drawing layers',groups[2],true),selection.nextSibling);
   const services=$('aad-services-controls');if(!services.hidden)aside.append(disclosure('MEP & location feedback',services));
-  for(const s of [...aside.children])if(s.tagName==='SECTION'&&s!==selection)aside.append(disclosure(s.querySelector('h2')?.textContent||'Review tools',s));
+  for(const s of [...aside.children])if(s.tagName==='SECTION'&&s!==selection&&s!==coordinateTools)aside.append(disclosure(s.querySelector('h2')?.textContent||'Review tools',s)); // coordinate pane is always available, not a collapsed review tool
   const dock=document.createElement('div');dock.id='pe-bottom';main.append(dock);
   const audit=$('aad-audit-register'),rooms=$('aad-derived-room-panel');dock.append(disclosure('Component register · selected floor / all components',audit),disclosure('Derived room areas',rooms));
   const exportBar=document.createElement('div');exportBar.className='pe-export-bar';
