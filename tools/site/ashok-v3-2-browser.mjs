@@ -44,6 +44,12 @@ try {
   editor.on('pageerror',e=>errors.push(e.message));
   await editor.waitForFunction(()=>window.AADStudio?.getSnapshot()&&document.getElementById('aad-storey')?.value==='ff',null,{timeout:65000});
   assert.equal(await editor.locator('#aad-storey').inputValue(),'ff');
+  assert.equal(await editor.locator('#pe-standalone-scope').isVisible(),true);
+  assert.equal(await editor.locator('#aad-storey').isVisible(),true);
+  await editor.locator('#aad-storey').selectOption('gf');
+  assert.equal(await editor.evaluate(()=>window.AADStudio.getViewportProof().activeLevel),'gf');
+  await editor.locator('#aad-storey').selectOption('ff');
+  assert.equal(await editor.evaluate(()=>window.AADStudio.getViewportProof().activeLevel),'ff');
   await editor.close();
   await p.locator('#pw-phase').selectOption('gf');
   assert.equal(new URL(await p.locator('#pw-edit-direct').getAttribute('href')).searchParams.get('phase'),'gf');
