@@ -27,6 +27,9 @@ try{
   await p.locator("#cad-global-navigation").waitFor({timeout:12000});
   const sheet=await p.locator('link[href*="cad-unified-theme.css"]').count();
   if(sheet!==1)throw Error(title+" missing one shared stylesheet");
+  // The shell is inserted by a deferred script. A partial/placeholder nav can
+  // appear before its nested anchors are initialized under a busy CI browser.
+  await p.waitForFunction(()=>document.querySelectorAll("#cad-global-navigation a").length>=7,null,{timeout:15000});
   const menu=await p.locator("#cad-global-navigation a").count();
   if(menu<7)throw Error(title+" missing global navigation");
   if(await p.locator('#cad-global-navigation .cad-global-links > a[href$="/cad/"]').count()!==0)
