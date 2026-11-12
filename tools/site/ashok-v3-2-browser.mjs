@@ -20,7 +20,7 @@ try {
   });
   assert.deepEqual(proof.xs,[3.6,3.6,3.6,3.6]);assert.equal(proof.grid,100);assert.equal(proof.issue,false);
   // The coordinate inspector must not cover the floor plan.
-  assert.equal(await frame.locator('#aad-grid-hud').evaluate(el=>el.parentElement.classList.contains('view-foot')),true);
+  assert.equal(await frame.locator('#aad-grid-hud').evaluate(el=>Boolean(el.closest('#aad-inspector'))&&!el.closest('#viewport2d')),true);
   const pin=await p.locator('#ashok-engine').evaluate(el=>{
    const doc=el.contentDocument,svg=doc.getElementById('viewer2d');
    const point=svg.createSVGPoint();point.x=3.6;point.y=7.0;
