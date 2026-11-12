@@ -61,6 +61,7 @@ thead{position:sticky;top:0;background:#dcebee}tbody tr:hover{background:#eaf6f3
 #viewer2d{display:block;width:100%;height:min(70vh,715px);min-height:470px;background:#f0f8f7;touch-action:none}
 #viewer3d{height:min(70vh,715px);min-height:470px}
 .viewport .view-foot{font-size:10px;color:#678089;padding:7px 11px}
+.viewport .view-foot output[hidden]{display:none!important} /* prevent stale pointer/plot coordinates appearing below the plan */
 body[data-view-mode="plan"] .linked-views{grid-template-columns:1fr}
 body[data-view-mode="plan"] #viewport3d{display:none}
 body[data-view-mode="building"] .linked-views{grid-template-columns:1fr}
