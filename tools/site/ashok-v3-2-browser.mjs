@@ -19,6 +19,32 @@ try {
    return{xs:['FF-N014','FF-N016','FF-N017','FF-N018'].map(id=>n[id].x),grid:s.manifest.presentation.coordinateGrid.baseCellMm,issue:s.manifest.restrictions.issueForConstruction};
   });
   assert.deepEqual(proof.xs,[3.6,3.6,3.6,3.6]);assert.equal(proof.grid,100);assert.equal(proof.issue,false);
+  // The coordinate inspector must not cover the floor plan.
+  assert.equal(await frame.locator('#aad-grid-hud').evaluate(el=>el.parentElement.classList.contains('view-foot')),true);
+  const pin=await p.locator('#ashok-engine').evaluate(el=>{
+   const doc=el.contentDocument,svg=doc.getElementById('viewer2d');
+   const point=svg.createSVGPoint();point.x=3.6;point.y=7.0;
+   const screen=point.matrixTransform(svg.getScreenCTM());
+   svg.dispatchEvent(new MouseEvent('click',{bubbles:true,clientX:screen.x,clientY:screen.y}));
+   const current=doc.getElementById('aad-grid-current').textContent;
+   const enabled=!doc.getElementById('aad-grid-copy').disabled;
+   point.x=4.4;point.y=6.0;
+   const other=point.matrixTransform(svg.getScreenCTM());
+   svg.dispatchEvent(new PointerEvent('pointermove',{bubbles:true,clientX:other.x,clientY:other.y}));
+   return{current,after:doc.getElementById('aad-grid-current').textContent,enabled,
+    preview:doc.getElementById('aad-coordinate-readout').textContent};
+  });
+  assert.match(pin.current,/Pinned: Ashok FF BX036-BY074/);
+  assert.equal(pin.after,pin.current);
+  assert.equal(pin.enabled,true);
+  assert.match(pin.preview,/Preview \(not pinned\)/);
+  const editorHref=await p.locator('#pw-edit-direct').getAttribute('href');
+  assert.equal(new URL(editorHref).searchParams.get('phase'),'ff');
+  const [editor]=await Promise.all([p.waitForEvent('popup'),p.locator('#pw-edit-direct').click()]);
+  editor.on('pageerror',e=>errors.push(e.message));
+  await editor.waitForFunction(()=>window.AADStudio?.getSnapshot()&&document.getElementById('aad-storey')?.value==='ff',null,{timeout:65000});
+  assert.equal(await editor.locator('#aad-storey').inputValue(),'ff');
+  await editor.close();
   await p.locator('#pw-phase').selectOption('gf');
   await p.waitForFunction(()=>window.ProjectWorkspace.getDrawing().getState().phase==='gf');
   const gfX=await p.locator('#ashok-engine').evaluate(el=>el.contentWindow.AADStudio.getSnapshot().models.gf.floorGraph.nodes.find(v=>v.id==='GF-N017').x);
