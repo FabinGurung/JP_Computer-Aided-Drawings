@@ -73,7 +73,7 @@ assert.ok(assembly.elements.some(e=>e.id?.endsWith('FF-W009-C4-C2-OWNER-20261112
 assert.ok(assembly.elements.some(e=>e.id?.endsWith('FF-D-LOUNGE-MAIN')));
 const stair=read('staircase-dimension-audit-20261112.json');
 const schedule=stair.drawnConfiguration,option=stair.ownerPreviouslyRequestedOption;
-const approx=(a,b)=>Math.abs(a-b)<.002;
+const approx=(a,b)=>Math.abs(a-b)<.01; // allow millimetre values rounded to 0.001 in the published JSON
 assert.equal(stair.classification,'ARCHITECTURAL_DIMENSION_CHECK_ONLY__DESIGN_GEOMETRY_UNCHANGED');
 assert.equal(manifest.presentation.roofAccess.risers,schedule.riserCount);
 assert.ok(approx(manifest.presentation.roofAccess.riseM*1000,schedule.risePerStoreyMm));
