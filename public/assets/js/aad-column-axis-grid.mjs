@@ -83,6 +83,7 @@ export function drawColumnAxisOverlay(target,manifest,levelId,{enabled=true,roof
   const lbl=el('text',{x:x+.25,y:z-.24,'text-anchor':'start','font-size':'.22','font-weight':'750','font-family':'system-ui,sans-serif',fill:'#563b7e','paint-order':'stroke',stroke:'#fffdf6','stroke-width':'.09','stroke-linejoin':'round','data-column-axis-node':marker.id},marker.id);
   labels.append(lbl);
  }
- labels.append(el('text',{x:(x0+x1)/2,y:z0-2.13,'text-anchor':'middle','font-size':'.22','font-weight':'750','font-family':'system-ui,sans-serif',fill:'#654b79','data-column-axis-disclaimer':'true'},'COLUMN AXES · PROVISIONAL MARKERS / NOT ENGINEERED'));
+ // Ashok's east coordinate inspector replaces its on-plan provenance caption. Other projects retain it when there is no such inspector.
+ if(!manifest.presentation?.coordinateGrid)labels.append(el('text',{x:(x0+x1)/2,y:z0-2.13,'text-anchor':'middle','font-size':'.22','font-weight':'750','font-family':'system-ui,sans-serif',fill:'#654b79','data-column-axis-disclaimer':'true'},'COLUMN AXES · PROVISIONAL MARKERS / NOT ENGINEERED'));
  return group;
 }

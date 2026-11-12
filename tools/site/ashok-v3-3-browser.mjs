@@ -15,6 +15,26 @@ try{
   await frame.locator('#aad-grid-hud').waitFor({state:'visible',timeout:20000});
   assert.equal(await frame.locator('#viewer2d').isVisible(),true);
   assert.equal(await frame.locator('#viewer3d canvas').isVisible(),true);
+  // The coordinate HUD must be in the east inspector, never over or beneath the drawing.
+  const pane=await p.locator('#ashok-engine').evaluate(el=>{
+   const doc=el.contentDocument,svg=doc.getElementById('viewer2d');
+   const hud=doc.getElementById('aad-grid-hud');
+   return{inEast:Boolean(hud.closest('#aad-inspector')),in2d:Boolean(hud.closest('#viewport2d')),
+    hasJump:Boolean(doc.querySelector('#viewport2d .aad-coordinate-jump')),
+    footCoordinateVisible:getComputedStyle(doc.getElementById('aad-coordinate-readout')).display!=='none',
+    hasVerboseStairCaption:svg.textContent.includes('STAIR OFFSET HOLD'),
+    hasVerboseAxisCaption:svg.textContent.includes('COLUMN AXES · PROVISIONAL'),
+    stair:doc.getElementById('aad-stair-values')?.innerText||''};
+  });
+  assert.equal(pane.inEast,true,'coordinate HUD must be in the east inspector');
+  assert.equal(pane.in2d,false,'coordinate HUD must not appear within the floor drawing');
+  assert.equal(pane.hasJump,true,'floor heading must link to coordinate pane');
+  assert.equal(pane.footCoordinateVisible,false,'no duplicate moving coordinate under the floor plan');
+  assert.equal(pane.hasVerboseStairCaption,false);
+  assert.equal(pane.hasVerboseAxisCaption,false);
+  assert.match(pane.stair,/169\.3 mm/);
+  assert.match(pane.stair,/279\.4 mm/);
+
   const report=await p.locator('#ashok-engine').evaluate(el=>{
    const w=el.contentWindow,s=w.AADStudio.getSnapshot();
    const axes=s.manifest.presentation.columnAxisGrid;

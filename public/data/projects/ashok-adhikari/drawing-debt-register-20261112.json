@@ -1,0 +1,79 @@
+{
+  "schema": "jp-cad://ashok-drawing-interface-debt-register/1",
+  "project": "Ashok Adhikari",
+  "edition": "v3.3",
+  "dateNpt": "2026-11-12",
+  "description": "Close drawing-only coordinate UI and staircase-calculation debt; retain historical architectural models and transfer physical support verification to the structural-analysis repository.",
+  "items": [
+    {
+      "id": "D-UI-001",
+      "issue": "Coordinate/provenance panel occupied 2D plan and moving coordinate duplicated beneath plan",
+      "resolution": "100 mm coordinate preview/pinned tools moved to east inspector; bottom duplicate hidden with strong [hidden] rule; 2D heading links to east pane.",
+      "state": "IMPLEMENTED_CI_VERIFICATION_REQUIRED",
+      "paths": [
+        "cad/aad/multistorey/main.js",
+        "cad/aad/multistorey/index.html"
+      ]
+    },
+    {
+      "id": "D-UI-002",
+      "issue": "Long static building-grid captions, axis disclaimer and stair-offset sentence crowded plans",
+      "resolution": "Preserve dimension ticks, BX numbers, axis bubbles and datum paths, but show semantic explanation and stair offset in east inspector.",
+      "state": "IMPLEMENTED_CI_VERIFICATION_REQUIRED",
+      "paths": [
+        "public/assets/js/aad-dimensioned-plan.mjs",
+        "public/assets/js/aad-column-axis-grid.mjs"
+      ]
+    },
+    {
+      "id": "D-UI-003",
+      "issue": "Coordinate inspector difficult to find on mobile or inside embedded workspace",
+      "resolution": "Add Coordinates / stair schedule jump from 2D header; keep east inspector at top of its panel in standard editor.",
+      "state": "IMPLEMENTED_CI_VERIFICATION_REQUIRED",
+      "paths": [
+        "public/assets/js/project-engine-layout.mjs",
+        "cad/aad/multistorey/main.js"
+      ]
+    },
+    {
+      "id": "D-STAIR-001",
+      "issue": "Unexplained 18-riser/250-going U-stair proportions across GF, FF and roof access",
+      "resolution": "Derived exact riser, flight, run, landings, bay footprint, roof continuation, datum offset and 11-inch option from v3.3 manifest, with native arithmetic QA and visible read-only stair schedule.",
+      "state": "CALCULATED_RETAINED_GEOMETRY",
+      "ref": "staircase-dimension-audit-20261112.json"
+    },
+    {
+      "id": "D-STAIR-002",
+      "issue": "Earlier 11-inch tread preference not represented by actual 250 mm stair geometry",
+      "resolution": "279.4 mm tread is an explicitly non-drawn space option. Do not shift any original wall, room or staircase without further layout verification.",
+      "state": "OPTION_DOCUMENTED_NOT_APPLIED",
+      "ref": "staircase-dimension-audit-20261112.json"
+    },
+    {
+      "id": "D-EXTERNAL-001",
+      "issue": "B1 marker on X3600 intersects drawn landing envelope and stair datum remains at X4175",
+      "resolution": "Record 575 mm drawing offset and transfer actual support, footprint and column position validation to structural-analysis owner. No change to drawing-only B marker/source wall.",
+      "state": "TRANSFERRED_TO_STRUCTURAL_ANALYSIS",
+      "ownerRepo": "FabinGurung/JP_Structural_Analysis"
+    },
+    {
+      "id": "D-EXTERNAL-002",
+      "issue": "Finished headroom and real slab/guard/beam dimensions lack direct measurements",
+      "resolution": "Record unknowns without fabricating clear-height or approved member dimensions. Later verify using real source survey/as-built or peer analysis.",
+      "state": "PENDING_EXTERNAL_SOURCE_EVIDENCE"
+    },
+    {
+      "id": "D-EXTERNAL-003",
+      "issue": "Large right FF C4–C2 opening faces right boundary",
+      "resolution": "Architectural opening remains as owner-approved visual candidate; permit, fire and structural lintel checks transferred to appropriate review authority.",
+      "state": "TRANSFERRED_REVIEW_NOT_RESOLVED"
+    }
+  ],
+  "governance": {
+    "modelModified": false,
+    "previousEditionUnchanged": true,
+    "crossRepoWrite": false,
+    "structuralAnalysisNotPerformed": true,
+    "releaseGate": "CAD Unified Website Staging QA → CAD Main GitHub Pages → independent live readback"
+  }
+}
