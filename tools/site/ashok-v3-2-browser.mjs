@@ -46,6 +46,7 @@ try {
   assert.equal(await editor.locator('#aad-storey').inputValue(),'ff');
   await editor.close();
   await p.locator('#pw-phase').selectOption('gf');
+  assert.equal(new URL(await p.locator('#pw-edit-direct').getAttribute('href')).searchParams.get('phase'),'gf');
   await p.waitForFunction(()=>window.ProjectWorkspace.getDrawing().getState().phase==='gf');
   const gfX=await p.locator('#ashok-engine').evaluate(el=>el.contentWindow.AADStudio.getSnapshot().models.gf.floorGraph.nodes.find(v=>v.id==='GF-N017').x);
   assert.equal(gfX,3.6);
