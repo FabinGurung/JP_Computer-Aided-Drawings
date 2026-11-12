@@ -1284,6 +1284,11 @@ gridHud.innerHTML='<strong>Coordinate tools · 100 mm grid</strong><span id="aad
 const gridStyle=document.createElement('style');gridStyle.textContent='#aad-grid-hud{display:flex;flex-wrap:wrap;gap:7px 10px;align-items:center;margin:6px 0;padding:9px;border:1px solid #c8d8d8;border-radius:7px;background:#f5f9fc;color:#214669;font-size:12px}#aad-grid-hud[hidden]{display:none!important}#aad-grid-hud strong{flex:1 1 100%}#aad-grid-preview{flex:1 1 100%;font:500 11px/1.4 ui-monospace,monospace;overflow-wrap:anywhere;color:#557084}#aad-grid-current{flex:1 1 220px;font:600 12px/1.5 ui-monospace,monospace;overflow-wrap:anywhere}#aad-grid-copy,#aad-grid-clear{padding:6px 10px;border:1px solid #99b3ca;background:#fff;color:#244d72;border-radius:6px;cursor:pointer}#aad-grid-hud button:disabled{opacity:.5;cursor:not-allowed}#aad-column-axes-label{display:flex;gap:7px;align-items:center;flex:1 1 100%;font-size:12px;font-weight:650}#aad-column-axes-label[hidden]{display:none!important}#aad-grid-help{flex:1 1 100%;font-size:11px;color:#51677d}#aad-grid-help summary{cursor:pointer;font-weight:650}#aad-grid-help small{display:block;line-height:1.55;margin:5px 0}#aad-stair-report{flex:1 1 100%;border-top:1px solid #d9e2e9;padding-top:8px}#aad-stair-report summary{font-size:12px;font-weight:750;cursor:pointer}#aad-stair-values{font-size:11px;line-height:1.6}#aad-stair-values table{border-collapse:collapse;width:100%;margin:6px 0}#aad-stair-values td{padding:3px 4px;border-bottom:1px solid #e3ecf1;vertical-align:top}#aad-stair-values td:first-child{font-weight:650;white-space:nowrap}#aad-stair-values p{margin:6px 0}@media(max-width:600px){#aad-grid-copy,#aad-grid-clear{min-height:44px}}';
 document.head.append(gridStyle);
 $('aad-inspector').prepend(gridHud);
+const coordinateJump=document.createElement('a');coordinateJump.href='#aad-grid-hud';
+coordinateJump.className='aad-coordinate-jump';coordinateJump.textContent='Coordinates / stair schedule';
+coordinateJump.style.cssText='margin-left:auto;font-size:11px;font-weight:700;color:#166e64;text-decoration:underline;white-space:normal;max-width:58%;text-align:right';
+$('viewport2d').querySelector('.viewport-title').append(coordinateJump);
+
 function renderStairSchedule(presentation){
  const host=$('aad-stair-values'),basis=$('aad-coordinate-basis');
  const grid=presentation.coordinateGrid;
