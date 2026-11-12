@@ -44,6 +44,7 @@ try {
   editor.on('pageerror',e=>errors.push(e.message));
   await editor.waitForFunction(()=>window.AADStudio?.getSnapshot()&&document.getElementById('aad-storey')?.value==='ff',null,{timeout:65000});
   assert.equal(await editor.locator('#aad-storey').inputValue(),'ff');
+  await editor.locator('#pe-standalone-scope').waitFor({state:'visible',timeout:20000});
   assert.equal(await editor.locator('#pe-standalone-scope').isVisible(),true);
   assert.equal(await editor.locator('#aad-storey').isVisible(),true);
   await editor.locator('#aad-storey').selectOption('gf');
