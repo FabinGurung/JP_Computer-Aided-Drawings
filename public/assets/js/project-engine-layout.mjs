@@ -15,11 +15,14 @@ export function installProjectEngine(adapter,kind='aad'){
     const label=$(id)?.closest('label');if(label)scope.append(label);
    }
    $('aad-edit-history-panel').before(scope);
+   const coordinatesLink=document.createElement('a');coordinatesLink.href='#aad-grid-hud';coordinatesLink.textContent='Coordinate tools (right pane)';coordinatesLink.style.cssText='font-size:12px;font-weight:700;color:#17645e';scope.append(coordinatesLink);
    const style=document.createElement('style');
    style.textContent='#pe-standalone-scope{display:flex;flex-wrap:wrap;align-items:center;gap:12px;padding:10px 12px;border-bottom:1px solid #d6e2e5;background:#f3f8fa}#pe-standalone-scope label{display:flex;align-items:center;gap:8px;flex-wrap:wrap;font-size:12px;font-weight:750}#pe-standalone-scope select{min-height:38px;max-width:210px;border-radius:6px;border:1px solid #b7cbd2;background:white;padding:6px 10px;color:#21424e}@media(max-width:600px){#pe-standalone-scope{gap:8px}#pe-standalone-scope label{width:100%}#pe-standalone-scope select{flex:1;max-width:none}}';
    document.head.append(style);
   }
   const aside=$('aad-inspector'),selection=$('selection').closest('section');aside.prepend(selection);
+  // Keep coordinate tools at the top of the right-hand inspector, not over the plan.
+  const coordinateTools=$('aad-grid-hud');if(coordinateTools)aside.prepend(coordinateTools);
   const presentation=$('aad-presentation-controls'),groups=[...presentation.querySelectorAll('fieldset')];
   if(groups[2])aside.insertBefore(disclosure('Drawing layers',groups[2],true),selection.nextSibling);
   const services=$('aad-services-controls');if(!services.hidden)aside.append(disclosure('MEP & location feedback',services));
