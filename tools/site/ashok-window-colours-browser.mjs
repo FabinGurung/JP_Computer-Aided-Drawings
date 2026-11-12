@@ -10,7 +10,7 @@ try{
   assert.equal(resp.status(),200);
   await p.waitForFunction(()=>window.ProjectWorkspace?.getDrawing()?.getState()?.ready,null,{timeout:65000});
   const frame=p.frameLocator('#ashok-engine');
-  await frame.locator('#viewer2d .aad-window').first().waitFor({state:'visible',timeout:30000});
+  await frame.locator('#viewer2d .aad-window').first().waitFor({state:'attached',timeout:30000}); // SVG lines can have zero-height layout bounds while strokes render
   const proof=await p.locator('#ashok-engine').evaluate(el=>{
    const w=el.contentWindow,doc=el.contentDocument;
    const windowLines=[...doc.querySelectorAll('#viewer2d .aad-window')];
@@ -24,7 +24,7 @@ try{
     windowWidth:windowLines[0].getAttribute('stroke-width'),
     colors3D:c.windows3D.filter(x=>x.id.endsWith('FF-W009-C4-C2-OWNER-20261112')),
     legend:c.legend,readOnlyProof:c,
-    windowsVisible:windowLines.every(n=>getComputedStyle(n).display!=='none'),
+    windowsVisible:windowLines.every(n=>getComputedStyle(n).display!=='none'&&Math.hypot(Number(n.getAttribute('x2'))-Number(n.getAttribute('x1')),Number(n.getAttribute('y2'))-Number(n.getAttribute('y1')))>0&&Number(n.getAttribute('stroke-width'))>0),
     doorCountOriginal:doors.length
    };
   });
