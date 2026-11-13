@@ -1,5 +1,5 @@
-import {PROJECTS,ALL_WORKSPACE_PROJECTS,CHAPTERS} from './project-workspace-config.mjs';
-import {AAD_WORKSPACE_ENGINE_VERSION,validateEditionRegistries,describeEdition,nextEditionRequest} from './project-edition-contract.mjs';
+import {PROJECTS,ALL_WORKSPACE_PROJECTS,CHAPTERS} from './project-workspace-config.mjs?v=1.4.0';
+import {AAD_WORKSPACE_ENGINE_VERSION,validateEditionRegistries,describeEdition,nextEditionRequest} from './project-edition-contract.mjs?v=1.4.0';
 import {NORMALIZED_PACKAGE_CATALOG} from './project-engineering-normalization.mjs';
 import {validateControlTower,inspectAxisEvidence,reviewGate,modelLineage} from './cad-view-control-tower.mjs';
 import {packageRecords,firstPackageId,packageById,renderPackages,renderPackageCards,renderPackageInspector,filterPackageRecords} from './project-site-packages.mjs';
