@@ -35,6 +35,29 @@ try{
   assert.match(pane.stair,/169\.3 mm/);
   assert.match(pane.stair,/279\.4 mm/);
 
+
+  // Owner UX: only the small metric drawing grid toggles. Source-preserved
+  // A-C / 1-5 candidate column axes remain visible and clearly provisional.
+  assert.equal(await p.locator('#pw-west-phase').inputValue(),'ff');
+  assert.equal(await p.locator('#pw-west-layout').inputValue(),'split');
+  if(viewport.width>=1440){
+   const toggle=p.locator('#pw-grid-visibility');
+   assert.equal(await toggle.isVisible(),true);
+   assert.equal(await frame.locator('#aad-plan-grid').isChecked(),true);
+   assert.equal(await frame.locator('#viewer2d [data-column-axis-overlay]').count(),1);
+   await toggle.click();
+   await p.waitForFunction(()=>document.querySelector('#ashok-engine').contentDocument.getElementById('aad-plan-grid')?.checked===false);
+   assert.equal(await frame.locator('#viewer2d [data-grid-spacing]').count(),0);
+   assert.equal(await frame.locator('#viewer2d [data-column-axis-overlay]').count(),1);
+   await toggle.click();
+   await p.waitForFunction(()=>document.querySelector('#ashok-engine').contentDocument.getElementById('aad-plan-grid')?.checked===true);
+   assert.ok(await frame.locator('#viewer2d [data-grid-spacing]').count()>0);
+   await p.locator('#pw-west-phase').selectOption('gf');
+   await p.waitForFunction(()=>window.ProjectWorkspace.getState().phase==='gf');
+   assert.equal(await p.locator('#pw-phase').inputValue(),'gf');
+   await p.locator('#pw-west-phase').selectOption('ff');
+   await p.waitForFunction(()=>window.ProjectWorkspace.getState().phase==='ff');
+  }
   const report=await p.locator('#ashok-engine').evaluate(el=>{
    const w=el.contentWindow,s=w.AADStudio.getSnapshot();
    const axes=s.manifest.presentation.columnAxisGrid;
