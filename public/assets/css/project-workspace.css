@@ -253,3 +253,6 @@ body[data-project-ui="ashok-v33-navigation"] .pw-request-drawer[open]{position:f
  body[data-project-ui="ashok-v33-navigation"] .pw-request-drawer[open]{top:58px;max-height:calc(100dvh - 60px)}
  .pw-element-table{min-width:580px}
 }
+
+.pw-west-editor{display:block;margin-top:8px;text-align:center;background:#fff;color:#176e68;text-decoration:none;font-size:12px;font-weight:750;padding:9px;border:1px solid #a5c7c5;border-radius:7px;line-height:1.4}
+.pw-west-editor[hidden]{display:none!important}
