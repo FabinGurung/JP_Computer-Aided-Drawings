@@ -29,6 +29,9 @@ try{
    assert.ok(status.contract.includes('Shared engine 1.4.0'));
    assert.deepEqual(status.options,project.editions.map(x=>x.id));
    assert.equal(status.requestDisabled,Boolean(project.synthetic));
+   // The west rail is a collapsed navigation drawer on mobile. Open it before
+   // exercising edition controls; the DOM provenance remains inspectable while closed.
+   if(viewport.width<=760){await p.locator('#pw-menu').click();await p.waitForFunction(()=>document.body.dataset.menu==='open',{timeout:10000});}
    if(edition.sourceRef){
     assert.ok(status.sourceHref?.endsWith('/'+edition.sourceRef),slug+' source link must preserve unique registered source');
    }else assert.equal(status.sourceHref,null);
