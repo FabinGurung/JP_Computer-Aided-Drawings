@@ -167,7 +167,8 @@ function renderEditionProvenance(){
  const statusText={'RELEASED_REVIEW':'Released for architectural review','FROZEN_REVIEW':'Preserved review version','FROZEN_BASELINE':'Preserved baseline','SOURCE_REVIEW':'Source interpretation only','SOURCE_PENDING':'Public model pending','TEMPLATE_ONLY':'No admitted geometry'}[d.lifecycle];
  const predecessor=d.predecessorId?' · Previous: '+d.predecessorId:'';
  const source=d.sourceRef?'<a href="'+esc(new URL(d.sourceRef,root).href)+'" target="_blank" rel="noopener">Read registered source/model</a>':'<span>Public model not admitted</span>';
- box.innerHTML='<strong>'+esc(kindText)+'</strong><span>'+esc(statusText+predecessor)+'</span><span>Shared engine '+esc(AAD_WORKSPACE_ENGINE_VERSION)+'</span>'+source;
+ const released=edition.releaseTag?'<a href="https://github.com/FabinGurung/jp-drawing-coordination/releases/tag/'+encodeURIComponent(edition.releaseTag)+'" target="_blank" rel="noopener">Verified architectural review milestone</a>':'';
+ box.innerHTML='<strong>'+esc(kindText)+'</strong><span>'+esc(statusText+predecessor)+'</span><span>Shared engine '+esc(AAD_WORKSPACE_ENGINE_VERSION)+'</span>'+source+released;
  $('pw-new-edition').disabled=config.synthetic===true;
  $('pw-new-edition').title=config.synthetic?'Fictional template cannot produce a real building edition':'Records a local request; a reviewed source-backed GitHub PR is required for a published edition';
 }
