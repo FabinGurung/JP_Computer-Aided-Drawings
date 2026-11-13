@@ -187,3 +187,15 @@
 .pw-tree>li[data-west-chapter] .pw-subnav{margin:0;padding:5px 0;border-left:0}
 .pw-tree>li[data-west-chapter] .pw-subnav>button{border-left:2px solid #d3e0e0;border-radius:0 6px 6px 0}
 .pw-tree>li[data-west-chapter] .pw-subnav>button[aria-current="true"]{border-left-color:var(--accent)}
+
+
+/* Shared v1.4.0 edition book: provenance belongs in the west rail on every project. */
+.pw-edition-provenance{display:grid;gap:4px;margin-top:10px;padding:10px;border:1px solid #b8d4cf;border-radius:7px;background:#fff;font-size:11px;line-height:1.5;overflow-wrap:anywhere}
+.pw-edition-provenance strong{font-size:12px;color:#165b57}
+.pw-edition-provenance span{display:block;color:#465d68}
+.pw-edition-provenance a{font-weight:750;text-underline-offset:2px}
+.pw-new-edition{display:block;width:100%;text-align:center;margin-top:10px;background:#176e68;color:#fff;font-weight:800;font-size:12px;border-color:#176e68;min-height:44px}
+.pw-new-edition:hover{background:#075b55;color:#fff}
+.pw-new-edition:disabled{opacity:.6;cursor:not-allowed}
+.pw-edition-policy{display:block;font-size:11px;font-weight:700;margin-top:9px;text-align:center;line-height:1.4}
+@media(max-width:720px){.pw-edition-provenance{font-size:12px}.pw-new-edition{min-height:46px}}
