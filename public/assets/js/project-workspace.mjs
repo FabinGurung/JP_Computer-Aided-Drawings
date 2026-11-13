@@ -193,11 +193,11 @@ if(ashokWorkspace){
   '<option value="split">2D and 3D</option><option value="plan">2D plan</option><option value="building">3D model</option></select></label></div>'+
   '<button type="button" id="pw-grid-visibility" aria-pressed="true" aria-controls="ashok-engine">Hide 100 mm drawing grid</button>'+
   '<p class="pw-grid-note">Drawing tiles: 100 / 500 / 1000 mm. Column axes A–C / 1–5 remain shown independently, as <strong>provisional markers</strong>.</p>'+
+  '<a id="pw-west-editor" class="pw-west-editor" href="#" target="_blank" rel="noopener" hidden>Open working edit studio + operation log</a>'+ 
   '<button type="button" id="pw-open-element-register">Floor-by-floor element table</button>'+
   '<button type="button" id="pw-open-local-history">Edit requests &amp; local history</button>'+
   '<small class="pw-review-warning">Current design: architectural review only. No site-completion records or engineered structural columns admitted.</small>';
- const firstNav=$('pw-rail').querySelector('nav');
- $('pw-rail').insertBefore(west,firstNav);
+ $('pw-rail').querySelector('.pw-edition-card').before(west);
  const drawer=$('pw-change-request');
  drawer.classList.add('pw-request-drawer');
  drawer.querySelector('summary').textContent='Local change requests — not applied model edit history';
@@ -212,6 +212,8 @@ function syncAshokNav(){
  const fp=$('pw-west-phase'),fl=$('pw-west-layout');
  if(fp){fp.innerHTML=$('pw-phase').innerHTML;fp.value=phase;}
  if(fl)fl.value=layout;
+ const editor=$('pw-west-editor'),sourceEditor=$('pw-edit-direct');
+ if(editor&&sourceEditor){editor.hidden=sourceEditor.hidden;if(!sourceEditor.hidden)editor.href=sourceEditor.href;}
  for(const b of document.querySelectorAll('[data-west-open]'))b.setAttribute('aria-current',String(b.dataset.westOpen===panel));
  const grid=$('pw-grid-visibility');
  grid.setAttribute('aria-pressed',String(drawingGridVisible));
