@@ -231,12 +231,14 @@ function applyAshokGridVisibility(){
  // The Ashok project workspace never hides provisional axes when hiding
  // drawing tiles. Retain separate expert controls on the full editor route.
  const axes=inner.getElementById('aad-column-axes');
- if(axes&&axes.checked===false){
-  axes.checked=true;
-  axes.dispatchEvent(new Event('change',{bubbles:true}));
- }
  const legend=inner.getElementById('aad-column-axes-label');
- if(legend)legend.hidden=true;
+ if(edition.id==='v3-3'){
+  if(axes&&axes.checked===false){
+   axes.checked=true;
+   axes.dispatchEvent(new Event('change',{bubbles:true}));
+  }
+  if(legend)legend.hidden=true;
+ }else if(legend)legend.hidden=false; // Historic review editions keep their original inspection toggles.
 }
 function refreshAshokInspector(){
  if(!ashokWorkspace||panel==='packages')return;
