@@ -1,0 +1,102 @@
+{
+  "schema": "jp-cad://aad-project-edition-contract/1.0",
+  "id": "AAD-EDITION-INHERITANCE-001",
+  "version": "1.4.0",
+  "adoptedOn": "2026-11-13",
+  "status": "ACTIVE_CAD_DOMAIN_POLICY",
+  "owner": "FabinGurung/jp-drawing-coordination",
+  "sourceAuthority": "Original governed source material in authenticated project Drive",
+  "governingDocument": "governance/aad/design-edition-lifecycle.v1.md",
+  "projectWorkspace": "public/assets/js/project-workspace.mjs",
+  "projectEditionRegistry": "public/assets/js/project-workspace-config.mjs",
+  "emptyProjectTemplate": "public/templates/project-workspace/project-template.v1.json",
+  "memoryWall": "/memory-wall/#editions",
+  "a7Role": "READ_ONLY_INDEX__DO_NOT_WRITE_A7_FROM_CAD",
+  "invariants": [
+    "Every admitted design alternative or changed owner-approved architectural geometry receives a NEW stable edition ID and NEW immutable source-backed model/manifest path.",
+    "Previously published model/manifest files and prior edition IDs remain selectable and unchanged; preserve Git history and PRE/POST evidence.",
+    "Original DWG/DXF/PDF and private engineering Docs remain authoritative at their existing Drive locations; only public-safe verified derivatives may be published in CAD.",
+    "Do not generate an edition for a UI/theme/renderer/coordinate-overlay improvement, an Actions deployment, an M-series engineering checkpoint, a document revision or a purely administrative release.",
+    "All five chapters and all floor/phase views refer to the selected edition; URL parameter edition must restore the same edition and avoid substituting a different project model.",
+    "Engine, schema, template and visual categories are updated ONCE in the shared CAD library and inherited by all registered projects; do not clone another project's building geometry.",
+    "Source-only and pending-project adapters remain genuinely source-only or unknown; no placeholders asserted as surveyed or approved structure.",
+    "Browser-local edit/request histories are not a new published edition. A reviewed PR with model/source files, provenance and CI is necessary to create a new public selection.",
+    "Every new edition records project/edition ID, predecessor, source family, source revision/hash where publicly permitted, creation reason, validity/approval status and a cross-floor impact review.",
+    "Validate existing versions and all affected project adapters before merge; require exact main-commit Actions + Pages deployment + independent live readback before immutable milestone tag/release."
+  ],
+  "editionKinds": [
+    {
+      "id": "architectural-design",
+      "meaning": "A distinct preserved building design snapshot with source-supported geometry",
+      "snapshotPolicy": "IMMUTABLE_MODEL_PATH"
+    },
+    {
+      "id": "design-option",
+      "meaning": "A source-supported conceptual building alternative, independent of shared software version",
+      "snapshotPolicy": "PROJECT_CONTROLLED_SOURCE"
+    },
+    {
+      "id": "source-family",
+      "meaning": "A named current or historic original drawing/revision family; not automatically a model edition",
+      "snapshotPolicy": "SOURCE_POINTER"
+    },
+    {
+      "id": "template",
+      "meaning": "Deliberately empty fictional starter with no admitted geometry",
+      "snapshotPolicy": "NO_REAL_DESIGN"
+    }
+  ],
+  "requiredEditionFields": [
+    "id",
+    "name",
+    "basis",
+    "kind",
+    "lifecycle",
+    "snapshotPolicy",
+    "predecessorId",
+    "sourceRef",
+    "levels"
+  ],
+  "permittedLifecycle": [
+    "RELEASED_REVIEW",
+    "FROZEN_REVIEW",
+    "FROZEN_BASELINE",
+    "SOURCE_REVIEW",
+    "SOURCE_PENDING",
+    "TEMPLATE_ONLY"
+  ],
+  "localRequestFlow": {
+    "record": "Browser local history (not GitHub and not original source)",
+    "handover": "Copy local change request / edit log with selected project ID, baseline edition ID and source references",
+    "admit": "Create new immutable project model/manifest when supported; independent source/geometry QA and reviewed PR",
+    "register": "Insert distinct edition option into west-rail selector with predecessor and new source reference",
+    "release": "Validate all shared project pages; merge; Pages and readback; tag engine/release separately from design edition"
+  },
+  "sharedProjects": [
+    "ashok-adhikari",
+    "narayani-parajuli",
+    "harisharan-adhikari",
+    "ramachandra-devkota"
+  ],
+  "syntheticFixture": "example-empty",
+  "separation": {
+    "designEdition": "Actual project-specific source/design alternative or changed geometry; appears in west selector",
+    "sourceRevision": "Underlying surveyed/drafted source revision or current family; may appear in selector only as explicitly source-family",
+    "documentRevision": "Stable native provider ID with R-sequence and verified archive, not an architectural edition",
+    "engineeringCheckpoint": "M/R/QA milestones and review evidence, not a design edition",
+    "engineRelease": "Shared renderer, interface or template version, not an architectural edition",
+    "milestoneRelease": "Immutable Git tag and release documenting the verified repo state; no invented architectural geometry"
+  },
+  "acceptance": {
+    "requiredActions": [
+      "CAD Unified Website Staging QA",
+      "CAD AAD Linked 2D-3D Room Product",
+      "CAD Main GitHub Pages (validated CAD publishing)",
+      "CAD M01 Live Pages Readback"
+    ],
+    "neverAutoApproveEngineering": true,
+    "noA7Write": true,
+    "preserveOldRoutes": true,
+    "noFakeGeometry": true
+  }
+}
