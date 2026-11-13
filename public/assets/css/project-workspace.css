@@ -199,3 +199,57 @@
 .pw-new-edition:disabled{opacity:.6;cursor:not-allowed}
 .pw-edition-policy{display:block;font-size:11px;font-weight:700;margin-top:9px;text-align:center;line-height:1.4}
 @media(max-width:720px){.pw-edition-provenance{font-size:12px}.pw-new-edition{min-height:46px}}
+
+
+/* Ashok-only v3.3 workbench UX. Shared rendering/geometry contracts stay intact. */
+body[data-project-ui="ashok-v33-navigation"] .pw-top{position:sticky;top:0;z-index:45;box-shadow:0 3px 12px #143c4420}
+body[data-project-ui="ashok-v33-navigation"] .pw-rail{scrollbar-width:thin}
+.pw-west-controls{margin:0 0 14px;padding:12px 10px;background:#f2f8f7;border:1px solid #b7d8d1;border-radius:10px;min-width:0}
+.pw-west-controls h3{font-size:12px;letter-spacing:.02em;margin:0 0 9px;color:#155d56}
+#pw-west-chapters{display:grid;gap:3px}
+#pw-west-chapters button{width:100%;text-align:left;min-height:38px;border:0;background:transparent;padding:8px 6px;font-weight:650;font-size:12px;line-height:1.3}
+#pw-west-chapters button small{font-size:10px;color:#687e87;margin-right:5px}
+#pw-west-chapters button[aria-current="true"]{background:#d9efe9;border-left:3px solid #18746b;color:#105d54;padding-left:6px}
+.pw-west-fields{display:grid;gap:8px;border-top:1px solid #c5dfd7;margin-top:9px;padding-top:10px}
+.pw-west-fields label{font-size:11px;display:grid;gap:3px;font-weight:700;color:#355c65}
+.pw-west-fields select{min-width:0;width:100%;font-size:12px;padding:6px 8px}
+#pw-grid-visibility,#pw-open-element-register,#pw-open-local-history{display:block;width:100%;font-weight:700;text-align:left;font-size:12px;margin-top:8px;min-height:40px;padding:7px 9px}
+#pw-grid-visibility[aria-pressed="true"]{background:#e9f5f2;border-color:#85bdb1;color:#156859}
+#pw-grid-visibility[aria-pressed="false"]{background:#fffdf7;border-color:#c8bda1;color:#695e45}
+#pw-open-element-register{background:#fff;border-color:#b6cfdd}
+#pw-open-local-history{background:#fff;border-color:#b6cfdd}
+.pw-west-controls .pw-grid-note{font-size:10px;line-height:1.5;color:#516d73;margin:7px 1px}
+.pw-review-warning{display:block;font-size:10px;color:#84612e;padding:9px 0 0;border-top:1px solid #c4d7d1;margin-top:10px;line-height:1.5}
+body[data-project-ui="ashok-v33-navigation"] .pw-toolbar{position:sticky;top:62px;z-index:30;margin-top:8px;padding:7px 10px;box-shadow:0 2px 10px #153a4215}
+body[data-project-ui="ashok-v33-navigation"] .pw-toolbar select{min-height:36px}
+body[data-project-ui="ashok-v33-navigation"] .pw-toolbar .pw-scope{display:none}
+body[data-project-ui="ashok-v33-navigation"] .pw-request-drawer:not([open]){display:none}
+body[data-project-ui="ashok-v33-navigation"] .pw-request-drawer[open]{position:fixed!important;inset:64px 0 auto auto;z-index:90;display:block!important;width:min(620px,calc(100vw - 16px));max-height:calc(100dvh - 70px);margin:0!important;overflow-y:auto;overscroll-behavior:contain;border:2px solid #8eb4b3;box-shadow:-12px 20px 45px #193c4b35;background:#fff;padding:17px!important}
+.pw-request-close{float:right;min-height:32px!important;font-size:12px;font-weight:750;padding:5px 12px}
+.pw-context-inspector dl{display:grid;grid-template-columns:1fr;gap:2px}
+.pw-context-inspector h3{font-size:12px;margin:12px 0 6px}
+.pw-inspected-object{display:grid;gap:6px;padding:10px;background:#f8fbfb;border:1px solid #e1ebed;border-radius:7px;font-size:12px;overflow-wrap:anywhere}
+.pw-inspected-object code{font-size:10px;white-space:normal}
+.pw-context-inspector .pw-inspector-actions button{white-space:normal;text-align:left}
+.pw-level-register h2{margin:4px 0 10px}
+.pw-level-register label{display:grid;gap:6px;font-weight:700;font-size:12px;max-width:480px}
+.pw-level-register input{width:100%;font-size:13px}
+.pw-level-group summary{display:flex;align-items:center;gap:12px;justify-content:space-between;font-size:14px;cursor:pointer;font-weight:700}
+.pw-level-group summary strong{color:#176e68}
+.pw-level-group summary::marker{color:#176e68}
+.pw-element-scroll{overflow:auto;max-height:480px;border:1px solid #d3e0e3;border-radius:7px}
+.pw-element-table{width:100%;border-collapse:collapse;min-width:640px;font-size:12px}
+.pw-element-table th{text-align:left;background:#eef5f4;position:sticky;top:0;z-index:1;padding:10px;border-bottom:1px solid #b8d0d1}
+.pw-element-table td{padding:8px 10px;border-bottom:1px solid #e7eded;vertical-align:top;line-height:1.5;overflow-wrap:anywhere}
+.pw-element-table td:first-child{font-weight:650}
+.pw-element-table code{font-size:11px}
+.pw-element-table tr:hover{background:#f6faf9}
+.pw-model-record[hidden]{display:none}
+#pw-element-matches{color:#506e70;font-size:12px}
+@media(max-width:760px){
+ body[data-project-ui="ashok-v33-navigation"] .pw-menu{font-weight:750}
+ body[data-project-ui="ashok-v33-navigation"] .pw-toolbar{position:sticky;top:56px;z-index:35}
+ body[data-project-ui="ashok-v33-navigation"] .pw-rail{max-height:75dvh;overflow-y:auto}
+ body[data-project-ui="ashok-v33-navigation"] .pw-request-drawer[open]{top:58px;max-height:calc(100dvh - 60px)}
+ .pw-element-table{min-width:580px}
+}
