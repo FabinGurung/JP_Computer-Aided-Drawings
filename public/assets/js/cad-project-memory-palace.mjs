@@ -1,4 +1,4 @@
-import {ALL_WORKSPACE_PROJECTS} from './project-workspace-config.mjs';
+import {ALL_WORKSPACE_PROJECTS} from './project-workspace-config.mjs?v=1.4.0';
 import {NORMALIZED_PACKAGE_CATALOG,NORMALIZED_PROJECTS} from './project-engineering-normalization.mjs';
 const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const slug=document.body.dataset.project,project=ALL_WORKSPACE_PROJECTS[slug],record=NORMALIZED_PROJECTS[slug],root=new URL('../../../',location.href);
