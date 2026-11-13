@@ -1,12 +1,18 @@
 # AAD domain guide template — CAD-owned
 
-Current implementation version: **0.3.3**, at the same canonical template path
+Current implementation version: **0.3.4**, at the same canonical template path
 and template ID. The added code register and archive-before-update document
 control are reusable capabilities within the existing CAD boundary. Human pages:
 `/memory-wall/` and `/codes/pokhara/`. Private engineering working records stay in
 their one canonical Google Doc; this repo does not mirror their private IDs.
 
 **Canonical writer and version history:** this repository, `FabinGurung/JP_Computer-Aided-Drawings`. The machine contract is [aad-domain-template.v0.1.json](aad-domain-template.v0.1.json). The public-facing guide is [../../public/guide/index.html](../../public/guide/index.html).
+
+## Shared edition and template inheritance — 2026-11-13
+
+The version-first **Design edition / source version** selector is governed by the [CAD machine edition contract](../../public/data/cad/design-edition-contract.v1.json) (workspace interface v1.4.0) and [edition lifecycle operator guide](design-edition-lifecycle.v1.md). The canonical reusable domain template is updated to **0.3.4** at the existing stable path. Each real project inherits the same studio and navigation engine; source-admitted project geometry stays project-specific. Only a new real design changes the edition options; a color/UI/schema update or milestone does not invent a new architectural edition.
+
+The [empty starter](../../public/templates/project-workspace/project-template.v1.json) is deliberately fictional. A7 is read-only and may index the CAD policy URI, but the policy must not be copied into A7 as a second governing source.
 
 ## Architectural decision
 
