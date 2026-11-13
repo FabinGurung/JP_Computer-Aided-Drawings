@@ -29,9 +29,15 @@ try{
    assert.ok(status.contract.includes('Shared engine 1.4.0'));
    assert.deepEqual(status.options,project.editions.map(x=>x.id));
    assert.equal(status.requestDisabled,Boolean(project.synthetic));
-   // The west rail is a collapsed navigation drawer on mobile. Open it before
-   // exercising edition controls; the DOM provenance remains inspectable while closed.
-   if(viewport.width<=760){await p.locator('#pw-menu').click();await p.waitForFunction(()=>document.body.dataset.menu==='open',null,{timeout:10000});}
+   // The source-version rail closes after navigation on mobile. Reopen it
+   // before each separate edit/edition action, as a real mobile user would.
+   const ensureEditionRail=async()=>{
+    if(viewport.width<=760 && !(await p.locator('#pw-edition').isVisible())){
+     await p.locator('#pw-menu').click();
+     await p.locator('#pw-edition').waitFor({state:'visible',timeout:12000});
+    }
+   };
+   await ensureEditionRail();
    if(edition.sourceRef){
     assert.ok(status.sourceHref?.endsWith('/'+edition.sourceRef),slug+' source link must preserve unique registered source');
    }else assert.equal(status.sourceHref,null);
@@ -54,11 +60,13 @@ try{
     assert.equal(await p.locator('#pw-edit-direct').isHidden(),true);
    }
    if(slug==='ashok-adhikari'){
+    await ensureEditionRail();
     await p.locator('#pw-edition').selectOption('v3-2');
     await p.waitForFunction(()=>document.getElementById('pw-edition-provenance')?.dataset.editionId==='v3-2',{timeout:10000});
     assert.ok((await p.locator('#pw-edition-provenance').innerText()).includes('Previous: v3-grid'));
     assert.equal(new URL(p.url()).searchParams.get('edition'),'v3-2');
     assert.ok((await p.locator('#pw-edit-direct').getAttribute('href')).includes('aad-building-v3-2-review.json'));
+    await ensureEditionRail();
     await p.locator('#pw-edition').selectOption('v3-3');
     await p.waitForFunction(()=>document.getElementById('pw-edition-provenance')?.dataset.editionId==='v3-3',{timeout:10000});
     assert.ok((await p.locator('#pw-edition-provenance').innerText()).includes('Released for architectural review'));
