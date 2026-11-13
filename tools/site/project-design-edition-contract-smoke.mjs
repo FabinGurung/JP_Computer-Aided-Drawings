@@ -52,6 +52,7 @@ for(const [slug,project] of Object.entries(ALL_WORKSPACE_PROJECTS)){
 }
 assert.deepEqual(PROJECTS['ashok-adhikari'].editions.map(x=>x.id),['v3-3','v3-2','v3-grid','v3','v2','v1']);
 assert.equal(PROJECTS['ashok-adhikari'].editions[0].lifecycle,'RELEASED_REVIEW');
+assert.equal(PROJECTS['ashok-adhikari'].editions[0].releaseTag,'ashok-v3.3.0-window-visibility-review.1');
 assert.equal(PROJECTS['ashok-adhikari'].editions[0].predecessorId,'v3-2');
 assert.equal(PROJECTS['ashok-adhikari'].editions[0].sourceRef,'data/projects/ashok-adhikari/aad-building-v3-3-review.json');
 assert.equal(PROJECTS['narayani-parajuli'].editions[0].kind,'source-family');
