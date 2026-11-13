@@ -41,8 +41,9 @@ try{
    await p.goto(base+'projects/'+slug+'/memory-wall/',{waitUntil:'domcontentloaded'});
    await p.waitForFunction(()=>Boolean(window.ProjectMemoryPalace),null,{timeout:15000});
    assert.equal(await p.locator('.memory-chapter h2').count(),7);
-   assert.equal(await p.locator('.memory-poster h4').count(),28);
-   assert.equal(await p.locator('.memory-toc a.level3').count(),28);
+   assert.equal(await p.locator('.memory-poster h4').count(),29);
+   assert.equal(await p.locator('.memory-toc a.level3').count(),29);
+   assert.equal(await p.locator('.memory-poster').filter({hasText:'Immutable design-edition selector and shared engine'}).count(),1);
    assert.equal(await p.locator('.memory-table tbody tr').count(),16);
    assert.ok(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth+2),'memory palace overflow '+slug+'/'+width);
    const synthetic=await p.evaluate(()=>window.ProjectMemoryPalace.synthetic);

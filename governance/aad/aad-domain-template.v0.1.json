@@ -1,8 +1,8 @@
 {
   "schema": "jp-cad://aad-domain-template/0.1",
   "template_id": "AAD-CAD-TEMPLATE-001",
-  "name": "AI-Aided Design and Drawing \u2014 owned CAD domain template",
-  "version": "0.3.3",
+  "name": "AI-Aided Design and Drawing — owned CAD domain template",
+  "version": "0.3.4",
   "status": "ACTIVE_DOMAIN_OWNED_TEMPLATE",
   "owner_repository": "FabinGurung/JP_Computer-Aided-Drawings",
   "owner_module": "CAD",
@@ -155,5 +155,18 @@
     "linkedViews": "same phase and component ID in 2D, 3D and register",
     "unknownData": "explicit availability state; never substitute geometry, zero quantities or programme dates",
     "projectEditionsSeparateFromDocumentRevisions": true
+  },
+  "designEditionInheritance": {
+    "contractVersion": "1.4.0",
+    "policyRef": "public/data/cad/design-edition-contract.v1.json",
+    "source": "CAD_OWNED_DOMAIN_RULE",
+    "visibleSelector": "west rail / Design edition / source version",
+    "immutableDesignSources": true,
+    "separateSourceAndDocumentRevisions": true,
+    "newGeometryRequiresNewEdition": true,
+    "UIandActionsUpdatesNeverCreateDesignEdition": true,
+    "projectAdaptersReuseOneEngine": true,
+    "A7": "READ_ONLY_CATALOGUE",
+    "emptySourceStatusMustNotInventModel": true
   }
 }

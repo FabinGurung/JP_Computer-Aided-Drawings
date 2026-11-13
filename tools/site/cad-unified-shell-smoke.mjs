@@ -25,6 +25,9 @@ try{
    continue;
   }
   await p.locator("#cad-global-navigation").waitFor({timeout:12000});
+  // Theme stylesheet and global navigation are installed by deferred shell script.
+  // Wait for exactly one linked stylesheet instead of racing the first DOM placeholder.
+  await p.waitForFunction(()=>document.querySelectorAll('link[href*="cad-unified-theme.css"]').length===1,null,{timeout:15000});
   const sheet=await p.locator('link[href*="cad-unified-theme.css"]').count();
   if(sheet!==1)throw Error(title+" missing one shared stylesheet");
   // The shell is inserted by a deferred script. A partial/placeholder nav can

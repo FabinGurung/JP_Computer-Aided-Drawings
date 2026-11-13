@@ -70,6 +70,7 @@ jobs:
           node tools/site/ashok-v3-2-smoke.mjs
           node tools/site/ashok-v3-3-smoke.mjs
           node tools/site/ashok-window-colours-smoke.mjs
+          node tools/site/project-design-edition-contract-smoke.mjs
           node tools/site/ashok-column-axes-smoke.mjs
           node tools/site/ashok-register-smoke.mjs
           node tools/site/ashok-v2-services-smoke.mjs
@@ -147,6 +148,7 @@ jobs:
           node tools/site/ashok-v3-2-browser.mjs
           node tools/site/ashok-v3-3-browser.mjs
           node tools/site/ashok-window-colours-browser.mjs
+          node tools/site/project-design-edition-contract-browser.mjs
           node tools/site/ashok-column-axes-browser.mjs
           node tools/site/engineering-normalization-browser.mjs
           node tools/site/harisharan-rear-nine-browser.mjs

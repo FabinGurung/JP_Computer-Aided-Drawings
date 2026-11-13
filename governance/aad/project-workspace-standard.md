@@ -238,3 +238,16 @@ desktop breakpoints. Future publisher/source intake pipelines must additionally
 demonstrate authenticated provider readback and dimensional/source reconciliation
 before assigning an approved structural axis or exporting a construction BOQ.
 No changes have been made to other repositories in this standard.
+
+## Project workspace standard 1.4 — immutable design editions and engine inheritance (13 November 2026)
+
+The west rail **Design edition / source version** selector is a registered book of design snapshots and explicit source families. It is not a convenient name for Git commits, document R-revisions, drawing overlay changes, material palettes, checkpoint names, or the whole shared engine build. New owner-adopted design geometry must be preserved as a **new source-backed edition**; the prior admitted model path, edition ID, floor geometry and read-only source remain selectable.
+
+Authority and mandatory schema: `public/data/cad/design-edition-contract.v1.json`.
+Operator lifecycle: `governance/aad/design-edition-lifecycle.v1.md`.
+Runtime validator: `public/assets/js/project-edition-contract.mjs`.
+All four real projects and the fictional empty starter inherit the same `project-workspace.mjs` (engine contract 1.4.0). Every project adapter states edition kind, lifecycle, sourceRef, predecessor and snapshot policy; pending source families and the empty fixture remain visibly non-admitted rather than fabricating plans.
+
+A west-rail **Request next design edition** button opens a local-only change request and carries the selected source ID and predecessor. It never writes the original Drive, GitHub or a new model by itself. On admitted change, validate the new source-backed model, append the registered edition, review via a PR, and publish through staging QA → Pages → independent readback. Shared feature releases such as the v3.3 window colors remain engine history, **not a separate house design**.
+
+The CAD Memory Wall, publishing memory wall, reusable template guide and each project memory poster link to this single CAD authority. A7 is a read-only catalogue and must not be modified from this CAD workstream. Engineering/municipal issue status remains independent of interface release approval.

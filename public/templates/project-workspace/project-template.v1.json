@@ -6,7 +6,8 @@
     "title": "Fictional Empty Project — TEMPLATE ONLY",
     "organization": "Example organization (synthetic)",
     "status": "SYNTHETIC_EMPTY_NOT_AN_ENGINEERING_PROJECT",
-    "jurisdiction": null
+    "jurisdiction": null,
+    "workspaceEngineVersion": "1.4.0"
   },
   "editions": [
     {
@@ -24,7 +25,13 @@
           "name": "Ground floor",
           "geometryStatus": "pending"
         }
-      ]
+      ],
+      "kind": "template",
+      "lifecycle": "TEMPLATE_ONLY",
+      "snapshotPolicy": "NO_REAL_DESIGN",
+      "predecessorId": null,
+      "sourceRef": null,
+      "geometryAdmitted": false
     }
   ],
   "chapters": [
@@ -94,5 +101,17 @@
       "packages": "NO_ADMITTED_WORKBENCHES",
       "sources": "ORIGINAL_FILES_PENDING"
     }
+  },
+  "editionPolicy": {
+    "reference": "data/cad/design-edition-contract.v1.json",
+    "version": "1.4.0",
+    "westRail": "Design edition / source version",
+    "newRealGeometry": "NEW_UNIQUE_EDITION_PLUS_NEW_IMMUTABLE_SOURCE_MODEL_PATH",
+    "earlierVersions": "KEEP_SELECTABLE_WITH_ORIGINAL_SOURCE_BYTES",
+    "uiRelease": "NO_ADDITIONAL_DESIGN_EDITION",
+    "noA7Write": true,
+    "sharedProjectEngine": "public/assets/js/project-workspace.mjs",
+    "sourceOnly": "NO_FAKE_GEOMETRY",
+    "emptyTemplate": "FICTIONAL_ONLY"
   }
 }

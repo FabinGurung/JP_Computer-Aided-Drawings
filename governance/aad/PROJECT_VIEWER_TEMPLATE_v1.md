@@ -38,3 +38,7 @@ This is the drawing equivalent of the reusable LaTeX research template: changes 
 This first extraction is a bounded visual subset, not a lossless replacement of the original DXF, and does not recreate omitted HATCH/INSERT/vector detail or structural reinforcement. Follow-up extraction adapters should add source entity handles, multi-view provenance, IFC mapping and checked room boundaries rather than overwriting existing measurements.
 
 **Source integrity / construction boundary:** Original project files retain their Drive IDs. Public dimension display for Narayani is explicitly authorized by the project owner; other users' file publication follows their own permissions and source controls.
+
+## Edition selector and 1.4 inheritance (13 Nov 2026)
+
+The current `project-workspace.mjs` plus `project-edition-contract.mjs` is the single standard interface for all real project roots. The **source model** belongs to the project; the shared engine belongs to CAD. New owner-adopted building geometry creates a separately versioned model/manifest and a registered edition option with predecessor. A UI/theme or shared kernel fix does not create a building edition. Preserve older URLs, source hashes and approvals. See `governance/aad/design-edition-lifecycle.v1.md` and the canonical public-safe policy `public/data/cad/design-edition-contract.v1.json`. Source-pending projects must show no false model.

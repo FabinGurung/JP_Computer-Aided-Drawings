@@ -8,6 +8,19 @@
 
 **Canonical AAD/CAD template:** `governance/aad/aad-domain-template.v0.1.json`. Human/operator contract: `governance/aad/README.md`. This CAD repository owns all CAD domain rules, drawing templates and engine validation. Earlier A7 `policies/global/ai-aided-product-guide.v0.1.json` is historical/misplaced, not the authoritative writer; leave it untouched unless the user separately authorizes a migration in A7.
 
+## Shared design-edition rule — mandatory for all CAD/AAD projects (13 November 2026)
+
+Before editing a project design edition or source revision, READ
+`public/data/cad/design-edition-contract.v1.json` (machine authority)
+and `governance/aad/design-edition-lifecycle.v1.md` (operator guide).
+
+- Every preserved owner-directed change to **real architectural design geometry** creates a new, separately named source-backed design edition in the west-rail **Design edition / source version** selector. Preserve immutable earlier admitted manifests and their URLs; show predecessor, source and lifecycle.
+- Source-family pointers, document R-revisions, M checkpoints, shared-engine/theme/window-color releases and Git tags are **not** by themselves new building design editions.
+- All four current project entrypoints and the fictional empty starter import the same versioned `public/assets/js/project-workspace.mjs`; change shared engine/template in CAD once and test each project. Never reuse Ashok's house model as Narayani, Harisharan or Ramachandra data.
+- The local **Request next design edition** control records instructions only. A reviewed source/geometry PR, Actions, Pages deployment and independent live readback create the selectable published edition.
+- A7 remains READ ONLY. CAD policy and human memory posters belong here; a separate explicit A7 scope is required to update the A7 index.
+- Require `node tools/site/project-design-edition-contract-smoke.mjs` and cross-project browser tests. No fake model for pending public sources.
+
 ## Authorized CAD work
 
 ### Code and document controls (adopted 2026-10-28)

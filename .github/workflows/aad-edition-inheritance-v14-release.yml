@@ -1,0 +1,108 @@
+name: CAD AAD Edition Inheritance v1.4.0 — Immutable Template Milestone
+
+on:
+  workflow_run:
+    workflows: ["CAD M01 Live Pages Readback"]
+    types: [completed]
+
+permissions:
+  contents: write
+  actions: read
+
+concurrency:
+  group: aad-edition-inheritance-v14-review-release
+  cancel-in-progress: false
+
+jobs:
+  seal-template-milestone:
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.head_branch == 'main' && github.event.workflow_run.event == 'workflow_run' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact read-back production commit including tag history
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.workflow_run.head_sha }}
+          persist-credentials: true
+      - name: Verify existing milestone seal is immutable
+        id: already
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TAG: aad-edition-inheritance-v1.4.0-review.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            git fetch --no-tags origin "refs/tags/$TAG:refs/tags/$TAG"
+            recorded="$(git rev-parse "refs/tags/$TAG^{}")"
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              kind="$(gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json isPrerelease --jq '.isPrerelease')"
+              test "$kind" = "true" || { echo "::error::Expected a historical review-only prerelease"; exit 1; }
+              test "$(git cat-file -p "$TAG" | grep -c 'AAD edition inheritance')" -ge 1 || { echo "::error::Unexpected tag annotation"; exit 1; }
+              echo "already_sealed=true" >> "$GITHUB_OUTPUT"
+              echo "AAD_EDITION_INHERITANCE_TAG_ALREADY_SEALED $TAG $recorded"
+            else
+              echo "::error::Tag exists without its immutable release"; exit 1
+            fi
+          else
+            if gh release view "$TAG" --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+              echo "::error::Release exists without annotated tag"; exit 1
+            fi
+            echo "already_sealed=false" >> "$GITHUB_OUTPUT"
+          fi
+      - uses: actions/setup-node@v4
+        if: steps.already.outputs.already_sealed != 'true'
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+        if: steps.already.outputs.already_sealed != 'true'
+      - name: Fail-closed same-commit edition policy, cross-project source integrity and live publication gates
+        if: steps.already.outputs.already_sealed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          BASELINE_SHA: 9df73de21257f59c7d917a83d965e0b5e6e6d985
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          main_sha="$(gh api "repos/${GITHUB_REPOSITORY}/git/ref/heads/main" --jq '.object.sha')"
+          test "$main_sha" = "$VERIFIED_SHA" || { echo "::error::main moved after live readback"; exit 1; }
+          git cat-file -e "$BASELINE_SHA^{commit}"
+          git merge-base --is-ancestor "$BASELINE_SHA" "$VERIFIED_SHA"
+          # Every source project stays byte-for-byte unchanged in this shared-engine milestone.
+          git diff --quiet "$BASELINE_SHA" "$VERIFIED_SHA" -- public/data/projects/
+          test -s governance/aad/releases/AAD_EDITION_INHERITANCE_V1_4_0_REVIEW.md
+          grep -q 'NOT FOR CONSTRUCTION' governance/aad/releases/AAD_EDITION_INHERITANCE_V1_4_0_REVIEW.md
+          grep -q 'design-edition-contract.v1.json' AGENTS.md
+          node tools/site/project-design-edition-contract-smoke.mjs
+          for workflow_name in "CAD Unified Website Staging QA" "CAD Main GitHub Pages (validated CAD publishing)" "CAD M01 Live Pages Readback"; do
+            count="$(gh api "repos/${GITHUB_REPOSITORY}/actions/runs?head_sha=$VERIFIED_SHA&per_page=100" \
+              --jq "[.workflow_runs[] | select(.name == \"$workflow_name\" and .head_sha == \"$VERIFIED_SHA\" and .conclusion == \"success\")] | length")"
+            test "$count" -ge 1 || { echo "::error::Missing successful same-commit gate: $workflow_name"; exit 1; }
+          done
+          echo "AAD_EDITION_INHERITANCE_EXACT_SHA_LIVE_GATES_PASS $VERIFIED_SHA"
+      - name: Create annotated immutable tag and review prerelease
+        if: steps.already.outputs.already_sealed != 'true'
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERIFIED_SHA: ${{ github.event.workflow_run.head_sha }}
+          TAG: aad-edition-inheritance-v1.4.0-review.1
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$VERIFIED_SHA"
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "::error::Unexpected tag race; refuse to overwrite tag"; exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$TAG" -m "AAD edition inheritance v1.4.0 · all project geometry unchanged · NOT FOR CONSTRUCTION" "$VERIFIED_SHA"
+          git push origin "refs/tags/$TAG"
+          gh release create "$TAG" --repo "$GITHUB_REPOSITORY" --verify-tag --prerelease \
+            --title "CAD AAD v1.4.0 — Immutable Design Edition & Shared Engine (Review Milestone)" \
+            --notes-file governance/aad/releases/AAD_EDITION_INHERITANCE_V1_4_0_REVIEW.md
+          gh release view "$TAG" --repo "$GITHUB_REPOSITORY" --json url,tagName,isPrerelease,publishedAt,targetCommitish
+          echo "AAD_EDITION_INHERITANCE_ANNOTATED_TAG_AND_RELEASE_PASS $VERIFIED_SHA"
