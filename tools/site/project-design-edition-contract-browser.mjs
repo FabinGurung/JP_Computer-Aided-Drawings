@@ -59,6 +59,8 @@ try{
     await p.locator('#pw-edition').selectOption('v3-3');
     await p.waitForFunction(()=>document.getElementById('pw-edition-provenance')?.dataset.editionId==='v3-3',{timeout:10000});
     assert.ok((await p.locator('#pw-edition-provenance').innerText()).includes('Released for architectural review'));
+    assert.ok((await p.locator('#pw-edition-provenance').innerText()).includes('Verified architectural review milestone'));
+    assert.ok((await p.locator('#pw-edition-provenance a').last().getAttribute('href')).includes('ashok-v3.3.0-window-visibility-review.1'));
    }
    if(slug==='ramachandra-devkota'){
     assert.equal(await p.locator('#pw-edit-direct').isHidden(),true);
